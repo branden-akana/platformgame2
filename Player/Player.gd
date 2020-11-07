@@ -1,9 +1,11 @@
 extends KinematicBody2D
 
 const ACCELERATION = 500
-const MAX_SPEED = 80
-const FRICTION = 500
-const DODGE_SPEED = 3
+const MAX_SPEED = 200
+const FRICTION = 800
+const DODGE_SPEED = 350
+
+onready var debug_info = $"../HUD/DebugInfo"
 
 enum {
 	MOVE,
@@ -28,20 +30,23 @@ func move_state(delta):
 	input_vector = input_vector.normalized()
 	
 	if input_vector != Vector2.ZERO:
+		# apply acceleration
 		dodge_vector = input_vector
 		velocity += input_vector * ACCELERATION * delta
 		velocity = velocity.move_toward(input_vector* MAX_SPEED, ACCELERATION * delta)
-	else:
+
+	if velocity.length() > MAX_SPEED or input_vector.length() == 0:
+		# apply friction
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
-	
-	print(velocity)
+
+	debug_info.text = "x: %.2f\ny: %.2f\nspeed: %.2f" % [velocity.x, velocity.y, velocity.length()]
 	move()
 	
 	if Input.is_action_just_pressed("key_dodge"):
 		state = DODGE
 
 func dodge_state(delta):
-	velocity = dodge_vector * DODGE_SPEED * MAX_SPEED
+	velocity = dodge_vector * DODGE_SPEED
 	move()
 
 func move():
