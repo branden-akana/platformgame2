@@ -1,0 +1,53 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://assets/player_sheet.png" type="Texture" id=1]
+
+[sub_resource type="RectangleShape2D" id=35]
+extents = Vector2( 57.6843, 61.2736 )
+
+[sub_resource type="AtlasTexture" id=29]
+atlas = ExtResource( 1 )
+region = Rect2( 16, 64, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=30]
+atlas = ExtResource( 1 )
+region = Rect2( 48, 64, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=31]
+atlas = ExtResource( 1 )
+region = Rect2( 80, 64, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=32]
+atlas = ExtResource( 1 )
+region = Rect2( 112, 64, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=33]
+atlas = ExtResource( 1 )
+region = Rect2( 112, 80, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=34]
+animations = [ {
+"frames": [ SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ) ],
+"loop": false,
+"name": "swing",
+"speed": 10.0
+} ]
+
+[node name="attack_u" type="Area2D"]
+collision_layer = 8
+collision_mask = 16
+
+[node name="hitbox" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2( 39.1338, -72.5957 )
+shape = SubResource( 35 )
+disabled = true
+
+[node name="sprite" type="AnimatedSprite" parent="."]
+position = Vector2( 52, -104 )
+scale = Vector2( 6, 12 )
+z_index = 2
+frames = SubResource( 34 )
+animation = "swing"
+frame = 4
+playing = true

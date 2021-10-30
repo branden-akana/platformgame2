@@ -5,3 +5,7 @@
 bin/
 build/
 lib/
+
+*.zip
+*.exe
+*.ACT

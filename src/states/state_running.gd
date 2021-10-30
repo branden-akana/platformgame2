@@ -16,6 +16,8 @@ func on_update(delta):
         else:
             runner.facing = Direction.LEFT
 
+        runner.emit_signal("walking")
+
     # jump out of running
     if buffer.is_action_just_pressed("key_jump", 0.2):
         set_state("jumpsquat")
@@ -46,3 +48,7 @@ func on_update(delta):
 
     else:
         set_state("airborne")
+
+func on_end():
+    print("stopped running")
+    runner.emit_signal("stop_walking")

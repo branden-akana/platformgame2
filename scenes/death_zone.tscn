@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/death_zone.gd" type="Script" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 624, 16 )
+
+[node name="death_zone" type="Area2D"]
+z_index = 1
+collision_layer = 64
+collision_mask = 34
+script = ExtResource( 1 )
+region_size = Vector2( 20, 1 )
+
+[node name="respawn_point" type="Node2D" parent="."]
+position = Vector2( 640, -160 )
+
+[node name="collision" type="CollisionShape2D" parent="."]
+position = Vector2( 640, 32 )
+shape = SubResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}

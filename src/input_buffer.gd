@@ -12,16 +12,28 @@ var input_deltas = {}
 # map of when inputs were pressed
 var input_buffer = {}
 
+# map of when inputs were pressed, but
+# unpressing will remove them from this map
+var input_holds = {}
+
 # Clear the buffer
 func reset():
-    input_buffer = {}
     input_map = {}
     input_deltas = {}
+    input_buffer = {}
+    input_holds = {}
 
+func duplicate() -> InputBuffer:
+    var copy = get_script().new()
+    copy.input_map = input_map.duplicate(true)
+    copy.input_deltas = input_deltas.duplicate(true)
+    copy.input_buffer = input_buffer.duplicate(true)
+    copy.input_holds = input_holds.duplicate(true)
+    return copy
 
 # Manually trigger a press for this input. This input will be stored in the buffer map
 # along with the time it was pressed.
-func trigger_press(input, value=1):
+func update_action(input, value=1):
     var input_delta
     var past_value
     if not input in input_map:
@@ -33,9 +45,15 @@ func trigger_press(input, value=1):
 
     input_deltas[input] = input_delta
 
+    # detect press
     if past_value < PRESS_THRESHOLD and value >= PRESS_THRESHOLD:
         # print("read press (%s) delta: %.2f" % [input, input_delta])
         input_buffer[input] = OS.get_ticks_msec()
+        input_holds[input] = OS.get_ticks_msec()
+
+    # detect unpress
+    elif past_value >= PRESS_THRESHOLD and value < PRESS_THRESHOLD:
+        input_holds.erase(input)
 
     input_map[input] = value
 
@@ -46,6 +64,12 @@ func get_time_since_last_pressed(input):
     else:
         var buffer = (OS.get_ticks_msec() - input_buffer[input]) / 1000.0
         return buffer 
+
+# Get the time (in seconds) that this input has been held down.
+func get_time_held(input):
+    if input in input_holds:
+        return (OS.get_ticks_msec() - input_holds[input]) / 1000.0
+    return 0
 
 # Read an input with a buffer (in seconds).
 # For example, reading an input press with a 0.5s tolerance will return true

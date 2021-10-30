@@ -11,8 +11,8 @@ func on_update(delta):
 
     if runner.is_on_floor():
         # player landed
-        runner.play_sound("land", -20)
-        set_state("idle")
+        runner.emit_signal("land")
+        reset_state()
     else:
         runner.apply_gravity(delta)
 

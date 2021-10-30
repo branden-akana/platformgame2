@@ -1,6 +1,4 @@
-[gd_scene load_steps=4 format=2]
-
-[ext_resource path="res://src/ParticleCleaner.gd" type="Script" id=1]
+[gd_scene load_steps=3 format=2]
 
 [sub_resource type="Curve" id=1]
 _data = [ Vector2( 0, 0 ), 0.0, 0.380005, 0, 0, Vector2( 0.992453, 1 ), 1.27656, 0.0, 0, 0 ]
@@ -29,4 +27,3 @@ scale_amount = 20.0
 scale_amount_random = 0.59
 scale_amount_curve = SubResource( 1 )
 color_ramp = SubResource( 2 )
-script = ExtResource( 1 )

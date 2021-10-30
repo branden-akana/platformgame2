@@ -1,0 +1,187 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://src/JoystickDisplay.gd" type="Script" id=2]
+[ext_resource path="res://assets/bg.png" type="Texture" id=3]
+[ext_resource path="res://shaders/viewport_palette_pixelate.tres" type="Material" id=4]
+[ext_resource path="res://assets/palette5.png" type="Texture" id=5]
+[ext_resource path="res://assets/palette.png" type="Texture" id=6]
+[ext_resource path="res://src/HUDLayer.gd" type="Script" id=8]
+[ext_resource path="res://scenes/Level_Test2.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scenes/camera.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=11]
+
+[sub_resource type="Theme" id=1]
+
+[sub_resource type="Shader" id=2]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+uniform sampler2D palette_a;
+uniform sampler2D palette_b;
+
+uniform float palette_blend = 0.0;
+uniform float pixel_size = 4.0;
+
+float rand(vec2 co) {
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+void fragment() {
+    // pixelize screen
+    float pixsize = float(pixel_size);
+	vec2 screen_size = vec2(textureSize(TEXTURE, 0));
+	vec2 screen_ratio = pixsize / screen_size;
+	//vec2 pixel_uv = (floor(SCREEN_UV / screen_ratio) * screen_ratio) + (screen_ratio / 2.0);
+    vec2 pixel_uv = (floor(UV / screen_ratio) * screen_ratio);
+	COLOR = textureLod(TEXTURE, pixel_uv, 0.0);
+        
+    // noise
+    //COLOR = mix(COLOR, vec4(vec3(rand(pixel_uv + rand(vec2(TIME)))), 1.0), 0.03);
+    float n = abs(rand(pixel_uv + rand(vec2(floor(TIME * 10.0)))));
+    n = clamp(n, 0.0, 1.0);
+    COLOR = mix(COLOR, COLOR - vec4(vec3(n), 0.0), 0.015);
+       
+    // use color palette
+    float u = floor(COLOR.g * 8.0) / 8.0 + (1.0 / 16.0);
+    float v = 0.0; // selects which row of the palette to use
+
+    vec4 palette_color_a = texture(palette_a, vec2(u, v));
+    vec4 palette_color_b = texture(palette_b, vec2(u, v));
+    vec4 palette_color = mix(palette_color_a, palette_color_b, palette_blend);
+    COLOR = vec4(palette_color.rgb, COLOR.a);
+}
+
+"
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
+shader_param/palette_blend = 0.25
+shader_param/pixel_size = 4.0
+shader_param/palette_a = ExtResource( 5 )
+shader_param/palette_b = ExtResource( 6 )
+
+[node name="Main" type="Node2D"]
+
+[node name="debug" type="CanvasLayer" parent="."]
+pause_mode = 2
+layer = 5
+script = ExtResource( 8 )
+
+[node name="JoystickDisplay" type="ColorRect" parent="debug"]
+margin_left = 24.6761
+margin_top = 152.813
+margin_right = 28.6761
+margin_bottom = 156.813
+theme = SubResource( 1 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Coin1" type="ColorRect" parent="debug"]
+visible = false
+margin_left = 13.0
+margin_top = 160.0
+margin_right = 21.0
+margin_bottom = 168.0
+color = Color( 0.141176, 0.921569, 0.666667, 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Coin2" type="ColorRect" parent="debug"]
+visible = false
+margin_left = 23.0
+margin_top = 160.0
+margin_right = 31.0
+margin_bottom = 168.0
+color = Color( 0.854902, 0.439216, 0.913725, 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Coin3" type="ColorRect" parent="debug"]
+visible = false
+margin_left = 33.0
+margin_top = 160.0
+margin_right = 41.0
+margin_bottom = 168.0
+color = Color( 0.890196, 0.878431, 0.172549, 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="DebugInfo" type="Label" parent="debug"]
+margin_left = 4.15908
+margin_top = 5.42046
+margin_right = 170.159
+margin_bottom = 19.4205
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="controls" type="Label" parent="debug"]
+visible = false
+margin_left = 9.19875
+margin_top = 181.809
+margin_right = 175.199
+margin_bottom = 246.809
+text = "X: jump
+square: attack
+R1: dash
+"
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="camera" parent="." instance=ExtResource( 10 )]
+
+[node name="player" parent="." instance=ExtResource( 11 )]
+
+[node name="viewports" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="fg" type="ViewportContainer" parent="viewports"]
+material = SubResource( 3 )
+margin_right = 1280.0
+margin_bottom = 720.0
+stretch = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="viewport" type="Viewport" parent="viewports/fg"]
+size = Vector2( 1280, 720 )
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="sprite" type="Sprite" parent="viewports/fg/viewport"]
+visible = false
+texture = ExtResource( 3 )
+
+[node name="fg2" type="ViewportContainer" parent="viewports"]
+material = ExtResource( 4 )
+margin_right = 1280.0
+margin_bottom = 720.0
+stretch = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="viewport" type="Viewport" parent="viewports/fg2"]
+size = Vector2( 1280, 720 )
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="sprite" type="Sprite" parent="viewports/fg2/viewport"]
+visible = false
+texture = ExtResource( 3 )
+
+[node name="World" parent="." instance=ExtResource( 9 )]

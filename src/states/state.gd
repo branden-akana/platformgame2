@@ -16,24 +16,25 @@ func init(runner_):
 
 # Set the state of the handle
 func set_state(state_name):
-    if state_name in runner.states:
-        on_end()
+    if runner and state_name in runner.states:
         var old_state_name = runner.state_name
-        runner.state_name = state_name
-        runner.state.time = 0.0
-        runner.state.tick = 0
-        runner.state.on_start(old_state_name)
+        var new_state = runner.states[state_name]
+        if new_state.can_start():
+            on_end()
+            runner.state_name = state_name
+            runner.state.time = 0.0
+            runner.state.tick = 0
+            runner.state.on_start(old_state_name)
 
 # Sets the state to a "default" state.
 func reset_state():
     if runner.is_on_floor():
-        runner.play_particle_effect(runner.DustParticles)
-        # var axis = buffer.get_action_axis()
-        # if axis.x != 0:
-            # set_state("running")
-        # else:
-            # set_state("idle")
-        set_state("idle")
+        var axis = buffer.get_action_axis()
+        if round(axis.x) != 0:
+            set_state("running")
+        else:
+            set_state("idle")
+        # set_state("idle")
     else:
         set_state("airborne")
 
@@ -68,6 +69,10 @@ func process(delta):
 # called when this state is instantiated
 func on_init():
     pass
+
+# checks if the runner can enter this state
+func can_start():
+    return true
 
 # called at the beginning of the state
 func on_start(state_name):

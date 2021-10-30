@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/charmap-oldschool_white.png" type="Texture" id=1]
+[ext_resource path="res://src/textbox.gd" type="Script" id=2]
+
+[node name="textbox" type="Node2D"]
+position = Vector2( 224, 528 )
+z_index = 10
+script = ExtResource( 2 )
+font = ExtResource( 1 )
+lines = [ "untitled platform game", "A/X        jump               X/Square   attack             RB/R1      airdash                                          " ]

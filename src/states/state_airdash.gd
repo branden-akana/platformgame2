@@ -7,6 +7,13 @@ export var DODGE_LENGTH = 0.2
 var airdash_dir: Vector2 = Vector2.ZERO
 var grounded: bool = false
 
+var particles = null
+
+func can_start():
+
+    var axis = buffer.get_action_axis()
+    return round(axis.length()) != 0
+
 func on_start(state_name):
 
     var axis = buffer.get_action_axis().round().normalized();
@@ -27,6 +34,11 @@ func on_start(state_name):
         # if runner.is_on_floor():
         #     runner.position.y -= 2
 
+    particles = Effects.play(Effects.Airdash, runner)
+    if runner.facing == Direction.LEFT:
+        particles.material.set_shader_param("flip", true)
+    else:
+        particles.material.set_shader_param("flip", false)
 
 func on_update(_delta):
 
@@ -41,18 +53,14 @@ func on_update(_delta):
         # middle of airdashing
 
         var airdash_speed = max(DODGE_SPEED, runner.velocity.length())
-        if runner.facing == Direction.LEFT:
-            runner.airdash_effect.material.set_shader_param("flip", true)
-        else:
-            runner.airdash_effect.material.set_shader_param("flip", false)
-        runner.airdash_effect.emitting = true
         runner.velocity = airdash_dir * lerp(airdash_speed, airdash_speed / 2, pow(time / DODGE_LENGTH, 2))
 
     if time >= DODGE_LENGTH or (not grounded and runner.is_on_floor()):
 
         # end of airdashing
 
-        runner.airdash_effect.emitting = false
         if runner.is_on_floor():
-            runner.play_sound("land", -20)
+            if particles:
+                particles.emitting = false
+            runner.emit_signal("land")
         reset_state()

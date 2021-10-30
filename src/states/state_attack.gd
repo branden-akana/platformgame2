@@ -14,6 +14,10 @@ var hitbox  # ref to active attack hitbox
 var hit_detected: bool = false
 var is_grounded: bool = true
 
+enum Attack {FORWARD, UP, DOWN}
+
+var attack_type = 0
+
 func on_init():
     
     attack_f = runner.get_node("attack_f")
@@ -36,12 +40,15 @@ func on_start(_state_name):
     if round(axis.y) == -1: # aiming up
         sprite = attack_u.get_node("sprite")
         hitbox = attack_u.get_node("hitbox")
+        attack_type = Attack.UP
     elif not runner.is_on_floor() and round(axis.y) == 1: # aiming down
         sprite = attack_d.get_node("sprite")
         hitbox = attack_d.get_node("hitbox")
+        attack_type = Attack.DOWN
     else:
         sprite = attack_f.get_node("sprite")
         hitbox = attack_f.get_node("hitbox")
+        attack_type = Attack.FORWARD
 
     match runner.facing:
         Direction.RIGHT:
@@ -78,7 +85,7 @@ func on_update(delta):
     if runner.is_on_floor():
         runner.apply_friction(delta)
 
-    if (0.3 <= time and time <= 0.5) or not hit_detected:
+    if (0.3 <= time and time <= 0.5) or not hit_detected or attack_type == Attack.UP:
         runner.apply_gravity(delta)
 
     if time >= 0.5 or (is_grounded and not runner.is_on_floor()):
@@ -89,8 +96,9 @@ func get_shape(area, area_shape):
 
 func on_area_enter(_area_id, area: Area2D, area_shape, _local_shape):
     if not hit_detected:
-        runner.velocity.y = 0  # cancel vertical momentum
-        runner.airjumps_left = 1  # restore jump
+        if attack_type != Attack.UP:
+            runner.velocity.y = 0  # cancel vertical momentum
+        runner.jumps_left = 1  # restore jump
         hit_detected = true
         runner.stun(0.1)
 
@@ -105,13 +113,12 @@ func on_area_enter(_area_id, area: Area2D, area_shape, _local_shape):
             var effect = HitEffect.instance()    
             effect.position = (contacts[0] / 4).floor() * 4
             effect.frame = 0
-            $"/root/World".add_child(effect)
+            $"/root/Main/World".add_child(effect)
 
-        print("num contacts: %s" % [contacts])
         if not runner.no_damage:
             if runner.camera:
                 runner.camera.screen_shake(16.0, 0.5)
-            runner.play_sound("hit", -10)
+            runner.emit_signal("hit")
 
 func on_end():
     hitbox.disabled = true
