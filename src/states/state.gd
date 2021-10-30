@@ -3,7 +3,7 @@ class_name RunnerState
 
 var runner
 var buffer: InputBuffer
-var game: Game
+# var game: Game
 
 var time: float = 0.0
 var tick: int = 0
@@ -11,7 +11,7 @@ var tick: int = 0
 func init(runner_):
     self.runner = runner_
     self.buffer = runner.buffer
-    self.game = $"/root/World" as Game
+    # self.game = $"/root/World" as Game
     on_init()
 
 # Set the state of the handle

@@ -6,7 +6,6 @@ export (Vector2) var region_size = Vector2(20, 11.25)
 export var palette_idx = 0
 
 onready var collision: CollisionShape2D = $collision
-onready var game = $"/root/World"
 
 func _ready():
 

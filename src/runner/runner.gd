@@ -60,9 +60,9 @@ var InputBuffer = load("res://src/input_buffer.gd")
 # ===========================================
 
 onready var sprite: AnimatedSprite = $sprite
-onready var debug_info = $"/root/World/debug/DebugInfo"
+# onready var debug_info = $"/root/Main/debug/DebugInfo"
 onready var grapple_line = $"Line2D"
-onready var camera = $"camera"
+# onready var camera = $"camera"
 
 onready var buffer: InputBuffer = InputBuffer.new()
 
@@ -106,7 +106,7 @@ var grapple_vel = 0.0
 
 func _ready():
     
-    add_child(grapple_line)
+    # add_child(grapple_line)
     add_child(stun_timer)
     stun_timer.one_shot = true
 

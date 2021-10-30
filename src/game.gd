@@ -139,7 +139,7 @@ func get_fg2() -> Viewport:
     return $"/root/Main/viewports/fg2/viewport" as Viewport
 
 func get_fg2_container() -> ViewportContainer:
-    return $"/root/World/viewports/fg2" as ViewportContainer
+    return $"/root/Main/viewports/fg2" as ViewportContainer
     
 # Reparent this node to FG1. Note that this node's position must now be handled manually.
 func reparent_to_fg1(node):

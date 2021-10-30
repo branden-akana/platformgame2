@@ -179,6 +179,7 @@ Effects="*res://src/particles.gd"
 
 gdscript/warnings/shadowed_variable=false
 gdscript/warnings/unused_argument=false
+gdscript/warnings/unused_signal=false
 gdscript/warnings/return_value_discarded=false
 
 [display]
@@ -334,3 +335,7 @@ debug_level2={
 [node]
 
 name_casing=2
+
+[rendering]
+
+quality/dynamic_fonts/use_oversampling=false
