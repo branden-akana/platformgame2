@@ -113,11 +113,10 @@ func on_area_enter(_area_id, area: Area2D, area_shape, _local_shape):
             var effect = HitEffect.instance()    
             effect.position = (contacts[0] / 4).floor() * 4
             effect.frame = 0
-            $"/root/Main/World".add_child(effect)
+            $"/root/Main".add_child(effect)
 
         if not runner.no_damage:
-            if runner.camera:
-                runner.camera.screen_shake(16.0, 0.5)
+            Game.get_camera().screen_shake(2.0, 0.5)
             runner.emit_signal("hit")
 
 func on_end():

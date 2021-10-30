@@ -1,5 +1,4 @@
 extends Sprite
-tool
 
 export (Texture) var bg_texture;
 export (float, 0.0, 1.0) var opacity = 0.5;

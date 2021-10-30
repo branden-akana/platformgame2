@@ -1,4 +1,3 @@
-tool
 extends Area2D
 
 onready var Player = load("res://src/Player.gd")

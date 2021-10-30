@@ -28,8 +28,7 @@ func on_start(state_name):
 
         runner.airdashes_left -= 1
         airdash_dir = Vector2(axis.x, axis.y).normalized();
-        if runner.camera:
-            runner.camera.screen_shake(8.0, 0.3)
+        #Game.get_camera().screen_shake(1.0, 0.3)
 
         # if runner.is_on_floor():
         #     runner.position.y -= 2

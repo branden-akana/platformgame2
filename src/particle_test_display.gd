@@ -1,5 +1,4 @@
 extends Node2D
-tool
 
 export var ROTATION_SPEED = 10
 export var ROTATION_RADIUS = 50

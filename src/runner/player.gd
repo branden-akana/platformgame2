@@ -22,6 +22,7 @@ func _ready():
 
 func pre_process(delta):
 
+
     # needed as sometimes the walking sound does not stop
     if state_name != "running":
         Sound.stop("walk")
@@ -39,13 +40,13 @@ func pre_process(delta):
         var down_held_time = buffer.get_time_held("key_down")
         var up_held_time = buffer.get_time_held("key_up")
 
-        if down_held_time:  # pan down
+        if down_held_time and buffer.get_action_strength("key_down") > 0.9:  # pan down
             # print("down held: %0.2f" % down_held_time)
             camera_offset = lerp(
                 Vector2(0, 0), Vector2(0, 80),
                 ease(clamp((down_held_time - 1.0) / 0.5, 0.0, 1.0), -2.8)
             )
-        elif up_held_time:  # pan up
+        elif up_held_time and buffer.get_action_strength("key_up") > 0.9:  # pan up
             # print("up held: %0.2f" % up_held_time)
             camera_offset = lerp(
                 Vector2(0, 0), Vector2(0, -80),

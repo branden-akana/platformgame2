@@ -1,5 +1,4 @@
 extends Area2D
-tool
 
 signal interact
 
@@ -22,12 +21,8 @@ func on_body_exit(body):
     is_interacting = false
 
 func _process(_delta):
-    if Engine.editor_hint:
-        position = Util.gridsnap(position, 16)
-
-    if not Engine.editor_hint:
-        if is_player_near and Input.is_action_just_pressed("grapple"):
-            interact()
+    if is_player_near and Input.is_action_just_pressed("grapple"):
+        interact()
         
 func interact():
     emit_signal("interact")

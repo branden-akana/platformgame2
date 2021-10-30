@@ -53,7 +53,7 @@ var state setget , get_state  # the state the player is in
 # resources
 # ===========================================
 
-var Coin = load("res://src/Coin.gd")
+# var Coin = load("res://src/Coin.gd")
 var InputBuffer = load("res://src/input_buffer.gd")
 
 # child nodes

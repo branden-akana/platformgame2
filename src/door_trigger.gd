@@ -1,6 +1,5 @@
 extends Area2D
 class_name DoorTrigger
-tool
 
 export (NodePath) var door_path
 

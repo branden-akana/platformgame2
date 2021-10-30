@@ -6,6 +6,9 @@ signal scene_loaded
 
 const Textbox = preload("res://scenes/textbox.tscn")
 
+const Level_1 = preload("res://scenes/Level_Test2.tscn")
+const Level_2 = preload("res://scenes/Level_Test.tscn")
+
 var time: float = 0.0
 var time_best: float = INF
 var time_paused: bool = false
@@ -31,30 +34,62 @@ func restart_level():
     reset_enemies()
     get_camera().init()
 
-func load_scene(path):
+func load_scene(level):
+    # debug_log("loading new scene...")
+    # debug_log("fading out...")
     yield(pause_and_fade_out(0.5), "completed")
-    call_deferred("_load_scene", path)
+    call_deferred("_load_scene", level)
     yield(self, "scene_loaded")
+    # debug_log("fading in...")
     yield(fade_in_and_unpause(0.5), "completed")
+    # debug_log("finished!")
 
-func _load_scene(path):
-    # remove current scene
-    get_current_scene().free()
+func _load_scene(level):
 
-    # also clear all objects in other viewports
+    # debug_log("clearing children")
+    
+    # clear all objects in other viewports
     for child in get_fg2().get_children():
         child.queue_free()
 
+    # debug_log("loading new scene")
+
     # load the new scene
-    var s = ResourceLoader.load(path)
-    current_scene = s.instance()
+    var packed_scene
+    match(level):
+        1:
+            packed_scene = Level_1
+        2:
+            packed_scene = Level_2
+        _:
+            packed_scene = Level_1
+
+    current_scene = packed_scene.instance()
     current_scene.name = "World"
+
+    # remove current scene and add new one
+    # debug_log("removing old scene")
+
+    get_current_scene().free()
+
+    # debug_log("adding new scene as child")
+
     $"/root/Main".add_child(current_scene)
+
+    # debug_log("restarting level...")
 
     # reset the level
     restart_level()
 
+    # debug_log("new scene loaded")
+
     emit_signal("scene_loaded")
+
+func debug_log(s):
+    var file = File.new()
+    file.open("res://log.txt", file.READ_WRITE)
+    file.seek_end()
+    file.store_line(s)
 
 func get_current_scene():
     return $"/root/Main/World"
@@ -96,21 +131,24 @@ func get_player() -> Node:
     return $"/root/Main/player"
 
 func _physics_process(delta):
+
     if not time_paused and not game_paused:
         time += delta
 
     if len(get_alive_enemies()) == 0 and not time_paused:
         pause_timer()
 
-    if Input.is_action_just_pressed("debug_level1"):
-        load_scene("res://scenes/Level_Test2.tscn")
-
-    if Input.is_action_just_pressed("debug_level2"):
-        load_scene("res://scenes/Level_Test.tscn")
-
     # update HUD timer
     HUD.get_node("control/timer").text = "%02d:%05.2f" % [floor(time/60.0), fmod(time, 60.0)]
     HUD.get_node("control/enemy_display").text = "enemies: %d" % len(get_alive_enemies())
+
+func _process(delta):
+
+    if Input.is_action_just_pressed("debug_level1"):
+        load_scene(1)
+
+    if Input.is_action_just_pressed("debug_level2"):
+        load_scene(2)
 
 func is_best_time():
     return time_paused and time < time_best

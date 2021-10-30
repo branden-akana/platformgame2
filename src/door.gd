@@ -1,5 +1,4 @@
 extends StaticBody2D
-tool
 
 signal door_closed
 signal door_opened
@@ -12,9 +11,6 @@ export var door_closed = false
 
 
 func _ready():
-    if Engine.editor_hint:
-        return
-
     tween = Tween.new()
     add_child(tween)
     
@@ -25,10 +21,6 @@ func _ready():
         position = close_position
     else:
         position = open_position
-
-func _process(_delta):
-    if Engine.editor_hint:
-        position = Util.gridsnap(position, 16)
         
 func get_enemies():
     return Game.get_enemies(self)
@@ -43,9 +35,6 @@ func is_door_unlocked():
     return true
 
 func _physics_process(_delta):
-    if Engine.editor_hint:
-        return
-
     if is_door_unlocked():
         open_door()
 

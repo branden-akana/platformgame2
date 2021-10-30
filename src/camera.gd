@@ -32,7 +32,7 @@ func _ready():
     real_origin = get_camera_origin()
 
 func init():
-    print("initializing camera")
+    # print("initializing camera")
     target_path = Game.get_player().get_path()
     current_zone = null
     initial_zone_set = false
@@ -168,11 +168,11 @@ func detect_zones():
     # print(zone)
     if zone and zone != current_zone:
         if not initial_zone_set:
-            print("setting initial zone: %s" % zone)
+            # print("setting initial zone: %s" % zone)
             yield(set_zone(zone, false), "completed")
             initial_zone_set = true
         else:
-            print("setting zone: %s" % zone)
+            # print("setting zone: %s" % zone)
             set_zone(zone)
 
 func _physics_process(delta):

@@ -50,5 +50,5 @@ func on_update(delta):
         set_state("airborne")
 
 func on_end():
-    print("stopped running")
+    # print("stopped running")
     runner.emit_signal("stop_walking")
