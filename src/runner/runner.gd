@@ -16,7 +16,7 @@ signal dragging
 
 export var ACCELERATION = 8000
 export var FRICTION = 3000
-export var MAX_SPEED = 500
+export var MAX_SPEED = 800
 
 export var AIR_ACCELERATION = 3000
 export var AIR_MAX_SPEED = 600

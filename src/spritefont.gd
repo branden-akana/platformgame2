@@ -7,9 +7,11 @@ const CHARS = (
     'abcdefghijklmnopqrstuvwxyz{|}~'
 )
 
+const SMALL_FONT = preload("res://assets/charmap-oldschool_white.png")
+
 export (Vector2) var CHAR_SIZE = Vector2(7, 9)
 export (int)     var LINE_LENGTH = 30
-export (Texture) var FONT = preload("res://assets/charmap-oldschool_white.png")
+export (Texture) var FONT = SMALL_FONT
 
 var CHAR_MAP = {}
 
@@ -42,7 +44,7 @@ func get_srcrect(c):
     # return coordinate
     return Rect2(CHAR_SIZE * coord, CHAR_SIZE)
 
-func draw_text(node, text):
+func draw_text(node, text, line_length = LINE_LENGTH):
 
     var i = 0  # char position
     var j = 0  # line position
@@ -54,6 +56,6 @@ func draw_text(node, text):
         else:
             node.draw_texture_rect_region(FONT, get_rect(i, j), get_srcrect(c))
             i += 1
-            if i >= LINE_LENGTH:
+            if i >= line_length:
                 i = 0
                 j += 1

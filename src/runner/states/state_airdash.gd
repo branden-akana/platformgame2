@@ -33,13 +33,16 @@ func on_start(state_name):
         # if runner.is_on_floor():
         #     runner.position.y -= 2
 
-    particles = Effects.play(Effects.Airdash, runner)
-    if runner.facing == Direction.LEFT:
-        particles.material.set_shader_param("flip", true)
-    else:
-        particles.material.set_shader_param("flip", false)
 
 func on_update(_delta):
+
+    if tick == 1:
+        # delayed start of particles
+        particles = Effects.play(Effects.Airdash, runner)
+        if runner.facing == Direction.LEFT:
+            particles.material.set_shader_param("flip", true)
+        else:
+            particles.material.set_shader_param("flip", false)
 
     # jump out of dash
     if buffer.is_action_just_pressed("key_jump", 0.2):
@@ -62,4 +65,6 @@ func on_update(_delta):
             if particles:
                 particles.emitting = false
             runner.emit_signal("land")
-        reset_state()
+            set_state("idle")
+        else:
+            set_state("airborne")

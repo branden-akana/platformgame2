@@ -18,11 +18,15 @@ var game_paused: bool setget , is_game_paused
 
 onready var current_scene = $"/root/Main/World"
 
+# used to draw sprite text
+onready var spritefont = SpriteFont.new()
+
 # Engine.time_scale = 0.5
 func _ready():
     # var Player = load("res://scenes/player.tscn")
     # var plr = Player.instance()
     # $"/root/Main".add_child(plr)
+    add_child(spritefont)
     restart_level()
     
 # Initialize the level. Use after loading a new level
@@ -218,7 +222,6 @@ func set_start_point(idx):
     
 # Text Box
 # ========================================================================
-
 func show_textbox(text):
     var textbox = Textbox.instance()
     textbox.set_text(text)
@@ -226,6 +229,9 @@ func show_textbox(text):
     HUD.move_child(textbox, 0)
     # textbox.load_text(texts)
     return textbox
+
+func draw_text(node, text):
+    spritefont.draw_text(node, text)
 
 # Pausing and Screen Transitions
 # ========================================================================
