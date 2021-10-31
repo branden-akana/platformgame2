@@ -10,3 +10,6 @@ lib/
 *.exe
 *.ACT
 *.txt
+
+# Linux binary
+*.x86_64
