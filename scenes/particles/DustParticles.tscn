@@ -1,24 +1,24 @@
 [gd_scene load_steps=3 format=2]
 
 [sub_resource type="Curve" id=1]
-_data = [ Vector2( 0, 0.234091 ), 0.0, 0.0, 0, 0, Vector2( 0.498113, 1 ), 0.142644, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 0.110227 ), 0.0, 0.0136363, 0, 0, Vector2( 1, 1 ), 0.298951, 0.0, 0, 0 ]
 
 [sub_resource type="Gradient" id=2]
-offsets = PoolRealArray( 0.0495868, 0.599174 )
-colors = PoolColorArray( 1, 1, 1, 0.3, 0.501961, 0.501961, 0.501961, 0 )
+offsets = PoolRealArray( 0.0495868, 0.726829, 0.795122 )
+colors = PoolColorArray( 1, 1, 1, 0.3, 0.78, 0.78, 0.78, 0.02, 0.501961, 0.501961, 0.501961, 0 )
 
 [node name="DustParticles" type="CPUParticles2D"]
-position = Vector2( 0, 20 )
+position = Vector2( 0, 40 )
 emitting = false
-amount = 1
+amount = 4
 lifetime = 2.0
 one_shot = true
-explosiveness = 1.0
+explosiveness = 0.79
 local_coords = false
 direction = Vector2( 0, -1 )
 spread = 46.74
 gravity = Vector2( 0, 0 )
-initial_velocity = 30.0
+initial_velocity = 15.0
 initial_velocity_random = 0.18
 scale_amount = 40.0
 scale_amount_curve = SubResource( 1 )

@@ -7,7 +7,7 @@ _data = [ Vector2( 0, 0 ), 0.0, 1.45406, 0, 0, Vector2( 0.264151, 1 ), 0.0440691
 colors = PoolColorArray( 1, 1, 1, 0.25, 0.501961, 0.501961, 0.501961, 0 )
 
 [node name="CPUParticles2D" type="CPUParticles2D"]
-position = Vector2( 0, 24 )
+position = Vector2( 0, 40 )
 z_index = -1
 emitting = false
 amount = 10

@@ -1,18 +1,15 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://src/JoystickDisplay.gd" type="Script" id=2]
+[ext_resource path="res://scenes/debug.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/bg.png" type="Texture" id=3]
 [ext_resource path="res://shaders/viewport_palette_pixelate.tres" type="Material" id=4]
 [ext_resource path="res://assets/palette5.png" type="Texture" id=5]
 [ext_resource path="res://assets/palette.png" type="Texture" id=6]
-[ext_resource path="res://src/HUDLayer.gd" type="Script" id=8]
 [ext_resource path="res://scenes/Level_Test2.tscn" type="PackedScene" id=9]
 [ext_resource path="res://scenes/camera.tscn" type="PackedScene" id=10]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=11]
 
-[sub_resource type="Theme" id=1]
-
-[sub_resource type="Shader" id=2]
+[sub_resource type="Shader" id=1]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 
@@ -53,8 +50,8 @@ void fragment() {
 
 "
 
-[sub_resource type="ShaderMaterial" id=3]
-shader = SubResource( 2 )
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
 shader_param/palette_blend = 0.25
 shader_param/pixel_size = 4.0
 shader_param/palette_a = ExtResource( 5 )
@@ -62,82 +59,7 @@ shader_param/palette_b = ExtResource( 6 )
 
 [node name="Main" type="Node2D"]
 
-[node name="debug" type="CanvasLayer" parent="."]
-pause_mode = 2
-layer = 5
-script = ExtResource( 8 )
-
-[node name="JoystickDisplay" type="ColorRect" parent="debug"]
-margin_left = 24.6761
-margin_top = 152.813
-margin_right = 28.6761
-margin_bottom = 156.813
-theme = SubResource( 1 )
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Coin1" type="ColorRect" parent="debug"]
-visible = false
-margin_left = 13.0
-margin_top = 160.0
-margin_right = 21.0
-margin_bottom = 168.0
-color = Color( 0.141176, 0.921569, 0.666667, 1 )
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="Coin2" type="ColorRect" parent="debug"]
-visible = false
-margin_left = 23.0
-margin_top = 160.0
-margin_right = 31.0
-margin_bottom = 168.0
-color = Color( 0.854902, 0.439216, 0.913725, 1 )
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="Coin3" type="ColorRect" parent="debug"]
-visible = false
-margin_left = 33.0
-margin_top = 160.0
-margin_right = 41.0
-margin_bottom = 168.0
-color = Color( 0.890196, 0.878431, 0.172549, 1 )
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="DebugInfo" type="Label" parent="debug"]
-margin_left = 4.15908
-margin_top = 5.42046
-margin_right = 170.159
-margin_bottom = 19.4205
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="controls" type="Label" parent="debug"]
-visible = false
-margin_left = 9.19875
-margin_top = 181.809
-margin_right = 175.199
-margin_bottom = 246.809
-text = "X: jump
-square: attack
-R1: dash
-"
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
+[node name="debug" parent="." instance=ExtResource( 1 )]
 
 [node name="camera" parent="." instance=ExtResource( 10 )]
 
@@ -147,7 +69,7 @@ __meta__ = {
 layer = 3
 
 [node name="fg" type="ViewportContainer" parent="viewports"]
-material = SubResource( 3 )
+material = SubResource( 2 )
 margin_right = 1280.0
 margin_bottom = 720.0
 stretch = true

@@ -1,9 +1,6 @@
 extends RunnerState
 class_name RunningState
 
-export var ACCELERATION = 1000
-export var MAX_SPEED = 750
-
 func on_start(old_state):
 
     # determine running direction
