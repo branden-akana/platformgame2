@@ -81,14 +81,18 @@ func on_start(_state_name):
 
 func on_update(delta):
 
+
     if tick <= 5:
         hitbox.disabled = false
     else:
         hitbox.disabled = true
 
     if runner.is_on_floor():
-        runner.apply_friction(delta)
+        process_friction(delta)
+    else:
+        process_air_acceleration(delta)
 
+    # keep applying gravity for uairs
     if (0.3 <= time and time <= 0.5) or not hit_detected or attack_type == Attack.UP:
         runner.apply_gravity(delta)
 
