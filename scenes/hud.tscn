@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://assets/palette2.png" type="Texture" id=1]
 [ext_resource path="res://src/vignette_focus.gd" type="Script" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://src/hud.gd" type="Script" id=5]
 [ext_resource path="res://assets/palette3.png" type="Texture" id=6]
 [ext_resource path="res://assets/palette6.png" type="Texture" id=7]
+[ext_resource path="res://scenes/spritetext.tscn" type="PackedScene" id=8]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -79,6 +80,9 @@ margin_bottom = 720.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="spritetext" parent="control" instance=ExtResource( 8 )]
+position = Vector2( 990, 126 )
 
 [node name="enemy_display" type="Label" parent="control"]
 material = SubResource( 3 )

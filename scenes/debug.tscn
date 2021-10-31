@@ -1,12 +1,84 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
+[ext_resource path="res://scenes/spritetext.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/debug/speed_display.gd" type="Script" id=2]
 [ext_resource path="res://src/debug/input_display.gd" type="Script" id=3]
+
+[sub_resource type="CanvasItemMaterial" id=2]
+blend_mode = 1
 
 [sub_resource type="Theme" id=1]
 
 [node name="debug" type="CanvasLayer"]
 pause_mode = 2
 layer = 5
+
+[node name="Coin1" type="ColorRect" parent="."]
+visible = false
+margin_left = 13.0
+margin_top = 160.0
+margin_right = 21.0
+margin_bottom = 168.0
+color = Color( 0.141176, 0.921569, 0.666667, 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Coin2" type="ColorRect" parent="."]
+visible = false
+margin_left = 23.0
+margin_top = 160.0
+margin_right = 31.0
+margin_bottom = 168.0
+color = Color( 0.854902, 0.439216, 0.913725, 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Coin3" type="ColorRect" parent="."]
+visible = false
+margin_left = 33.0
+margin_top = 160.0
+margin_right = 41.0
+margin_bottom = 168.0
+color = Color( 0.890196, 0.878431, 0.172549, 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="DebugInfo" type="Label" parent="."]
+margin_left = 4.15908
+margin_top = 5.42046
+margin_right = 170.159
+margin_bottom = 19.4205
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="controls" type="Label" parent="."]
+visible = false
+margin_left = 9.19875
+margin_top = 181.809
+margin_right = 175.199
+margin_bottom = 246.809
+text = "X: jump
+square: attack
+R1: dash
+"
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="version" parent="." instance=ExtResource( 1 )]
+modulate = Color( 1, 1, 1, 0.0784314 )
+material = SubResource( 2 )
+position = Vector2( 16, 672 )
+text = "v0.2"
 
 [node name="input_display" type="Node2D" parent="."]
 position = Vector2( 60, 124 )
@@ -85,63 +157,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Coin1" type="ColorRect" parent="."]
-visible = false
-margin_left = 13.0
-margin_top = 160.0
-margin_right = 21.0
-margin_bottom = 168.0
-color = Color( 0.141176, 0.921569, 0.666667, 1 )
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
+[node name="speed_display" type="Node2D" parent="."]
+position = Vector2( 40, 32 )
+script = ExtResource( 2 )
 
-[node name="Coin2" type="ColorRect" parent="."]
-visible = false
-margin_left = 23.0
-margin_top = 160.0
-margin_right = 31.0
-margin_bottom = 168.0
-color = Color( 0.854902, 0.439216, 0.913725, 1 )
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="Coin3" type="ColorRect" parent="."]
-visible = false
-margin_left = 33.0
-margin_top = 160.0
-margin_right = 41.0
-margin_bottom = 168.0
-color = Color( 0.890196, 0.878431, 0.172549, 1 )
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="DebugInfo" type="Label" parent="."]
-margin_left = 4.15908
-margin_top = 5.42046
-margin_right = 170.159
-margin_bottom = 19.4205
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="controls" type="Label" parent="."]
-visible = false
-margin_left = 9.19875
-margin_top = 181.809
-margin_right = 175.199
-margin_bottom = 246.809
-text = "X: jump
-square: attack
-R1: dash
-"
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
+[node name="spritetext" parent="speed_display" instance=ExtResource( 1 )]
+modulate = Color( 0.776471, 0.564706, 0, 1 )
+material = SubResource( 2 )
+text = "1234"
