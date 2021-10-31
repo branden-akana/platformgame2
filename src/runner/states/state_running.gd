@@ -24,8 +24,8 @@ func on_update(delta):
 
     # dash out of running
     if (
-        buffer.is_action_just_pressed("key_right", 0.0, 0.2) or
-        buffer.is_action_just_pressed("key_left", 0.0, 0.2)
+        buffer.is_axis_just_pressed("key_right", "key_left", [], 0.0) or
+        buffer.is_axis_just_pressed("key_left", "key_right", [], 0.0)
     ):
         set_state("dash")
 

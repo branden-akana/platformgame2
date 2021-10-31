@@ -12,6 +12,9 @@ var input_deltas = {}
 # map of when inputs were pressed
 var input_buffer = {}
 
+# map of when inputs were unpressed
+var input_unpress_buffer = {}
+
 # map of when inputs were pressed, but
 # unpressing will remove them from this map
 var input_holds = {}
@@ -21,6 +24,7 @@ func reset():
     input_map = {}
     input_deltas = {}
     input_buffer = {}
+    input_unpress_buffer = {}
     input_holds = {}
 
 func duplicate() -> InputBuffer:
@@ -28,6 +32,7 @@ func duplicate() -> InputBuffer:
     copy.input_map = input_map.duplicate(true)
     copy.input_deltas = input_deltas.duplicate(true)
     copy.input_buffer = input_buffer.duplicate(true)
+    copy.input_unpress_buffer = input_unpress_buffer.duplicate(true)
     copy.input_holds = input_holds.duplicate(true)
     return copy
 
@@ -53,8 +58,10 @@ func update_action(input, value=1):
 
     # detect unpress
     elif past_value >= PRESS_THRESHOLD and value < PRESS_THRESHOLD:
+        input_unpress_buffer[input] = OS.get_ticks_msec()
         input_holds.erase(input)
 
+    # update values
     input_map[input] = value
 
 # Get the time (in seconds) from the last time this input has been pressed.
@@ -63,6 +70,14 @@ func get_time_since_last_pressed(input):
         return INF
     else:
         var buffer = (OS.get_ticks_msec() - input_buffer[input]) / 1000.0
+        return buffer 
+
+# Get the time (in seconds) from the last time this input has been unpressed.
+func get_time_since_last_unpressed(input):
+    if not input in input_unpress_buffer:
+        return INF
+    else:
+        var buffer = (OS.get_ticks_msec() - input_unpress_buffer[input]) / 1000.0
         return buffer 
 
 # Get the time (in seconds) that this input has been held down.
@@ -92,6 +107,48 @@ func is_action_just_pressed(input, tolerance: float = 0.0, delta=0.0, clear=true
             return true
         else:
             return false
+
+# Reads the difference between two inputs with a buffer (in seconds).
+# Movements occuring within this buffer will still count as a press.
+# input: the input representing primary direction
+# opposite_input: the input representing opposite direction
+# other_inputs: if any of these inputs are also pressed, ignore the primary press
+func is_axis_just_pressed(input: String, opposite_input: String, other_inputs = [], tolerance: float = 0.0, delta: float = 0.0):
+
+    var a_last_pressed = get_time_since_last_pressed(input)
+    var a_is_pressed = is_action_pressed(input)
+    var a_delta = get_action_delta(input)
+    var b_last_unpressed = get_time_since_last_unpressed(opposite_input)
+    var b_is_pressed = is_action_pressed(opposite_input)
+
+    var press_detected = false
+
+    # detect a press if:
+    # (1) the primary input has just been pressed and the opposite input is not held or
+    # (2) the opposite input has just been unpressed and the primary input is held
+
+    # no buffer case
+    if tolerance == 0.0:
+        press_detected = (
+            (abs(a_last_pressed) < 0.01 and a_delta >= delta and !b_is_pressed)
+            or (abs(b_last_unpressed) < 0.01 and a_is_pressed)
+        )
+
+    # buffer case
+    else:
+        press_detected = (
+            (a_last_pressed <= tolerance and a_delta >= delta and !b_is_pressed)
+            or (b_last_unpressed <= tolerance and a_is_pressed)
+        )
+
+    if press_detected:
+        # check if any of the other inputs are pressed
+        for input in other_inputs:
+            if is_action_pressed(input):
+                return false
+        return true
+
+    return false
 
 # Create an axis (Vector2) from four actions representing the directions.
 func get_action_axis(right="key_right", left="key_left", up="key_up", down="key_down") -> Vector2:

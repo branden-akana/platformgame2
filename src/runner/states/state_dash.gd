@@ -1,9 +1,15 @@
 extends RunnerState
 class_name DashState
 
-export var INIT_DASH_SPEED = 100
+export var INIT_DASH_SPEED = 800
+
 export var MAX_DASH_SPEED = 800
-export var DASH_ACCELERATION = 1000 / 0.2
+export var MAX_DASH_SPEED_REV = 1200
+
+export var DASH_ACCELERATION = 1500 / 0.2
+export var DASH_ACCELERATION_REV = 2000 / 0.2
+
+export var DASH_LENGTH = 16  # in frames
 
 func on_start(_old_state):
 
@@ -29,12 +35,13 @@ func on_start(_old_state):
 
 func on_update(delta):
 
-    var axis = buffer.get_action_axis()
+    # transition checks
+    # =================
 
     # dash out of dash (dash dancing)
     if (
-        buffer.is_action_just_pressed("key_right", 0, 0.6) or
-        buffer.is_action_just_pressed("key_left", 0, 0.6)
+        buffer.is_axis_just_pressed("key_right", "key_left", ["key_up", "key_down"], 0.0) or
+        buffer.is_axis_just_pressed("key_left", "key_right", ["key_up", "key_down"], 0.0)
     ):
         set_state("dash")
 
@@ -42,27 +49,51 @@ func on_update(delta):
     if buffer.is_action_just_pressed("key_jump", 0.1):
         set_state("jumpsquat")
 
+    # =================
+
+    var axis = buffer.get_action_axis()
+
+    # used to determine which way to accelerate;
+    # can only be 1 or -1 (disregard the analog part)
+    var effective_axis = 0
+
+    # if true, runner is holding stick in opposite direction
+    var is_reversed = false
+
+    match(runner.facing):
+        Direction.RIGHT:
+            if axis.x >= 0:
+                effective_axis = 1
+            else:
+                is_reversed = true
+                effective_axis = -1
+
+        Direction.LEFT:
+            if axis.x <= 0:
+                effective_axis = -1
+            else:
+                is_reversed = true
+                effective_axis = 1
+
     var accel = DASH_ACCELERATION
     var max_speed = MAX_DASH_SPEED
 
-    # increase acceleration in reverse (allow moonwalking)
-    if (
-        (runner.facing == Direction.RIGHT and axis.x < 0) or
-        (runner.facing == Direction.LEFT and axis.x > 0)
-    ):
-        accel *= 2
-        max_speed *= 1.5
+    # change acceleration if reversed (allow moonwalking)
+    if is_reversed:
+        accel = DASH_ACCELERATION_REV
+        max_speed = MAX_DASH_SPEED_REV
         
-    runner.apply_acceleration(delta, axis.x, accel, max_speed)
+    runner.apply_acceleration(delta, effective_axis, accel, max_speed)
 
-    if round(axis.length()) == 0:  # neutral position
+    if axis.length() <= 0.1:  # stick in neutral position
         set_state("idle")
 
-    # ground check
+    # airborne check
     if not runner.is_on_floor():
         set_state("airborne")
 
-    if tick >= 20: # end of dash
+    # end of dash
+    if tick >= DASH_LENGTH and axis.length() > 0.1:
         set_state("running")
 
 
