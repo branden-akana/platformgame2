@@ -50,9 +50,9 @@ func pre_process(_delta):
         var expected_pos = pos_frames[tick][0]
         var expected_vel = pos_frames[tick][1]
         var delta_pos = position.distance_to(expected_pos)
-        var delta_vel = velocity.distance_to(expected_vel)
-        print("Frame %d: delt pos = %0.2f, delt vel = %0.2f" % [tick, delta_pos, delta_vel])
-        if delta_pos > 0.0:
+        # var delta_vel = velocity.distance_to(expected_vel)
+        # print("Frame %d: delt pos = %0.2f, delt vel = %0.2f" % [tick, delta_pos, delta_vel])
+        if delta_pos > MIN_DEVIATION:
             print("Ghost deviation detected! Fixing position...")
             position = expected_pos
             velocity = expected_vel
