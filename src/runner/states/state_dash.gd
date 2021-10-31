@@ -13,13 +13,8 @@ export var DASH_LENGTH = 16  # in frames
 
 func on_start(_old_state):
 
-    var axis = buffer.get_action_axis()
-
     # determine dash direction
-    if axis.x > 0:
-        runner.facing = Direction.RIGHT
-    elif axis.x < 0:
-        runner.facing = Direction.LEFT
+    update_facing()
 
     # play dash sound
     runner.emit_signal("dash")
@@ -38,16 +33,11 @@ func on_update(delta):
     # transition checks
     # =================
 
-    # dash out of dash (dash dancing)
-    if (
-        buffer.is_axis_just_pressed("key_right", "key_left", ["key_up", "key_down"], 0.0) or
-        buffer.is_axis_just_pressed("key_left", "key_right", ["key_up", "key_down"], 0.0)
-    ):
-        set_state("dash")
-
-    # jump out of dash
-    if buffer.is_action_just_pressed("key_jump", 0.1):
-        set_state("jumpsquat")
+    check_dash(0.0, true)  # dash-dancing
+    check_ground_jump()
+    check_dropdown_platforms()
+    check_airborne()
+    check_idling()
 
     # =================
 
@@ -84,13 +74,6 @@ func on_update(delta):
         max_speed = MAX_DASH_SPEED_REV
         
     runner.apply_acceleration(delta, effective_axis, accel, max_speed)
-
-    if axis.length() <= 0.1:  # stick in neutral position
-        set_state("idle")
-
-    # airborne check
-    if not runner.is_on_floor():
-        set_state("airborne")
 
     # end of dash
     if tick >= DASH_LENGTH and axis.length() > 0.1:

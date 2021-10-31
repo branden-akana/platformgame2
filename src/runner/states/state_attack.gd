@@ -37,6 +37,9 @@ func on_start(_state_name):
     elif axis.x < 0:
         runner.facing = Direction.LEFT
 
+    # detect attack direction
+
+    # check which attack to use
     if round(axis.y) == -1: # aiming up
         sprite = attack_u.get_node("sprite")
         hitbox = attack_u.get_node("hitbox")
@@ -50,6 +53,7 @@ func on_start(_state_name):
         hitbox = attack_f.get_node("hitbox")
         attack_type = Attack.FORWARD
 
+    # check which direction to face the attack
     match runner.facing:
         Direction.RIGHT:
             sprite.position = sprite.position.abs()

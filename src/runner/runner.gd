@@ -12,15 +12,25 @@ signal dragging
 # constants
 # ===========================================
 
+# movement physics params
+
 export var ACCELERATION = 8000
-export var AIR_ACCELERATION = 2000
-export var MAX_SPEED = 500
 export var FRICTION = 3000
+export var MAX_SPEED = 500
+
+export var AIR_ACCELERATION = 3000
+export var AIR_MAX_SPEED = 600
+
+export var FAST_FALL_SPEED = 2500
+
 export var DODGE_SPEED = 600
 export var DODGE_LENGTH = 0.3
+
+export var JUMP_VELOCITY = 800
 export var GRAVITY = 2400
 export var TERMINAL_VELOCITY = 1000  # maximum downwards velocity
-export var JUMP_VELOCITY = 800
+
+# other consts
 
 export var COLORS = {
     "default": Color(1.0, 1.0, 1.0),

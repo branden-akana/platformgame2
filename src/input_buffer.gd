@@ -1,7 +1,7 @@
 class_name InputBuffer
 
 # threshold to trigger a "press" for analog inputs
-const PRESS_THRESHOLD = 0.3
+const PRESS_THRESHOLD = 0.5
 
 # map of input values
 var input_map = {}
