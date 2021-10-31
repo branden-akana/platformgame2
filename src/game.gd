@@ -39,7 +39,7 @@ func load_scene(level):
     # debug_log("fading out...")
     yield(pause_and_fade_out(0.5), "completed")
     call_deferred("_load_scene", level)
-    yield(self, "scene_loaded")
+    # yield(self, "scene_loaded")
     # debug_log("fading in...")
     yield(fade_in_and_unpause(0.5), "completed")
     # debug_log("finished!")
@@ -149,6 +149,12 @@ func _process(delta):
 
     if Input.is_action_just_pressed("debug_level2"):
         load_scene(2)
+        
+# func _input(event):
+    
+     # used for me to identify what ID a button is
+#    if event is InputEventJoypadButton:
+#       print(event.button_index)
 
 func is_best_time():
     return time_paused and time < time_best
