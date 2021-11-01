@@ -18,15 +18,16 @@ func play(scene, parent, params = {}):
 
     return instance
     
-func delete(instance):
-    if queued_deletion.find(instance) != -1:
-        queued_deletion.append(instance)
-        yield(get_tree().create_timer(2.0), "timeout")
-        queued_deletion.erase(instance)
-        instance.queue_free()
+func delete(particles):
+    if not particles in queued_deletion:
+        queued_deletion.append(particles)
+        yield(get_tree().create_timer(1.0), "timeout")
+        particles.free()
+        queued_deletion.erase(particles)
+        
 
 func _physics_process(delta):
     for particles in get_tree().get_nodes_in_group("particles"):
         if particles and not particles.emitting:
-            delete(particles)
+            call_deferred("delete", particles)
     

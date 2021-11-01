@@ -62,7 +62,7 @@ func on_update(_delta):
         # end of airdashing
 
         if runner.is_on_floor():
-            if particles:
+            if is_instance_valid(particles):
                 particles.emitting = false
             runner.emit_signal("land")
             set_state("idle")
