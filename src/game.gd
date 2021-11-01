@@ -14,7 +14,7 @@ var time_best: float = INF
 var time_paused: bool = false
 
 var game_pause_requests = []
-var game_paused: bool setget , is_game_paused
+var game_paused: bool setget , is_paused
 
 onready var current_scene = $"/root/Main/World"
 
@@ -136,7 +136,7 @@ func get_player() -> Node:
 
 func _physics_process(delta):
 
-    if not time_paused and not game_paused:
+    if not time_paused and not is_paused():
         time += delta
 
     if len(get_alive_enemies()) == 0 and not time_paused:
@@ -256,17 +256,17 @@ func pause(node):
     if not node in game_pause_requests:
         game_pause_requests.append(node)
 
-        if not is_game_paused() and len(game_pause_requests) == 1:
+        if len(game_pause_requests) == 1:
             emit_signal("paused")
-            print("paused")
+            #print("paused")
 
 func unpause(node):
     game_pause_requests.erase(node)
-    if is_game_paused() and len(game_pause_requests) == 0:
+    if len(game_pause_requests) == 0:
         emit_signal("unpaused")
-        print("unpaused")
+        #print("unpaused")
 
-func is_game_paused():
+func is_paused():
     return len(game_pause_requests) > 0
 
 
