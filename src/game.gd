@@ -16,7 +16,7 @@ var time_paused: bool = false
 var game_pause_requests = []
 var game_paused: bool setget , is_paused
 
-onready var current_scene = $"/root/Main/World"
+onready var current_level = get_level()
 
 # used to draw sprite text
 onready var spritefont = SpriteFont.new()
@@ -48,7 +48,7 @@ func load_scene(level):
     yield(fade_in_and_unpause(0.5), "completed")
     # debug_log("finished!")
 
-func _load_scene(level):
+func _load_scene(level_path):
 
     # debug_log("clearing children")
     
@@ -60,7 +60,7 @@ func _load_scene(level):
 
     # load the new scene
     var packed_scene
-    match(level):
+    match(level_path):
         1:
             packed_scene = Level_1
         2:
@@ -68,17 +68,18 @@ func _load_scene(level):
         _:
             packed_scene = Level_1
 
-    current_scene = packed_scene.instance()
-    current_scene.name = "World"
+    var level = packed_scene.instance()
+    level.name = "level"
 
     # remove current scene and add new one
     # debug_log("removing old scene")
 
-    get_current_scene().free()
+    get_level().free()
 
     # debug_log("adding new scene as child")
 
-    $"/root/Main".add_child(current_scene)
+    $"/root/Main".add_child(level)
+    current_level = level
 
     # debug_log("restarting level...")
 
@@ -95,11 +96,8 @@ func debug_log(s):
     file.seek_end()
     file.store_line(s)
 
-func get_current_scene():
-    return $"/root/Main/World"
-
-func get_current_level() -> Level:
-    return $"/root/Main/World/level" as Level
+func get_level() -> Level:
+    return $"/root/Main/level" as Level
 
 func get_camera() -> Node:
     return $"/root/Main/camera"
@@ -207,18 +205,8 @@ func reparent_to_fg2(node):
 # Start Point / Checkpoints
 # ========================================================================
 
-var start_point_idx = 0
-
-func get_start_point() -> Node2D:
-    var key
-    if start_point_idx == 0:
-        key = "/root/Main/World/spawns/start"
-    else:
-        key = "/root/Main/World/spawns/start%d" % start_point_idx
-    return get_node(key) as Node2D
-
-func set_start_point(idx):
-    start_point_idx = idx
+func get_start_point(idx = 0) -> Vector2:
+    return get_level().get_start_point(idx)
     
 # Text Box
 # ========================================================================

@@ -1,5 +1,6 @@
 [gd_scene load_steps=24 format=2]
 
+[ext_resource path="res://src/level.gd" type="Script" id=1]
 [ext_resource path="res://scenes/camera_zone.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/spikes_trap.png" type="Texture" id=9]
 [ext_resource path="res://assets/s4m_ur4i_huge-assetpack-tilemap.png" type="Texture" id=10]
@@ -8,7 +9,6 @@
 [ext_resource path="res://shaders/grayscale.gdshader" type="Shader" id=16]
 [ext_resource path="res://scenes/death_zone.tscn" type="PackedScene" id=17]
 [ext_resource path="res://src/background.gd" type="Script" id=19]
-[ext_resource path="res://src/start_point.gd" type="Script" id=21]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
@@ -206,22 +206,23 @@ func on_unpause():
 #    pass
 "
 
-[sub_resource type="RectangleShape2D" id=13]
+[sub_resource type="RectangleShape2D" id=11]
 extents = Vector2( 1008, 16 )
 
-[sub_resource type="RectangleShape2D" id=14]
+[sub_resource type="RectangleShape2D" id=12]
 extents = Vector2( 624, 16 )
 
-[sub_resource type="RectangleShape2D" id=15]
+[sub_resource type="RectangleShape2D" id=13]
 extents = Vector2( 784, 16 )
 
-[sub_resource type="ShaderMaterial" id=16]
+[sub_resource type="ShaderMaterial" id=14]
 shader = ExtResource( 16 )
 
-[node name="World" type="Node2D"]
+[node name="level" type="Node2D"]
 pause_mode = 2
+script = ExtResource( 1 )
 
-[node name="level" type="TileMap" parent="."]
+[node name="tilemap" type="TileMap" parent="."]
 pause_mode = 2
 modulate = Color( 1, 2, 1, 1 )
 scale = Vector2( 4, 4 )
@@ -252,11 +253,10 @@ initial_velocity_random = 0.5
 scale_amount = 4.0
 script = SubResource( 10 )
 
-[node name="spawns" type="Node" parent="."]
+[node name="points" type="Node" parent="."]
 
-[node name="start" type="Node2D" parent="spawns"]
+[node name="start" type="Node2D" parent="points"]
 position = Vector2( 96, 480 )
-script = ExtResource( 21 )
 
 [node name="camera_zones" type="Node" parent="."]
 
@@ -288,7 +288,7 @@ position = Vector2( 96, -480 )
 
 [node name="collision" parent="death_zones/death_zone2" index="1"]
 position = Vector2( 1024, 32 )
-shape = SubResource( 13 )
+shape = SubResource( 11 )
 
 [node name="death_zone" parent="death_zones" instance=ExtResource( 17 )]
 position = Vector2( 0, 720 )
@@ -298,7 +298,7 @@ z_index = 16
 position = Vector2( 96, -240 )
 
 [node name="collision" parent="death_zones/death_zone" index="1"]
-shape = SubResource( 14 )
+shape = SubResource( 12 )
 
 [node name="death_zone3" parent="death_zones" instance=ExtResource( 17 )]
 position = Vector2( 3328, 880 )
@@ -310,7 +310,7 @@ position = Vector2( 96, -400 )
 
 [node name="collision" parent="death_zones/death_zone3" index="1"]
 position = Vector2( 800, 32 )
-shape = SubResource( 15 )
+shape = SubResource( 13 )
 
 [node name="enemies" type="Node2D" parent="."]
 pause_mode = 2
@@ -353,7 +353,7 @@ position = Vector2( 4448, 224 )
 pause_mode = 2
 modulate = Color( 0.5, 0.5, 0.5, 1 )
 self_modulate = Color( 0.572549, 0.572549, 0.572549, 1 )
-material = SubResource( 16 )
+material = SubResource( 14 )
 scale = Vector2( 2, 2 )
 z_index = -10
 texture = ExtResource( 15 )

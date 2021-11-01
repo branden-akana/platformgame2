@@ -22,7 +22,7 @@ var is_alive = true
 
 onready var sprite: Polygon2D = $sprite
 onready var tween = Tween.new()
-onready var real_position = sprite.global_position
+onready var real_position = $sprite.global_position
 
 func _ready():
     origin = position

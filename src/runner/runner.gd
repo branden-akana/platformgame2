@@ -162,7 +162,7 @@ func get_current_conditions():
 
 # Respawn the player at the start point of the level
 func restart():
-    respawn(Game.get_start_point().position)
+    respawn(Game.get_start_point())
     tick = 0
 
 # Respawn the player at a set position
