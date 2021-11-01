@@ -25,7 +25,7 @@ func set_state(state_name):
             runner.state.time = 0.0
             runner.state.tick = 0
             runner.state.on_start(old_state_name)
-            print("state: %s -> %s" % [old_state_name, state_name])
+            #print("state: %s -> %s" % [old_state_name, state_name])
 
 # Return true if the runner's current state is this state.
 func is_active():

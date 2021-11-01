@@ -14,7 +14,7 @@ func on_body_enter(body):
     is_player_near = true
 
 func on_body_exit(body):
-    print("exited interactable")
+    # print("exited interactable")
     Game.get_player().get_node("interact_sprite").visible = false
     on_dismiss()
     is_player_near = false
@@ -28,9 +28,9 @@ func interact():
     emit_signal("interact")
     if not is_interacting:
         is_interacting = true
-        print("now interacting")
+        # print("now interacting")
         yield(on_interact(), "completed")
-        print("no longer interacting")
+        # print("no longer interacting")
         is_interacting = false
 
 func on_interact():
