@@ -28,6 +28,8 @@ func _ready():
     # $"/root/Main".add_child(plr)
     add_child(spritefont)
     restart_level()
+    
+    print("Feel free to minimize this window! It needs to be open for some reason to avoid a crash.")
 
 # Initialize the game. Use after loading a new level.
 func reinitialize_game():
