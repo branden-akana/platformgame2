@@ -89,7 +89,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/runner/states/state_jumpsquat.gd"
 }, {
-"base": "TileMap",
+"base": "Node2D",
 "class": "Level",
 "language": "GDScript",
 "path": "res://src/level.gd"
@@ -352,4 +352,5 @@ name_casing=2
 
 [rendering]
 
+environment/default_clear_color=Color( 0.0976563, 0.0976563, 0.0976563, 1 )
 quality/dynamic_fonts/use_oversampling=false
