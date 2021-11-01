@@ -11,7 +11,10 @@ var attack_d
 var sprite  # ref to active attack sprite
 var hitbox  # ref to active attack hitbox
 
+# if true, this attack has hit an enemy
 var hit_detected: bool = false
+
+# if true, this attack was done on the ground
 var is_grounded: bool = true
 
 enum Attack {FORWARD, UP, DOWN}
@@ -104,8 +107,7 @@ func get_shape(area, area_shape):
 
 func on_area_enter(_area_id, area: Area2D, area_shape, _local_shape):
     if (
-        not hit_detected
-        and area is Enemy
+        area is Enemy
         and (area.health > 0 or runner.ignore_enemy_hp)
     ):
         # on hit behavior
