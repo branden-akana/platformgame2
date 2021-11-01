@@ -16,6 +16,8 @@ var replay_finished = false
 func _ready():
     print("buffer: %s " % buffer)
     no_damage = true
+    no_effects = true
+    ignore_enemy_hp = true
 
     COLORS = {
         "default": Color(0.3, 0.3, 0.3),

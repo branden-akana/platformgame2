@@ -26,7 +26,7 @@ onready var real_position = sprite.global_position
 
 func _ready():
     origin = position
-    self.connect("area_entered", self, "on_area_enter")
+    # self.connect("area_entered", self, "on_area_enter")
     
     set_as_toplevel(true)
     position = real_position
@@ -61,12 +61,19 @@ func reset():
     health = 100
     is_alive = true
 
-func on_area_enter(area):
-    var no_damage = area.get_parent().no_damage
-    if not no_damage:
-        hit_shift = Vector2.ZERO
-        hit_direction = area.get_parent().position.direction_to(position)
-        hit_elasticity = HIT_ELASTICITY
-        color_blend = HIT_COLOR_LENGTH
-        health = 0
+func damage(from, dmg = 1):
+    hit_shift = Vector2.ZERO
+    hit_direction = from.position.direction_to(position)
+    hit_elasticity = HIT_ELASTICITY
+    color_blend = HIT_COLOR_LENGTH
+    health = 0
+
+# func on_area_enter(area):
+#     var no_damage = area.get_parent().no_damage
+#     if not no_damage:
+#         hit_shift = Vector2.ZERO
+#         hit_direction = area.get_parent().position.direction_to(position)
+#         hit_elasticity = HIT_ELASTICITY
+#         color_blend = HIT_COLOR_LENGTH
+#         health = 0
 

@@ -103,7 +103,12 @@ func get_shape(area, area_shape):
     return area.shape_owner_get_shape(area.shape_find_owner(area_shape), area_shape)
 
 func on_area_enter(_area_id, area: Area2D, area_shape, _local_shape):
-    if not hit_detected:
+    if (
+        not hit_detected
+        and area is Enemy
+        and (area.health > 0 or runner.ignore_enemy_hp)
+    ):
+        # on hit behavior
         if attack_type != Attack.UP:
             runner.velocity.y = 0  # cancel vertical momentum
         runner.jumps_left = 1  # restore jump
@@ -111,19 +116,21 @@ func on_area_enter(_area_id, area: Area2D, area_shape, _local_shape):
         runner.stun(0.1)
 
         # effects
-        var shape = hitbox.shape
-        var contacts = shape.collide_and_get_contacts(
-            hitbox.global_transform,
-            get_shape(area, area_shape),
-            area.global_transform)
+        if not runner.no_effects:
+            var shape = hitbox.shape
+            var contacts = shape.collide_and_get_contacts(
+                hitbox.global_transform,
+                get_shape(area, area_shape),
+                area.global_transform)
 
-        if len(contacts):
-            var effect = HitEffect.instance()    
-            effect.position = (contacts[0] / 4).floor() * 4
-            effect.frame = 0
-            $"/root/Main".add_child(effect)
+            if len(contacts):
+                var effect = HitEffect.instance()    
+                effect.position = (contacts[0] / 4).floor() * 4
+                effect.frame = 0
+                $"/root/Main".add_child(effect)
 
         if not runner.no_damage:
+            area.damage(runner)
             Game.get_camera().screen_shake(2.0, 0.5)
             runner.emit_signal("hit")
 

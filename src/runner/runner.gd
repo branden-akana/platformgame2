@@ -94,6 +94,12 @@ var facing: int = Direction.RIGHT
 # if true, attacks don't do any damage
 var no_damage = false
 
+# if true, don't play certain effects
+var no_effects = false
+
+# if true, runner can hit dead enemies
+var ignore_enemy_hp = false
+
 # number of jumps allowed to perform until the runner touches the floor
 var jumps_left = 1
 
