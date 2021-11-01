@@ -90,6 +90,7 @@ func on_update(delta):
         hitbox.disabled = true
 
     if runner.is_on_floor():
+        is_grounded = true
         process_friction(delta)
     else:
         check_fastfall()
@@ -99,6 +100,7 @@ func on_update(delta):
     if (0.3 <= time and time <= 0.5) or not hit_detected or attack_type == Attack.UP:
         runner.apply_gravity(delta)
 
+    # end of attack or edge cancelled
     if time >= 0.5 or (is_grounded and not runner.is_on_floor()):
         reset_state()
 
