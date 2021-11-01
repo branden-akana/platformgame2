@@ -19,7 +19,8 @@ export var FRICTION = 3000
 export var MAX_SPEED = 800
 
 export var AIR_ACCELERATION = 3000
-export var AIR_MAX_SPEED = 600
+export var AIR_FRICTION = 1000
+export var AIR_MAX_SPEED = 700
 
 export var FAST_FALL_SPEED = 2500
 
@@ -316,10 +317,10 @@ func apply_acceleration(delta, x, acceleration, max_speed):
     return true
 
 # Apply friction (deceleration) to the runner
-func apply_friction(delta):
-    if abs(velocity.x) > 0:
+func apply_friction(delta, friction = FRICTION):
+    if is_on_floor() and abs(velocity.x) > 0:
         emit_signal("dragging")
-    velocity.x = move_toward(velocity.x, 0, FRICTION * delta)
+    velocity.x = move_toward(velocity.x, 0, friction * delta)
 
 # Stun the runner for a specified amount of time
 func stun(length):

@@ -13,3 +13,4 @@ func on_update(delta):
     else:
         process_gravity(delta)
         process_air_acceleration(delta)
+        process_air_friction(delta)

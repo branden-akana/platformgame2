@@ -147,7 +147,12 @@ func process_air_acceleration(delta):
 
 # Process friction for a frame.
 func process_friction(delta):
-    runner.apply_friction(delta)
+    runner.apply_friction(delta, runner.FRICTION)
+
+func process_air_friction(delta):
+    var x = buffer.get_action_axis().x
+    if x == 0:
+        runner.apply_friction(delta, runner.AIR_FRICTION)
 
 
 
