@@ -143,6 +143,10 @@ func _ready():
     connect("jump", Effects, "play", [Effects.Jump, self]) 
     connect("dragging", Effects, "play", [Effects.Dust, self])
 
+func _exit_tree():
+    Game.get_foreground().remove_child(sprite)
+    sprite.queue_free()
+
 func get_state() -> RunnerState:
     if state_name in states:
         return states[state_name]

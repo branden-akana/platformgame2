@@ -28,14 +28,26 @@ func _ready():
     # $"/root/Main".add_child(plr)
     add_child(spritefont)
     restart_level()
+
+# Initialize the game. Use after loading a new level.
+func reinitialize_game():
+
+    # reset best time / ghost
+    time_best = INF
+    get_player().delete_ghost()
+
+    # reset the level
+    restart_level()
     
-# Initialize the level. Use after loading a new level
+# Restart the level. Use to reset the state of just the level.
 func restart_level():
 
     # set start position
     get_player().restart()
+
     reset_timer()
     reset_enemies()
+
     get_camera().init()
 
 func load_scene(level):
@@ -83,8 +95,8 @@ func _load_scene(level_path):
 
     # debug_log("restarting level...")
 
-    # reset the level
-    restart_level()
+    # reinit the game
+    reinitialize_game()
 
     # debug_log("new scene loaded")
 
