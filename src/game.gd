@@ -6,8 +6,9 @@ signal scene_loaded
 
 const Textbox = preload("res://scenes/textbox.tscn")
 
-const Level_1 = preload("res://scenes/Level_Test2.tscn")
-const Level_2 = preload("res://scenes/Level_Test.tscn")
+const Level_TestHub = preload("res://scenes/levels/test_hub.tscn")
+const Level_1 = preload("res://scenes/levels/Level_Test2.tscn")
+const Level_2 = preload("res://scenes/levels/Level_Test.tscn")
 
 var time: float = 0.0
 var time_best: float = INF
@@ -76,11 +77,11 @@ func _load_scene(level_path):
     var packed_scene
     match(level_path):
         1:
-            packed_scene = Level_1
+            packed_scene = Level_TestHub
         2:
             packed_scene = Level_2
         _:
-            packed_scene = Level_1
+            packed_scene = level_path
 
     var level = packed_scene.instance()
     level.name = "level"
@@ -270,8 +271,4 @@ func unpause(node):
 
 func is_paused():
     return len(game_pause_requests) > 0
-
-
-
-
 

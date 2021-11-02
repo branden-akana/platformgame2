@@ -1,4 +1,5 @@
 extends Runner
+class_name Player
 
 var GhostPlayer = preload("res://scenes/GhostPlayer.tscn")
 
