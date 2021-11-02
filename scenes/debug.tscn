@@ -83,7 +83,7 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0.0784314 )
 material = SubResource( 1 )
 position = Vector2( 16, 672 )
-text = "v0.2.2"
+text = "v0.2.3"
 
 [node name="input_display" type="Node2D" parent="."]
 position = Vector2( 60, 124 )
