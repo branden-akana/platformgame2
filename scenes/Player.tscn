@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://src/runner/player.gd" type="Script" id=1]
 [ext_resource path="res://src/animated_sprite.gd" type="Script" id=2]
@@ -6,7 +6,7 @@
 [ext_resource path="res://scenes/runner/attack_d.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/debug/tempnode.gd" type="Script" id=5]
 [ext_resource path="res://scenes/hud.tscn" type="PackedScene" id=6]
-[ext_resource path="res://assets/player_sheet.png" type="Texture" id=7]
+[ext_resource path="res://assets/runner_sprites.tres" type="SpriteFrames" id=7]
 [ext_resource path="res://shaders/grayscale.gdshader" type="Shader" id=8]
 [ext_resource path="res://scenes/runner/attack_u.tscn" type="PackedScene" id=9]
 [ext_resource path="res://scenes/runner/attack_f.tscn" type="PackedScene" id=10]
@@ -98,106 +98,6 @@ nodes/fragment/connections = PoolIntArray( 5, 1, 0, 1, 5, 0, 3, 0, 3, 0, 7, 0, 7
 shader = SubResource( 7 )
 shader_param/color = Color( 1, 1, 1, 1 )
 
-[sub_resource type="AtlasTexture" id=9]
-atlas = ExtResource( 7 )
-region = Rect2( 0, 80, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=10]
-atlas = ExtResource( 7 )
-region = Rect2( 16, 80, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=11]
-atlas = ExtResource( 7 )
-region = Rect2( 32, 80, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=12]
-atlas = ExtResource( 7 )
-region = Rect2( 48, 80, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=13]
-atlas = ExtResource( 7 )
-region = Rect2( 0, 48, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=14]
-atlas = ExtResource( 7 )
-region = Rect2( 16, 48, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=15]
-atlas = ExtResource( 7 )
-region = Rect2( 32, 48, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=16]
-atlas = ExtResource( 7 )
-region = Rect2( 48, 48, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=17]
-atlas = ExtResource( 7 )
-region = Rect2( 0, 112, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=18]
-atlas = ExtResource( 7 )
-region = Rect2( 16, 112, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=19]
-atlas = ExtResource( 7 )
-region = Rect2( 32, 112, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=20]
-atlas = ExtResource( 7 )
-region = Rect2( 0, 16, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=21]
-atlas = ExtResource( 7 )
-region = Rect2( 16, 16, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=22]
-atlas = ExtResource( 7 )
-region = Rect2( 32, 16, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=23]
-atlas = ExtResource( 7 )
-region = Rect2( 48, 16, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=24]
-atlas = ExtResource( 7 )
-region = Rect2( 64, 16, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=25]
-atlas = ExtResource( 7 )
-region = Rect2( 80, 16, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=26]
-atlas = ExtResource( 7 )
-region = Rect2( 0, 160, 16, 16 )
-
-[sub_resource type="SpriteFrames" id=27]
-animations = [ {
-"frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ) ],
-"loop": true,
-"name": "idle",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ) ],
-"loop": false,
-"name": "attack",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 17 ), SubResource( 18 ), SubResource( 19 ) ],
-"loop": true,
-"name": "airborne",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ) ],
-"loop": true,
-"name": "running",
-"speed": 10.0
-}, {
-"frames": [ SubResource( 26 ) ],
-"loop": true,
-"name": "jumpsquat",
-"speed": 5.0
-} ]
-
 [node name="player" type="KinematicBody2D"]
 z_index = 1
 collision_layer = 2
@@ -222,9 +122,9 @@ region_rect = Rect2( 0, 0, 56, 56 )
 material = SubResource( 8 )
 scale = Vector2( 4, 4 )
 z_index = 1
-frames = SubResource( 27 )
+frames = ExtResource( 7 )
 animation = "idle"
-frame = 2
+frame = 3
 playing = true
 offset = Vector2( 0, 1 )
 script = ExtResource( 2 )
