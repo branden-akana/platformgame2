@@ -195,6 +195,11 @@ func _process(delta):
             for enemy in get_tree().get_nodes_in_group("enemy"):
                 enemy.is_visible_when_dead = false
                 enemy.update_color()
+                
+    # toggle additional debug HUD info
+    if Input.is_action_just_pressed("toggle_debug"):
+        var info = get_debug_hud().get_node("DebugInfo")
+        info.visible = !info.visible
         
 # func _input(event):
     
