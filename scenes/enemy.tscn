@@ -15,7 +15,8 @@ collision_mask = 8
 script = ExtResource( 1 )
 
 [node name="sprite" type="Polygon2D" parent="."]
-color = Color( 0.72549, 0.72549, 0.72549, 1 )
+rotation = -2.66351
+color = Color( 0.3, 0.3, 0.3, 1 )
 offset = Vector2( -25, -25 )
 polygon = PoolVector2Array( 0, 0, 50, 0, 50, 50, 0, 50 )
 

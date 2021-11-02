@@ -24,10 +24,13 @@ onready var spritefont = SpriteFont.new()
 
 # Engine.time_scale = 0.5
 func _ready():
-    # var Player = load("res://scenes/player.tscn")
-    # var plr = Player.instance()
-    # $"/root/Main".add_child(plr)
+
     add_child(spritefont)
+
+    # Game initialization stuff
+
+    Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+
     restart_level()
     
     print("Feel free to minimize this window! It needs to be open for some reason to avoid a crash.")
@@ -166,6 +169,9 @@ func _process(delta):
 
     if Input.is_action_just_pressed("debug_level2"):
         load_scene(2)
+
+    if Input.is_action_just_pressed("toggle_fullscreen"):
+        OS.window_fullscreen = !OS.window_fullscreen
         
 # func _input(event):
     

@@ -39,13 +39,17 @@ func init():
     monitoring_zones = true
     detect_zones()
 
+func get_window_size() -> Vector2:
+    return get_viewport().size
+    # return OS.window_size
+
 func get_target():
     return get_node(target_path)
 
 func get_target_camera_pos() -> Vector2:
     # the camera origin is relative to the top-left corner of the screen,
     # so shift the position by half the screen size to center it
-    return get_target().position - (OS.window_size/2)
+    return get_target().position - (get_window_size() / 2)
 
 func set_target(nodepath):
     target_path = nodepath
@@ -53,7 +57,7 @@ func set_target(nodepath):
 
 func clamp_vec(vec):
     var mn = min_position
-    var mx = max_position - OS.window_size
+    var mx = max_position - get_window_size()
     return Vector2(clamp(vec.x, mn.x, mx.x), clamp(vec.y, mn.y, mx.y))
 
 func is_in_region(vec, mn, mx):
