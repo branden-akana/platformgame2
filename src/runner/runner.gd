@@ -281,6 +281,8 @@ func jump(factor = 1.0):
             velocity.x = MAX_SPEED
         elif axis.x < 0:
             velocity.x = -MAX_SPEED
+        
+    state.set_state("airborne")
 
     
 func apply_gravity(delta):
