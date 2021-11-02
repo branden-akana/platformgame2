@@ -8,6 +8,7 @@ signal hit
 signal jump
 signal dash
 signal dragging
+signal died
 
 # constants
 # ===========================================
@@ -343,6 +344,7 @@ func hurt(damage = 100, respawn_point = null):
         respawn(respawn_point)
     else:
         respawn(Game.get_start_point())
+    emit_signal("died")
 
 # Called when a body intersects this runner's hurtbox.
 func on_hurtbox_entered(from):

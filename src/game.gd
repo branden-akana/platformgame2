@@ -10,9 +10,16 @@ const Level_TestHub = preload("res://scenes/levels/test_hub.tscn")
 const Level_1 = preload("res://scenes/levels/Level_Test2.tscn")
 const Level_2 = preload("res://scenes/levels/Level_Test.tscn")
 
+# the total amount of time elapsed for the current level until completion
 var time: float = 0.0
+
+# the best completion time
 var time_best: float = INF
+
 var time_paused: bool = false
+
+# total amount of times the player died in the current level
+var num_deaths = 0
 
 var game_pause_requests = []
 var game_paused: bool setget , is_paused
@@ -37,6 +44,8 @@ func _ready():
     
     print("Feel free to minimize this window! It needs to be open for some reason to avoid a crash.")
 
+    get_player().connect("died", self, "on_player_death")
+
 # Initialize the game. Use after loading a new level.
 func reinitialize_game():
 
@@ -53,6 +62,7 @@ func restart_level():
     # set start position
     get_player().restart()
 
+    num_deaths = 0
     reset_timer()
     reset_enemies()
 
@@ -110,6 +120,10 @@ func _load_scene(level_path):
 
     emit_signal("scene_loaded")
 
+func on_player_death():
+    if not time_paused:
+        num_deaths += 1
+
 func debug_log(s):
     var file = File.new()
     file.open("res://log.txt", file.READ_WRITE)
@@ -164,8 +178,10 @@ func _physics_process(delta):
         pause_timer()
 
     # update HUD timer
-    HUD.get_node("control/timer").text = "%02d:%05.2f" % [floor(time/60.0), fmod(time, 60.0)]
+    HUD.get_node("control/timer").text = "%02d:%02d" % [floor(time/60.0), floor(fmod(time, 60.0))]
+    HUD.get_node("control/timer_small").text = "%03d" % [fmod(fmod(time, 60.0), 1.0) * 1000]
     HUD.get_node("control/enemy_display").text = "enemies: %d" % len(get_alive_enemies())
+    HUD.get_node("control/death_display").text = "deaths: %d" % num_deaths
 
 func _process(delta):
 
