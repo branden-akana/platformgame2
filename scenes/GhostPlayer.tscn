@@ -33,10 +33,13 @@ playing = true
 [node name="collision" parent="." instance=ExtResource( 6 )]
 
 [node name="attack_d" parent="." instance=ExtResource( 1 )]
+visible = false
 
 [node name="attack_f" parent="." instance=ExtResource( 5 )]
+visible = false
 
 [node name="attack_u" parent="." instance=ExtResource( 2 )]
+visible = false
 
 [node name="hurtbox" type="Area2D" parent="."]
 collision_layer = 128
