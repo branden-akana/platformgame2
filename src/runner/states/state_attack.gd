@@ -84,6 +84,13 @@ func on_start(_state_name):
 
 func on_update(delta):
 
+    # allow jump cancelling
+    # if hit_detected:
+        # check_jump()
+
+    if not is_active():
+        return
+
     if tick <= 5:
         hitbox.disabled = false
     else:
