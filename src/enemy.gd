@@ -64,6 +64,8 @@ func get_hp_color(hp):
         0:
             return Color(0.2, 0.2, 0.2, 0.0)
         1:
+            return Color(0.3, 0.3, 0.3)
+        2:
             return Color(0.7, 0.7, 0.7)
         _:
             return Color(1.0, 1.0, 1.0)

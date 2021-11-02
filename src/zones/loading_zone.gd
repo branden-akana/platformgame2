@@ -4,7 +4,11 @@ tool
 export (PackedScene) var to_level
 export (Vector2) var size = Vector2(2, 2) setget set_size
 
+# flag needed for setget
+var ready = false
+
 func _ready():
+    ready = true
     connect("body_entered", self, "on_body_entered")
     set_size(size)
 
@@ -19,7 +23,7 @@ func _draw():
 
 func set_size(new_size):
     size = new_size
-    if is_instance_valid($collision):
+    if ready:
         $collision.position = (size * 16)
         $collision.shape.extents = (size * 16)
 
