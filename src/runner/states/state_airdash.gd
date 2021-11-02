@@ -65,6 +65,7 @@ func on_update(_delta):
             if is_instance_valid(particles):
                 particles.emitting = false
             runner.emit_signal("land")
-            set_state("idle")
+            # set_state("idle")
+            reset_state()
         else:
             set_state("airborne")
