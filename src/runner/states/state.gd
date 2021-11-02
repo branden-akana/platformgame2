@@ -79,7 +79,7 @@ func process(delta):
 # Check if the player wants to drop-down a platform.
 func check_dropdown_platforms():
     if runner.is_on_floor() and buffer.is_action_just_pressed("key_down"):
-        runner.position += Vector2(0, 2)
+        runner.position += Vector2(0, 4)
 
 # Check if the player wants to do a grounded jump.
 func check_ground_jump():
@@ -90,6 +90,14 @@ func check_ground_jump():
 func check_air_jump():
     if !runner.is_on_floor() and buffer.is_action_just_pressed("key_jump", 0.2):
         runner.jump()
+
+# Check if the player wants to do a jump (air or grounded).
+func check_jump():
+    if buffer.is_action_just_pressed("key_jump", 0.2):
+        if runner.is_on_floor():
+            set_state("jumpsquat")
+        else:
+            runner.jump()
 
 # Check if the player wants to fastfall.
 func check_fastfall():
