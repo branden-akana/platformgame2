@@ -54,6 +54,7 @@ __meta__ = {
 }
 
 [node name="DebugInfo" type="Label" parent="."]
+visible = false
 margin_left = 4.15908
 margin_top = 5.42046
 margin_right = 170.159
