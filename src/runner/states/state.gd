@@ -79,7 +79,7 @@ func process(delta):
 # Check if the player wants to drop-down a platform.
 func check_dropdown_platforms():
     if runner.is_on_floor() and buffer.is_action_just_pressed("key_down"):
-        runner.position += Vector2(0, 1)
+        runner.position += Vector2(0, 2)
 
 # Check if the player wants to do a grounded jump.
 func check_ground_jump():
