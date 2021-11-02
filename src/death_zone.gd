@@ -17,7 +17,6 @@ func get_respawn_point():
     return $"respawn_point".position
     
 func on_body_entered(body):
-
     body.respawn(position + get_respawn_point())
     
 # debug visuals

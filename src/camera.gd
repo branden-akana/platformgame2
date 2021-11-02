@@ -63,6 +63,12 @@ func clamp_vec(vec):
 func is_in_region(vec, mn, mx):
     return (mn.x >= vec.x and vec.x >= mx.x) and (mn.y >= vec.y and vec.y >= mx.y)
 
+# Sets the current zone to focus on.
+#
+# The camera will now be bound within this zone.
+# If smooth_transition is true, briefly pause the game and transition
+# the camera to the new zone. Otherwise, move the camera to the
+# new zone instantly.
 func set_zone(zone, smooth_transition = true):
     current_zone = zone
 
@@ -81,9 +87,12 @@ func set_zone(zone, smooth_transition = true):
         tween_origin(to, 0.0)
         yield(get_tree(), "idle_frame")
 
-
+# Smoothly transition the origin of the camera to a specified location.
+#
+# While this transition is occuring, the game will pause.
+# `time` sets how long the transition is (in seconds). If `time` is
+# 0, the camera is moved to the new location instantly.
 func tween_origin(to, time = 0.5):
-    
     var from = real_origin
 
     if time == 0:

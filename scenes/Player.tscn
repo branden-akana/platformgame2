@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://src/runner/player.gd" type="Script" id=1]
 [ext_resource path="res://src/animated_sprite.gd" type="Script" id=2]
@@ -98,6 +98,9 @@ nodes/fragment/connections = PoolIntArray( 5, 1, 0, 1, 5, 0, 3, 0, 3, 0, 7, 0, 7
 shader = SubResource( 7 )
 shader_param/color = Color( 1, 1, 1, 1 )
 
+[sub_resource type="RectangleShape2D" id=9]
+extents = Vector2( 16, 24 )
+
 [node name="player" type="KinematicBody2D"]
 z_index = 1
 collision_layer = 2
@@ -124,7 +127,6 @@ scale = Vector2( 4, 4 )
 z_index = 1
 frames = ExtResource( 7 )
 animation = "idle"
-frame = 3
 playing = true
 offset = Vector2( 0, 1 )
 script = ExtResource( 2 )
@@ -136,6 +138,13 @@ script = ExtResource( 2 )
 [node name="attack_u" parent="." instance=ExtResource( 9 )]
 
 [node name="attack_d" parent="." instance=ExtResource( 4 )]
+
+[node name="hurtbox" type="Area2D" parent="."]
+collision_layer = 128
+collision_mask = 4
+
+[node name="collision_shape_2d" type="CollisionShape2D" parent="hurtbox"]
+shape = SubResource( 9 )
 
 [node name="Node2D" type="Node2D" parent="."]
 visible = false

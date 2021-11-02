@@ -136,6 +136,8 @@ func _ready():
     connect("jump", Effects, "play", [Effects.Jump, self]) 
     connect("dragging", Effects, "play", [Effects.Dust, self])
 
+    $hurtbox.connect("body_entered", self, "on_hurtbox_entered")
+
 func _exit_tree():
     Game.get_foreground().remove_child(sprite)
     sprite.queue_free()
@@ -329,4 +331,18 @@ func stun(length):
     $"attack_f/sprite".play()
     $"attack_u/sprite".play()
     $"attack_d/sprite".play()
+
+# Hurt the player.
+#
+# If the player dies from being hurt, they will respawn at the specified
+# respawn point, or the start point if one isn't provided.
+func hurt(damage = 100, respawn_point = null):
+    if respawn_point:
+        respawn(respawn_point)
+    else:
+        respawn(Game.get_start_point())
+
+# Called when a body intersects this runner's hurtbox.
+func on_hurtbox_entered(from):
+    hurt(from.damage, from.get_respawn_point())
 

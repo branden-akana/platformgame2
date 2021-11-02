@@ -362,6 +362,7 @@ toggle_practice_mode={
 2d_physics/layer_5="enemy"
 2d_physics/layer_6="ghost_player"
 2d_physics/layer_7="trigger"
+2d_physics/layer_8="runner_hurtbox"
 
 [logging]
 

@@ -249,6 +249,8 @@ func reparent_to_fg2(node):
 # Start Point / Checkpoints
 # ========================================================================
 
+# Gets the start point of the current level.
+# This is where the player spawns when the level loads.
 func get_start_point(idx = 0) -> Vector2:
     return get_level().get_start_point(idx)
     

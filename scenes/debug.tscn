@@ -8,10 +8,10 @@
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
 
-[sub_resource type="CanvasItemMaterial" id=3]
+[sub_resource type="CanvasItemMaterial" id=2]
 blend_mode = 1
 
-[sub_resource type="Theme" id=2]
+[sub_resource type="Theme" id=3]
 
 [node name="debug" type="CanvasLayer"]
 pause_mode = 2
@@ -86,11 +86,11 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0.0784314 )
 material = SubResource( 1 )
 position = Vector2( 16, 672 )
-text = "v0.2.3"
+text = "v0.2.4"
 
 [node name="pingtext" parent="." instance=ExtResource( 1 )]
 modulate = Color( 1, 1, 1, 0 )
-material = SubResource( 3 )
+material = SubResource( 2 )
 position = Vector2( 40, 192 )
 
 [node name="input_display" type="Node2D" parent="."]
@@ -107,7 +107,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = 8.0
 margin_bottom = 8.0
-theme = SubResource( 2 )
+theme = SubResource( 3 )
 __meta__ = {
 "_edit_lock_": true,
 "_edit_use_anchors_": false
