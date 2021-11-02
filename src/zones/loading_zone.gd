@@ -14,20 +14,23 @@ func _ready():
 
 func _process(delta):
     if Engine.editor_hint:
+        # update the position and content of the text
         $spritetext.position = $collision.position + Vector2($collision.shape.extents.x, 0)
         $spritetext.text = to_level.resource_path
         update()
-
-func _draw():
-    Util.draw_zone(self, Color(0.0, 1.0, 0.0))
 
 func set_size(new_size):
     size = new_size
     if ready:
         $collision.position = (size * 16)
         $collision.shape.extents = (size * 16)
+        update()
 
 func on_body_entered(body):
     if body is Player:
         Game.load_scene(to_level)
+
+func _draw():
+    if Engine.editor_hint:
+        Util.draw_zone(self, Color(0.0, 1.0, 0.0))  # green
 

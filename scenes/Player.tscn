@@ -127,6 +127,7 @@ scale = Vector2( 4, 4 )
 z_index = 1
 frames = ExtResource( 7 )
 animation = "idle"
+frame = 2
 playing = true
 offset = Vector2( 0, 1 )
 script = ExtResource( 2 )
