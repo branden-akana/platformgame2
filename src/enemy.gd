@@ -65,7 +65,7 @@ func reset():
     is_alive = true
 
     if is_instance_valid(sprite):
-        sprite.color = get_hp_color(health)
+        update_color()
 
 func get_hp_color(hp):
     match(hp):
@@ -81,12 +81,16 @@ func get_hp_color(hp):
         _:
             return Color(1.0, 1.0, 1.0)
 
+func update_color():
+    sprite.color = get_hp_color(health)
+
 func damage(from, dmg = 1):
     hit_shift = Vector2.ZERO
     hit_direction = from.position.direction_to(position)
     hit_elasticity = HIT_ELASTICITY
     color_blend = HIT_COLOR_LENGTH
-    health -= dmg
+
+    health = max(0, health - dmg)
         
     if health == 0 and is_alive:
         is_alive = false

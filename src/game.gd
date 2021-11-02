@@ -22,7 +22,9 @@ onready var current_level = get_level()
 # used to draw sprite text
 onready var spritefont = SpriteFont.new()
 
-# Engine.time_scale = 0.5
+# flags
+var practice_mode = false
+
 func _ready():
 
     add_child(spritefont)
@@ -150,6 +152,9 @@ func reset_enemies():
 func get_player() -> Node:
     return $"/root/Main/player"
 
+func get_debug_hud() -> Node:
+    return $"/root/Main/debug"
+
 func _physics_process(delta):
 
     if not time_paused and not is_paused():
@@ -172,6 +177,24 @@ func _process(delta):
 
     if Input.is_action_just_pressed("toggle_fullscreen"):
         OS.window_fullscreen = !OS.window_fullscreen
+
+    # toggle "practice mode" which:
+    # (1) the player will be able to hit dead enemies
+    # (2) dead enemies will now be visible
+    if Input.is_action_just_pressed("toggle_practice_mode"):
+        practice_mode = !practice_mode
+        debug_ping("Practice Mode: %s" % [practice_mode])
+
+        if practice_mode:
+            get_player().ignore_enemy_hp = true
+            for enemy in get_tree().get_nodes_in_group("enemy"):
+                enemy.is_visible_when_dead = true
+                enemy.update_color()
+        else:
+            get_player().ignore_enemy_hp = false
+            for enemy in get_tree().get_nodes_in_group("enemy"):
+                enemy.is_visible_when_dead = false
+                enemy.update_color()
         
 # func _input(event):
     
@@ -245,6 +268,10 @@ func draw_text(node, text):
 # Pausing and Screen Transitions
 # ========================================================================
 
+# Sets the time scale of the physics.
+func set_time_scale(scale):
+    Engine.time_scale = scale
+
 func pause_and_fade_out(time):
     pause(self)
     yield(HUD.fade_out(time), "completed")
@@ -277,4 +304,20 @@ func unpause(node):
 
 func is_paused():
     return len(game_pause_requests) > 0
+
+# Debug features
+# ==============
+
+# Briefly show a message in the debug HUD.
+func debug_ping(message):
+    var pingtext = get_debug_hud().get_node("pingtext")
+    pingtext.text = message
+    var tween = Tween.new()
+    add_child(tween)
+    tween.interpolate_property(pingtext, "modulate:a",
+        1.0, 0.0, 1.0)
+    tween.start()
+    yield(tween, "tween_completed")
+    remove_child(tween)
+
 
