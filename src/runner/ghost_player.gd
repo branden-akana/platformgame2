@@ -19,12 +19,6 @@ func _ready():
     no_effects = true
     ignore_enemy_hp = true
 
-    COLORS = {
-        "default": Color(0.3, 0.3, 0.3),
-        "nodashes": Color(0.3, 0.3, 0.3)
-    }
-
-
 func init(initial_conditions_, replay_frames_, pos_frames_):
     initial_conditions = initial_conditions_
     replay_frames = replay_frames_

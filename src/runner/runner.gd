@@ -33,11 +33,6 @@ export var TERMINAL_VELOCITY = 1000  # maximum downwards velocity
 
 # other consts
 
-export var COLORS = {
-    "default": Color(1.0, 1.0, 1.0),
-    "nodashes": Color(0.3, 0.3, 0.3)
-}
-
 const MAX_COINS = 3
 
 # states
@@ -128,8 +123,6 @@ func _ready():
     stun_timer.one_shot = true
 
     # sprite setup
-    remove_child(sprite)
-    Game.get_foreground().add_child(sprite)
     sprite.set_as_toplevel(true)
 
     # state setup
@@ -197,12 +190,6 @@ func clear_coins():
 #================================================================================
 
 func _process(_delta):
-
-    # update player color
-    if airdashes_left <= 0:
-        sprite.modulate = COLORS["nodashes"]
-    else:
-        sprite.modulate = COLORS["default"]
 
     # check player direction (for flipping sprites)
     match facing:

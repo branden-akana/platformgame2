@@ -21,8 +21,16 @@ func _ready():
     connect("hit", Sound, "play", ["hit", -10])
     connect("dash", Sound, "play", ["walk", -20, 0.8, false, true])
 
+    # sprite setup
+    Game.reparent_to_fg1(sprite)
+
 func pre_process(delta):
 
+    # update player color
+    if airdashes_left <= 0:
+        sprite.modulate = Color(0.3, 0.3, 0.3)
+    else:
+        sprite.modulate = Color(1.0, 1.0, 1.0)
 
     # needed as sometimes the walking sound does not stop
     if state_name != "running":
