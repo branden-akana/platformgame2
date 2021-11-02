@@ -36,25 +36,25 @@ func pre_process(delta):
         return
 
     # camera panning
-    if is_on_floor():
-        var camera_offset = Vector2(0, 0)
-        var down_held_time = buffer.get_time_held("key_down")
-        var up_held_time = buffer.get_time_held("key_up")
+    # if is_on_floor():
+    #     var camera_offset = Vector2(0, 0)
+    #     var down_held_time = buffer.get_time_held("key_down")
+    #     var up_held_time = buffer.get_time_held("key_up")
 
-        if down_held_time and buffer.get_action_strength("key_down") > 0.9:  # pan down
-            # print("down held: %0.2f" % down_held_time)
-            camera_offset = lerp(
-                Vector2(0, 0), Vector2(0, 80),
-                ease(clamp((down_held_time - 1.0) / 0.5, 0.0, 1.0), -2.8)
-            )
-        elif up_held_time and buffer.get_action_strength("key_up") > 0.9:  # pan up
-            # print("up held: %0.2f" % up_held_time)
-            camera_offset = lerp(
-                Vector2(0, 0), Vector2(0, -80),
-                ease(clamp((up_held_time - 1.0) / 0.5, 0.0, 1.0), -2.8)
-            )
+    #     if down_held_time and buffer.get_action_strength("key_down") > 0.9:  # pan down
+    #         # print("down held: %0.2f" % down_held_time)
+    #         camera_offset = lerp(
+    #             Vector2(0, 0), Vector2(0, 80),
+    #             ease(clamp((down_held_time - 1.0) / 0.5, 0.0, 1.0), -2.8)
+    #         )
+    #     elif up_held_time and buffer.get_action_strength("key_up") > 0.9:  # pan up
+    #         # print("up held: %0.2f" % up_held_time)
+    #         camera_offset = lerp(
+    #             Vector2(0, 0), Vector2(0, -80),
+    #             ease(clamp((up_held_time - 1.0) / 0.5, 0.0, 1.0), -2.8)
+    #         )
 
-        Game.get_camera().set_offset(camera_offset)
+    #     Game.get_camera().set_offset(camera_offset)
 
     # record initial conditions (position, velocity, etc.)
     if tick == 0:
