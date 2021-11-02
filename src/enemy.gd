@@ -13,13 +13,17 @@ onready var health = max_health
 
 var origin: Vector2
 
-var hit_direction: Vector2
-var hit_shift: Vector2  # position shift from being hit
+var hit_direction: Vector2 = Vector2.ZERO
+var hit_shift: Vector2 = Vector2.ZERO # position shift from being hit
 var hit_elasticity: float = 0.0
 
 var color_blend: float = 0.0
 
+# flags
+
 var is_alive = true
+
+var is_visible_when_dead = false
 
 # children
 
@@ -29,8 +33,13 @@ onready var tween = Tween.new()
 func _ready():
     add_child(tween)
 
+    self.set_as_toplevel(true)
+    position += get_parent().position
+
     if not Engine.editor_hint:
         Game.reparent_to_fg2(sprite)
+    else:
+        sprite.set_as_toplevel(true)
 
     reset()
     
@@ -38,15 +47,14 @@ func _process(delta):
     if not is_instance_valid(sprite):
         return
         
-    if not Engine.editor_hint:
-        sprite.global_rotation += delta
+    sprite.global_rotation += delta
 
-        if hit_direction and hit_elasticity > 0.0:
-            hit_shift += hit_direction * delta * HIT_SHIFT_AMT
-            hit_elasticity -= delta
+    if hit_direction and hit_elasticity > 0.0:
+        hit_shift += hit_direction * delta * HIT_SHIFT_AMT
+        hit_elasticity -= delta
 
-        # shift sprite in hit direction
-        sprite.position = global_position + lerp(Vector2.ZERO, hit_shift, ease(hit_elasticity / HIT_ELASTICITY, 3))
+    # shift sprite in hit direction
+    sprite.position = position + lerp(Vector2.ZERO, hit_shift, ease(hit_elasticity / HIT_ELASTICITY, 3))
 
 func set_max_health(max_hp):
     max_health = max_hp
@@ -62,7 +70,10 @@ func reset():
 func get_hp_color(hp):
     match(hp):
         0:
-            return Color(0.2, 0.2, 0.2, 0.0)
+            if is_visible_when_dead:
+                return Color(0.2, 0.2, 0.2, 0.5)
+            else:
+                return Color(0.2, 0.2, 0.2, 0.0)
         1:
             return Color(0.3, 0.3, 0.3)
         2:
