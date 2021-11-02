@@ -16,6 +16,9 @@ func play(scene, parent, params = {}):
     instance.add_to_group("particles")
     instance.restart()
 
+    if parent is GhostPlayer:
+        instance.visible = false
+
     return instance
     
 func delete(particles):
