@@ -34,7 +34,7 @@ func _ready():
     add_child(tween)
 
     self.set_as_toplevel(true)
-    position += get_parent().position
+    # position += get_parent().position
 
     if not Engine.editor_hint:
         Game.reparent_to_fg2(sprite)
