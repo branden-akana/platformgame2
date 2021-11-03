@@ -112,7 +112,7 @@ func tween_origin(to, time = 0.5):
         Game.unpause(self)
 
 func get_camera_origin():
-    var target = get_node(target_path)
+    var target = get_node_or_null(target_path)
     if target:
         return -target.get_viewport().canvas_transform.origin
     else:
@@ -120,7 +120,7 @@ func get_camera_origin():
 
 func set_camera_origin(vec):
 
-    var target = get_node(target_path)
+    var target = get_node_or_null(target_path)
     if target:
 
         real_origin = vec
