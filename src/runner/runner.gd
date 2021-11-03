@@ -348,6 +348,6 @@ func hurt(damage = 100, respawn_point = null):
 
 # Called when a body intersects this runner's hurtbox.
 func on_hurtbox_entered(from):
-    print("hurtbox triggered: %s" % from)
+    # print("hurtbox triggered: %s" % from)
     hurt(from.damage, from.get_respawn_point())
 

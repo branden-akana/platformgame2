@@ -7,8 +7,8 @@ signal scene_loaded
 const Textbox = preload("res://scenes/textbox.tscn")
 
 const Level_TestHub = preload("res://scenes/levels/test_hub.tscn")
-const Level_1 = preload("res://scenes/levels/Level_Test2.tscn")
-const Level_2 = preload("res://scenes/levels/Level_Test.tscn")
+const Level_1 = preload("res://scenes/levels/test2.tscn")
+const Level_2 = preload("res://scenes/levels/test1.tscn")
 
 # the total amount of time elapsed for the current level until completion
 var time: float = 0.0
@@ -50,7 +50,7 @@ func _ready():
 func reinitialize_game():
 
     # reset best time / ghost
-    time_best = INF
+    clear_best_times()
     get_player().delete_ghost()
 
     # reset the level
@@ -59,12 +59,12 @@ func reinitialize_game():
 # Restart the level. Use to reset the state of just the level.
 func restart_level():
 
-    # set start position
-    get_player().restart()
-
     num_deaths = 0
     reset_timer()
     reset_enemies()
+
+    # set start position
+    get_player().restart()
 
     get_camera().init()
 
@@ -175,11 +175,11 @@ func _physics_process(delta):
         time += delta
 
     if len(get_alive_enemies()) == 0 and not time_paused:
-        pause_timer()
+        stop_timer()
 
     # update HUD timer
     HUD.get_node("control/timer").text = "%02d:%02d" % [floor(time/60.0), floor(fmod(time, 60.0))]
-    HUD.get_node("control/timer_small").text = "%03d" % [fmod(fmod(time, 60.0), 1.0) * 1000]
+    HUD.get_node("control/timer_small").text = "%03d" % [fmod(time, 1.0) * 1000]
     HUD.get_node("control/enemy_display").text = "enemies: %d" % len(get_alive_enemies())
     HUD.get_node("control/death_display").text = "deaths: %d" % num_deaths
 
@@ -223,19 +223,42 @@ func _process(delta):
 #    if event is InputEventJoypadButton:
 #       print(event.button_index)
 
+# Speedrun Timer
+# ========================================================================
+
 func is_best_time():
-    return time_paused and time < time_best
+    return time_paused and time <= time_best
 
 # Pause the ingame timer
 func pause_timer():
     time_paused = true
 
+func stop_timer():
+    print("[timer] timer stopped")
+    pause_timer()
+
+    # calculate time difference
+    if time_best < INF:
+        HUD.get_node("control/best_diff").text = Util.format_time_diff(time - time_best)
+
+    # check for new best time
+    if is_best_time():
+        print("[timer] new best time recorded")
+        time_best = time
+        # create a new ghost replay
+        get_player().create_ghost()
+
 # Reset the ingame timer
 func reset_timer():
-    if is_best_time():
-        time_best = time
     time = 0.0
     time_paused = false
+    HUD.get_node("control/best_diff").text = ""
+    if time_best < INF:
+        HUD.get_node("control/best").text = "best %s" % Util.format_time(time_best)
+
+func clear_best_times():
+    time_best = INF
+    HUD.get_node("control/best").text = ""
 
 # Palettes / Viewports
 # ========================================================================

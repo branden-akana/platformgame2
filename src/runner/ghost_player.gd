@@ -14,28 +14,37 @@ var pos_frames = null
 var replay_finished = false
 
 func _ready():
-    print("buffer: %s " % buffer)
+    # print("buffer: %s " % buffer)
     no_damage = true
     no_effects = true
     ignore_enemy_hp = true
+    sprite.visible = false
 
 func init(initial_conditions_, replay_frames_, pos_frames_):
     initial_conditions = initial_conditions_
     replay_frames = replay_frames_
     pos_frames = pos_frames_
-    print("Replay Loaded (%d frames)" % len(replay_frames))
+    print("[ghost] new replay loaded! (%d frames)" % len(replay_frames))
     print("    position: %s" % initial_conditions.position)
     print("    velocity: %s" % initial_conditions.velocity)
     print("    state: %s" % initial_conditions.state_name)
-    restart()
+
+# stop playing this ghost
+func stop():
+    print("[ghost] stopped replay")
+    sprite.visible = false
 
 func restart():
+    print("[ghost] restarting replay")
     .restart()
+    sprite.visible = true
     replay_finished = false
     position = initial_conditions.position
     velocity = initial_conditions.velocity
     state_name = initial_conditions.state_name
-    print("Restarting ghost replay")
+
+    yield(self, "replay_finish")
+    stop()
 
 func pre_process(_delta):
     
@@ -49,7 +58,7 @@ func pre_process(_delta):
         # var delta_vel = velocity.distance_to(expected_vel)
         # print("Frame %d: delt pos = %0.2f, delt vel = %0.2f" % [tick, delta_pos, delta_vel])
         if delta_pos > MIN_DEVIATION:
-            print("Ghost deviation detected! Fixing position...")
+            print("[ghost] deviation detected! fixing position...")
             position = expected_pos
             velocity = expected_vel
 
@@ -60,6 +69,7 @@ func pre_process(_delta):
             buffer.update_action(input, input_map[input])
     else:
         if not replay_finished:
+            print("[ghost] reached end of replay")
             replay_finished = true
             emit_signal("replay_finish")
 

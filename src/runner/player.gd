@@ -94,16 +94,8 @@ func player_restart():
 
 func restart():
 
-    # send replay data to ghost if better complete time
-    if Game.is_best_time():
-        if not is_instance_valid(ghost):
-            create_ghost()
-
-        # update ghost replay
-        ghost.init(initial_conditions, replay_frames.duplicate(true), pos_frames.duplicate(true))
-    else:
-        if is_instance_valid(ghost):
-            ghost.restart()
+    if is_instance_valid(ghost):
+        ghost.restart()
 
     # reset player to start point
     .restart()
@@ -123,15 +115,20 @@ func respawn(pos):
     # unpause after fadein
     yield(Game.fade_in_and_unpause(0.2), "completed")
 
-func create_ghost():
 
-    print("creating new ghost")
-    ghost = GhostPlayer.instance()
-    get_parent().add_child(ghost)
+# Create a ghost replay from this player's currently recorded inputs.
+func create_ghost():
+    if not is_instance_valid(ghost):
+        print("[ghost] creating new ghost")
+        ghost = GhostPlayer.instance()
+        get_parent().add_child(ghost)
+
+    # update ghost replay
+    ghost.init(initial_conditions, replay_frames.duplicate(true), pos_frames.duplicate(true))
 
 func delete_ghost():
     if is_instance_valid(ghost):
-        print("deleting ghost")
+        print("[ghost] deleting ghost")
         get_parent().remove_child(ghost)
         ghost.queue_free()
     
