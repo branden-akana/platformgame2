@@ -67,7 +67,7 @@ func is_in_region(vec, mn, mx):
 # the camera to the new room. Otherwise, move the camera to the
 # new room instantly.
 func set_room_focus(room, smooth_transition = true):
-    if Game.current_room == room:
+    if room == null or Game.current_room == room:
         return
 
     Game.current_room = room
