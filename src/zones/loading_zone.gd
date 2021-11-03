@@ -8,8 +8,14 @@ export (Vector2) var size = Vector2(2, 2) setget set_size
 var ready = false
 
 func _ready():
-    ready = true
+    # create a new rectangle shape for the collision
+    # this is to ensure individual zones can have different sized shapes
+    $collision.shape = RectangleShape2D.new()
+
     connect("body_entered", self, "on_body_entered")
+
+    ready = true
+
     set_size(size)
 
 func _process(delta):

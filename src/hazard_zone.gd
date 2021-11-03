@@ -8,7 +8,13 @@ export (Vector2) var size = Vector2(40, 2) setget set_size
 var ready = false
 
 func _ready():
+    # create a new rectangle shape for the collision
+    # this is to ensure individual zones can have different sized shapes
+    $collision.shape = RectangleShape2D.new()
+
     ready = true
+
+    # manually call set_size for the editor
     set_size(size)
 
 # Gets the respawn point to send players after they die to this hazard.
