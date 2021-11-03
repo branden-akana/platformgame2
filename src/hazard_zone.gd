@@ -2,7 +2,7 @@ extends StaticBody2D
 tool
 
 export (int) var damage = 100
-export (Vector2) var size = Vector2(40, 2) setget set_size
+export (Vector2) var size = Vector2(20, 1) setget set_size
 
 # flag needed for setget
 var ready = false
@@ -31,8 +31,8 @@ func get_respawn_point() -> Vector2:
 func set_size(new_size):
     size = new_size
     if ready:
-        $collision.position = (size * 16)
-        $collision.shape.extents = (size * 16)
+        $collision.position = (size * 32)
+        $collision.shape.extents = (size * 32)
         update()
 
 func _process(delta):
