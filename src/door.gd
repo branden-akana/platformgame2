@@ -36,39 +36,75 @@ func is_door_unlocked():
 
 func _physics_process(_delta):
     if is_door_unlocked():
-        open_door()
+        open_door(true, false)
 
-func close_door():
+func close_door(transition = false):
 
-    if not is_door_unlocked() and not door_closed and not tween.is_active():
-        tween.interpolate_property(
-            self, "position", open_position, close_position, 1.0,
-            Tween.TRANS_CUBIC, Tween.EASE_IN)
-        tween.start()
-        yield(Game.pause_and_lbox_in(0.5), "completed")
-        yield(tween, "tween_all_completed")
-        Game.get_camera().screen_shake(4.0, 0.5)
+    if not door_closed:
+        print("[door] closing door")
         door_closed = true
+
+        if tween.is_active():
+            tween.reset_all()
+            tween.stop_all()
+
+        if transition:
+            # focus camera on door
+            Game.set_camera_focus(self)
+
+            # letterbox, screen shake, and open door
+            tween.interpolate_property(
+                self, "position", open_position, close_position, 1.0,
+                Tween.TRANS_CUBIC, Tween.EASE_IN)
+            tween.start()
+            yield(Game.pause_and_lbox_in(0.5), "completed")
+            yield(tween, "tween_all_completed")
+            Game.get_camera().screen_shake(4.0, 0.5)
+        else:
+            position = close_position
+
         emit_signal("door_closed")
-        yield(Game.unpause_and_lbox_out(2.0), "completed")
+
+        if transition:
+            # focus camera back to player
+            Game.set_camera_focus(Game.get_player())
+            yield(Game.unpause_and_lbox_out(2.0), "completed")
     else:
         yield()
 
-func open_door():
+func open_door(transition = false, focus = true):
 
-    if door_closed and not tween.is_active():
-        Game.set_camera_focus(self)
-        tween.interpolate_property(
-            self, "position", close_position, open_position, 1.0,
-            Tween.TRANS_CUBIC, Tween.EASE_IN)
-        tween.start()
-        yield(Game.pause_and_lbox_in(0.5), "completed")
-        yield(tween, "tween_all_completed")
-        Game.get_camera().screen_shake(4.0, 0.5)
+    if door_closed:
+        print("[door] opening door")
         door_closed = false
+
+        if tween.is_active():
+            tween.reset_all()
+            tween.stop_all()
+
+        if transition:
+            # letterbox, screen shake, and open door
+            tween.interpolate_property(
+                self, "position", close_position, open_position, 1.0,
+                Tween.TRANS_CUBIC, Tween.EASE_IN)
+            tween.start()
+
+            if focus:
+                # focus camera on door
+                Game.set_camera_focus(self)
+                yield(Game.pause_and_lbox_in(0.5), "completed")
+
+            yield(tween, "tween_all_completed")
+            Game.get_camera().screen_shake(4.0, 0.5)
+        else:
+            position = close_position
+
         emit_signal("door_opened")
-        Game.set_camera_focus(Game.get_player())
-        yield(Game.unpause_and_lbox_out(2.0), "completed")
+
+        if transition and focus:
+            # focus camera back to player
+            Game.set_camera_focus(Game.get_player())
+            yield(Game.unpause_and_lbox_out(2.0), "completed")
     else:
         yield()
 

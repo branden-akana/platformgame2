@@ -68,6 +68,7 @@ func restart_level():
     num_deaths = 0
     reset_timer()
     reset_enemies()
+    reset_entities()
 
     get_camera().init()
 
@@ -217,6 +218,11 @@ func reset_enemies():
     for enemy in get_enemies():
         enemy.reset()
 
+# Reset entities in the level (doors, etc.)
+func reset_entities():
+    for door in get_tree().get_nodes_in_group("door"):
+        door.close_door(false)
+
 func get_player() -> Node:
     return $"/root/Main/player"
 
@@ -234,8 +240,8 @@ func _physics_process(delta):
     # update HUD timer
     HUD.get_node("control/timer").text = "%02d:%02d" % [floor(time/60.0), floor(fmod(time, 60.0))]
     HUD.get_node("control/timer_small").text = "%03d" % [fmod(time, 1.0) * 1000]
-    HUD.get_node("control/enemy_display").text = "enemies: %d" % len(get_alive_enemies())
-    HUD.get_node("control/death_display").text = "deaths: %d" % num_deaths
+    # HUD.get_node("control/enemy_display").text = "enemies: %d" % len(get_alive_enemies())
+    HUD.get_node("control/death_display").text = "deaths %d" % num_deaths
 
 func _process(delta):
 
