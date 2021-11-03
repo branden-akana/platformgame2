@@ -8,6 +8,7 @@ var open_position: Vector2
 var tween
 
 export var door_closed = false
+var enemies_cleared = false
 
 
 func _ready():
@@ -35,7 +36,8 @@ func is_door_unlocked():
     return true
 
 func _physics_process(_delta):
-    if is_door_unlocked():
+    if is_door_unlocked() and enemies_cleared == false:
+        enemies_cleared = true
         open_door(true, false)
 
 func close_door(transition = false):

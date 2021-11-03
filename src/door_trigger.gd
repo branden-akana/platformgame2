@@ -14,5 +14,6 @@ func _draw():
 func on_trigger(_body):
     var door = get_node(door_path)
     if door:
-        yield(door.close_door(), "completed")
-        Game.set_start_point(2)
+        door.close_door(true)
+        yield(door, "door_closed")
+        #Game.set_start_point(2)
