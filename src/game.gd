@@ -24,7 +24,11 @@ var num_deaths = 0
 var game_pause_requests = []
 var game_paused: bool setget , is_paused
 
+# the current level that is loaded
 onready var current_level = get_level()
+
+# the current room that the player is in
+var current_room = null setget set_current_room
 
 # used to draw sprite text
 onready var spritefont = SpriteFont.new()
@@ -40,11 +44,13 @@ func _ready():
 
     Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
-    restart_level()
-    
     print("Feel free to minimize this window! It needs to be open for some reason to avoid a crash.")
 
     get_player().connect("died", self, "on_player_death")
+    
+    yield(get_player(), "ready")
+
+    reinitialize_game()
 
 # Initialize the game. Use after loading a new level.
 func reinitialize_game():
@@ -53,7 +59,7 @@ func reinitialize_game():
     clear_best_times()
     get_player().delete_ghost()
 
-    # reset the level
+    restart_player()
     restart_level()
     
 # Restart the level. Use to reset the state of just the level.
@@ -63,10 +69,11 @@ func restart_level():
     reset_timer()
     reset_enemies()
 
+    get_camera().init()
+
+func restart_player():
     # set start position
     get_player().restart()
-
-    get_camera().init()
 
 func load_scene(level):
     # debug_log("loading new scene...")
@@ -120,6 +127,56 @@ func _load_scene(level_path):
 
     emit_signal("scene_loaded")
 
+# Level/Room Functions
+# ========================================================================
+
+func get_level() -> Level:
+    return $"/root/Main/level" as Level
+
+# Get a list of all rooms in the current level.
+func get_rooms() -> Array:
+    return get_tree().get_nodes_in_group("room")
+
+func set_current_room(room):
+    # print("entered new room")
+    current_room = room
+
+# Attempt to find a room at this position. If none is found, return null.
+func get_room_at_point(pos):
+    # print("finding %s in %s" % [pos, get_rooms()])
+    for room in get_rooms():
+        # get this room's collision box
+        var collision = room.get_node("collision")
+        var shape = collision.shape
+
+        # create a rect with the same dimensions as the collision shape
+        # then check if a point is inside the rect
+        var rect = Rect2(collision.global_position - shape.extents, shape.extents * 2)
+        if rect.has_point(pos):
+            return room
+
+    return null
+
+# Attempt to find a room at a body's position.
+# (overlaps_body() doesn't react very well to sudden position changes?)
+func get_room_at_node(node):
+    # use point check function
+    return get_room_at_point(node.global_position)
+
+    # if node is PhysicsBody2D:
+    #     # use the builtin overlap function
+    #     for room in get_rooms():
+    #         if room.overlaps_body(node):
+    #             return room
+    #     return null
+    # else:
+    #     # use point check function
+    #     return get_room_at_point(node.global_position)
+
+func on_room_entered(room, player):
+    print("[game] new room entered %s" % room)
+    get_camera().set_room_focus(room)
+
 func on_player_death():
     if not time_paused:
         num_deaths += 1
@@ -129,9 +186,6 @@ func debug_log(s):
     file.open("res://log.txt", file.READ_WRITE)
     file.seek_end()
     file.store_line(s)
-
-func get_level() -> Level:
-    return $"/root/Main/level" as Level
 
 func get_camera() -> Node:
     return $"/root/Main/camera"
@@ -335,6 +389,7 @@ func unpause_and_lbox_out(time):
     yield(HUD.lbox_out(time), "completed")
 
 func pause(node):
+    # print("[game] %s wants to pause" % node.name)
     if not node in game_pause_requests:
         game_pause_requests.append(node)
 
@@ -343,6 +398,7 @@ func pause(node):
             #print("paused")
 
 func unpause(node):
+    # print("[game] %s wants to unpause" % node.name)
     game_pause_requests.erase(node)
     if len(game_pause_requests) == 0:
         emit_signal("unpaused")

@@ -16,9 +16,6 @@ var region_transition = 0.0
 var transition_tween = Tween.new()
 
 var real_origin = Vector2.ZERO
-var current_zone = null
-var monitoring_zones = false
-var initial_zone_set = false
 
 var shake_max_time = 0.0
 var shake_time = 0.0
@@ -32,12 +29,12 @@ func _ready():
     real_origin = get_camera_origin()
 
 func init():
-    # print("initializing camera")
-    target_path = Game.get_player().get_path()
-    current_zone = null
-    initial_zone_set = false
-    monitoring_zones = true
-    detect_zones()
+    # print("[camera] init")
+
+    set_target(Game.get_player().get_path())
+    yield(Game.get_player(), "respawned")
+    set_room_focus(get_room_at_target(), false)
+    transition_tween.reset_all()
 
 func get_window_size() -> Vector2:
     return get_viewport().size
@@ -52,8 +49,8 @@ func get_target_camera_pos() -> Vector2:
     return get_target().position - (get_window_size() / 2)
 
 func set_target(nodepath):
+    print("[camera] setting target to %s" % nodepath)
     target_path = nodepath
-    detect_zones()
 
 func clamp_vec(vec):
     var mn = min_position
@@ -63,27 +60,35 @@ func clamp_vec(vec):
 func is_in_region(vec, mn, mx):
     return (mn.x >= vec.x and vec.x >= mx.x) and (mn.y >= vec.y and vec.y >= mx.y)
 
-# Sets the current zone to focus on.
+# Sets the current room to focus on.
 #
-# The camera will now be bound within this zone.
+# The camera will now be bound within this room.
 # If smooth_transition is true, briefly pause the game and transition
-# the camera to the new zone. Otherwise, move the camera to the
-# new zone instantly.
-func set_zone(zone, smooth_transition = true):
-    current_zone = zone
+# the camera to the new room. Otherwise, move the camera to the
+# new room instantly.
+func set_room_focus(room, smooth_transition = true):
+    if Game.current_room == room:
+        return
 
-    min_position = zone.position
-    max_position = zone.position + (zone.region_size * 64)
+    Game.current_room = room
+    var bounds = room.get_bounds()
+
+    min_position = bounds[0]
+    max_position = bounds[1]
+
+    # print("new bounds: %s, %s" % bounds)
     
     var to = clamp_vec(get_target_camera_pos())
 
     if smooth_transition:
-        var tween_2 = HUD.change_palette(zone.palette_idx)
+        # print("[camera] moving camera with transition")
+        var tween_2 = HUD.change_palette(room.palette_idx)
         var tween_1 = tween_origin(to, 0.5)
         yield(tween_1, "completed")
         yield(tween_2, "completed")
     else:
-        HUD.change_palette(zone.palette_idx, 0.2)
+        # print("[camera] moving camera without transition")
+        HUD.change_palette(room.palette_idx, 0.2)
         tween_origin(to, 0.0)
         yield(get_tree(), "idle_frame")
 
@@ -97,7 +102,6 @@ func tween_origin(to, time = 0.5):
 
     if time == 0:
         set_camera_origin(to)
-        yield(get_tree(), "idle_frame")
     else:
         Game.pause(self)
         transition_tween.interpolate_method(
@@ -155,47 +159,9 @@ func _process(delta):
 
         set_camera_origin(origin)
 
-func get_all_zones() -> Array:
-    return get_tree().get_nodes_in_group("camera_zone")
-
-# Gets the camera zone at this node.
-# (doesn't react very well to sudden position changes?)
-func get_zone_at_node(node):
-    for zone in get_all_zones():
-        if zone.overlaps_body(node):
-            return zone
-    return null
-
-# Gets the camera zone at this position.
-func get_zone_at_point(pos):
-    for zone in get_all_zones():
-        var collision = zone.get_node("collision")
-        var shape = collision.shape
-        var rect = Rect2(collision.global_position - shape.extents, shape.extents * 2)
-        if rect.has_point(pos):
-            return zone
-    return null
-
-func detect_zones():
-    var zone = get_zone_at_point(get_target().position)
-    # print(zone)
-    if zone and zone != current_zone:
-        if not initial_zone_set:
-            # print("setting initial zone: %s" % zone)
-            yield(set_zone(zone, false), "completed")
-            initial_zone_set = true
-        else:
-            # print("setting zone: %s" % zone)
-            set_zone(zone)
-
-func _physics_process(delta):
-    if monitoring_zones:
-        detect_zones()
-
-    # var intersects = get_world_2d().direct_space_state.intersect_point(
-    #     get_target().global_position, 32, [], 0b100000,
-    #     true, true)
-    # print("intersects: %s" % [intersects])
+# Get the room at the current target (if any).
+func get_room_at_target():
+    return Game.get_room_at_point(get_target().global_position)
 
 func clamp_origin():
     return clamp_vec(get_camera_origin())
