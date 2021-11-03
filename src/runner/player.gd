@@ -95,7 +95,7 @@ func hurt(damage = 100, respawn_point = null):
     # pause during fadeout
     yield(Game.pause_and_fade_out(0.2), "completed")
 
-    .hurt()
+    .hurt(damage, respawn_point)
 
     # unpause after fadein
     yield(Game.fade_in_and_unpause(0.2), "completed")
