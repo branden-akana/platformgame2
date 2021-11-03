@@ -142,7 +142,7 @@ func on_area_enter(_area_id, area: Area2D, area_shape, _local_shape):
 
         if not runner.no_damage:
             area.damage(runner)
-            Game.get_camera().screen_shake(2.0, 0.5)
+            Game.get_camera().screen_shake(1.0, 0.2)
             runner.emit_signal("hit")
 
 func on_end():
