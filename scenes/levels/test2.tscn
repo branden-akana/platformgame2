@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://shaders/grayscale.gdshader" type="Shader" id=1]
 [ext_resource path="res://assets/Tilemap.png" type="Texture" id=2]
@@ -11,8 +11,6 @@
 [ext_resource path="res://scenes/door.tscn" type="PackedScene" id=9]
 [ext_resource path="res://src/background.gd" type="Script" id=10]
 [ext_resource path="res://src/interactable_textbox.gd" type="Script" id=11]
-[ext_resource path="res://src/door.gd" type="Script" id=12]
-[ext_resource path="res://src/door_trigger.gd" type="Script" id=13]
 [ext_resource path="res://assets/spikes_trap.png" type="Texture" id=14]
 [ext_resource path="res://assets/bg.png" type="Texture" id=15]
 
@@ -282,16 +280,6 @@ func on_unpause():
 #    pass
 "
 
-[sub_resource type="RectangleShape2D" id=13]
-extents = Vector2( 4, 16 )
-
-[sub_resource type="AtlasTexture" id=14]
-atlas = ExtResource( 5 )
-region = Rect2( 200, 144, 8, 32 )
-
-[sub_resource type="RectangleShape2D" id=15]
-extents = Vector2( 46.2627, 49.7928 )
-
 [sub_resource type="CircleShape2D" id=16]
 radius = 64.0
 
@@ -360,50 +348,6 @@ initial_velocity_random = 0.5
 scale_amount = 4.0
 script = SubResource( 12 )
 
-[node name="door" type="StaticBody2D" parent="."]
-pause_mode = 2
-position = Vector2( 32, 448 )
-collision_layer = 129
-collision_mask = 0
-script = ExtResource( 12 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="door"]
-scale = Vector2( 4, 4 )
-shape = SubResource( 13 )
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="Sprite" type="Sprite" parent="door"]
-scale = Vector2( 4, 4 )
-texture = SubResource( 14 )
-region_enabled = true
-region_rect = Rect2( 0, 0, 8, 32 )
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="door2" parent="." instance=ExtResource( 9 )]
-
-[node name="enemy12" parent="door2" instance=ExtResource( 7 )]
-position = Vector2( -160, 128 )
-
-[node name="door_trigger" type="Area2D" parent="."]
-position = Vector2( 124.146, 448 )
-collision_layer = 0
-collision_mask = 2
-script = ExtResource( 13 )
-__meta__ = {
-"_edit_lock_": true
-}
-door_path = NodePath("../door")
-
-[node name="collision" type="CollisionShape2D" parent="door_trigger"]
-shape = SubResource( 15 )
-__meta__ = {
-"_edit_lock_": true
-}
-
 [node name="sign2" type="Area2D" parent="."]
 position = Vector2( -2146.25, 223.491 )
 scale = Vector2( 2, 2 )
@@ -441,141 +385,146 @@ lines = [ "Press X to jump. Hold it down for a higher jump." ]
 scale = Vector2( 0.5, 0.5 )
 shape = SubResource( 16 )
 
-[node name="camera_zones" type="Node" parent="."]
+[node name="room_1" parent="." instance=ExtResource( 4 )]
+z_index = 15
+z_as_relative = false
 
-[node name="camera_zone4" parent="camera_zones" instance=ExtResource( 4 )]
+[node name="enemy" parent="room_1" instance=ExtResource( 7 )]
+position = Vector2( 704, 304 )
+
+[node name="enemy2" parent="room_1" instance=ExtResource( 7 )]
+position = Vector2( 256, 464 )
+
+[node name="enemy3" parent="room_1" instance=ExtResource( 7 )]
+position = Vector2( 960, 184 )
+
+[node name="death_zone" parent="room_1" instance=ExtResource( 8 )]
+position = Vector2( 0, 722.132 )
+scale = Vector2( 1, 1.00296 )
+z_index = 16
+
+[node name="respawn" type="Node2D" parent="room_1/death_zone"]
+position = Vector2( 128, -240 )
+
+[node name="room_2" parent="." instance=ExtResource( 4 )]
+position = Vector2( 1280, 0 )
+z_index = 15
+z_as_relative = false
+size = Vector2( 32, 15 )
+
+[node name="enemy4" parent="room_2" instance=ExtResource( 7 )]
+position = Vector2( 1984, 400 )
+
+[node name="enemy5" parent="room_2" instance=ExtResource( 7 )]
+position = Vector2( 3200, 464 )
+
+[node name="enemy6" parent="room_2" instance=ExtResource( 7 )]
+position = Vector2( 2592, 272 )
+
+[node name="enemy7" parent="room_2" instance=ExtResource( 7 )]
+position = Vector2( 1984, 656 )
+
+[node name="death_zone2" parent="room_2" instance=ExtResource( 8 )]
+position = Vector2( 0, 962.843 )
+scale = Vector2( 1, 1.00296 )
+size = Vector2( 32, 1 )
+
+[node name="respawn" type="Node2D" parent="room_2/death_zone2"]
+position = Vector2( 128, -480 )
+
+[node name="room_3" parent="." instance=ExtResource( 4 )]
+position = Vector2( 3328, -400 )
+z_index = 15
+z_as_relative = false
+size = Vector2( 20, 20 )
+
+[node name="enemy8" parent="room_3" instance=ExtResource( 7 )]
+position = Vector2( 3968, 336 )
+
+[node name="enemy10" parent="room_3" instance=ExtResource( 7 )]
+position = Vector2( 3968, 80 )
+
+[node name="enemy11" parent="room_3" instance=ExtResource( 7 )]
+position = Vector2( 4448, 272 )
+
+[node name="death_zone3" parent="room_3" instance=ExtResource( 8 )]
+position = Vector2( 0, 1283.79 )
+scale = Vector2( 1, 1.00296 )
+z_index = 16
+size = Vector2( 40, 1 )
+
+[node name="respawn" type="Node2D" parent="room_3/death_zone3"]
+position = Vector2( 96, -400 )
+
+[node name="room_4" parent="." instance=ExtResource( 4 )]
 position = Vector2( -1280, -384 )
 z_index = 15
 z_as_relative = false
 size = Vector2( 20, 17 )
 palette_idx = 1
 
-[node name="camera_zone9" parent="camera_zones" instance=ExtResource( 4 )]
-position = Vector2( -1280, -1472 )
-z_index = 15
-z_as_relative = false
-size = Vector2( 20, 17 )
-palette_idx = 2
+[node name="door2" parent="room_4" instance=ExtResource( 9 )]
+position = Vector2( 1248, 834.464 )
+scale = Vector2( 1, 1.00296 )
 
-[node name="camera_zone6" parent="camera_zones" instance=ExtResource( 4 )]
-position = Vector2( -3840, -256 )
-z_index = 15
-z_as_relative = false
-palette_idx = 1
+[node name="enemy12" parent="room_4/door2" instance=ExtResource( 7 )]
+position = Vector2( -160, 128 )
 
-[node name="camera_zone8" parent="camera_zones" instance=ExtResource( 4 )]
-position = Vector2( -6720, -1024 )
-z_index = 15
-z_as_relative = false
-size = Vector2( 25, 15 )
-palette_idx = 1
-
-[node name="camera_zone7" parent="camera_zones" instance=ExtResource( 4 )]
-position = Vector2( -5120, -496 )
-z_index = 15
-z_as_relative = false
-size = Vector2( 20, 15 )
-palette_idx = 1
-
-[node name="camera_zone5" parent="camera_zones" instance=ExtResource( 4 )]
+[node name="room_5" parent="." instance=ExtResource( 4 )]
 position = Vector2( -2560, -256 )
 z_index = 15
 z_as_relative = false
 size = Vector2( 20, 15 )
 palette_idx = 1
 
-[node name="camera_zone3" parent="camera_zones" instance=ExtResource( 4 )]
-position = Vector2( 3328, -400 )
-z_index = 15
-z_as_relative = false
-size = Vector2( 20, 20 )
+[node name="death_zone5" parent="room_5" instance=ExtResource( 8 )]
+position = Vector2( 0, 970.867 )
+scale = Vector2( 1, 1.00296 )
 
-[node name="camera_zone" parent="camera_zones" instance=ExtResource( 4 )]
-z_index = 15
-z_as_relative = false
-
-[node name="camera_zone2" parent="camera_zones" instance=ExtResource( 4 )]
-position = Vector2( 1280, 0 )
-z_index = 15
-z_as_relative = false
-size = Vector2( 32, 15 )
-
-[node name="death_zones" type="Node" parent="."]
-pause_mode = 2
-
-[node name="death_zone4" parent="death_zones" instance=ExtResource( 8 )]
-position = Vector2( -3840, 472 )
-
-[node name="respawn" type="Node2D" parent="death_zones/death_zone4"]
-position = Vector2( 128, -184 )
-
-[node name="death_zone5" parent="death_zones" instance=ExtResource( 8 )]
-position = Vector2( -2560, 712 )
-
-[node name="respawn" type="Node2D" parent="death_zones/death_zone5"]
+[node name="respawn" type="Node2D" parent="room_5/death_zone5"]
 position = Vector2( 128, -488 )
 
-[node name="death_zone2" parent="death_zones" instance=ExtResource( 8 )]
-position = Vector2( 1280, 960 )
-size = Vector2( 32, 1 )
+[node name="room_6" parent="." instance=ExtResource( 4 )]
+position = Vector2( -3840, -256 )
+z_index = 15
+z_as_relative = false
+palette_idx = 1
 
-[node name="respawn" type="Node2D" parent="death_zones/death_zone2"]
-position = Vector2( 128, -480 )
+[node name="death_zone4" parent="room_6" instance=ExtResource( 8 )]
+position = Vector2( 0, 730.156 )
+scale = Vector2( 1, 1.00296 )
 
-[node name="death_zone" parent="death_zones" instance=ExtResource( 8 )]
-position = Vector2( 0, 720 )
-z_index = 16
+[node name="respawn" type="Node2D" parent="room_6/death_zone4"]
+position = Vector2( 128, -184 )
 
-[node name="respawn" type="Node2D" parent="death_zones/death_zone"]
-position = Vector2( 128, -240 )
+[node name="room_7" parent="." instance=ExtResource( 4 )]
+position = Vector2( -5120, -496 )
+z_index = 15
+z_as_relative = false
+size = Vector2( 20, 15 )
+palette_idx = 1
 
-[node name="death_zone3" parent="death_zones" instance=ExtResource( 8 )]
-position = Vector2( 3328, 880 )
-z_index = 16
-size = Vector2( 40, 1 )
+[node name="room_8" parent="." instance=ExtResource( 4 )]
+position = Vector2( -6720, -1024 )
+z_index = 15
+z_as_relative = false
+size = Vector2( 25, 15 )
+palette_idx = 1
 
-[node name="respawn" type="Node2D" parent="death_zones/death_zone3"]
-position = Vector2( 96, -400 )
+[node name="room_9" parent="." instance=ExtResource( 4 )]
+position = Vector2( -1280, -1472 )
+z_index = 15
+z_as_relative = false
+size = Vector2( 20, 17 )
+palette_idx = 2
 
-[node name="enemies" type="Node2D" parent="."]
-
-[node name="enemy" parent="enemies" instance=ExtResource( 7 )]
-position = Vector2( 704, 304 )
-
-[node name="enemy2" parent="enemies" instance=ExtResource( 7 )]
-position = Vector2( 256, 464 )
-
-[node name="enemy3" parent="enemies" instance=ExtResource( 7 )]
-position = Vector2( 960, 184 )
-
-[node name="enemy4" parent="enemies" instance=ExtResource( 7 )]
-position = Vector2( 1984, 400 )
-
-[node name="enemy5" parent="enemies" instance=ExtResource( 7 )]
-position = Vector2( 3200, 464 )
-
-[node name="enemy6" parent="enemies" instance=ExtResource( 7 )]
-position = Vector2( 2592, 272 )
-
-[node name="enemy7" parent="enemies" instance=ExtResource( 7 )]
-position = Vector2( 1984, 656 )
-
-[node name="enemy8" parent="enemies" instance=ExtResource( 7 )]
-position = Vector2( 3968, 336 )
-
-[node name="enemy10" parent="enemies" instance=ExtResource( 7 )]
-position = Vector2( 3968, 80 )
-
-[node name="enemy11" parent="enemies" instance=ExtResource( 7 )]
-position = Vector2( 4448, 272 )
-
-[node name="enemy15" parent="enemies" instance=ExtResource( 7 )]
+[node name="enemy15" parent="room_9" instance=ExtResource( 7 )]
 position = Vector2( -192, -1088 )
 
-[node name="enemy14" parent="enemies" instance=ExtResource( 7 )]
+[node name="enemy14" parent="room_9" instance=ExtResource( 7 )]
 position = Vector2( -320, -704 )
 
-[node name="enemy16" parent="enemies" instance=ExtResource( 7 )]
+[node name="enemy16" parent="room_9" instance=ExtResource( 7 )]
 position = Vector2( -960, -832 )
 
 [node name="background" type="Sprite" parent="."]
