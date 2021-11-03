@@ -97,8 +97,7 @@ func _load_scene(level_path):
     # debug_log("clearing children")
     
     # clear all objects in other viewports
-    for child in get_fg2().get_children():
-        child.queue_free()
+    clear_fg2()
 
     # debug_log("loading new scene")
 
@@ -341,17 +340,25 @@ func clear_best_times():
 # Palettes / Viewports
 # ========================================================================
 
+# Foreground 1: used by the player
 func get_foreground() -> Viewport:
     return $"/root/Main/viewports/fg/viewport" as Viewport
 
 func get_foreground_container() -> ViewportContainer:
     return $"/root/Main/viewports/fg" as ViewportContainer
 
+# Foreground 2: used for enemies
 func get_fg2() -> Viewport:
     return $"/root/Main/viewports/fg2/viewport" as Viewport
 
 func get_fg2_container() -> ViewportContainer:
     return $"/root/Main/viewports/fg2" as ViewportContainer
+
+# Free all the children in foreground layer 2.
+func clear_fg2():
+    for child in get_fg2().get_children():
+        get_fg2().remove_child(child)
+        child.queue_free()
     
 # Reparent this node to FG1. Note that this node's position must now be handled manually.
 func reparent_to_fg1(node):
