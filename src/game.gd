@@ -24,6 +24,9 @@ var num_deaths = 0
 var game_pause_requests = []
 var game_paused: bool setget , is_paused
 
+# amount of time user has held pause
+var pause_hold_time = 0.0
+
 # the current level that is loaded
 onready var current_level = get_level()
 
@@ -276,6 +279,18 @@ func _process(delta):
     if Input.is_action_just_pressed("toggle_debug"):
         var info = get_debug_hud().get_node("DebugInfo")
         info.visible = !info.visible
+
+
+    # hold to quit
+    if Input.is_action_pressed("pause"):
+        if pause_hold_time == 0:
+            debug_ping("Hold to quit")
+        pause_hold_time += delta
+        if pause_hold_time > 1.0:
+            get_tree().quit()
+    else:
+        pause_hold_time = 0
+
         
 # func _input(event):
     
