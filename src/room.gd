@@ -44,6 +44,30 @@ func get_bounds():
     else:
         return [position, position + get_viewport().size]
 
+# Get a list of enemies in this room.
+func get_enemies():
+    var enemies = []
+    for child in get_children():
+        if "enemy" in child.get_groups():
+            enemies.append(child)
+        
+        # also get enemies in doors
+        if "door" in child.get_groups():
+            for c in child.get_children():
+                if "enemy" in c.get_groups():
+                    enemies.append(c)
+
+    return enemies
+
+# Get a list of enemies in this room that are alive.
+func get_alive_enemies():
+    var enemies = []
+    for enemy in get_enemies():
+        if enemy.health > 0:
+            enemies.append(enemy)
+    
+    return enemies
+
 func on_body_entered(body):
     if body is Player:
         emit_signal("room_entered", self, body)
