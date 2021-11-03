@@ -20,6 +20,8 @@ func _ready():
     ignore_enemy_hp = true
     sprite.visible = false
 
+    connect("replay_finish", self, "stop")
+
 func init(initial_conditions_, replay_frames_, pos_frames_):
     initial_conditions = initial_conditions_
     replay_frames = replay_frames_
@@ -42,9 +44,6 @@ func restart():
     position = initial_conditions.position
     velocity = initial_conditions.velocity
     state_name = initial_conditions.state_name
-
-    yield(self, "replay_finish")
-    stop()
 
 func pre_process(_delta):
     

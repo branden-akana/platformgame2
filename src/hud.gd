@@ -1,5 +1,8 @@
 extends CanvasLayer
 
+signal fade_in_finished
+signal fade_out_finished
+
 onready var tween: Tween
 
 export (Array, Texture) var palettes
@@ -58,7 +61,9 @@ func fade_in(time):
         Color(1.0, 1.0, 1.0, 1.0),
         time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
     tween.start()
-    yield(tween, "tween_completed")
+    yield(tween, "tween_all_completed")
+    emit_signal("fade_in_finished")
+    return tween
 
 func fade_out(time):
     tween.interpolate_property($fade, "color",
@@ -74,7 +79,9 @@ func fade_out(time):
         Color(1.0, 1.0, 1.0, 0.0),
         time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
     tween.start()
-    yield(tween, "tween_completed")
+    yield(tween, "tween_all_completed")
+    emit_signal("fade_out_finished")
+    return tween
 
 func lbox_in(time):
     $letterbox1.position.y = 0

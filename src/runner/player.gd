@@ -82,12 +82,20 @@ func pre_process(delta):
 
 # Do an animated restart
 func player_restart():
-
     # pause during fadeout
     yield(Game.pause_and_fade_out(0.2), "completed")
 
-    # reset level
+    restart()
     Game.restart_level()
+
+    # unpause after fadein
+    yield(Game.fade_in_and_unpause(0.2), "completed")
+
+func hurt(damage = 100, respawn_point = null):
+    # pause during fadeout
+    yield(Game.pause_and_fade_out(0.2), "completed")
+
+    .hurt()
 
     # unpause after fadein
     yield(Game.fade_in_and_unpause(0.2), "completed")
@@ -105,16 +113,9 @@ func restart():
     pos_frames = {}
 
 
+
 func respawn(pos):
-
-    # pause during fadeout
-    yield(Game.pause_and_fade_out(0.2), "completed")
-
     .respawn(pos)
-
-    # unpause after fadein
-    yield(Game.fade_in_and_unpause(0.2), "completed")
-
 
 # Create a ghost replay from this player's currently recorded inputs.
 func create_ghost():

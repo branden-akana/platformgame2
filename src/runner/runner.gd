@@ -9,6 +9,7 @@ signal jump
 signal dash
 signal dragging
 signal died
+signal respawned
 
 # constants
 # ===========================================
@@ -168,10 +169,12 @@ func restart():
 
 # Respawn the player at a set position
 func respawn(pos):
+    # print("[runner] setting pos to %s" % pos)
     position = pos
     velocity = Vector2(0, 0)
     get_state().set_state("idle")
     buffer.reset()
+    emit_signal("respawned")
 
 # throwable grapple points (coins)
 # ===========================================
@@ -340,11 +343,11 @@ func stun(length):
 # If the player dies from being hurt, they will respawn at the specified
 # respawn point, or the start point if one isn't provided.
 func hurt(damage = 100, respawn_point = null):
+    emit_signal("died")
     if respawn_point:
         respawn(respawn_point)
     else:
         respawn(Game.get_start_point())
-    emit_signal("died")
 
 # Called when a body intersects this runner's hurtbox.
 func on_hurtbox_entered(from):
