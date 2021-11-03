@@ -3,6 +3,7 @@ class_name AttackState
 
 const OFFSET: Vector2 = Vector2(120, -16)
 var HitEffect = preload("res://scenes/particles/hit_effect.tscn")
+var HitParticles = preload("res://scenes/particles/hit_particles.tscn")
 
 var attack_f
 var attack_u
@@ -142,6 +143,14 @@ func on_area_enter(_area_id, area: Area2D, area_shape, _local_shape):
 
         if not runner.no_damage:
             area.damage(runner)
+
+            if area.health == 0:
+                var effect = HitParticles.instance()
+                effect.position = area.position
+                effect.direction = runner.position.direction_to(area.position)
+                effect.emitting = true
+                $"/root/Main".add_child(effect)
+
             Game.get_camera().screen_shake(1.0, 0.2)
             runner.emit_signal("hit")
 
