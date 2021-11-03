@@ -9,6 +9,22 @@ static func gridsnap(vec: Vector2, grid_size):
 static func await(object):
     return yield(object, "completed")
 
+static func format_time(time):
+    var mins = floor(time / 60.0)
+    var secs = floor(fmod(time, 60.0))
+    var ms = fmod(time, 1.0) * 1000
+    return "%02d:%02d.%03d" % [mins, secs, ms]
+
+static func format_time_diff(time):
+    var sig = "+"
+    if time < 0:
+        sig = "-"
+    time = abs(time)
+    var mins = floor(time / 60.0)
+    var secs = floor(fmod(time, 60.0))
+    var ms = fmod(time, 1.0) * 1000
+    return "%s%02d:%02d.%03d" % [sig, mins, secs, ms]
+
 # DEBUG DRAWS
 # ===============================================================
 
