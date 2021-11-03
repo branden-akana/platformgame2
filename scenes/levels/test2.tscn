@@ -1,20 +1,20 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://shaders/grayscale.gdshader" type="Shader" id=1]
-[ext_resource path="res://src/level.gd" type="Script" id=2]
-[ext_resource path="res://scenes/door.tscn" type="PackedScene" id=3]
-[ext_resource path="res://src/door.gd" type="Script" id=4]
-[ext_resource path="res://src/interactable_textbox.gd" type="Script" id=9]
-[ext_resource path="res://assets/spikes_trap.png" type="Texture" id=10]
-[ext_resource path="res://assets/s4m_ur4i_huge-assetpack-tilemap.png" type="Texture" id=11]
-[ext_resource path="res://src/door_trigger.gd" type="Script" id=12]
-[ext_resource path="res://assets/Tilemap.png" type="Texture" id=13]
-[ext_resource path="res://assets/bg.png" type="Texture" id=14]
-[ext_resource path="res://assets/PS4.png" type="Texture" id=15]
-[ext_resource path="res://scenes/enemy.tscn" type="PackedScene" id=16]
-[ext_resource path="res://scenes/camera_zone.tscn" type="PackedScene" id=17]
-[ext_resource path="res://scenes/hazard_zone.tscn" type="PackedScene" id=18]
-[ext_resource path="res://src/background.gd" type="Script" id=19]
+[ext_resource path="res://assets/Tilemap.png" type="Texture" id=2]
+[ext_resource path="res://assets/PS4.png" type="Texture" id=3]
+[ext_resource path="res://scenes/camera_zone.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/s4m_ur4i_huge-assetpack-tilemap.png" type="Texture" id=5]
+[ext_resource path="res://src/level.gd" type="Script" id=6]
+[ext_resource path="res://scenes/enemy.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/hazard_zone.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/door.tscn" type="PackedScene" id=9]
+[ext_resource path="res://src/background.gd" type="Script" id=10]
+[ext_resource path="res://src/interactable_textbox.gd" type="Script" id=11]
+[ext_resource path="res://src/door.gd" type="Script" id=12]
+[ext_resource path="res://src/door_trigger.gd" type="Script" id=13]
+[ext_resource path="res://assets/spikes_trap.png" type="Texture" id=14]
+[ext_resource path="res://assets/bg.png" type="Texture" id=15]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
@@ -48,7 +48,7 @@ points = PoolVector2Array( 32, 0, 32, 16, 0, 16 )
 
 [sub_resource type="TileSet" id=11]
 12/name = "s4m_ur4i_huge-assetpack-tilemap.png 12"
-12/texture = ExtResource( 11 )
+12/texture = ExtResource( 5 )
 12/tex_offset = Vector2( 0, 0 )
 12/modulate = Color( 1, 1, 1, 1 )
 12/region = Rect2( 248, 240, 16, 16 )
@@ -70,7 +70,7 @@ points = PoolVector2Array( 32, 0, 32, 16, 0, 16 )
 } ]
 12/z_index = 0
 13/name = "s4m_ur4i_huge-assetpack-tilemap.png 13"
-13/texture = ExtResource( 11 )
+13/texture = ExtResource( 5 )
 13/tex_offset = Vector2( 0, 0 )
 13/modulate = Color( 1, 1, 1, 1 )
 13/region = Rect2( 264, 240, 16, 8 )
@@ -92,7 +92,7 @@ points = PoolVector2Array( 32, 0, 32, 16, 0, 16 )
 } ]
 13/z_index = 0
 14/name = "s4m_ur4i_huge-assetpack-tilemap.png 14"
-14/texture = ExtResource( 11 )
+14/texture = ExtResource( 5 )
 14/tex_offset = Vector2( 0, 0 )
 14/modulate = Color( 1, 1, 1, 1 )
 14/region = Rect2( 320, 256, 16, 8 )
@@ -122,7 +122,7 @@ points = PoolVector2Array( 32, 0, 32, 16, 0, 16 )
 } ]
 14/z_index = 0
 17/name = "spikes_trap.png 17"
-17/texture = ExtResource( 10 )
+17/texture = ExtResource( 14 )
 17/tex_offset = Vector2( 0, 0 )
 17/modulate = Color( 1, 1, 1, 1 )
 17/region = Rect2( 0, 0, 32, 32 )
@@ -136,7 +136,7 @@ points = PoolVector2Array( 32, 0, 32, 16, 0, 16 )
 17/shapes = [  ]
 17/z_index = 0
 18/name = "s4m_ur4i_huge-assetpack-tilemap.png 18"
-18/texture = ExtResource( 11 )
+18/texture = ExtResource( 5 )
 18/tex_offset = Vector2( 0, 0 )
 18/modulate = Color( 1, 1, 1, 1 )
 18/region = Rect2( 272, 160, 16, 8 )
@@ -158,7 +158,7 @@ points = PoolVector2Array( 32, 0, 32, 16, 0, 16 )
 } ]
 18/z_index = 1
 19/name = "s4m_ur4i_huge-assetpack-tilemap.png 19"
-19/texture = ExtResource( 11 )
+19/texture = ExtResource( 5 )
 19/tex_offset = Vector2( 0, 0 )
 19/modulate = Color( 1, 1, 1, 1 )
 19/region = Rect2( 264, 248, 8, 8 )
@@ -180,7 +180,7 @@ points = PoolVector2Array( 32, 0, 32, 16, 0, 16 )
 } ]
 19/z_index = 0
 20/name = "s4m_ur4i_huge-assetpack-tilemap.png 20"
-20/texture = ExtResource( 11 )
+20/texture = ExtResource( 5 )
 20/tex_offset = Vector2( 0, 0 )
 20/modulate = Color( 0.345098, 0.345098, 0.345098, 1 )
 20/region = Rect2( 120, 280, 16, 16 )
@@ -194,7 +194,7 @@ points = PoolVector2Array( 32, 0, 32, 16, 0, 16 )
 20/shapes = [  ]
 20/z_index = -10
 21/name = "s4m_ur4i_huge-assetpack-tilemap.png 21"
-21/texture = ExtResource( 11 )
+21/texture = ExtResource( 5 )
 21/tex_offset = Vector2( 0, 0 )
 21/modulate = Color( 0.52549, 0.52549, 0.52549, 1 )
 21/region = Rect2( 112, 136, 16, 16 )
@@ -208,7 +208,7 @@ points = PoolVector2Array( 32, 0, 32, 16, 0, 16 )
 21/shapes = [  ]
 21/z_index = -1
 22/name = "s4m_ur4i_huge-assetpack-tilemap.png 22"
-22/texture = ExtResource( 11 )
+22/texture = ExtResource( 5 )
 22/tex_offset = Vector2( 0, 0 )
 22/modulate = Color( 0.819608, 0.819608, 0.819608, 1 )
 22/region = Rect2( 312, 80, 32, 16 )
@@ -229,7 +229,7 @@ points = PoolVector2Array( 32, 0, 32, 16, 0, 16 )
 } ]
 22/z_index = 0
 23/name = "Tilemap.png 23"
-23/texture = ExtResource( 13 )
+23/texture = ExtResource( 2 )
 23/tex_offset = Vector2( 0, 0 )
 23/modulate = Color( 1, 1, 1, 1 )
 23/region = Rect2( 96, 312, 16, 16 )
@@ -243,7 +243,7 @@ points = PoolVector2Array( 32, 0, 32, 16, 0, 16 )
 23/shapes = [  ]
 23/z_index = 0
 24/name = "PS4.png 24"
-24/texture = ExtResource( 15 )
+24/texture = ExtResource( 3 )
 24/tex_offset = Vector2( 0, 0 )
 24/modulate = Color( 1, 1, 1, 1 )
 24/region = Rect2( 0, 0, 12, 16 )
@@ -286,7 +286,7 @@ func on_unpause():
 extents = Vector2( 4, 16 )
 
 [sub_resource type="AtlasTexture" id=14]
-atlas = ExtResource( 11 )
+atlas = ExtResource( 5 )
 region = Rect2( 200, 144, 8, 32 )
 
 [sub_resource type="RectangleShape2D" id=15]
@@ -295,27 +295,12 @@ extents = Vector2( 46.2627, 49.7928 )
 [sub_resource type="CircleShape2D" id=16]
 radius = 64.0
 
-[sub_resource type="RectangleShape2D" id=17]
-extents = Vector2( 640, 32 )
-
-[sub_resource type="RectangleShape2D" id=18]
-extents = Vector2( 640, 32 )
-
-[sub_resource type="RectangleShape2D" id=19]
-extents = Vector2( 640, 32 )
-
-[sub_resource type="RectangleShape2D" id=20]
-extents = Vector2( 640, 32 )
-
-[sub_resource type="RectangleShape2D" id=21]
-extents = Vector2( 640, 32 )
-
-[sub_resource type="ShaderMaterial" id=22]
+[sub_resource type="ShaderMaterial" id=17]
 shader = ExtResource( 1 )
 
 [node name="level" type="Node2D"]
 pause_mode = 2
-script = ExtResource( 2 )
+script = ExtResource( 6 )
 __meta__ = {
 "_edit_lock_": true
 }
@@ -380,7 +365,7 @@ pause_mode = 2
 position = Vector2( 32, 448 )
 collision_layer = 129
 collision_mask = 0
-script = ExtResource( 4 )
+script = ExtResource( 12 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="door"]
 scale = Vector2( 4, 4 )
@@ -398,16 +383,16 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="door2" parent="." instance=ExtResource( 3 )]
+[node name="door2" parent="." instance=ExtResource( 9 )]
 
-[node name="enemy12" parent="door2" instance=ExtResource( 16 )]
+[node name="enemy12" parent="door2" instance=ExtResource( 7 )]
 position = Vector2( -320, 2368 )
 
 [node name="door_trigger" type="Area2D" parent="."]
 position = Vector2( 124.146, 448 )
 collision_layer = 0
 collision_mask = 2
-script = ExtResource( 12 )
+script = ExtResource( 13 )
 __meta__ = {
 "_edit_lock_": true
 }
@@ -424,7 +409,7 @@ position = Vector2( -2146.25, 223.491 )
 scale = Vector2( 2, 2 )
 collision_layer = 64
 collision_mask = 2
-script = ExtResource( 9 )
+script = ExtResource( 11 )
 lines = [ "You can jump mid-air by       walking off a ledge instead ofjumping off." ]
 
 [node name="collision" type="CollisionShape2D" parent="sign2"]
@@ -437,7 +422,7 @@ position = Vector2( -4704, 32 )
 scale = Vector2( 2, 2 )
 collision_layer = 64
 collision_mask = 2
-script = ExtResource( 9 )
+script = ExtResource( 11 )
 lines = [ "Drop down platforms by        pressing down while standing  on it." ]
 
 [node name="collision" type="CollisionShape2D" parent="sign3"]
@@ -449,7 +434,7 @@ position = Vector2( -3552, 288 )
 scale = Vector2( 2, 2 )
 collision_layer = 64
 collision_mask = 2
-script = ExtResource( 9 )
+script = ExtResource( 11 )
 lines = [ "Press X to jump. Hold it down for a higher jump." ]
 
 [node name="collision" type="CollisionShape2D" parent="sign4"]
@@ -458,58 +443,58 @@ shape = SubResource( 16 )
 
 [node name="camera_zones" type="Node" parent="."]
 
-[node name="camera_zone4" parent="camera_zones" instance=ExtResource( 17 )]
+[node name="camera_zone4" parent="camera_zones" instance=ExtResource( 4 )]
 position = Vector2( -1280, -384 )
 z_index = 15
 z_as_relative = false
 region_size = Vector2( 20, 17 )
 palette_idx = 1
 
-[node name="camera_zone9" parent="camera_zones" instance=ExtResource( 17 )]
+[node name="camera_zone9" parent="camera_zones" instance=ExtResource( 4 )]
 position = Vector2( -1280, -1472 )
 z_index = 15
 z_as_relative = false
 region_size = Vector2( 20, 17 )
 palette_idx = 2
 
-[node name="camera_zone6" parent="camera_zones" instance=ExtResource( 17 )]
+[node name="camera_zone6" parent="camera_zones" instance=ExtResource( 4 )]
 position = Vector2( -3840, -256 )
 z_index = 15
 z_as_relative = false
 palette_idx = 1
 
-[node name="camera_zone8" parent="camera_zones" instance=ExtResource( 17 )]
+[node name="camera_zone8" parent="camera_zones" instance=ExtResource( 4 )]
 position = Vector2( -6720, -1040 )
 z_index = 15
 z_as_relative = false
 region_size = Vector2( 25, 15 )
 palette_idx = 1
 
-[node name="camera_zone7" parent="camera_zones" instance=ExtResource( 17 )]
+[node name="camera_zone7" parent="camera_zones" instance=ExtResource( 4 )]
 position = Vector2( -5120, -496 )
 z_index = 15
 z_as_relative = false
 region_size = Vector2( 20, 15 )
 palette_idx = 1
 
-[node name="camera_zone5" parent="camera_zones" instance=ExtResource( 17 )]
+[node name="camera_zone5" parent="camera_zones" instance=ExtResource( 4 )]
 position = Vector2( -2560, -256 )
 z_index = 15
 z_as_relative = false
 region_size = Vector2( 20, 15 )
 palette_idx = 1
 
-[node name="camera_zone3" parent="camera_zones" instance=ExtResource( 17 )]
+[node name="camera_zone3" parent="camera_zones" instance=ExtResource( 4 )]
 position = Vector2( 3328, -400 )
 z_index = 15
 z_as_relative = false
 region_size = Vector2( 25, 20 )
 
-[node name="camera_zone" parent="camera_zones" instance=ExtResource( 17 )]
+[node name="camera_zone" parent="camera_zones" instance=ExtResource( 4 )]
 z_index = 15
 z_as_relative = false
 
-[node name="camera_zone2" parent="camera_zones" instance=ExtResource( 17 )]
+[node name="camera_zone2" parent="camera_zones" instance=ExtResource( 4 )]
 position = Vector2( 1280, 0 )
 z_index = 15
 z_as_relative = false
@@ -518,111 +503,96 @@ region_size = Vector2( 32, 15 )
 [node name="death_zones" type="Node" parent="."]
 pause_mode = 2
 
-[node name="death_zone4" parent="death_zones" instance=ExtResource( 18 )]
+[node name="death_zone4" parent="death_zones" instance=ExtResource( 8 )]
 position = Vector2( -3840, 472 )
-
-[node name="collision" parent="death_zones/death_zone4" index="0"]
-shape = SubResource( 17 )
 
 [node name="respawn" type="Node2D" parent="death_zones/death_zone4"]
 position = Vector2( 128, -184 )
 
-[node name="death_zone5" parent="death_zones" instance=ExtResource( 18 )]
+[node name="death_zone5" parent="death_zones" instance=ExtResource( 8 )]
 position = Vector2( -2560, 712 )
-
-[node name="collision" parent="death_zones/death_zone5" index="0"]
-shape = SubResource( 18 )
 
 [node name="respawn" type="Node2D" parent="death_zones/death_zone5"]
 position = Vector2( 128, -488 )
 
-[node name="death_zone2" parent="death_zones" instance=ExtResource( 18 )]
+[node name="death_zone2" parent="death_zones" instance=ExtResource( 8 )]
 position = Vector2( 1280, 960 )
-
-[node name="collision" parent="death_zones/death_zone2" index="0"]
-shape = SubResource( 19 )
 
 [node name="respawn" type="Node2D" parent="death_zones/death_zone2"]
 position = Vector2( 128, -480 )
 
-[node name="death_zone" parent="death_zones" instance=ExtResource( 18 )]
+[node name="death_zone" parent="death_zones" instance=ExtResource( 8 )]
 position = Vector2( 0, 720 )
 z_index = 16
-
-[node name="collision" parent="death_zones/death_zone" index="0"]
-shape = SubResource( 20 )
 
 [node name="respawn" type="Node2D" parent="death_zones/death_zone"]
 position = Vector2( 128, -240 )
 
-[node name="death_zone3" parent="death_zones" instance=ExtResource( 18 )]
+[node name="death_zone3" parent="death_zones" instance=ExtResource( 8 )]
 position = Vector2( 3328, 880 )
 z_index = 16
-
-[node name="collision" parent="death_zones/death_zone3" index="0"]
-shape = SubResource( 21 )
 
 [node name="respawn" type="Node2D" parent="death_zones/death_zone3"]
 position = Vector2( 96, -400 )
 
 [node name="enemies" type="Node2D" parent="."]
 
-[node name="enemy" parent="enemies" instance=ExtResource( 16 )]
+[node name="enemy" parent="enemies" instance=ExtResource( 7 )]
 position = Vector2( 704, 304 )
 
-[node name="enemy2" parent="enemies" instance=ExtResource( 16 )]
+[node name="enemy2" parent="enemies" instance=ExtResource( 7 )]
 position = Vector2( 256, 464 )
 
-[node name="enemy3" parent="enemies" instance=ExtResource( 16 )]
+[node name="enemy3" parent="enemies" instance=ExtResource( 7 )]
 position = Vector2( 960, 184 )
 
-[node name="enemy4" parent="enemies" instance=ExtResource( 16 )]
+[node name="enemy4" parent="enemies" instance=ExtResource( 7 )]
 position = Vector2( 1984, 400 )
 
-[node name="enemy5" parent="enemies" instance=ExtResource( 16 )]
+[node name="enemy5" parent="enemies" instance=ExtResource( 7 )]
 position = Vector2( 3200, 464 )
 
-[node name="enemy6" parent="enemies" instance=ExtResource( 16 )]
+[node name="enemy6" parent="enemies" instance=ExtResource( 7 )]
 position = Vector2( 2592, 272 )
 
-[node name="enemy7" parent="enemies" instance=ExtResource( 16 )]
+[node name="enemy7" parent="enemies" instance=ExtResource( 7 )]
 position = Vector2( 1984, 656 )
 
-[node name="enemy8" parent="enemies" instance=ExtResource( 16 )]
+[node name="enemy8" parent="enemies" instance=ExtResource( 7 )]
 position = Vector2( 3968, 336 )
 
-[node name="enemy10" parent="enemies" instance=ExtResource( 16 )]
+[node name="enemy10" parent="enemies" instance=ExtResource( 7 )]
 position = Vector2( 3968, 80 )
 
-[node name="enemy11" parent="enemies" instance=ExtResource( 16 )]
+[node name="enemy11" parent="enemies" instance=ExtResource( 7 )]
 position = Vector2( 4448, 272 )
 
-[node name="enemy15" parent="enemies" instance=ExtResource( 16 )]
+[node name="enemy15" parent="enemies" instance=ExtResource( 7 )]
 position = Vector2( -192, -1088 )
 
-[node name="enemy14" parent="enemies" instance=ExtResource( 16 )]
+[node name="enemy14" parent="enemies" instance=ExtResource( 7 )]
 position = Vector2( -320, -704 )
 
-[node name="enemy16" parent="enemies" instance=ExtResource( 16 )]
+[node name="enemy16" parent="enemies" instance=ExtResource( 7 )]
 position = Vector2( -960, -832 )
 
 [node name="background" type="Sprite" parent="."]
 pause_mode = 2
 modulate = Color( 0.5, 0.5, 0.5, 1 )
 self_modulate = Color( 0.658824, 0.658824, 0.658824, 1 )
-material = SubResource( 22 )
+material = SubResource( 17 )
 position = Vector2( -3907.68, -1103.22 )
 scale = Vector2( 4, 4 )
 z_index = -10
-texture = ExtResource( 14 )
+texture = ExtResource( 15 )
 centered = false
 offset = Vector2( 0, -200 )
 flip_v = true
-script = ExtResource( 19 )
+script = ExtResource( 10 )
 __meta__ = {
 "_edit_lock_": true
 }
-bg_texture = ExtResource( 14 )
+bg_texture = ExtResource( 15 )
 
 [node name="color_rect" type="ColorRect" parent="background"]
 show_behind_parent = true
@@ -635,9 +605,3 @@ __meta__ = {
 "_edit_lock_": true,
 "_edit_use_anchors_": false
 }
-
-[editable path="death_zones/death_zone4"]
-[editable path="death_zones/death_zone5"]
-[editable path="death_zones/death_zone2"]
-[editable path="death_zones/death_zone"]
-[editable path="death_zones/death_zone3"]
