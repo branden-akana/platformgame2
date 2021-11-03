@@ -2,6 +2,7 @@ extends Node2D
 
 signal paused
 signal unpaused
+signal level_restarted
 signal scene_loaded
 
 const Textbox = preload("res://scenes/textbox.tscn")
@@ -74,6 +75,8 @@ func restart_level():
     reset_entities()
 
     get_camera().init()
+
+    emit_signal("level_restarted")
 
 func restart_player():
     # set start position

@@ -22,6 +22,11 @@ func _ready():
         position = close_position
     else:
         position = open_position
+
+    Game.connect("level_restarted", self, "on_level_restart")
+
+func on_level_restart():
+    enemies_cleared = false
         
 func get_enemies():
     return Game.get_enemies(self)
