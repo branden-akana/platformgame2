@@ -3,7 +3,7 @@
 [ext_resource path="res://shaders/grayscale.gdshader" type="Shader" id=1]
 [ext_resource path="res://assets/Tilemap.png" type="Texture" id=2]
 [ext_resource path="res://assets/PS4.png" type="Texture" id=3]
-[ext_resource path="res://scenes/camera_zone.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/room.tscn" type="PackedScene" id=4]
 [ext_resource path="res://assets/s4m_ur4i_huge-assetpack-tilemap.png" type="Texture" id=5]
 [ext_resource path="res://src/level.gd" type="Script" id=6]
 [ext_resource path="res://scenes/enemy.tscn" type="PackedScene" id=7]
@@ -386,7 +386,7 @@ __meta__ = {
 [node name="door2" parent="." instance=ExtResource( 9 )]
 
 [node name="enemy12" parent="door2" instance=ExtResource( 7 )]
-position = Vector2( -320, 2368 )
+position = Vector2( -160, 128 )
 
 [node name="door_trigger" type="Area2D" parent="."]
 position = Vector2( 124.146, 448 )
@@ -447,14 +447,14 @@ shape = SubResource( 16 )
 position = Vector2( -1280, -384 )
 z_index = 15
 z_as_relative = false
-region_size = Vector2( 20, 17 )
+size = Vector2( 20, 17 )
 palette_idx = 1
 
 [node name="camera_zone9" parent="camera_zones" instance=ExtResource( 4 )]
 position = Vector2( -1280, -1472 )
 z_index = 15
 z_as_relative = false
-region_size = Vector2( 20, 17 )
+size = Vector2( 20, 17 )
 palette_idx = 2
 
 [node name="camera_zone6" parent="camera_zones" instance=ExtResource( 4 )]
@@ -464,31 +464,31 @@ z_as_relative = false
 palette_idx = 1
 
 [node name="camera_zone8" parent="camera_zones" instance=ExtResource( 4 )]
-position = Vector2( -6720, -1040 )
+position = Vector2( -6720, -1024 )
 z_index = 15
 z_as_relative = false
-region_size = Vector2( 25, 15 )
+size = Vector2( 25, 15 )
 palette_idx = 1
 
 [node name="camera_zone7" parent="camera_zones" instance=ExtResource( 4 )]
 position = Vector2( -5120, -496 )
 z_index = 15
 z_as_relative = false
-region_size = Vector2( 20, 15 )
+size = Vector2( 20, 15 )
 palette_idx = 1
 
 [node name="camera_zone5" parent="camera_zones" instance=ExtResource( 4 )]
 position = Vector2( -2560, -256 )
 z_index = 15
 z_as_relative = false
-region_size = Vector2( 20, 15 )
+size = Vector2( 20, 15 )
 palette_idx = 1
 
 [node name="camera_zone3" parent="camera_zones" instance=ExtResource( 4 )]
 position = Vector2( 3328, -400 )
 z_index = 15
 z_as_relative = false
-region_size = Vector2( 25, 20 )
+size = Vector2( 20, 20 )
 
 [node name="camera_zone" parent="camera_zones" instance=ExtResource( 4 )]
 z_index = 15
@@ -498,7 +498,7 @@ z_as_relative = false
 position = Vector2( 1280, 0 )
 z_index = 15
 z_as_relative = false
-region_size = Vector2( 32, 15 )
+size = Vector2( 32, 15 )
 
 [node name="death_zones" type="Node" parent="."]
 pause_mode = 2
@@ -517,6 +517,7 @@ position = Vector2( 128, -488 )
 
 [node name="death_zone2" parent="death_zones" instance=ExtResource( 8 )]
 position = Vector2( 1280, 960 )
+size = Vector2( 32, 1 )
 
 [node name="respawn" type="Node2D" parent="death_zones/death_zone2"]
 position = Vector2( 128, -480 )
@@ -531,6 +532,7 @@ position = Vector2( 128, -240 )
 [node name="death_zone3" parent="death_zones" instance=ExtResource( 8 )]
 position = Vector2( 3328, 880 )
 z_index = 16
+size = Vector2( 40, 1 )
 
 [node name="respawn" type="Node2D" parent="death_zones/death_zone3"]
 position = Vector2( 96, -400 )
