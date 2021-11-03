@@ -281,10 +281,12 @@ func jump(factor = 1.0):
             velocity.y = -950 * factor
 
     if not is_on_floor():
-        if axis.x > 0:
+        if axis.x > buffer.PRESS_THRESHOLD:
             velocity.x = MAX_SPEED
-        elif axis.x < 0:
+        elif axis.x < -buffer.PRESS_THRESHOLD:
             velocity.x = -MAX_SPEED
+        elif axis.y < -buffer.PRESS_THRESHOLD:
+            velocity.x = 0
         
     state.set_state("airborne")
 
