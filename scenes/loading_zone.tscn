@@ -2,7 +2,7 @@
 
 [ext_resource path="res://src/zones/loading_zone.gd" type="Script" id=1]
 [ext_resource path="res://scenes/spritetext.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/levels/Level_Test.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/levels/test1.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 64, 64 )

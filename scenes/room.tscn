@@ -1,13 +1,14 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://src/camera_zone.gd" type="Script" id=1]
+[ext_resource path="res://src/room.gd" type="Script" id=1]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 624, 344 )
 
-[node name="camera_zone" type="Area2D" groups=[
-"camera_zone",
+[node name="room" type="Area2D" groups=[
+"room",
 ]]
+scale = Vector2( 1, 0.997047 )
 collision_layer = 64
 collision_mask = 130
 script = ExtResource( 1 )

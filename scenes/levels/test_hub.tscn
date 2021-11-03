@@ -22,21 +22,21 @@ tile_data = PoolIntArray( -10682536, 12, 0, -10682534, 12, 0, -10682532, 12, 0, 
 position = Vector2( -640, -1664 )
 size = Vector2( 22, 30 )
 
-[node name="enemy2" parent="room_1" index="1" instance=ExtResource( 2 )]
-position = Vector2( -1568, -128 )
-
-[node name="enemy3" parent="room_1" index="2" instance=ExtResource( 2 )]
-position = Vector2( -1376, -256 )
-max_health = 3
-
-[node name="enemy4" parent="room_1" index="3" instance=ExtResource( 2 )]
-position = Vector2( -1184, -128 )
-max_health = 2
-
 [node name="room_2" parent="." index="3" instance=ExtResource( 3 )]
 position = Vector2( -2176, -4344 )
 size = Vector2( 24, 72 )
 palette_idx = 1
+
+[node name="enemy2" parent="room_2" index="1" instance=ExtResource( 2 )]
+position = Vector2( -1568, -128 )
+
+[node name="enemy3" parent="room_2" index="2" instance=ExtResource( 2 )]
+position = Vector2( -1376, -256 )
+max_health = 3
+
+[node name="enemy4" parent="room_2" index="3" instance=ExtResource( 2 )]
+position = Vector2( -1184, -128 )
+max_health = 2
 
 [node name="room_3" parent="." index="4" instance=ExtResource( 3 )]
 position = Vector2( -5248, -512 )
