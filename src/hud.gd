@@ -1,3 +1,12 @@
+#===============================================================================
+# Game HUD
+#
+# Contains scripting for the game HUD, such as timers, tooltips, etc.
+# This script also contains:
+# - controls for the color palette used by the levels
+# - controls for transitions such as fade in/out and letterboxing
+#===============================================================================
+
 extends CanvasLayer
 
 signal fade_in_finished

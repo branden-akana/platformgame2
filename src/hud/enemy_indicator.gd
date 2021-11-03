@@ -4,6 +4,8 @@ var total = 0
 var alive = 0
 var dead = 0
 
+const SPACING = 32
+
 func _physics_process(delta):
     var room = Game.current_room
     
@@ -20,18 +22,20 @@ func _draw():
     var x = -get_origin(total)
     
     for _i in range(dead):
-        draw_circle(Vector2(x, 0), 8, Color(1.0, 1.0, 1.0, 0.7))
-        x += 48
+        draw_circle(Vector2(x, 0), 5, Color(1.0, 1.0, 1.0, 0.2))
+        x += SPACING
         
     for _i in range(alive):
-        draw_circle(Vector2(x, 0), 14, Color(1.0, 1.0, 1.0, 0.7))
-        x += 48
+        draw_circle(Vector2(x, 0), 14, Color(0.0, 0.0, 0.0, 0.6))
+        draw_circle(Vector2(x, 0), 10, Color(1.0, 1.0, 1.0, 0.3))
+
+        x += SPACING
         
 func get_width(total):
-    return total * 48
+    return total * SPACING
     
 func get_origin(total):
-    return (get_width(total) / 2) - (48 / 2)
+    return (get_width(total) / 2) - (SPACING / 2)
     
 
     
