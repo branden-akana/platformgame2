@@ -11,6 +11,8 @@ var initial_conditions = null
 var replay_frames = null
 var pos_frames = null
 
+var playing = false
+
 var replay_finished = false
 
 func _ready():
@@ -35,6 +37,7 @@ func init(initial_conditions_, replay_frames_, pos_frames_):
 func stop():
     print("[ghost] stopped replay")
     sprite.visible = false
+    playing = false
 
 func restart():
     print("[ghost] restarting replay")
@@ -44,8 +47,12 @@ func restart():
     position = initial_conditions.position
     velocity = initial_conditions.velocity
     state_name = initial_conditions.state_name
+    playing = true
 
 func pre_process(_delta):
+
+    if not playing:
+        return
     
     if tick == 0:
         set_input_buffer(initial_conditions.buffer.duplicate())
