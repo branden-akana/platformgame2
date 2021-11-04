@@ -81,6 +81,8 @@ func on_start(_state_name):
     hit_detected = false
     is_grounded = runner.is_on_floor()
 
+    runner.emit_signal("attack")
+
     # runner.camera.screen_shake(16.0, 0.5)
 
 func on_update(delta):

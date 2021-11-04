@@ -17,7 +17,7 @@ scale = Vector2( 4, 4 )
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 8, 8 )
 format = 1
-tile_data = PoolIntArray( 196604, 12, 0, 196606, 12, 0, 131072, 12, 0, 131074, 12, 0, 327678, 12, 0, 262144, 12, 0 )
+tile_data = PoolIntArray( 196604, 22, 0, 196606, 22, 0, 131072, 22, 0, 131074, 22, 0, 327678, 22, 0, 262144, 22, 0 )
 __meta__ = {
 "_edit_lock_": true
 }
@@ -30,7 +30,6 @@ cell_size = Vector2( 8, 8 )
 collision_layer = 512
 collision_mask = 0
 format = 1
-tile_data = PoolIntArray( 327678, 12, 0, 262144, 12, 0 )
 __meta__ = {
 "_edit_lock_": true
 }

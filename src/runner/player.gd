@@ -17,7 +17,9 @@ func _ready():
     connect("jump", Sound, "play", ["jump", -10, 1, false])
     connect("land", Sound, "play", ["land", -20])
     connect("hit", Sound, "play", ["hit", -10])
-    connect("dash", Sound, "play", ["walk", -20, 0.8, false, true])
+    connect("dash", Sound, "play", ["dash", -20, 0.8, false, true])
+    connect("attack", Sound, "play", ["attack", -20, 0.7, false, true])
+
 
     # sprite setup
     Game.reparent_to_fg1(sprite)
@@ -67,11 +69,11 @@ func pre_process(delta):
         var value = Input.get_action_strength(key)
         buffer.update_action(key, value)
 
-    if Game.is_recording:
-        # record initial conditions (position, velocity, etc.)
-        if tick == 0:
-            initial_conditions = get_current_conditions()
+    # record initial conditions (position, velocity, etc.)
+    if tick == 0:
+        initial_conditions = get_current_conditions()
 
+    if Game.is_recording:
         # record pos/vel periodically (for replay pos checking)
         if tick % fix_interval == 0:
             pos_frames[tick] = [position, velocity]

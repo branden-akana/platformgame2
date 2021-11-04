@@ -103,25 +103,28 @@ func check_jump():
 func check_wall_jump():
 
     var space = get_world_2d().direct_space_state
+    var margin = 20
+    var jump_mult = 0.8
+    var offset = Vector2(0, 32)
 
     # raycast left
     var left_result = space.intersect_ray(
-        runner.position,
-        runner.position + (Vector2.LEFT * 20),
+        runner.position + offset,
+        runner.position + offset + (Vector2.LEFT * margin),
         [], 0b0001)
     # print("left ray: %s" % left_result)
     if left_result and buffer.is_action_just_pressed("key_right"):
-        runner.jump(0.8, true, runner.MAX_SPEED)
+        runner.jump(jump_mult, true, runner.MAX_SPEED)
         update_facing()
         runner.emit_signal("walljump_right")
 
     var right_result = space.intersect_ray(
-        runner.position,
-        runner.position + (Vector2.RIGHT * 20),
+        runner.position + offset,
+        runner.position + offset + (Vector2.RIGHT * margin),
         [], 0b0001)
     # print("right ray: %s" % right_result)
     if right_result and buffer.is_action_just_pressed("key_left"):
-        runner.jump(0.8, true, -runner.MAX_SPEED)
+        runner.jump(jump_mult, true, -runner.MAX_SPEED)
         update_facing()
         runner.emit_signal("walljump_left")
 

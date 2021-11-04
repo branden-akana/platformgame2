@@ -245,7 +245,7 @@ func _physics_process(delta):
     if not time_paused and not is_paused():
         time += delta
 
-    if len(get_alive_enemies()) == 0 and not time_paused:
+    if len(get_enemies()) > 0 and len(get_alive_enemies()) == 0 and not time_paused:
         stop_timer()
 
     # update HUD timer
@@ -470,7 +470,7 @@ func replay_save():
 
 # Start playback of the last replay (using a ghost).
 func replay_playback_start():
-    if replay:
+    if is_instance_valid(replay):
         print("[demo] playback started")
 
         if not is_instance_valid(replay_ghost):

@@ -4,7 +4,10 @@ class_name Runner
 signal walking
 signal stop_walking
 signal land
+
+signal attack
 signal hit
+
 signal jump
 signal dash
 signal dragging
