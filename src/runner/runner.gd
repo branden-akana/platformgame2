@@ -68,7 +68,7 @@ var InputBuffer = load("res://src/input_buffer.gd")
 # ===========================================
 
 onready var sprite: AnimatedSprite = $sprite
-# onready var debug_info = $"/root/Main/debug/DebugInfo"
+# onready var debug_info = $"/root/main/debug/DebugInfo"
 onready var grapple_line = $"Line2D"
 # onready var camera = $"camera"
 

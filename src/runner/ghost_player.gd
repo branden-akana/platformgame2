@@ -22,12 +22,12 @@ func _ready():
     ignore_enemy_hp = true
     sprite.visible = false
 
-    connect("replay_finish", self, "stop")
+    connect("replay_finish", Game, "replay_playback_stop")
 
-func init(initial_conditions_, replay_frames_, pos_frames_):
-    initial_conditions = initial_conditions_
-    replay_frames = replay_frames_
-    pos_frames = pos_frames_
+func load_replay(replay):
+    initial_conditions = replay.initial_conditions
+    replay_frames = replay.input_frames
+    pos_frames = replay.pos_frames
     print("[ghost] new replay loaded! (%d frames)" % len(replay_frames))
     print("    position: %s" % initial_conditions.position)
     print("    velocity: %s" % initial_conditions.velocity)

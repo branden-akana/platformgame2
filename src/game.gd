@@ -11,6 +11,8 @@ const Level_TestHub = preload("res://scenes/levels/test_hub.tscn")
 const Level_1 = preload("res://scenes/levels/test2.tscn")
 const Level_2 = preload("res://scenes/levels/test1.tscn")
 
+const GhostPlayer = preload("res://scenes/ghost_player.tscn")
+
 # the total amount of time elapsed for the current level until completion
 var time: float = 0.0
 
@@ -22,7 +24,8 @@ var time_paused: bool = false
 # total amount of times the player died in the current level
 var num_deaths = 0
 
-var game_pause_requests = []
+# game pausing variables
+var game_pause_requests = []  # contains refs to nodes that want to pause the game
 var game_paused: bool setget , is_paused
 
 # amount of time user has held pause
@@ -39,6 +42,9 @@ onready var spritefont = SpriteFont.new()
 
 # flags
 var practice_mode = false
+var is_recording = true   # if true, record the player
+var replay = null         # ref to the last saved replay
+var replay_ghost = null   # ref to the ghost that plays replays
 
 func _ready():
 
@@ -61,7 +67,7 @@ func reinitialize_game():
 
     # reset best time / ghost
     clear_best_times()
-    get_player().delete_ghost()
+    replay_clear()
 
     restart_player()
     restart_level()
@@ -121,7 +127,7 @@ func _load_scene(level_path):
 
     # debug_log("adding new scene as child")
 
-    $"/root/Main".add_child(level)
+    $"/root/main".add_child(level)
     current_level = level
 
     # debug_log("restarting level...")
@@ -137,7 +143,7 @@ func _load_scene(level_path):
 # ========================================================================
 
 func get_level() -> Level:
-    return $"/root/Main/level" as Level
+    return $"/root/main/level" as Level
 
 # Get a list of all rooms in the current level.
 func get_rooms() -> Array:
@@ -194,7 +200,7 @@ func debug_log(s):
     file.store_line(s)
 
 func get_camera() -> Node:
-    return $"/root/Main/camera"
+    return $"/root/main/camera"
 
 func set_camera_focus(node):
     get_camera().set_target(node.get_path())
@@ -229,10 +235,10 @@ func reset_entities():
         door.close_door(false)
 
 func get_player() -> Node:
-    return $"/root/Main/player"
+    return $"/root/main/player"
 
 func get_debug_hud() -> Node:
-    return $"/root/Main/debug"
+    return $"/root/main/debug"
 
 func _physics_process(delta):
 
@@ -247,6 +253,10 @@ func _physics_process(delta):
     HUD.get_node("control/timer_small").text = "%03d" % [fmod(time, 1.0) * 1000]
     # HUD.get_node("control/enemy_display").text = "enemies: %d" % len(get_alive_enemies())
     HUD.get_node("control/death_display").text = "deaths %d" % num_deaths
+
+    var velocity = get_player().velocity
+    var state_name = get_player().state_name
+    get_node("/root/main/debug/info").text = "speed: %3.2f (x=%3.2f, y=%3.2f)\nstate: %s" % [velocity.length(), velocity.x, velocity.y, state_name]
 
 func _process(delta):
 
@@ -323,7 +333,7 @@ func stop_timer():
         print("[timer] new best time recorded")
         time_best = time
         # create a new ghost replay
-        get_player().create_ghost()
+        replay_save()
 
 # Reset the ingame timer
 func reset_timer():
@@ -342,17 +352,17 @@ func clear_best_times():
 
 # Foreground 1: used by the player
 func get_foreground() -> Viewport:
-    return $"/root/Main/viewports/fg/viewport" as Viewport
+    return $"/root/main/viewports/fg/viewport" as Viewport
 
 func get_foreground_container() -> ViewportContainer:
-    return $"/root/Main/viewports/fg" as ViewportContainer
+    return $"/root/main/viewports/fg" as ViewportContainer
 
 # Foreground 2: used for enemies
 func get_fg2() -> Viewport:
-    return $"/root/Main/viewports/fg2/viewport" as Viewport
+    return $"/root/main/viewports/fg2/viewport" as Viewport
 
 func get_fg2_container() -> ViewportContainer:
-    return $"/root/Main/viewports/fg2" as ViewportContainer
+    return $"/root/main/viewports/fg2" as ViewportContainer
 
 # Free all the children in foreground layer 2.
 func clear_fg2():
@@ -438,8 +448,58 @@ func unpause(node):
 func is_paused():
     return len(game_pause_requests) > 0
 
-# Debug features
-# ==============
+# Replay / Ghost functions
+#===============================================================================
+
+# Start recording a replay.
+func replay_start_recording():
+    is_recording = true
+    print("[demo] recording started")
+    debug_ping("recording started")
+
+# Stop recording a replay.
+func replay_stop_recording():
+    is_recording = false
+    print("[demo] recording stopped")
+    debug_ping("recording stopped")
+
+func replay_save():
+    replay = get_player().export_replay()
+    print("[demo] recording saved")
+    debug_ping("recording saved")
+
+# Start playback of the last replay (using a ghost).
+func replay_playback_start():
+    if replay:
+        print("[demo] playback started")
+
+        if not is_instance_valid(replay_ghost):
+            print("[ghost] creating new ghost")
+            replay_ghost = GhostPlayer.instance()
+            $"/root/main".add_child(replay_ghost)
+
+        replay_ghost.load_replay(replay)
+        replay_ghost.restart()
+    else:
+        print("[demo] no replay to playback!")
+
+func replay_playback_stop():
+    print("[demo] playback stopped")
+    if is_instance_valid(replay_ghost):
+        replay_ghost.stop()
+
+# Stop playback.
+func replay_clear():
+    print("[demo] recording cleared")
+    replay = null
+    if is_instance_valid(replay_ghost):
+        print("[ghost] deleting ghost")
+        replay_ghost.queue_free()
+
+
+
+# Debug functions
+#===============================================================================
 
 # Briefly show a message in the debug HUD.
 func debug_ping(message):

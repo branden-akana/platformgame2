@@ -1,8 +1,6 @@
 extends Runner
 class_name Player
 
-var GhostPlayer = preload("res://scenes/GhostPlayer.tscn")
-
 var initial_conditions = null
 var replay_frames = {}
 
@@ -64,29 +62,32 @@ func pre_process(delta):
 
     #     Game.get_camera().set_offset(camera_offset)
 
-    # record initial conditions (position, velocity, etc.)
-    if tick == 0:
-        initial_conditions = get_current_conditions()
-
-    if tick % fix_interval == 0:
-        pos_frames[tick] = [position, velocity]
-
-    # replay recording
+    # process player input
     for key in ["key_up", "key_down", "key_left", "key_right", "key_jump", "key_dodge", "grapple", "shoot"]:
         var value = Input.get_action_strength(key)
         buffer.update_action(key, value)
 
-    replay_frames[tick] = buffer.input_map.duplicate()
+    if Game.is_recording:
+        # record initial conditions (position, velocity, etc.)
+        if tick == 0:
+            initial_conditions = get_current_conditions()
 
-    get_node("/root/Main/debug/DebugInfo").text = "speed: %3.2f (x=%3.2f, y=%3.2f)\nstate: %s" % [velocity.length(), velocity.x, velocity.y, state_name]
+        # record pos/vel periodically (for replay pos checking)
+        if tick % fix_interval == 0:
+            pos_frames[tick] = [position, velocity]
+
+        # record current inputs for this frame
+        replay_frames[tick] = buffer.input_map.duplicate()
 
 # Do an animated restart
 func player_restart():
     # pause during fadeout
     yield(Game.pause_and_fade_out(0.2), "completed")
 
+    Game.replay_stop_recording()
     restart()
     Game.restart_level()
+    Game.replay_start_recording()
 
     # unpause after fadein
     yield(Game.fade_in_and_unpause(0.2), "completed")
@@ -102,34 +103,19 @@ func hurt(damage = 100, respawn_point = null):
 
 func restart():
 
-    if is_instance_valid(ghost):
-        ghost.restart()
-
     # reset player to start point
     .restart()
+    if Game.replay:
+        Game.replay_playback_start()
 
     # clear replay data
     replay_frames = {}
     pos_frames = {}
 
+# func respawn(pos):
+#     .respawn(pos)
 
-
-func respawn(pos):
-    .respawn(pos)
-
-# Create a ghost replay from this player's currently recorded inputs.
-func create_ghost():
-    if not is_instance_valid(ghost):
-        print("[ghost] creating new ghost")
-        ghost = GhostPlayer.instance()
-        get_parent().add_child(ghost)
-
-    # update ghost replay
-    ghost.init(initial_conditions, replay_frames.duplicate(true), pos_frames.duplicate(true))
-
-func delete_ghost():
-    if is_instance_valid(ghost):
-        print("[ghost] deleting ghost")
-        get_parent().remove_child(ghost)
-        ghost.queue_free()
-    
+func export_replay():
+    var replay = Replay.new()
+    replay.init(initial_conditions, replay_frames, pos_frames)
+    return replay
