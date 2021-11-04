@@ -87,8 +87,8 @@ func check_ground_jump():
         set_state("jumpsquat")
 
 # Check if the player wants to do an air jump.
-func check_air_jump():
-    if !runner.is_on_floor() and buffer.is_action_just_pressed("key_jump", 0.2):
+func check_air_jump(force = false):
+    if (!runner.is_on_floor() or force) and buffer.is_action_just_pressed("key_jump", 0.2):
         runner.jump()
 
 # Check if the player wants to do a jump (air or grounded).
@@ -98,6 +98,32 @@ func check_jump():
             set_state("jumpsquat")
         else:
             runner.jump()
+
+# Check if the player wants to do a walljump.
+func check_wall_jump():
+
+    var space = get_world_2d().direct_space_state
+
+    # raycast left
+    var left_result = space.intersect_ray(
+        runner.position,
+        runner.position + (Vector2.LEFT * 20),
+        [], 0b0001)
+    # print("left ray: %s" % left_result)
+    if left_result and buffer.is_action_just_pressed("key_right"):
+        runner.jump(0.8, true, runner.MAX_SPEED)
+        update_facing()
+        runner.emit_signal("walljump_right")
+
+    var right_result = space.intersect_ray(
+        runner.position,
+        runner.position + (Vector2.RIGHT * 20),
+        [], 0b0001)
+    # print("right ray: %s" % right_result)
+    if right_result and buffer.is_action_just_pressed("key_left"):
+        runner.jump(0.8, true, -runner.MAX_SPEED)
+        update_facing()
+        runner.emit_signal("walljump_left")
 
 # Check if the player wants to fastfall.
 func check_fastfall():

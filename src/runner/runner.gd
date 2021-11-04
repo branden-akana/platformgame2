@@ -11,6 +11,9 @@ signal dragging
 signal died
 signal respawned
 
+signal walljump_left
+signal walljump_right
+
 # constants
 # ===========================================
 
@@ -135,8 +138,12 @@ func _ready():
     grapple_line.set_as_toplevel(true)
     grapple_line.visible = false
 
+    # connect signals to particle effects
     connect("jump", Effects, "play", [Effects.Jump, self]) 
     connect("dragging", Effects, "play", [Effects.Dust, self])
+    connect("land", Effects, "play", [Effects.Land, self]) 
+    connect("walljump_left", Effects, "play", [Effects.WallJumpRight, self]) 
+    connect("walljump_right", Effects, "play", [Effects.WallJumpLeft, self]) 
 
     $hurtbox.connect("body_entered", self, "on_hurtbox_entered")
 
@@ -267,13 +274,15 @@ func _physics_process(delta):  # update input and physics
 
     tick += 1
 
-func jump(factor = 1.0):
+# Make the runner jump. If force is true, ignore how many jumps they have left.
+func jump(factor = 1.0, force = false, vel_x = null):
 
     var axis = buffer.get_action_axis()
 
-    if jumps_left > 0:
+    if jumps_left > 0 or force:
         emit_signal("jump")
-        jumps_left -= 1
+        if not force:
+            jumps_left -= 1
 
         if state_name == "airdash":
             velocity.y = -750 * factor
@@ -281,7 +290,9 @@ func jump(factor = 1.0):
             velocity.y = -950 * factor
 
     if not is_on_floor():
-        if axis.x > buffer.PRESS_THRESHOLD:
+        if vel_x:
+            velocity.x = vel_x
+        elif axis.x > buffer.PRESS_THRESHOLD:
             velocity.x = MAX_SPEED
         elif axis.x < -buffer.PRESS_THRESHOLD:
             velocity.x = -MAX_SPEED

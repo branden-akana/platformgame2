@@ -99,6 +99,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/runner/states/state_reeling.gd"
 }, {
+"base": "Reference",
+"class": "Replay",
+"language": "GDScript",
+"path": "res://src/replay.gd"
+}, {
 "base": "Area2D",
 "class": "Room",
 "language": "GDScript",
@@ -158,6 +163,7 @@ _global_script_class_icons={
 "Level": "",
 "Player": "",
 "ReelingState": "",
+"Replay": "",
 "Room": "",
 "Runner": "",
 "RunnerInitialState": "",
@@ -171,7 +177,7 @@ _global_script_class_icons={
 [application]
 
 config/name="untitled platform game"
-run/main_scene="res://scenes/Main.tscn"
+run/main_scene="res://scenes/main.tscn"
 config/icon="res://icon.png"
 
 [autoload]
@@ -373,6 +379,7 @@ pause={
 2d_physics/layer_7="trigger"
 2d_physics/layer_8="runner_hurtbox"
 2d_physics/layer_9="obstacle"
+2d_physics/layer_10="platform"
 
 [logging]
 

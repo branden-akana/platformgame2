@@ -4,6 +4,9 @@ const Dust = preload("res://scenes/particles/DustParticles.tscn")
 const Jump = preload("res://scenes/particles/JumpParticles.tscn")
 const Airdash = preload("res://scenes/particles/AirdashEffect.tscn")
 const Dash = preload("res://scenes/particles/DashEffect.tscn")
+const Land = preload("res://scenes/particles/land_effect.tscn")
+const WallJumpLeft = preload("res://scenes/particles/walljump_left.tscn")
+const WallJumpRight = preload("res://scenes/particles/walljump_right.tscn")
 
 var queued_deletion = []
 

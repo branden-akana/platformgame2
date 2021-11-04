@@ -36,6 +36,13 @@ func on_start(state_name):
 
 func on_update(_delta):
 
+    # jump out of dash
+    check_air_jump(true)
+    check_wall_jump()
+
+    if not is_active():
+        return
+
     if tick == 1:
         # delayed start of particles
         particles = Effects.play(Effects.Airdash, runner)
@@ -43,12 +50,6 @@ func on_update(_delta):
             particles.material.set_shader_param("flip", true)
         else:
             particles.material.set_shader_param("flip", false)
-
-    # jump out of dash
-    if buffer.is_action_just_pressed("key_jump", 0.2):
-        runner.jump()
-        set_state("airborne")
-        return
 
     if time >= 0 and time < DODGE_LENGTH:
 

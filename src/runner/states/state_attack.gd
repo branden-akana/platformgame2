@@ -85,9 +85,9 @@ func on_start(_state_name):
 
 func on_update(delta):
 
-    # allow jump cancelling
-    # if hit_detected:
-        # check_jump()
+    if hit_detected:
+        check_wall_jump()  # allow walljump canceling
+        # check_jump()  # allow jump canceling
 
     if not is_active():
         return
