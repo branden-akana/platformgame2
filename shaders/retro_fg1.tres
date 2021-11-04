@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=2]
+
+[ext_resource path="res://assets/palette2.png" type="Texture" id=1]
+[ext_resource path="res://assets/palette5.png" type="Texture" id=2]
+[ext_resource path="res://shaders/retro_texture.gdshader" type="Shader" id=3]
+
+[resource]
+shader = ExtResource( 3 )
+shader_param/palette_blend = 0.0
+shader_param/pixel_size = 4.0
+shader_param/palette_a = ExtResource( 2 )
+shader_param/palette_b = ExtResource( 1 )

@@ -1,10 +1,15 @@
-[gd_resource type="ShaderMaterial" load_steps=4 format=2]
+/*
+    Retro Shader
+    
+    This shader implements the following effects:
+    - Pixelization (with a specified pixel size)
+    - Noise
+    - Color palette (depends on the green channel of a pixel)
+    
+    This version samples TEXTURE which will process the area the object using this shader covers.
+*/
 
-[ext_resource path="res://assets/palette.png" type="Texture" id=1]
-[ext_resource path="res://assets/palette2.png" type="Texture" id=2]
-
-[sub_resource type="Shader" id=1]
-code = "shader_type canvas_item;
+shader_type canvas_item;
 
 uniform sampler2D palette_a;
 uniform sampler2D palette_b;
@@ -12,6 +17,7 @@ uniform sampler2D palette_b;
 uniform float palette_blend = 0.0;
 uniform float pixel_size = 4.0;
 
+// "random" number generator
 float rand(vec2 co) {
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
@@ -19,17 +25,17 @@ float rand(vec2 co) {
 void fragment() {
     // pixelize screen
     float pixsize = float(pixel_size);
-	vec2 screen_size = vec2(textureSize(SCREEN_TEXTURE, 0));
+	vec2 screen_size = vec2(textureSize(TEXTURE, 0));
 	vec2 screen_ratio = pixsize / screen_size;
 	//vec2 pixel_uv = (floor(SCREEN_UV / screen_ratio) * screen_ratio) + (screen_ratio / 2.0);
-    vec2 pixel_uv = (floor(SCREEN_UV / screen_ratio) * screen_ratio);
-	COLOR = textureLod(SCREEN_TEXTURE, pixel_uv, 0.0);
+    vec2 pixel_uv = (floor(UV / screen_ratio) * screen_ratio);
+	COLOR = textureLod(TEXTURE, pixel_uv, 0.0);
         
     // noise
     //COLOR = mix(COLOR, vec4(vec3(rand(pixel_uv + rand(vec2(TIME)))), 1.0), 0.03);
     float n = abs(rand(pixel_uv + rand(vec2(floor(TIME * 10.0)))));
-    //n = clamp(n, 0.0, 1.0);
-    COLOR = mix(COLOR, COLOR + vec4(vec3(n), 0.0), 0.015);
+    n = clamp(n, 0.0, 1.0);
+    COLOR = mix(COLOR, COLOR - vec4(vec3(n), 0.0), 0.015);
        
     // use color palette
     float u = floor(COLOR.g * 8.0) / 8.0 + (1.0 / 16.0);
@@ -41,11 +47,3 @@ void fragment() {
     COLOR = vec4(palette_color.rgb, COLOR.a);
 }
 
-"
-
-[resource]
-shader = SubResource( 1 )
-shader_param/palette_blend = 0.0
-shader_param/pixel_size = 4.0
-shader_param/palette_a = ExtResource( 1 )
-shader_param/palette_b = ExtResource( 2 )

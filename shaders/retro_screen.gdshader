@@ -1,10 +1,15 @@
-[gd_resource type="ShaderMaterial" load_steps=4 format=2]
+/*
+    Retro Shader
+    
+    This shader implements the following effects:
+    - Pixelization (with a specified pixel size)
+    - Noise
+    - Color palette (depends on the green channel of a pixel)
+    
+    This version samples SCREEN_TEXTURE which will process the entire screen.
+*/
 
-[ext_resource path="res://assets/palette.png" type="Texture" id=1]
-[ext_resource path="res://assets/palette2.png" type="Texture" id=2]
-
-[sub_resource type="Shader" id=1]
-code = "shader_type canvas_item;
+shader_type canvas_item;
 
 uniform sampler2D palette_a;
 uniform sampler2D palette_b;
@@ -12,6 +17,7 @@ uniform sampler2D palette_b;
 uniform float palette_blend = 0.0;
 uniform float pixel_size = 4.0;
 
+// "random" number generator
 float rand(vec2 co) {
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
@@ -53,12 +59,3 @@ void light() {
     LIGHT_COLOR = vec4(0.0);
     LIGHT_HEIGHT = 0.0;
 }
-
-"
-
-[resource]
-shader = SubResource( 1 )
-shader_param/palette_blend = 0.0
-shader_param/pixel_size = 4.0
-shader_param/palette_a = ExtResource( 1 )
-shader_param/palette_b = ExtResource( 2 )

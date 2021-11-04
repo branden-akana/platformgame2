@@ -141,7 +141,7 @@ func _ready():
     $hurtbox.connect("body_entered", self, "on_hurtbox_entered")
 
 func _exit_tree():
-    Game.get_foreground().remove_child(sprite)
+    sprite.get_parent().remove_child(sprite)
     sprite.queue_free()
 
 func get_state() -> RunnerState:

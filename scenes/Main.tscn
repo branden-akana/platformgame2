@@ -1,61 +1,12 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scenes/debug.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/levels/test_hub.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/bg.png" type="Texture" id=3]
-[ext_resource path="res://shaders/viewport_palette_pixelate.tres" type="Material" id=4]
-[ext_resource path="res://assets/palette5.png" type="Texture" id=5]
-[ext_resource path="res://assets/palette.png" type="Texture" id=6]
+[ext_resource path="res://shaders/retro_fg1.tres" type="Material" id=4]
+[ext_resource path="res://shaders/retro_fg2.tres" type="Material" id=5]
 [ext_resource path="res://scenes/camera.tscn" type="PackedScene" id=10]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=11]
-
-[sub_resource type="Shader" id=1]
-resource_local_to_scene = true
-code = "shader_type canvas_item;
-
-uniform sampler2D palette_a;
-uniform sampler2D palette_b;
-
-uniform float palette_blend = 0.0;
-uniform float pixel_size = 4.0;
-
-float rand(vec2 co) {
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-}
-
-void fragment() {
-    // pixelize screen
-    float pixsize = float(pixel_size);
-	vec2 screen_size = vec2(textureSize(TEXTURE, 0));
-	vec2 screen_ratio = pixsize / screen_size;
-	//vec2 pixel_uv = (floor(SCREEN_UV / screen_ratio) * screen_ratio) + (screen_ratio / 2.0);
-    vec2 pixel_uv = (floor(UV / screen_ratio) * screen_ratio);
-	COLOR = textureLod(TEXTURE, pixel_uv, 0.0);
-        
-    // noise
-    //COLOR = mix(COLOR, vec4(vec3(rand(pixel_uv + rand(vec2(TIME)))), 1.0), 0.03);
-    float n = abs(rand(pixel_uv + rand(vec2(floor(TIME * 10.0)))));
-    n = clamp(n, 0.0, 1.0);
-    COLOR = mix(COLOR, COLOR - vec4(vec3(n), 0.0), 0.015);
-       
-    // use color palette
-    float u = (floor(COLOR.g * 4.0) / 4.0) + (1.0 / 8.0);
-    float v = 0.0; // selects which row of the palette to use
-
-    vec4 palette_color_a = texture(palette_a, vec2(u, v));
-    vec4 palette_color_b = texture(palette_b, vec2(u, v));
-    vec4 palette_color = mix(palette_color_a, palette_color_b, palette_blend);
-    COLOR = vec4(palette_color.rgb, COLOR.a);
-}
-
-"
-
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
-shader_param/palette_blend = 0.25
-shader_param/pixel_size = 4.0
-shader_param/palette_a = ExtResource( 5 )
-shader_param/palette_b = ExtResource( 6 )
 
 [node name="Main" type="Node2D"]
 
@@ -71,7 +22,7 @@ shader_param/palette_b = ExtResource( 6 )
 layer = 3
 
 [node name="fg" type="ViewportContainer" parent="viewports"]
-material = SubResource( 2 )
+material = ExtResource( 4 )
 margin_right = 1280.0
 margin_bottom = 720.0
 stretch = true
@@ -90,7 +41,7 @@ visible = false
 texture = ExtResource( 3 )
 
 [node name="fg2" type="ViewportContainer" parent="viewports"]
-material = ExtResource( 4 )
+material = ExtResource( 5 )
 margin_right = 1280.0
 margin_bottom = 720.0
 stretch = true
