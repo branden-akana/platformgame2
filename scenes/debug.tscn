@@ -56,7 +56,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DebugInfo" type="Label" parent="."]
+[node name="info" type="Label" parent="."]
 visible = false
 margin_left = 4.15908
 margin_top = 5.42046
