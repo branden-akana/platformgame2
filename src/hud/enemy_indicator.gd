@@ -22,7 +22,8 @@ func _draw():
     var x = -get_origin(total)
     
     for _i in range(dead):
-        draw_circle(Vector2(x, 0), 5, Color(1.0, 1.0, 1.0, 0.2))
+        # draw_circle(Vector2(x, 0), 8, Color(0.0, 0.0, 0.0, 0.6))
+        draw_circle(Vector2(x, 0), 4, Color(1.0, 1.0, 1.0, 0.6))
         x += SPACING
         
     for _i in range(alive):

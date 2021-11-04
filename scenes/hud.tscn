@@ -91,6 +91,7 @@ position = Vector2( 990, 126 )
 
 [node name="enemy_indicator" type="Node2D" parent="control"]
 position = Vector2( 638, 62 )
+z_index = 10
 script = ExtResource( 10 )
 
 [node name="enemy_display" type="Label" parent="control"]
