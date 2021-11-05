@@ -7,6 +7,7 @@ const Dash = preload("res://scenes/particles/DashEffect.tscn")
 const Land = preload("res://scenes/particles/land_effect.tscn")
 const WallJumpLeft = preload("res://scenes/particles/walljump_left.tscn")
 const WallJumpRight = preload("res://scenes/particles/walljump_right.tscn")
+const Clear = preload("res://scenes/particles/clear_effect.tscn")
 
 var queued_deletion = []
 

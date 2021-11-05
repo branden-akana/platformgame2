@@ -3,6 +3,7 @@ extends Node2D
 signal paused
 signal unpaused
 signal level_restarted
+signal level_cleared
 signal scene_loaded
 
 const Textbox = preload("res://scenes/textbox.tscn")
@@ -57,6 +58,7 @@ func _ready():
     print("Feel free to minimize this window! It needs to be open for some reason to avoid a crash.")
 
     get_player().connect("died", self, "on_player_death")
+    connect("level_cleared", self, "on_level_clear")
     
     yield(get_player(), "ready")
 
@@ -188,6 +190,19 @@ func get_room_at_node(node):
 func on_room_entered(room, player):
     print("[game] new room entered %s" % room)
     get_camera().set_room_focus(room)
+
+func on_level_clear():
+    print("[game] level cleared!")
+    var tween = Util.new_tween(self)
+
+    tween.interpolate_property(Engine, "time_scale", 0.2, 1, 1)
+    tween.start()
+    # HUD.blink(0.5)
+    Effects.play(Effects.Clear, get_player())
+
+    yield(tween, "tween_completed")
+
+    tween.queue_free()
 
 func on_player_death():
     if not time_paused:
@@ -322,6 +337,7 @@ func pause_timer():
 
 func stop_timer():
     print("[timer] timer stopped")
+    emit_signal("level_cleared")
     pause_timer()
 
     # calculate time difference
