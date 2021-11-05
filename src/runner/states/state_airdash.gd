@@ -24,7 +24,7 @@ func on_start(state_name):
         set_state("airborne")
         return
     else:
-        grounded = state_name in ["idle", "dash", "running"]
+        grounded = state_name in ["idle", "dash", "running", "attack"]
 
         runner.airdashes_left -= 1
         airdash_dir = Vector2(axis.x, axis.y).normalized();
