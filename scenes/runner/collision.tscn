@@ -1,7 +1,0 @@
-[gd_scene format=2]
-
-[node name="collision" type="CollisionPolygon2D"]
-visible = false
-position = Vector2( 0, 8 )
-scale = Vector2( 4, 4 )
-polygon = PoolVector2Array( 4, 6, -4, 6, -4, 0, 0, -5, 4, 0 )

@@ -56,6 +56,10 @@ func change_palette(idx, time = 0.5):
     else:
         yield(get_tree(), "idle_frame")
 
+func blink(time):
+    tween.interpolate_property($white_fade, "color:a", 0.1, 0.0, time)
+    tween.start()
+
 func fade_in(time):
     tween.interpolate_property($fade, "color",
         Color(0.0, 0.0, 0.0, 1.0),

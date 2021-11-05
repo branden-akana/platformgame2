@@ -20,10 +20,12 @@ func set_state(state_name):
         var old_state_name = runner.state_name
         var new_state = runner.states[state_name]
         if new_state.can_start():
+            # Call on_end() of previous state
             on_end()
             runner.state_name = state_name
             runner.state.time = 0.0
             runner.state.tick = 0
+            # Call on_start() of new state
             runner.state.on_start(old_state_name)
             #print("state: %s -> %s" % [old_state_name, state_name])
 

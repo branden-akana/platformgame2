@@ -21,7 +21,7 @@ func _physics_process(delta):
         emitting = false
 "
 
-[sub_resource type="Gradient" id=3]
+[sub_resource type="Gradient" id=2]
 offsets = PoolRealArray( 0, 0.718121 )
 colors = PoolColorArray( 1, 1, 1, 1, 0, 0, 0, 0 )
 
@@ -32,8 +32,10 @@ z_index = -2
 script = SubResource( 1 )
 
 [node name="left" type="CPUParticles2D" parent="."]
+emitting = false
 amount = 4
 lifetime = 2.0
+one_shot = true
 explosiveness = 1.0
 local_coords = false
 emission_shape = 3
@@ -46,11 +48,13 @@ initial_velocity = 70.0
 linear_accel = -500.0
 linear_accel_random = 0.48
 scale_amount = 4.0
-color_ramp = SubResource( 3 )
+color_ramp = SubResource( 2 )
 
 [node name="right" type="CPUParticles2D" parent="."]
+emitting = false
 amount = 4
 lifetime = 2.0
+one_shot = true
 explosiveness = 1.0
 local_coords = false
 emission_shape = 3
@@ -63,4 +67,4 @@ initial_velocity = 70.0
 linear_accel = -500.0
 linear_accel_random = 0.51
 scale_amount = 4.0
-color_ramp = SubResource( 3 )
+color_ramp = SubResource( 2 )

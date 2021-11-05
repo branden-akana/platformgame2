@@ -100,7 +100,7 @@ func hurt(damage = 100, respawn_point = null):
 
     .hurt(damage, respawn_point)
 
-    # unpause after fadein
+    # unpause after fadein11
     yield(Game.fade_in_and_unpause(0.2), "completed")
 
 func restart():

@@ -1,14 +1,13 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://src/runner/player.gd" type="Script" id=1]
 [ext_resource path="res://src/animated_sprite.gd" type="Script" id=2]
 [ext_resource path="res://assets/PS4.png" type="Texture" id=3]
-[ext_resource path="res://scenes/runner/attack_d.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/moves/normal_up.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/moves/normal_down.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/moves/normal_forward.tscn" type="PackedScene" id=6]
 [ext_resource path="res://assets/runner_sprites.tres" type="SpriteFrames" id=7]
 [ext_resource path="res://shaders/grayscale.gdshader" type="Shader" id=8]
-[ext_resource path="res://scenes/runner/attack_u.tscn" type="PackedScene" id=9]
-[ext_resource path="res://scenes/runner/attack_f.tscn" type="PackedScene" id=10]
-[ext_resource path="res://scenes/runner/collision.tscn" type="PackedScene" id=11]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 8 )
@@ -126,22 +125,32 @@ scale = Vector2( 4, 4 )
 z_index = 1
 frames = ExtResource( 7 )
 animation = "idle"
+frame = 1
 playing = true
 offset = Vector2( 0, 1 )
 script = ExtResource( 2 )
 
-[node name="collision" parent="." instance=ExtResource( 11 )]
-visible = true
+[node name="collision" type="CollisionPolygon2D" parent="."]
+visible = false
+position = Vector2( 0, 8 )
+scale = Vector2( 4, 4 )
+polygon = PoolVector2Array( 4, 6, -4, 6, -4, 0, 0, -5, 4, 0 )
 
-[node name="attack_f" parent="." instance=ExtResource( 10 )]
+[node name="moveset" type="Node2D" parent="."]
 
-[node name="attack_u" parent="." instance=ExtResource( 9 )]
+[node name="normal_up" parent="moveset" instance=ExtResource( 4 )]
+runner_path = NodePath("../..")
 
-[node name="attack_d" parent="." instance=ExtResource( 4 )]
+[node name="normal_down" parent="moveset" instance=ExtResource( 5 )]
+runner_path = NodePath("../..")
+
+[node name="normal_forward" parent="moveset" instance=ExtResource( 6 )]
+runner_path = NodePath("../..")
 
 [node name="hurtbox" type="Area2D" parent="."]
 collision_layer = 128
 collision_mask = 4
 
 [node name="collision_shape_2d" type="CollisionShape2D" parent="hurtbox"]
+position = Vector2( 0, 8 )
 shape = SubResource( 9 )

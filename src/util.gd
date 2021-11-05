@@ -9,6 +9,28 @@ static func gridsnap(vec: Vector2, grid_size):
 static func await(object):
     return yield(object, "completed")
 
+static func new_tween(parent) -> Tween:
+    var tween = Tween.new()
+    parent.add_child(tween)
+    return tween
+
+# Get the shape of an area's collision, given the Area2D and a shape ID.
+static func get_shape(area: Area2D, shape_id: int) -> Shape2D:
+    return area.shape_owner_get_shape(area.shape_find_owner(shape_id), shape_id)
+
+# Get a list of collision points between two shapes
+static func get_collision_contacts(a: Area2D, a_shape: Shape2D, b: Area2D, b_shape: Shape2D):
+    return a_shape.collide_and_get_contacts(
+        a.global_transform,
+        b_shape,
+        b.global_transform
+    )
+    # var shape = hitbox.shape
+    # var contacts = shape.collide_and_get_contacts(
+    #     hitbox.global_transform,
+    #     Util.get_shape(target, area_shape),
+    #     target.global_transform)
+
 static func format_time(time):
     var mins = floor(time / 60.0)
     var secs = floor(fmod(time, 60.0))

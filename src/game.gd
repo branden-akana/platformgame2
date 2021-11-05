@@ -304,7 +304,7 @@ func _process(delta):
                 
     # toggle additional debug HUD info
     if Input.is_action_just_pressed("toggle_debug"):
-        var info = get_debug_hud().get_node("DebugInfo")
+        var info = get_debug_hud().get_node("info")
         info.visible = !info.visible
 
 

@@ -17,6 +17,9 @@ signal respawned
 signal walljump_left
 signal walljump_right
 
+signal hitstun_start
+signal hitstun_end
+
 # constants
 # ===========================================
 
@@ -338,21 +341,19 @@ func apply_friction(delta, friction = FRICTION):
     velocity.x = move_toward(velocity.x, 0, friction * delta)
 
 # Stun the runner for a specified amount of time
-func stun(length):
+func stun(frames):
 
-    stun_timer.start(length)
+    # convert frames to seconds
+    var time = frames / float(Engine.iterations_per_second)
+    stun_timer.start(time)
 
+    emit_signal("hitstun_start")
     sprite.stop()
-    $"attack_f/sprite".stop()
-    $"attack_u/sprite".stop()
-    $"attack_d/sprite".stop()
 
     yield(stun_timer, "timeout")
 
+    emit_signal("hitstun_end")
     sprite.play()
-    $"attack_f/sprite".play()
-    $"attack_u/sprite".play()
-    $"attack_d/sprite".play()
 
 # Hurt the player.
 #
