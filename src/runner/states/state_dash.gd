@@ -4,7 +4,7 @@ class_name DashState
 export var INIT_DASH_SPEED = 800
 
 export var MAX_DASH_SPEED = 800
-export var MAX_DASH_SPEED_REV = 1200
+export var MAX_DASH_SPEED_REV = 1250
 
 export var DASH_ACCELERATION = 1500 / 0.2
 export var DASH_ACCELERATION_REV = 2000 / 0.2
