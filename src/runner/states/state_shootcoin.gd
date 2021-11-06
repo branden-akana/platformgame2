@@ -29,16 +29,16 @@ func on_update(delta):
                 coin.set_color(Color(0.9, 0.3, 0.3))
 
         # determine throw direction
-        if buffer.get_action_strength("key_up") >= 0.5:
+        if input.get_action_strength("key_up") >= 0.5:
             coin.shoot_up()
 
-        elif buffer.get_action_strength("key_down") >= 0.5:
+        elif input.get_action_strength("key_down") >= 0.5:
             coin.shoot_down()
 
-        elif buffer.get_action_strength("key_left") >= 0.5:
+        elif input.get_action_strength("key_left") >= 0.5:
             coin.shoot_left()
 
-        elif buffer.get_action_strength("key_right") >= 0.5:
+        elif input.get_action_strength("key_right") >= 0.5:
             coin.shoot_right()
 
 

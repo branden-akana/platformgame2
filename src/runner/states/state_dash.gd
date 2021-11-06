@@ -47,7 +47,7 @@ func on_update(delta):
     elif not is_active():
         return
 
-    var axis = buffer.get_action_axis()
+    var axis = input.get_action_axis()
 
     # used to determine which way to accelerate;
     # can only be 1 or -1 (disregard the analog part)

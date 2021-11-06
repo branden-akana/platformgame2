@@ -79,7 +79,7 @@ func pre_process(delta):
     # process player input
     for key in ["key_up", "key_down", "key_left", "key_right", "key_jump", "key_dodge", "grapple", "shoot", "special"]:
         var value = Input.get_action_strength(key)
-        buffer.update_action(key, value)
+        input.update_action(key, value)
 
     # record initial conditions (position, velocity, etc.)
     if tick == 0:
@@ -91,7 +91,7 @@ func pre_process(delta):
             pos_frames[tick] = [position, velocity]
 
         # record current inputs for this frame
-        replay_frames[tick] = buffer.input_map.duplicate()
+        replay_frames[tick] = input.action_map.duplicate()
 
 # Do an animated restart
 func player_restart():

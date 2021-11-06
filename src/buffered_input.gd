@@ -1,39 +1,39 @@
-class_name InputBuffer
+class_name BufferedInput
 
 # threshold to trigger a "press" for analog inputs
 const PRESS_THRESHOLD = 0.5
 
 # map of input values
-var input_map = {}
+var action_map = {}
 
 # map of input deltas (difference in input value after a press, used for analog inputs)
-var input_deltas = {}
+var action_deltas = {}
 
 # map of when inputs were pressed
-var input_buffer = {}
+var action_press_times = {}
 
 # map of when inputs were unpressed
-var input_unpress_buffer = {}
+var action_unpress_times = {}
 
 # map of when inputs were pressed, but
 # unpressing will remove them from this map
-var input_holds = {}
+var action_holds = {}
 
 # Clear the buffer
 func reset():
-    input_map = {}
-    input_deltas = {}
-    input_buffer = {}
-    input_unpress_buffer = {}
-    input_holds = {}
+    action_map = {}
+    action_deltas = {}
+    action_press_times = {}
+    action_unpress_times = {}
+    action_holds = {}
 
-func duplicate() -> InputBuffer:
+func duplicate() -> BufferedInput:
     var copy = get_script().new()
-    copy.input_map = input_map.duplicate(true)
-    copy.input_deltas = input_deltas.duplicate(true)
-    copy.input_buffer = input_buffer.duplicate(true)
-    copy.input_unpress_buffer = input_unpress_buffer.duplicate(true)
-    copy.input_holds = input_holds.duplicate(true)
+    copy.action_map = action_map.duplicate(true)
+    copy.action_deltas = action_deltas.duplicate(true)
+    copy.action_press_times = action_press_times.duplicate(true)
+    copy.action_unpress_times = action_unpress_times.duplicate(true)
+    copy.action_holds = action_holds.duplicate(true)
     return copy
 
 # Manually trigger a press for this input. This input will be stored in the buffer map
@@ -41,49 +41,49 @@ func duplicate() -> InputBuffer:
 func update_action(input, value=1):
     var input_delta
     var past_value
-    if not input in input_map:
+    if not input in action_map:
         past_value = 0
         input_delta = value
     else:
-        past_value = input_map[input]
+        past_value = action_map[input]
         input_delta = value - past_value
 
-    input_deltas[input] = input_delta
+    action_deltas[input] = input_delta
 
     # detect press
     if past_value < PRESS_THRESHOLD and value >= PRESS_THRESHOLD:
         # print("read press (%s) delta: %.2f" % [input, input_delta])
-        input_buffer[input] = OS.get_ticks_msec()
-        input_holds[input] = OS.get_ticks_msec()
+        action_press_times[input] = OS.get_ticks_msec()
+        action_holds[input] = OS.get_ticks_msec()
 
     # detect unpress
     elif past_value >= PRESS_THRESHOLD and value < PRESS_THRESHOLD:
-        input_unpress_buffer[input] = OS.get_ticks_msec()
-        input_holds.erase(input)
+        action_unpress_times[input] = OS.get_ticks_msec()
+        action_holds.erase(input)
 
     # update values
-    input_map[input] = value
+    action_map[input] = value
 
 # Get the time (in seconds) from the last time this input has been pressed.
 func get_time_since_last_pressed(input):
-    if not input in input_buffer:
+    if not input in action_press_times:
         return INF
     else:
-        var buffer = (OS.get_ticks_msec() - input_buffer[input]) / 1000.0
+        var buffer = (OS.get_ticks_msec() - action_press_times[input]) / 1000.0
         return buffer 
 
 # Get the time (in seconds) from the last time this input has been unpressed.
 func get_time_since_last_unpressed(input):
-    if not input in input_unpress_buffer:
+    if not input in action_unpress_times:
         return INF
     else:
-        var buffer = (OS.get_ticks_msec() - input_unpress_buffer[input]) / 1000.0
+        var buffer = (OS.get_ticks_msec() - action_unpress_times[input]) / 1000.0
         return buffer 
 
 # Get the time (in seconds) that this input has been held down.
 func get_time_held(input):
-    if input in input_holds:
-        return (OS.get_ticks_msec() - input_holds[input]) / 1000.0
+    if input in action_holds:
+        return (OS.get_ticks_msec() - action_holds[input]) / 1000.0
     return 0
 
 # Read an input with a buffer (in seconds).
@@ -103,7 +103,7 @@ func is_action_just_pressed(input, tolerance: float = 0.0, delta=0.0, clear=true
         if last_pressed <= tolerance and input_delta >= delta:
             # print("[%s] last pressed: %.2f, delta: %.2f" % [input, last_pressed, input_delta])
             if clear:
-                input_buffer.erase(input)
+                action_press_times.erase(input)
             return true
         else:
             return false
@@ -159,20 +159,20 @@ func get_action_axis(right="key_right", left="key_left", up="key_up", down="key_
     return axis
 
 func is_action_pressed(input):
-    if input in input_map:
-        return input_map[input] >= PRESS_THRESHOLD
+    if input in action_map:
+        return action_map[input] >= PRESS_THRESHOLD
     else:
         return false
 
 func get_action_strength(input):
-    if input in input_map:
-        return input_map[input]
+    if input in action_map:
+        return action_map[input]
     else:
         return 0.0
 
 func get_action_delta(input):
-    if input in input_deltas:
-        return input_deltas[input]
+    if input in action_deltas:
+        return action_deltas[input]
     else:
         return 0.0
     

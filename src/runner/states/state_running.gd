@@ -9,7 +9,7 @@ func on_start(old_state):
 
 func on_update(delta):
 
-    var axis = buffer.get_action_axis()
+    var axis = input.get_action_axis()
 
     check_dash()
     check_ground_jump()

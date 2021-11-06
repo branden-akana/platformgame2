@@ -22,7 +22,7 @@ func on_start(_state_name):
 
     is_grounded = false
 
-    var axis = buffer.get_action_axis()
+    var axis = input.get_action_axis()
 
     # check move facing direction
     update_facing()

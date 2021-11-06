@@ -76,7 +76,7 @@ var state setget , get_state  # the state the player is in
 # ===========================================
 
 # var Coin = load("res://src/Coin.gd")
-var InputBuffer = load("res://src/input_buffer.gd")
+# var BufferedInput = load("res://src/buffered_input.gd")
 
 # child nodes
 # ===========================================
@@ -86,7 +86,7 @@ onready var sprite: AnimatedSprite = $sprite
 # onready var grapple_line = $"Line2D"
 # onready var camera = $"camera"
 
-onready var buffer: InputBuffer = InputBuffer.new()
+onready var input: BufferedInput = BufferedInput.new()
 
 # when active, "stun" the player (skip all physics processing)
 var stun_timer = Timer.new()
@@ -167,17 +167,17 @@ func get_state() -> RunnerState:
         return states[state_name]
     return null
 
-func set_input_buffer(buffer_):
-    self.buffer = buffer_
+func set_input_handler(input_):
+    self.input = input_
     for state in states.values():
-        state.buffer = buffer_
+        state.input = input_
 
 func get_current_conditions():
     var conditions = RunnerInitialState.new()
     conditions.position = position
     conditions.velocity = velocity
     conditions.state_name = state_name
-    conditions.buffer = buffer.duplicate()
+    conditions.input = input.duplicate()
     return conditions
 
 # Respawn the player at the start point of the level
@@ -191,7 +191,7 @@ func respawn(pos):
     position = pos
     velocity = Vector2(0, 0)
     get_state().set_state("idle")
-    buffer.reset()
+    input.reset()
     emit_signal("respawned")
 
 # throwable grapple points (coins)
@@ -291,21 +291,21 @@ func _physics_process(delta):  # update input and physics
 # Make the runner jump. If force is true, ignore how many jumps they have left.
 func jump(factor = 1.0, force = false, vel_x = null):
 
-    var axis = buffer.get_action_axis()
+    var axis = input.get_action_axis()
 
     if not is_on_floor():
         # airborne jump direction switch
         if vel_x:
             velocity.x = vel_x
-        elif axis.x > buffer.PRESS_THRESHOLD:
+        elif axis.x > input.PRESS_THRESHOLD:
             velocity.x = MAX_SPEED
-        elif axis.x < -buffer.PRESS_THRESHOLD:
+        elif axis.x < -input.PRESS_THRESHOLD:
             velocity.x = -MAX_SPEED
-        elif axis.y < -buffer.PRESS_THRESHOLD:
+        elif axis.y < -input.PRESS_THRESHOLD:
             velocity.x = 0
     else:
         # grounded jump direction switch
-        if axis.y < -buffer.PRESS_THRESHOLD:
+        if axis.y < -input.PRESS_THRESHOLD:
             velocity.x = 0
 
     if jumps_left > 0 or force:
@@ -328,7 +328,7 @@ func jump(factor = 1.0, force = false, vel_x = null):
 func apply_gravity(delta):
     if not is_on_floor():
         velocity.y = min(TERMINAL_VELOCITY, velocity.y + (GRAVITY * delta))
-        # if buffer.is_action_just_pressed("key_down") and velocity.y > 0 and velocity.y < GRAVITY:
+        # if input.is_action_just_pressed("key_down") and velocity.y > 0 and velocity.y < GRAVITY:
         # velocity.y = GRAVITY
 
 # Apply acceleration to the runner

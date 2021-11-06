@@ -14,7 +14,7 @@ func on_update(delta):
 
     # state behavior
 
-    var axis = buffer.get_action_axis()
+    var axis = input.get_action_axis()
 
     if is_active():
 

@@ -6,4 +6,4 @@ class_name RunnerInitialState
 var position
 var velocity
 var state_name
-var buffer
+var input

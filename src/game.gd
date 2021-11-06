@@ -14,6 +14,8 @@ const Level_2 = preload("res://scenes/levels/test1.tscn")
 
 const GhostPlayer = preload("res://scenes/ghost_player.tscn")
 
+var frame: int = 0
+
 # the total amount of time elapsed for the current level until completion
 var time: float = 0.0
 
@@ -66,6 +68,8 @@ func _ready():
 
 # Initialize the game. Use after loading a new level.
 func reinitialize_game():
+
+    frame = 0
 
     # reset best time / ghost
     clear_best_times()

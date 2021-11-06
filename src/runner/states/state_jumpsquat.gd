@@ -10,7 +10,7 @@ func on_start(_old_state):
 func on_update(_delta):
 
     if tick >= JUMPSQUAT_FRAMES:
-        if buffer.is_action_pressed("key_jump"):
+        if input.is_action_pressed("key_jump"):
             runner.jump()
         else:
             runner.jump(0.7)

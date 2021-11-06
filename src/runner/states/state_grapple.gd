@@ -38,12 +38,12 @@ func on_update(delta):
         # runner.apply_acceleration(delta, 500)
 
     # reel in
-    if !buffer.get_action_strength("grapple"):
+    if !input.get_action_strength("grapple"):
     # if buffer.is_action_just_pressed("key_jump"):
         set_state("reeling")
 
     # jump out of grapple
-    if buffer.is_action_just_pressed("key_jump") or trace or coin == null:
+    if input.is_action_just_pressed("key_jump") or trace or coin == null:
     # if !buffer.get_action_strength("grapple") or trace or coin == null:
         runner.release_grapple()
         reset_state()

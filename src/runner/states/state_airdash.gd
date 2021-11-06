@@ -11,12 +11,12 @@ var particles = null
 
 func can_start():
 
-    var axis = buffer.get_action_axis()
+    var axis = input.get_action_axis()
     return round(axis.length()) != 0
 
 func on_start(state_name):
 
-    var axis = buffer.get_action_axis().round().normalized();
+    var axis = input.get_action_axis().round().normalized();
     airdash_dir = Vector2.ZERO
 
     # determine airdash direction

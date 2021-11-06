@@ -55,7 +55,7 @@ func pre_process(_delta):
         return
     
     if tick == 0:
-        set_input_buffer(initial_conditions.buffer.duplicate())
+        set_input_handler(initial_conditions.input.duplicate())
 
     if tick in pos_frames:
         var expected_pos = pos_frames[tick][0]
@@ -70,9 +70,9 @@ func pre_process(_delta):
 
     # read inputs from replay frames
     if tick in replay_frames:
-        var input_map = replay_frames[tick]
-        for input in input_map:
-            buffer.update_action(input, input_map[input])
+        var action_map = replay_frames[tick]
+        for action in action_map:
+            input.update_action(action, action_map[action])
     else:
         if not replay_finished:
             print("[ghost] reached end of replay")
