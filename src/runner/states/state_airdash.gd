@@ -46,10 +46,11 @@ func on_update(_delta):
     if tick == 1:
         # delayed start of particles
         particles = Effects.play(Effects.Airdash, runner)
+        particles.get_node("wave").direction = -airdash_dir
         if runner.facing == Direction.LEFT:
-            particles.material.set_shader_param("flip", true)
+            particles.get_node("trail").material.set_shader_param("flip", true)
         else:
-            particles.material.set_shader_param("flip", false)
+            particles.get_node("trail").material.set_shader_param("flip", false)
 
     if time >= 0 and time < DODGE_LENGTH:
 

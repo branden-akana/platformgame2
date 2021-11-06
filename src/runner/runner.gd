@@ -79,7 +79,7 @@ var InputBuffer = load("res://src/input_buffer.gd")
 
 onready var sprite: AnimatedSprite = $sprite
 # onready var debug_info = $"/root/main/debug/DebugInfo"
-onready var grapple_line = $"Line2D"
+# onready var grapple_line = $"Line2D"
 # onready var camera = $"camera"
 
 onready var buffer: InputBuffer = InputBuffer.new()
@@ -129,6 +129,7 @@ var grapple_dist = 0.0
 var grapple_vel = 0.0
 
 func _ready():
+    stun_timer.name = "stun_timer"
     
     # add_child(grapple_line)
     add_child(stun_timer)
@@ -140,10 +141,9 @@ func _ready():
     # state setup
     for s in states.values():
         s.init(self)
-        add_child(s)
 
-    grapple_line.set_as_toplevel(true)
-    grapple_line.visible = false
+    # grapple_line.set_as_toplevel(true)
+    # grapple_line.visible = false
 
     # connect signals to particle effects
     connect("jump", Effects, "play", [Effects.Jump, self]) 
@@ -228,19 +228,19 @@ func _process(_delta):
             sprite.animation = "running"
         "airborne":
             sprite.animation = "airborne"
-        "grapple":
-            grapple_line.set_default_color(Color(1.0, 1.0, 1.0))
-        "reeling":
-            grapple_line.set_default_color(Color(1.0, 1.0, 1.0))
+        # "grapple":
+            # grapple_line.set_default_color(Color(1.0, 1.0, 1.0))
+        # "reeling":
+            # grapple_line.set_default_color(Color(1.0, 1.0, 1.0))
 
     # update grapple visuals
-    if state_name in ["grapple", "reeling"]:
-        grapple_line.visible = true
-        if lastcoin != null:
-            grapple_line.set_point_position(0, position)
-            grapple_line.set_point_position(1, lastcoin.position)
-    else:
-        grapple_line.visible = false
+    # if state_name in ["grapple", "reeling"]:
+    #     grapple_line.visible = true
+    #     if lastcoin != null:
+    #         grapple_line.set_point_position(0, position)
+    #         grapple_line.set_point_position(1, lastcoin.position)
+    # else:
+    #     grapple_line.visible = false
 
     # pixel snap the sprite's position
     sprite.position = Util.gridsnap(position, 4)
@@ -287,14 +287,18 @@ func jump(factor = 1.0, force = false, vel_x = null):
     var axis = buffer.get_action_axis()
 
     if jumps_left > 0 or force:
-        emit_signal("jump")
+    # if airdashes_left > 0 or force:
+        # if not force and not is_on_floor():
         if not force:
             jumps_left -= 1
+            # airdashes_left -= 1
 
         if state_name == "airdash":
             velocity.y = -750 * factor
         else:
             velocity.y = -950 * factor
+
+        if not force: emit_signal("jump")
 
     if not is_on_floor():
         if vel_x:

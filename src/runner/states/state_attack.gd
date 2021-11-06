@@ -11,6 +11,8 @@ var current_move
 # if true, this attack was done on the ground
 var is_grounded: bool = false
 
+func get_name(): return "attack_state"
+
 func on_init():
     moves[MoveDirection.FORWARD] = runner.get_node("moveset/normal_forward")
     moves[MoveDirection.UP]      = runner.get_node("moveset/normal_up")

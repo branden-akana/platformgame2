@@ -18,16 +18,16 @@ func on_update(delta):
         max_grapple_length = coin.position.distance_to(runner.position)
 
     # attempt path trace between player and last coin
-    var space_state = get_world_2d().direct_space_state
+    var space_state = runner.get_world_2d().direct_space_state
     var pivot = coin.position
-    var trace = space_state.intersect_ray(position, pivot, [self, coin], 0b0001)
+    var trace = space_state.intersect_ray(runner.position, pivot, [self, coin], 0b0001)
 
     if coin != null and !trace:  # path trace success
 
         # update grapple visuals
         runner.grapple_line.visible = true
         runner.grapple_line.set_default_color(Color(0.0, 0.0, 0.0))
-        runner.grapple_line.set_point_position(0, position)
+        runner.grapple_line.set_point_position(0, runner.position)
         runner.grapple_line.set_point_position(1, pivot)
 
         # v1 physics
@@ -49,11 +49,11 @@ func on_update(delta):
         reset_state()
 
     # grapple swinging physics
-    var dist = position.distance_to(pivot)
+    var dist = runner.position.distance_to(pivot)
 
     if dist >= max_grapple_length:  # only applies if at edge of grapple length
 
-        var new_pos = pivot + (pivot.direction_to(position) * max_grapple_length)
+        var new_pos = pivot + (pivot.direction_to(runner.position) * max_grapple_length)
 
         var old_dir = runner.velocity.normalized()
         var new_dir = (new_pos - runner.lastpos).normalized()
@@ -61,8 +61,8 @@ func on_update(delta):
         var angle = old_dir.angle_to(new_dir)
         print("sin: %.2f, cos: %.2f" % [sin(angle), cos(angle)])
 
-        position = new_pos
-        var new_velocity = (position - runner.lastpos).normalized() * runner.velocity.length()
+        runner.position = new_pos
+        var new_velocity = (runner.position - runner.lastpos).normalized() * runner.velocity.length()
         runner.velocity = new_velocity
         if abs(runner.velocity.x) < 100:
             runner.velocity.x *= abs(cos(angle))

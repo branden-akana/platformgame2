@@ -1,4 +1,3 @@
-extends Node2D
 class_name RunnerState
 
 var runner
@@ -108,7 +107,7 @@ func check_jump():
 # Check if the player wants to do a walljump.
 func check_wall_jump():
 
-    var space = get_world_2d().direct_space_state
+    var space = runner.get_world_2d().direct_space_state
     var margin = 20
     var jump_mult = 0.8
     var offset = Vector2(0, 32)
