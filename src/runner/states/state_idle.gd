@@ -18,6 +18,8 @@ func on_update(delta):
 
         if abs(runner.velocity.x) > runner.WALK_MAX_SPEED or axis.x == 0:
             process_friction(delta)
+        elif abs(axis.x) == 1 and is_facing_forward():
+            set_state("dash")
         elif axis.x > runner.WALK_THRESHOLD and is_facing_forward():
             runner.apply_acceleration(delta, 1, runner.ACCELERATION, effective_max_walk_speed)
         elif axis.x < -runner.WALK_THRESHOLD and is_facing_forward():
