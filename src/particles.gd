@@ -2,7 +2,7 @@ extends Node2D
 
 const Dust = preload("res://scenes/particles/DustParticles.tscn")
 const Jump = preload("res://scenes/particles/JumpParticles.tscn")
-const Airdash = preload("res://scenes/particles/AirdashEffect.tscn")
+const Airdash = preload("res://scenes/particles/airdash_effect.tscn")
 const Dash = preload("res://scenes/particles/DashEffect.tscn")
 const Land = preload("res://scenes/particles/land_effect.tscn")
 const HitEffect = preload("res://scenes/particles/hit_effect.tscn")
@@ -11,44 +11,38 @@ const WallJumpLeft = preload("res://scenes/particles/walljump_left.tscn")
 const WallJumpRight = preload("res://scenes/particles/walljump_right.tscn")
 const Clear = preload("res://scenes/particles/clear_effect.tscn")
 
-var queued_deletion = []
-
 func play(scene, parent = get_node("/root/main"), params = {}):
-    var instance = scene.instance()
+    # don't play any effects from a ghost
+    if parent is GhostPlayer: return
+
+    var effect = scene.instance()
     for key in params:
-        instance.set(key, params[key])
+        effect.set(key, params[key])
 
-    parent.add_child(instance)
-    instance.add_to_group("particles")
-    instance.restart()
+    parent.add_child(effect)
+    var lifetime = 1.0
+    if "lifetime" in effect: lifetime = effect.lifetime
 
-    if parent is GhostPlayer:
-        instance.visible = false
+    # call on_particles_finished() at the end of this effect's lifetime
+    var timer = get_tree().create_timer(lifetime)
+    timer.connect("timeout", self, "on_effect_finished", [effect])
 
-    return instance
+    effect.emitting = true
+    return effect
 
 func play_anim(scene, parent = get_node("/root/main")):
-    var instance = scene.instance()
+    var effect = scene.instance()
 
-    parent.add_child(instance)
-    instance.play()
+    parent.add_child(effect)
 
-    if parent is GhostPlayer:
-        instance.visible = false
+    # call on_particles_finished() at the end of this effect's lifetime
+    var timer = get_tree().create_timer(5.0)
+    timer.connect("timeout", self, "on_effect_finished", [effect])
 
-    return instance
-    
-func delete(particles):
-    if not particles in queued_deletion:
-        queued_deletion.append(particles)
-        yield(get_tree().create_timer(1.0), "timeout")
-        if is_instance_valid(particles):
-            particles.free()
-        queued_deletion.erase(particles)
-        
+    effect.play()
+    return effect
 
-func _physics_process(delta):
-    for particles in get_tree().get_nodes_in_group("particles"):
-        if particles and not particles.emitting:
-            call_deferred("delete", particles)
-    
+# called when an effect has finished
+func on_effect_finished(node):
+    # print("[effects] node %s finished" % node.name)
+    node.queue_free()
