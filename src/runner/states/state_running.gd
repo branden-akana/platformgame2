@@ -4,8 +4,8 @@ class_name RunningState
 func on_start(old_state):
 
     # determine running direction
-    update_facing()
-    # pass
+    # update_facing()
+    pass
 
 func on_update(delta):
 

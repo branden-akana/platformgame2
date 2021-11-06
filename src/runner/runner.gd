@@ -29,22 +29,54 @@ signal hitstun_end
 
 # movement physics params
 
+# general ground movement
+
 export var ACCELERATION = 8000
 export var FRICTION = 3000
 export var MAX_SPEED = 800
+
+# airborne drifting
 
 export var AIR_ACCELERATION = 3000
 export var AIR_FRICTION = 1000
 export var AIR_MAX_SPEED = 700
 
-export var FAST_FALL_SPEED = 2500
+# idling / walking
 
-export var DODGE_SPEED = 600
-export var DODGE_LENGTH = 0.3
+export var WALK_MAX_SPEED = 250
+
+# airdash
+
+export var AIRDASH_SPEED = 1000  # (mininum) speed at start of airdash
+export var AIRDASH_SPEED_END = 500  # speed at end of airdash
+export var AIRDASH_LENGTH = 12
+
+# jumping / gravity
+
+export var JUMPSQUAT_LENGTH = 4  # amount of frames to stay grounded before jumping
 
 export var JUMP_VELOCITY = 800
 export var GRAVITY = 2400
 export var TERMINAL_VELOCITY = 1000  # maximum downwards velocity
+export var FAST_FALL_SPEED = 2500
+
+# dash
+
+# captain falcon: 16
+export var DASH_LENGTH = 20  # in frames
+
+export var DASH_INIT_SPEED = 200  # dash initial speed
+
+export var DASH_ACCELERATION = 10000  # dash acceleration
+export var DASH_ACCELERATION_REV = 10000  # dash reverse acceleration
+
+export var DASH_MAX_SPEED = 800  # dash max speed
+export var DASH_MAX_SPEED_REV = 1250  # dash reverse max speed (moonwalking)
+
+# buffers (frame window to accept these actions before they are actionable)
+
+export var BUFFER_JUMP = 2
+export var BUFFER_AIRDASH = 20
 
 # other consts
 
@@ -148,14 +180,6 @@ func _ready():
 
     # grapple_line.set_as_toplevel(true)
     # grapple_line.visible = false
-
-    # connect signals to particle effects
-    # connect("jump", Effects, "play", [Effects.Jump, self, {"direction": -velocity}]) 
-    connect("jump", Effects, "play", [Effects.Jump, self]) 
-    connect("dragging", Effects, "play", [Effects.Dust, self])
-    connect("land", Effects, "play", [Effects.Land, self]) 
-    connect("walljump_left", Effects, "play", [Effects.WallJumpRight, self]) 
-    connect("walljump_right", Effects, "play", [Effects.WallJumpLeft, self]) 
 
     $hurtbox.connect("body_entered", self, "on_hurtbox_entered")
 

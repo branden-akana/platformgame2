@@ -14,6 +14,7 @@ var ghost = null
 onready var airdash_tween = Util.new_tween(self)
 
 func _ready():
+    # connect signal to sound effects
     connect("walking", Sound, "play", ["walk", -20, 0.8, true, false])
     connect("stop_walking", Sound, "stop", ["walk"])
     connect("jump", Sound, "play", ["jump", -10, 1, false])
@@ -21,6 +22,14 @@ func _ready():
     connect("hit", Sound, "play", ["hit", -10])
     connect("dash", Sound, "play", ["dash", -20, 0.8, false, true])
     connect("attack", Sound, "play", ["attack", -20, 0.7, false, true])
+
+    # connect signals to particle effects
+    # connect("jump", Effects, "play", [Effects.Jump, self, {"direction": -velocity}]) 
+    connect("jump", Effects, "play", [Effects.Jump, self]) 
+    connect("dragging", Effects, "play", [Effects.Dust, self])
+    connect("land", Effects, "play", [Effects.Land, self]) 
+    connect("walljump_left", Effects, "play", [Effects.WallJumpRight, self]) 
+    connect("walljump_right", Effects, "play", [Effects.WallJumpLeft, self]) 
 
     connect("airdash", self, "on_airdash")
     connect("airdash_restored", self, "on_airdash_restored")
@@ -128,7 +137,7 @@ func restart():
 
 func respawn(pos):
     .respawn(pos)
-    if Game.current_room:
+    if is_instance_valid(Game.current_room):
         Game.current_room.reset_room()
 
 func export_replay():

@@ -2,6 +2,7 @@ class_name RunnerState
 
 var runner
 var input: BufferedInput
+
 # var game: Game
 
 var time: float = 0.0
@@ -26,7 +27,7 @@ func set_state(state_name):
             runner.state.tick = 0
             # Call on_start() of new state
             runner.state.on_start(old_state_name)
-            #print("state: %s -> %s" % [old_state_name, state_name])
+            # print("state: %s -> %s" % [old_state_name, state_name])
 
 # Return true if the runner's current state is this state.
 func is_active():
@@ -53,7 +54,7 @@ func process(delta):
     if runner == null:
         return
 
-    if runner.airdashes_left > 0 and input.is_action_just_pressed("key_dodge", 20):
+    if runner.airdashes_left > 0 and input.is_action_just_pressed("key_dodge", runner.BUFFER_AIRDASH):
         set_state("airdash")
         return
 
@@ -88,17 +89,17 @@ func check_dropdown_platforms():
 
 # Check if the player wants to do a grounded jump.
 func check_ground_jump():
-    if runner.is_on_floor() and input.is_action_just_pressed("key_jump", 12):
+    if runner.is_on_floor() and input.is_action_just_pressed("key_jump", runner.BUFFER_JUMP):
         set_state("jumpsquat")
 
 # Check if the player wants to do an air jump.
 func check_air_jump(force = false):
-    if (!runner.is_on_floor() or force) and input.is_action_just_pressed("key_jump", 12):
+    if (!runner.is_on_floor() or force) and input.is_action_just_pressed("key_jump", runner.BUFFER_JUMP):
         runner.jump()
 
 # Check if the player wants to do a jump (air or grounded).
 func check_jump():
-    if input.is_action_just_pressed("key_jump", 12):
+    if input.is_action_just_pressed("key_jump", runner.BUFFER_JUMP):
         if runner.is_on_floor():
             set_state("jumpsquat")
         else:

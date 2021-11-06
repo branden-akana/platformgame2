@@ -1,16 +1,6 @@
 extends RunnerState
 class_name DashState
 
-export var INIT_DASH_SPEED = 400
-
-export var MAX_DASH_SPEED = 800
-export var MAX_DASH_SPEED_REV = 1250
-
-export var DASH_ACCELERATION = 2000 / 0.2
-export var DASH_ACCELERATION_REV = 2000 / 0.2
-
-export var DASH_LENGTH = 16  # in frames
-
 func on_start(_old_state):
 
     # determine dash direction
@@ -23,10 +13,10 @@ func on_start(_old_state):
     match runner.facing:
         Direction.RIGHT:
             Effects.play(Effects.Dash, runner, {"direction": Vector2(-3, -1)})
-            runner.velocity.x = INIT_DASH_SPEED
+            runner.velocity.x = runner.DASH_INIT_SPEED
         Direction.LEFT:
             Effects.play(Effects.Dash, runner, {"direction": Vector2(3, -1)})
-            runner.velocity.x = -INIT_DASH_SPEED
+            runner.velocity.x = -runner.DASH_INIT_SPEED
 
 func on_update(delta):
 
@@ -71,18 +61,18 @@ func on_update(delta):
                 is_reversed = true
                 effective_axis = 1
 
-    var accel = DASH_ACCELERATION
-    var max_speed = MAX_DASH_SPEED
+    var accel = runner.DASH_ACCELERATION
+    var max_speed = runner.DASH_MAX_SPEED
 
     # change acceleration if reversed (allow moonwalking)
     if is_reversed:
-        accel = DASH_ACCELERATION_REV
-        max_speed = MAX_DASH_SPEED_REV
+        accel = runner.DASH_ACCELERATION_REV
+        max_speed = runner.DASH_MAX_SPEED_REV
         
     runner.apply_acceleration(delta, effective_axis, accel, max_speed)
 
     # end of dash
-    if tick >= DASH_LENGTH and axis.length() > 0.1:
+    if tick >= runner.DASH_LENGTH and axis.length() > 0.1:
         set_state("running")
 
 

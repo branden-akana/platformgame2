@@ -1,9 +1,6 @@
 extends RunnerState
 class_name AirdashState
 
-export var DODGE_SPEED = 1000
-export var DODGE_LENGTH = 0.2
-
 var airdash_dir: Vector2 = Vector2.ZERO
 var grounded: bool = false
 
@@ -54,14 +51,17 @@ func on_update(_delta):
         else:
             particles.get_node("trail").material.set_shader_param("flip", false)
 
-    if time >= 0 and time < DODGE_LENGTH:
+    if tick >= 0 and tick <= runner.AIRDASH_LENGTH:
 
         # middle of airdashing
 
-        var airdash_speed = max(DODGE_SPEED, runner.velocity.length())
-        runner.velocity = airdash_dir * lerp(airdash_speed, airdash_speed / 2, pow(time / DODGE_LENGTH, 2))
+        var airdash_speed = max(runner.AIRDASH_SPEED, runner.velocity.length())
+        var t = pow(tick / float(runner.AIRDASH_LENGTH), 2)
+        runner.velocity = (airdash_dir * lerp(
+            airdash_speed, runner.AIRDASH_SPEED_END, t
+        ))
 
-    if time >= DODGE_LENGTH or (not grounded and runner.is_on_floor()):
+    if tick > runner.AIRDASH_LENGTH or (not grounded and runner.is_on_floor()):
 
         # end of airdashing
 
