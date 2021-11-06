@@ -12,14 +12,16 @@ const WallJumpRight = preload("res://scenes/particles/walljump_right.tscn")
 const Clear = preload("res://scenes/particles/clear_effect.tscn")
 
 func play(scene, parent = get_node("/root/main"), params = {}):
-    # don't play any effects from a ghost
-    if parent is GhostPlayer: return
-
     var effect = scene.instance()
+    parent.add_child(effect)
+
+    # don't play any effects from a ghost
+    if parent is GhostPlayer:
+        effect.visible = false
+
     for key in params:
         effect.set(key, params[key])
 
-    parent.add_child(effect)
     var lifetime = 1.0
     if "lifetime" in effect: lifetime = effect.lifetime
 

@@ -146,6 +146,7 @@ func _ready():
     # grapple_line.visible = false
 
     # connect signals to particle effects
+    # connect("jump", Effects, "play", [Effects.Jump, self, {"direction": -velocity}]) 
     connect("jump", Effects, "play", [Effects.Jump, self]) 
     connect("dragging", Effects, "play", [Effects.Dust, self])
     connect("land", Effects, "play", [Effects.Land, self]) 
@@ -155,7 +156,6 @@ func _ready():
     $hurtbox.connect("body_entered", self, "on_hurtbox_entered")
 
 func _exit_tree():
-    sprite.get_parent().remove_child(sprite)
     sprite.queue_free()
 
 func get_state() -> RunnerState:
@@ -286,6 +286,21 @@ func jump(factor = 1.0, force = false, vel_x = null):
 
     var axis = buffer.get_action_axis()
 
+    if not is_on_floor():
+        # airborne jump direction switch
+        if vel_x:
+            velocity.x = vel_x
+        elif axis.x > buffer.PRESS_THRESHOLD:
+            velocity.x = MAX_SPEED
+        elif axis.x < -buffer.PRESS_THRESHOLD:
+            velocity.x = -MAX_SPEED
+        elif axis.y < -buffer.PRESS_THRESHOLD:
+            velocity.x = 0
+    else:
+        # grounded jump direction switch
+        if axis.y < -buffer.PRESS_THRESHOLD:
+            velocity.x = 0
+
     if jumps_left > 0 or force:
     # if airdashes_left > 0 or force:
         # if not force and not is_on_floor():
@@ -299,16 +314,6 @@ func jump(factor = 1.0, force = false, vel_x = null):
             velocity.y = -950 * factor
 
         if not force: emit_signal("jump")
-
-    if not is_on_floor():
-        if vel_x:
-            velocity.x = vel_x
-        elif axis.x > buffer.PRESS_THRESHOLD:
-            velocity.x = MAX_SPEED
-        elif axis.x < -buffer.PRESS_THRESHOLD:
-            velocity.x = -MAX_SPEED
-        elif axis.y < -buffer.PRESS_THRESHOLD:
-            velocity.x = 0
         
     state.set_state("airborne")
 
