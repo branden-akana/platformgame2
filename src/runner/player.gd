@@ -65,7 +65,7 @@ func pre_process(delta):
     #     Game.get_camera().set_offset(camera_offset)
 
     # process player input
-    for key in ["key_up", "key_down", "key_left", "key_right", "key_jump", "key_dodge", "grapple", "shoot"]:
+    for key in ["key_up", "key_down", "key_left", "key_right", "key_jump", "key_dodge", "grapple", "shoot", "special"]:
         var value = Input.get_action_strength(key)
         buffer.update_action(key, value)
 

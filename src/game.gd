@@ -195,12 +195,14 @@ func on_level_clear():
     print("[game] level cleared!")
     var tween = Util.new_tween(self)
 
+    var pitch_effect = AudioServer.get_bus_effect(0, 0)
     tween.interpolate_property(Engine, "time_scale", 0.2, 1, 1)
+    tween.interpolate_method(pitch_effect, "set_pitch_scale", 0.8, 1.0, 0.5)
     tween.start()
     # HUD.blink(0.5)
     Effects.play(Effects.Clear, get_player())
 
-    yield(tween, "tween_completed")
+    yield(tween, "tween_all_completed")
 
     tween.queue_free()
 

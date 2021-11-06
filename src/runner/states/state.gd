@@ -65,9 +65,13 @@ func process(delta):
     if buffer.is_action_just_pressed("grapple"):
         if runner.lastcoin:
             set_state("grapple")
-        elif runner.state_name != "attack":
+        elif not runner.state_name in ["attack", "special"]:
             set_state("attack")
         return
+
+    if buffer.is_action_just_pressed("special"):
+        if not runner.state_name in ["attack", "special"]:
+            set_state("special")
 
     if runner.state == self:
         on_update(delta)

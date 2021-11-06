@@ -35,8 +35,15 @@ var hit_detected = false
 # move properties
 # =================================
 
+export (int) var damage = 1
+
+export (int) var dmg = 1
+
 # how long to put the player in hitstun on hit (in frames, from time of hit)
 export (int) var stun_length = 6
+
+# if true, stops the player's vertical velocity at the start
+export var cancel_gravity_on_start = false
 
 # if true, stops the player's vertical velocity and stops applying gravity
 export var cancel_gravity_on_hit = true
@@ -78,6 +85,12 @@ func _physics_process(delta):
                 hitbox.get_node("collision").disabled = true
                 hitbox.modulate = Color(1.0, 1.0, 1.0)
                 
+            if cancel_gravity_on_start and frame == 0:
+                if runner:
+                    runner.velocity.y = 0
+
+            $sprite.modulate.a = 1 - ((frame - 12) / float(frame_length))
+
             # apply gravity when:
             if (
                 # no hit was detected yet or
@@ -87,7 +100,8 @@ func _physics_process(delta):
                 # the move cancels gravity and is within the frame window
                 cancel_gravity_on_hit and frame > cancel_gravity_length
                 ):
-                    runner.apply_gravity(delta)
+                    if runner:
+                        runner.apply_gravity(delta)
 
         frame += 1
 
@@ -130,7 +144,11 @@ func on_hitbox_entered(area_id, target: Area2D, target_shape_id, hitbox_shape_id
 
         # on hit damage
         if not runner.no_damage:
-            target.damage(runner)
+            # print("[moveset] hit for %s damage" % dmg)
+            if dmg:
+                target.hurt(runner, dmg)
+            else:
+                target.hurt(runner)
 
             if target.health == 0:
                 var effect = Effects.play(Effects.HitParticles)
@@ -155,7 +173,8 @@ func start(__ = null):
     $sprite.frame = 0  # restart animation
 
     # flip if directed to the left
-    set_flipped(runner.facing == Direction.LEFT)
+    if runner:
+        set_flipped(runner.facing == Direction.LEFT)
 
     
     resume()

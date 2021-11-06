@@ -36,7 +36,7 @@ func get_width(total):
     return total * SPACING
     
 func get_origin(total):
-    return (get_width(total) / 2) - (SPACING / 2)
+    return (get_width(total) / 2.0) - (SPACING / 2.0)
     
 
     

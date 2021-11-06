@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://src/runner/player.gd" type="Script" id=1]
 [ext_resource path="res://src/animated_sprite.gd" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://scenes/moves/normal_forward.tscn" type="PackedScene" id=6]
 [ext_resource path="res://assets/runner_sprites.tres" type="SpriteFrames" id=7]
 [ext_resource path="res://shaders/grayscale.gdshader" type="Shader" id=8]
+[ext_resource path="res://scenes/moves/special_heavy.tscn" type="PackedScene" id=9]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 8 )
@@ -138,14 +139,25 @@ polygon = PoolVector2Array( 4, 6, -4, 6, -4, 0, 0, -5, 4, 0 )
 
 [node name="moveset" type="Node2D" parent="."]
 
+[node name="special_heavy" parent="moveset" instance=ExtResource( 9 )]
+runner_path = NodePath("../..")
+damage = null
+cancel_gravity_on_start = null
+
 [node name="normal_up" parent="moveset" instance=ExtResource( 4 )]
 runner_path = NodePath("../..")
+damage = null
+cancel_gravity_on_start = null
 
 [node name="normal_down" parent="moveset" instance=ExtResource( 5 )]
 runner_path = NodePath("../..")
+damage = null
+cancel_gravity_on_start = null
 
 [node name="normal_forward" parent="moveset" instance=ExtResource( 6 )]
 runner_path = NodePath("../..")
+damage = null
+cancel_gravity_on_start = null
 
 [node name="hurtbox" type="Area2D" parent="."]
 collision_layer = 128

@@ -84,7 +84,7 @@ func get_hp_color(hp):
 func update_color():
     sprite.color = get_hp_color(health)
 
-func damage(from, dmg = 1):
+func hurt(from, dmg = 1):
     hit_shift = Vector2.ZERO
     hit_direction = from.position.direction_to(position)
     hit_elasticity = HIT_ELASTICITY

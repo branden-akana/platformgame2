@@ -8,7 +8,19 @@ script = ExtResource( 5 )
 
 [node name="sprite" parent="." index="2"]
 modulate = Color( 0.4, 0.4, 0.4, 1 )
-frame = 1
+frame = 3
 
 [node name="moveset" parent="." index="4"]
 visible = false
+
+[node name="normal_up" parent="moveset" index="0"]
+damage = null
+cancel_gravity_on_start = null
+
+[node name="normal_down" parent="moveset" index="1"]
+damage = null
+cancel_gravity_on_start = null
+
+[node name="normal_forward" parent="moveset" index="2"]
+damage = null
+cancel_gravity_on_start = null

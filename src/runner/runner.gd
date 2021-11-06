@@ -61,7 +61,8 @@ var states = {
     "grapple": GrappleState.new(),
     "reeling": ReelingState.new(),
 
-    "attack": AttackState.new()
+    "attack": AttackState.new(),
+    "special": SpecialState.new()
 }
 
 var state_name = "idle"

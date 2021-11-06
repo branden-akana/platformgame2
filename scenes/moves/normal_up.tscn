@@ -10,7 +10,6 @@ extents = Vector2( 64, 64 )
 cancel_gravity_on_hit = false
 
 [node name="sprite" parent="." index="0"]
-visible = false
 position = Vector2( 56, -56 )
 scale = Vector2( 6, 12 )
 
