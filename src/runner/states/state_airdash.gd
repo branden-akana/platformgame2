@@ -33,6 +33,8 @@ func on_start(state_name):
         # if runner.is_on_floor():
         #     runner.position.y -= 2
 
+    runner.emit_signal("airdash")
+
 
 func on_update(_delta):
 

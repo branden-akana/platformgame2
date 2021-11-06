@@ -9,10 +9,14 @@ signal attack
 signal hit
 
 signal jump
-signal dash
 signal dragging
 signal died
 signal respawned
+
+signal dash
+
+signal airdash
+signal airdash_restored
 
 signal walljump_left
 signal walljump_right
@@ -265,6 +269,9 @@ func _physics_process(delta):  # update input and physics
         return
 
     if is_on_floor():
+        if airdashes_left == 0:
+            emit_signal("airdash_restored")
+
         airdashes_left = 1;
         jumps_left = 1;
 

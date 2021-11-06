@@ -47,4 +47,5 @@ func play_anim(scene, parent = get_node("/root/main")):
 # called when an effect has finished
 func on_effect_finished(node):
     # print("[effects] node %s finished" % node.name)
-    node.queue_free()
+    if is_instance_valid(node):
+        node.queue_free()

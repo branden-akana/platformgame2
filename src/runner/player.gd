@@ -11,6 +11,8 @@ var fix_interval = 20
 
 var ghost = null
 
+onready var airdash_tween = Util.new_tween(self)
+
 func _ready():
     connect("walking", Sound, "play", ["walk", -20, 0.8, true, false])
     connect("stop_walking", Sound, "stop", ["walk"])
@@ -20,9 +22,19 @@ func _ready():
     connect("dash", Sound, "play", ["dash", -20, 0.8, false, true])
     connect("attack", Sound, "play", ["attack", -20, 0.7, false, true])
 
+    connect("airdash", self, "on_airdash")
+    connect("airdash_restored", self, "on_airdash_restored")
 
     # sprite setup
     Game.reparent_to_fg1(sprite)
+
+func on_airdash_restored():
+    airdash_tween.interpolate_property(sprite, "modulate:g", 10.0, 1.0, 0.2)
+    airdash_tween.start()
+
+func on_airdash():
+    if airdash_tween:
+        airdash_tween.reset_all()
 
 func pre_process(delta):
 
@@ -32,7 +44,7 @@ func pre_process(delta):
     else:
         sprite.modulate = Color(1.0, 1.0, 1.0)
 
-    # needed as sometimes the walking sound does not stop
+    # needed as sometimes the walking sound does not sto111p
     if state_name != "running":
         Sound.stop("walk")
 
@@ -114,8 +126,10 @@ func restart():
     replay_frames = {}
     pos_frames = {}
 
-# func respawn(pos):
-#     .respawn(pos)
+func respawn(pos):
+    .respawn(pos)
+    if Game.current_room:
+        Game.current_room.reset_room()
 
 func export_replay():
     var replay = Replay.new()

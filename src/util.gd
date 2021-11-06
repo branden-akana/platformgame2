@@ -14,6 +14,11 @@ static func new_tween(parent) -> Tween:
     parent.add_child(tween)
     return tween
 
+# Wait for a tween to complete, then delete it
+static func await_tween(tween):
+    yield(tween, "tween_all_completed")
+    tween.queue_free()
+
 # Get the shape of an area's collision, given the Area2D and a shape ID.
 static func get_shape(area: Area2D, shape_id: int) -> Shape2D:
     return area.shape_owner_get_shape(area.shape_find_owner(shape_id), shape_id)

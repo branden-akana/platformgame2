@@ -33,18 +33,19 @@ onready var tween = Tween.new()
 func _ready():
     add_child(tween)
 
-    self.set_as_toplevel(true)
-    # position += get_parent().position
-
     if not Engine.editor_hint:
         Game.reparent_to_fg2(sprite)
-    else:
+        self.set_as_toplevel(true)
+        self.position += get_parent().position
         sprite.set_as_toplevel(true)
 
     reset()
     
 func _process(delta):
     if not is_instance_valid(sprite):
+        return
+
+    if Engine.editor_hint:
         return
         
     sprite.global_rotation += delta

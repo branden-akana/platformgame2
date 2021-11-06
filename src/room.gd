@@ -44,6 +44,11 @@ func get_bounds():
     else:
         return [position, position + get_viewport().size]
 
+# Reset this room.
+func reset_room():
+    for enemy in get_enemies():
+        enemy.reset()
+
 # Get a list of enemies in this room.
 func get_enemies():
     var enemies = []

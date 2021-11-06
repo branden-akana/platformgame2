@@ -1,12 +1,12 @@
 extends RunnerState
 class_name DashState
 
-export var INIT_DASH_SPEED = 800
+export var INIT_DASH_SPEED = 400
 
 export var MAX_DASH_SPEED = 800
 export var MAX_DASH_SPEED_REV = 1250
 
-export var DASH_ACCELERATION = 1500 / 0.2
+export var DASH_ACCELERATION = 2000 / 0.2
 export var DASH_ACCELERATION_REV = 2000 / 0.2
 
 export var DASH_LENGTH = 16  # in frames
@@ -40,6 +40,12 @@ func on_update(delta):
     check_idling()
 
     # =================
+
+    if runner.state_name == "idle":
+        print("ended dash at %.3f" % runner.velocity.x)
+        runner.velocity.x *= 0.1
+    elif not is_active():
+        return
 
     var axis = buffer.get_action_axis()
 
