@@ -156,7 +156,7 @@ func get_axis(prefix="key_") -> Vector2:
     var right = prefix + "right"
     var left  = prefix + "left"
     var up    = prefix + "up"
-    var down  = prefix + "key_down"
+    var down  = prefix + "down"
     var axis = Vector2(
         get_action_strength(right) - get_action_strength(left),
         get_action_strength(down) - get_action_strength(up)

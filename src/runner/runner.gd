@@ -79,7 +79,7 @@ export var DASH_MAX_SPEED_REV = 1500 # dash reverse max speed (moonwalking)
 
 # buffers (frame window to accept these actions before they are actionable)
 
-export var BUFFER_JUMP = 2
+export var BUFFER_JUMP = 12
 export var BUFFER_AIRDASH = 20
 
 # other consts

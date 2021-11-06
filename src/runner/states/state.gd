@@ -69,15 +69,20 @@ func process(delta):
 # COMMON CHECKS
 #===============================================================================
 
+# Set the runner state to either idle, running, dash, or airborne
+# depending on the current state of the runner.
 func goto_idle_or_dash():
     if runner.is_on_floor():
         if round(input.get_axis().x) == 0:
             set_state("idle")
+        elif is_facing_forward():
+            set_state("running")
         else:
             set_state("dash")
     else:
         set_state("airborne")
 
+# Set the runner state to either idle, running, or airborne.
 func goto_idle_or_run():
     if runner.is_on_floor():
         if round(input.get_axis().x) == 0:

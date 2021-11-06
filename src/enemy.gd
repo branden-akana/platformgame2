@@ -36,7 +36,7 @@ func _ready():
     if not Engine.editor_hint:
         Game.reparent_to_fg2(sprite)
         self.set_as_toplevel(true)
-        self.position += get_parent().position
+        self.position += get_parent().global_position
         sprite.set_as_toplevel(true)
 
     reset()

@@ -33,8 +33,8 @@ func _ready():
 
     connect("airdash", self, "on_airdash")
     connect("airdash_restored", self, "on_airdash_restored")
-    connect("walljump_left", self, "play_flash_effect")
-    connect("walljump_right", self, "play_flash_effect")
+    # connect("walljump_left", self, "play_flash_effect")
+    # connect("walljump_right", self, "play_flash_effect")
 
     # sprite setup
     Game.reparent_to_fg1(sprite)
@@ -113,10 +113,7 @@ func player_restart():
     # pause during fadeout
     yield(Game.pause_and_fade_out(0.2), "completed")
 
-    Game.replay_stop_recording()
     restart()
-    Game.restart_level()
-    Game.replay_start_recording()
 
     # unpause after fadein
     yield(Game.fade_in_and_unpause(0.2), "completed")
@@ -130,21 +127,22 @@ func hurt(damage = 100, respawn_point = null):
     # unpause after fadein11
     yield(Game.fade_in_and_unpause(0.2), "completed")
 
-func restart():
-
-    # reset player to start point
-    .restart()
-    if Game.replay:
-        Game.replay_playback_start()
-
-    # clear replay data
-    replay_frames = {}
-    pos_frames = {}
-
 func respawn(pos):
     .respawn(pos)
-    if is_instance_valid(Game.current_room):
-        Game.current_room.reset_room()
+    if pos == Game.get_start_point():
+        # restart level
+        Game.replay_stop_recording()
+        Game.restart_level()
+        # clear replay data
+        replay_frames = {}
+        pos_frames = {}
+        Game.replay_start_recording()
+        if Game.replay:
+            Game.replay_playback_start()
+    else:
+        # restart room
+        if is_instance_valid(Game.current_room):
+            Game.current_room.reset_room()
 
 func export_replay():
     var replay = Replay.new()
