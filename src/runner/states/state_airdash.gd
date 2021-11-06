@@ -8,12 +8,12 @@ var particles = null
 
 func can_start():
 
-    var axis = input.get_action_axis()
+    var axis = input.get_axis()
     return round(axis.length()) != 0
 
 func on_start(state_name):
 
-    var axis = input.get_action_axis().round().normalized();
+    var axis = input.get_axis().round().normalized();
     airdash_dir = Vector2.ZERO
 
     # determine airdash direction
@@ -70,6 +70,6 @@ func on_update(_delta):
                 particles.emitting = false
             runner.emit_signal("land")
             # set_state("idle")
-            reset_state()
+            goto_idle_or_dash()
         else:
             set_state("airborne")

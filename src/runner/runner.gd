@@ -43,6 +43,7 @@ export var AIR_MAX_SPEED = 700
 
 # idling / walking
 
+export var WALK_THRESHOLD = 0.2
 export var WALK_MAX_SPEED = 250
 
 # airdash
@@ -64,6 +65,9 @@ export var FAST_FALL_SPEED = 2500
 
 # captain falcon: 16
 export var DASH_LENGTH = 20  # in frames
+export var DASH_SENSITIVITY = 0.3  # how fast you need to tilt the stick to start a dash (0 = more sensitive)
+
+export var DASH_STOP_SPEED = 80  # dash early stop speed
 
 export var DASH_INIT_SPEED = 200  # dash initial speed
 
@@ -165,21 +169,26 @@ var grapple_dist = 0.0
 var grapple_vel = 0.0
 
 func _ready():
-    stun_timer.name = "stun_timer"
-    
-    # add_child(grapple_line)
-    add_child(stun_timer)
-    stun_timer.one_shot = true
-
-    # sprite setup
-    sprite.set_as_toplevel(true)
-
-    # state setup
-    for s in states.values():
-        s.init(self)
+    # children setup
 
     # grapple_line.set_as_toplevel(true)
     # grapple_line.visible = false
+    # add_child(grapple_line)
+
+    stun_timer.name = "stun_timer"
+    stun_timer.one_shot = true
+    add_child(stun_timer)
+
+    sprite.set_as_toplevel(true)
+
+    $moveset.visible = true
+
+    # state setup
+    
+    for s in states.values():
+        s.init(self)
+
+    # event setup
 
     $hurtbox.connect("body_entered", self, "on_hurtbox_entered")
 
@@ -315,7 +324,7 @@ func _physics_process(delta):  # update input and physics
 # Make the runner jump. If force is true, ignore how many jumps they have left.
 func jump(factor = 1.0, force = false, vel_x = null):
 
-    var axis = input.get_action_axis()
+    var axis = input.get_axis()
 
     if not is_on_floor():
         # airborne jump direction switch

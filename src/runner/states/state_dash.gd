@@ -32,12 +32,11 @@ func on_update(delta):
     # =================
 
     if runner.state_name == "idle":
-        print("ended dash at %.3f" % runner.velocity.x)
-        runner.velocity.x *= 0.1
+        runner.velocity.x = runner.DASH_STOP_SPEED
     elif not is_active():
         return
 
-    var axis = input.get_action_axis()
+    var axis = input.get_axis()
 
     # used to determine which way to accelerate;
     # can only be 1 or -1 (disregard the analog part)
@@ -73,7 +72,7 @@ func on_update(delta):
 
     # end of dash
     if tick >= runner.DASH_LENGTH and axis.length() > 0.1:
-        set_state("running")
+        goto_idle_or_run()
 
 
     

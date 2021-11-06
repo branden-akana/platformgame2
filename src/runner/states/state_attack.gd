@@ -22,7 +22,7 @@ func on_start(_state_name):
 
     is_grounded = false
 
-    var axis = input.get_action_axis()
+    var axis = input.get_axis()
 
     # check move facing direction
     update_facing()
@@ -62,7 +62,7 @@ func on_update(delta):
 
     # end of move or edge cancelled
     if !current_move.playing or (is_grounded and not runner.is_on_floor()):
-        reset_state()
+        goto_idle_or_dash()
 
 func on_end():
     current_move.stop()

@@ -11,7 +11,7 @@ func on_update(delta):
 
         coin = runner.lastcoin
         if !coin:
-            reset_state()
+            goto_idle_or_dash()
             return
 
         grapple_initial_vel = runner.velocity
@@ -46,7 +46,7 @@ func on_update(delta):
     if input.is_action_just_pressed("key_jump") or trace or coin == null:
     # if !buffer.get_action_strength("grapple") or trace or coin == null:
         runner.release_grapple()
-        reset_state()
+        goto_idle_or_dash()
 
     # grapple swinging physics
     var dist = runner.position.distance_to(pivot)

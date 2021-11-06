@@ -33,18 +33,6 @@ func set_state(state_name):
 func is_active():
     return runner.state == self
 
-# Sets the state to a "default" state.
-func reset_state():
-    if runner.is_on_floor():
-        var axis = input.get_action_axis()
-        if round(axis.x) != 0:
-            set_state("running")
-        else:
-            set_state("idle")
-        # set_state("idle")
-    else:
-        set_state("airborne")
-
 # INPUTS
 #=======================================
 
@@ -81,6 +69,23 @@ func process(delta):
 # COMMON CHECKS
 #===============================================================================
 
+func goto_idle_or_dash():
+    if runner.is_on_floor():
+        if round(input.get_axis().x) == 0:
+            set_state("idle")
+        else:
+            set_state("dash")
+    else:
+        set_state("airborne")
+
+func goto_idle_or_run():
+    if runner.is_on_floor():
+        if round(input.get_axis().x) == 0:
+            set_state("idle")
+        else:
+            set_state("running")
+    else:
+        set_state("airborne")
 
 # Check if the player wants to drop-down a platform.
 func check_dropdown_platforms():
@@ -157,7 +162,7 @@ func check_dash(sensitivity = 0.0, require_neutral = false):
 
 # Check if player is trying to not move (no movement input)
 func check_idling():
-    var axis = input.get_action_axis()
+    var axis = input.get_axis()
     if axis.length() <= 0.01:
         set_state("idle")
 
@@ -168,32 +173,44 @@ func check_airborne():
 
 # Update the runner's facing direction based on movement direction.
 func update_facing():
-    var x = input.get_action_axis().x
+    var x = input.get_axis().x
     if x > 0:
         runner.facing = Direction.RIGHT
     elif x < 0:
         runner.facing = Direction.LEFT
 
+# True if the runner is moving opposite of their facing direction.
+func is_facing_forward():
+    var x = input.get_axis().x
+    if (
+        x > 0 and runner.facing == Direction.RIGHT or
+        x < 0 and runner.facing == Direction.LEFT
+    ):
+        return true
+    return false
+
 # Process gravity for a frame.
 func process_gravity(delta):
     runner.apply_gravity(delta)
 
+func process_acceleration(delta, accel, max_speed):
+    var x = input.get_axis().x
+    runner.apply_acceleration(delta, x, accel, max_speed)
+
 # Process airborne acceleration (drifting) for a frame.
 func process_ground_acceleration(delta):
-    var x = input.get_action_axis().x
-    runner.apply_acceleration(delta, x, runner.ACCELERATION, runner.MAX_SPEED)
+    process_acceleration(delta, runner.ACCELERATION, runner.MAX_SPEED)
 
 # Process grounded acceleration (running) for a frame.
 func process_air_acceleration(delta):
-    var x = input.get_action_axis().x
-    runner.apply_acceleration(delta, x, runner.AIR_ACCELERATION, runner.AIR_MAX_SPEED)
+    process_acceleration(delta, runner.AIR_ACCELERATION, runner.AIR_MAX_SPEED)
 
 # Process friction for a frame.
 func process_friction(delta):
     runner.apply_friction(delta, runner.FRICTION)
 
 func process_air_friction(delta):
-    var x = input.get_action_axis().x
+    var x = input.get_axis().x
     if x == 0:
         runner.apply_friction(delta, runner.AIR_FRICTION)
 

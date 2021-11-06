@@ -11,7 +11,7 @@ var fix_interval = 20
 
 var ghost = null
 
-onready var airdash_tween = Util.new_tween(self)
+onready var flash_tween = Util.new_tween(self)
 
 func _ready():
     # connect signal to sound effects
@@ -33,17 +33,23 @@ func _ready():
 
     connect("airdash", self, "on_airdash")
     connect("airdash_restored", self, "on_airdash_restored")
+    connect("walljump_left", self, "play_flash_effect")
+    connect("walljump_right", self, "play_flash_effect")
 
     # sprite setup
     Game.reparent_to_fg1(sprite)
 
+# Start an effect where the player flashes
+func play_flash_effect():
+    flash_tween.interpolate_property(sprite, "modulate:g", 10.0, 1.0, 0.2)
+    flash_tween.start()
+
 func on_airdash_restored():
-    airdash_tween.interpolate_property(sprite, "modulate:g", 10.0, 1.0, 0.2)
-    airdash_tween.start()
+    play_flash_effect()
 
 func on_airdash():
-    if airdash_tween:
-        airdash_tween.reset_all()
+    if flash_tween:
+        flash_tween.reset_all()
 
 func pre_process(delta):
 

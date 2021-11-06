@@ -150,8 +150,13 @@ func is_axis_just_pressed(input: String, opposite_input: String, other_inputs = 
 
     return false
 
-# Create an axis (Vector2) from four actions representing the directions.
-func get_action_axis(right="key_right", left="key_left", up="key_up", down="key_down") -> Vector2:
+# Create an axis (Vector2) given the prefix of the action.
+# This assumes the directional actions are -"right", -"left", -"up", -"down"
+func get_axis(prefix="key_") -> Vector2:
+    var right = prefix + "right"
+    var left  = prefix + "left"
+    var up    = prefix + "up"
+    var down  = prefix + "key_down"
     var axis = Vector2(
         get_action_strength(right) - get_action_strength(left),
         get_action_strength(down) - get_action_strength(up)

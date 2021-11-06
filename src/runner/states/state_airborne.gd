@@ -9,7 +9,7 @@ func on_update(delta):
     if runner.is_on_floor():
         # player landed
         runner.emit_signal("land")
-        reset_state()
+        goto_idle_or_dash()
     else:
         process_gravity(delta)
         process_air_acceleration(delta)
