@@ -118,10 +118,18 @@ func hurt(damage = 100, respawn_point = null):
     Game.call_with_fade_transition(self, "_hurt", [damage, respawn_point])
     # .hurt(damage, respawn_point)
 
+func get_current_conditions():
+    var conditions = RunnerInitialState.new()
+    conditions.position = position
+    conditions.velocity = velocity
+    conditions.state_name = state_name
+    conditions.input = input.duplicate()
+    return conditions
+
 # Clear all recorded data of the player.
 # Use this before starting a recording.
 func clear_recorded_data():
-    initial_conditions = {}
+    initial_conditions = null
     replay_frames = {}
     pos_frames = {}
 

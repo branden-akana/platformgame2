@@ -27,8 +27,6 @@ func on_start(_state_name):
     # check move facing direction
     update_facing()
 
-    print(axis)
-
     # check which move to use
     var attack_direction = MoveDirection.FORWARD
     if round(axis.y) == -1: # aiming up

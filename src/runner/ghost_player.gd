@@ -7,6 +7,7 @@ signal replay_finish
 # fix the position
 const MIN_DEVIATION = 0.0
 
+var replay = null
 var initial_conditions = null
 var replay_frames = null
 var pos_frames = null
@@ -22,16 +23,10 @@ func _ready():
     ignore_enemy_hp = true
     sprite.visible = false
 
-    connect("replay_finish", Game, "replay_playback_stop")
+    connect("replay_finish", Game, "replay_playbaadack_stop")
 
-func load_replay(replay):
-    initial_conditions = replay.initial_conditions
-    replay_frames = replay.input_frames
-    pos_frames = replay.pos_frames
-    print("[ghost] new replay loaded! (%d frames)" % len(replay_frames))
-    print("    position: %s" % initial_conditions.position)
-    print("    velocity: %s" % initial_conditions.velocity)
-    print("    state: %s" % initial_conditions.state_name)
+func load_replay(new_replay):
+    replay = new_replay
 
 # stop playing this ghost
 func stop():
@@ -44,22 +39,20 @@ func restart():
     .restart()
     sprite.visible = true
     replay_finished = false
-    position = initial_conditions.position
-    velocity = initial_conditions.velocity
-    state_name = initial_conditions.state_name
+    position = replay.start_position
+    velocity = replay.start_velocity
+    state_name = replay.start_state_name
+    set_input_handler(replay.start_input)
     playing = true
 
 func pre_process(_delta):
 
     if not playing:
         return
-    
-    if tick == 0:
-        set_input_handler(initial_conditions.input.duplicate())
 
-    if tick in pos_frames:
-        var expected_pos = pos_frames[tick][0]
-        var expected_vel = pos_frames[tick][1]
+    if tick in replay.pos_frames:
+        var expected_pos = replay.pos_frames[tick][0]
+        var expected_vel = replay.pos_frames[tick][1]
         var delta_pos = position.distance_to(expected_pos)
         # var delta_vel = velocity.distance_to(expected_vel)
         # print("Frame %d: delt pos = %0.2f, delt vel = %0.2f" % [tick, delta_pos, delta_vel])
@@ -69,8 +62,8 @@ func pre_process(_delta):
             velocity = expected_vel
 
     # read inputs from replay frames
-    if tick in replay_frames:
-        var action_map = replay_frames[tick]
+    if tick in replay.input_frames:
+        var action_map = replay.input_frames[tick]
         for action in action_map:
             input.update_action(action, action_map[action])
     else:

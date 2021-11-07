@@ -511,7 +511,10 @@ func replay_stop_recording():
 
 func replay_save():
     replay = get_player().export_replay()
-    print("[demo] recording saved")
+    print("[demo] new replay saved! (%d frames)" % len(replay.input_frames))
+    print("    position: %s" % replay.start_position)
+    print("    velocity: %s" % replay.start_velocity)
+    print("    state: %s" % replay.start_state_name)
     debug_ping("recording saved")
 
 # Start playback of the last replay (using a ghost).

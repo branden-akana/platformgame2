@@ -205,14 +205,6 @@ func set_input_handler(input_):
     for state in states.values():
         state.input = input_
 
-func get_current_conditions():
-    var conditions = RunnerInitialState.new()
-    conditions.position = position
-    conditions.velocity = velocity
-    conditions.state_name = state_name
-    conditions.input = input.duplicate()
-    return conditions
-
 # Respawn the player at the start point of the level
 func restart():
     respawn(Game.get_start_point())
@@ -316,7 +308,8 @@ func _physics_process(delta):  # update input and physics
         state_.process(delta)
 
     # apply velocity
-    velocity = move_and_slide_with_snap(velocity, Vector2(0, 1), Vector2(0, -1), true)
+    move_and_slide_with_snap(velocity, Vector2(0, 1), Vector2(0, -1), true)
+    position = position.round()
     # velocity = move_and_slide(velocity, Vector2(0, -1), true)
 
     tick += 1
@@ -421,7 +414,7 @@ func _hurt(damage, respawn_point):
 
 # Called when a body intersects this runner's hurtbox.
 func on_hurtbox_entered(from):
-    print("hurtbox triggered: %s" % from)
+    # print("hurtbox triggered: %s" % from)
     if "damage" in from:
         hurt(from.damage, from.get_respawn_point())
     else:
