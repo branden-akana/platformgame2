@@ -81,14 +81,30 @@ func reinitialize_game():
 # Restart the level. Use to reset the state of just the level.
 func restart_level():
 
+    # stop replay recording
+    replay_stop_recording()
+
+    # reset stats / timers
     num_deaths = 0
     reset_timer()
+
+    # reset state of the level
     reset_enemies()
     reset_entities()
 
+    # reset camera
     get_camera().init()
 
+    # start replay recording and playback
+    replay_start_recording()
+    replay_playback_start()
+
     emit_signal("level_restarted")
+
+# Restart the current room.
+func restart_room():
+    if is_instance_valid(current_room):
+        current_room.reset_room()
 
 func restart_player():
     # set start position
@@ -451,6 +467,13 @@ func unpause_and_lbox_out(time):
     unpause(self)
     yield(HUD.lbox_out(time), "completed")
 
+# Call the given method on an object in the middle of a paused
+# fade in/out transition.
+func call_with_fade_transition(object, method, args = [], fade_out = 0.2, fade_in = 0.2):
+    yield(pause_and_fade_out(fade_out), "completed")
+    object.callv(method, args)
+    yield(fade_in_and_unpause(fade_in), "completed")
+
 func pause(node):
     # print("[game] %s wants to pause" % node.name)
     if not node in game_pause_requests:
@@ -475,6 +498,7 @@ func is_paused():
 
 # Start recording a replay.
 func replay_start_recording():
+    get_player().clear_recorded_data()
     is_recording = true
     print("[demo] recording started")
     debug_ping("recording started")

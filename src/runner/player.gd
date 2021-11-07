@@ -18,7 +18,7 @@ func _ready():
     connect("walking", Sound, "play", ["walk", -20, 0.8, true, false])
     connect("stop_walking", Sound, "stop", ["walk"])
     connect("jump", Sound, "play", ["jump", -10, 1, false])
-    connect("land", Sound, "play", ["land", -20])
+    connect("land", Sound, "play", ["land", -20, 0.9])
     connect("hit", Sound, "play", ["hit", -10])
     connect("dash", Sound, "play", ["dash", -20, 0.8, false, true])
     connect("attack", Sound, "play", ["attack", -20, 0.7, false, true])
@@ -33,6 +33,8 @@ func _ready():
 
     connect("airdash", self, "on_airdash")
     connect("airdash_restored", self, "on_airdash_restored")
+    connect("walljump_left", Sound, "play", ["land", -20, 0.8])
+    connect("walljump_right", Sound, "play", ["land", -20, 0.8])
     # connect("walljump_left", self, "play_flash_effect")
     # connect("walljump_right", self, "play_flash_effect")
 
@@ -110,39 +112,25 @@ func pre_process(delta):
 
 # Do an animated restart
 func player_restart():
-    # pause during fadeout
-    yield(Game.pause_and_fade_out(0.2), "completed")
-
-    restart()
-
-    # unpause after fadein
-    yield(Game.fade_in_and_unpause(0.2), "completed")
+    Game.call_with_fade_transition(self, "restart")
 
 func hurt(damage = 100, respawn_point = null):
-    # pause during fadeout
-    yield(Game.pause_and_fade_out(0.2), "completed")
+    Game.call_with_fade_transition(self, "_hurt", [damage, respawn_point])
+    # .hurt(damage, respawn_point)
 
-    .hurt(damage, respawn_point)
-
-    # unpause after fadein11
-    yield(Game.fade_in_and_unpause(0.2), "completed")
+# Clear all recorded data of the player.
+# Use this before starting a recording.
+func clear_recorded_data():
+    initial_conditions = {}
+    replay_frames = {}
+    pos_frames = {}
 
 func respawn(pos):
     .respawn(pos)
     if pos == Game.get_start_point():
-        # restart level
-        Game.replay_stop_recording()
         Game.restart_level()
-        # clear replay data
-        replay_frames = {}
-        pos_frames = {}
-        Game.replay_start_recording()
-        if Game.replay:
-            Game.replay_playback_start()
     else:
-        # restart room
-        if is_instance_valid(Game.current_room):
-            Game.current_room.reset_room()
+        Game.restart_room()
 
 func export_replay():
     var replay = Replay.new()

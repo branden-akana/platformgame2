@@ -64,15 +64,15 @@ export var FAST_FALL_SPEED = 2500
 # dash
 
 # captain falcon: 16
-export var DASH_LENGTH = 20  # in frames
+export var DASH_LENGTH = 16  # in frames
 export var DASH_SENSITIVITY = 0.3  # how fast you need to tilt the stick to start a dash (0 = more sensitive)
 
 export var DASH_STOP_SPEED = 80  # dash early stop speed
 
 export var DASH_INIT_SPEED = 200  # dash initial speed
 
-export var DASH_ACCELERATION = 10000  # dash acceleration
-export var DASH_ACCELERATION_REV = 10000  # dash reverse acceleration
+export var DASH_ACCELERATION = 20000  # dash acceleration
+export var DASH_ACCELERATION_REV = 11000  # dash reverse acceleration
 
 export var DASH_MAX_SPEED = 800  # dash max speed
 export var DASH_MAX_SPEED_REV = 1500 # dash reverse max speed (moonwalking)
@@ -410,6 +410,9 @@ func stun(frames):
 # If the player dies from being hurt, they will respawn at the specified
 # respawn point, or the start point if one isn't provided.
 func hurt(damage = 100, respawn_point = null):
+    _hurt(damage, respawn_point)
+
+func _hurt(damage, respawn_point):
     emit_signal("died")
     if respawn_point:
         respawn(respawn_point)
