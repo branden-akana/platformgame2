@@ -50,7 +50,7 @@ func on_update(delta):
 
     if current_move.hit_detected:
         check_wall_jump()  # allow walljump canceling
-        # check_jump()  # allow jump canceling
+        check_jump()  # allow jump canceling
 
     if not is_active():
         return

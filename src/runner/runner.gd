@@ -341,12 +341,12 @@ func jump(factor = 1.0, force = false, vel_x = null):
         if axis.y < -input.PRESS_THRESHOLD:
             velocity.x = 0
 
-    if jumps_left > 0 or force:
-    # if airdashes_left > 0 or force:
-        # if not force and not is_on_floor():
-        if not force:
-            jumps_left -= 1
-            # airdashes_left -= 1
+    # if jumps_left > 0 or force:
+    if airdashes_left > 0 or force:
+        # if not force:
+        if not force and not is_on_floor():
+            # jumps_left -= 1
+            airdashes_left -= 1
 
         if state_name == "airdash":
             velocity.y = -750 * factor
