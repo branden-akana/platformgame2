@@ -23,7 +23,7 @@ func _ready():
     ignore_enemy_hp = true
     sprite.visible = false
 
-    connect("replay_finish", Game, "replay_playbaadack_stop")
+    connect("replay_finish", Game, "replay_playback_stop")
 
 func load_replay(new_replay):
     replay = new_replay
