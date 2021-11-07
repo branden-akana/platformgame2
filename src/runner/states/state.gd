@@ -119,7 +119,7 @@ func check_jump():
 func check_wall_jump():
 
     var space = runner.get_world_2d().direct_space_state
-    var margin = 20
+    var margin = 30
     var jump_mult = 0.8
     var offset = Vector2(0, 32)
 

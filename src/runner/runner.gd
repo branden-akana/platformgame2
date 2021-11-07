@@ -308,7 +308,7 @@ func _physics_process(delta):  # update input and physics
         state_.process(delta)
 
     # apply velocity
-    move_and_slide_with_snap(velocity, Vector2(0, 1), Vector2(0, -1), true)
+    velocity = move_and_slide_with_snap(velocity, Vector2(0, 1), Vector2(0, -1), true)
     position = position.round()
     # velocity = move_and_slide(velocity, Vector2(0, -1), true)
 
