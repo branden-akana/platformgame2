@@ -1,4 +1,5 @@
 extends Node2D
+tool
 
 var total = 0
 var alive = 0
@@ -7,14 +8,19 @@ var dead = 0
 const SPACING = 32
 
 func _physics_process(delta):
-    var room = Game.current_room
-    
-    if is_instance_valid(room):
+    if not Engine.editor_hint:
+        var room = Game.current_room
         
-        total = len(room.get_enemies())
-        alive = len(room.get_alive_enemies())
-        dead = total - alive
-        
+        if is_instance_valid(room):
+            
+            total = len(room.get_enemies())
+            alive = len(room.get_alive_enemies())
+            dead = total - alive
+            
+            update()
+    else:
+        alive = 2
+        dead = 2
         update()
 
 func _draw():
@@ -23,7 +29,7 @@ func _draw():
     
     for _i in range(dead):
         # draw_circle(Vector2(x, 0), 8, Color(0.0, 0.0, 0.0, 0.6))
-        draw_circle(Vector2(x, 0), 4, Color(1.0, 1.0, 1.0, 0.6))
+        draw_circle(Vector2(x, 0), 3, Color(1.0, 1.0, 1.0, 0.3))
         x += SPACING
         
     for _i in range(alive):
