@@ -2,7 +2,7 @@ extends RunnerState
 class_name AirdashState
 
 var airdash_dir: Vector2 = Vector2.ZERO
-var grounded: bool = false
+var on_ground: bool = false
 
 var particles = null
 
@@ -21,7 +21,7 @@ func on_start(state_name):
         set_state("airborne")
         return
     else:
-        grounded = state_name in ["idle", "dash", "running", "attack"]
+        on_ground = state_name in ["idle", "dash", "running", "attack"]
 
         runner.airdashes_left -= 1
         airdash_dir = Vector2(axis.x, axis.y).normalized();
@@ -33,7 +33,7 @@ func on_start(state_name):
     runner.emit_signal("airdash")
 
 
-func on_update(_delta):
+func on_update(delta):
 
     # jump out of dash
     check_air_jump(true)
@@ -41,6 +41,9 @@ func on_update(_delta):
 
     if not is_active():
         return
+
+    if not runner.is_on_floor():
+        on_ground = false
 
     if tick == 1:
         # delayed start of particles
@@ -61,15 +64,19 @@ func on_update(_delta):
             airdash_speed, runner.AIRDASH_SPEED_END, t
         ))
 
-    if tick > runner.AIRDASH_LENGTH or (not grounded and runner.is_on_floor()):
+        check_lazy_grounded(delta)
+
+    if tick > runner.AIRDASH_LENGTH or (not on_ground and runner.is_on_floor()):
 
         # end of airdashing
 
         if runner.is_on_floor():
             if is_instance_valid(particles):
                 particles.emitting = false
-            runner.emit_signal("land")
-            # set_state("idle")
-            goto_idle_or_dash()
+            set_state("idle")
+            # goto_idle_or_dash()
         else:
             set_state("airborne")
+
+    if not is_active() and is_instance_valid(particles):
+        particles.emitting = false

@@ -56,10 +56,14 @@ func on_airdash():
 func pre_process(delta):
 
     # update player color
-    if airdashes_left <= 0:
-        sprite.modulate = Color(0.3, 0.3, 0.3)
-    else:
-        sprite.modulate = Color(1.0, 1.0, 1.0)
+    match airdashes_left:
+        2:
+            sprite.modulate = Color(1.0, 1.0, 1.0)
+        1:
+            sprite.modulate = Color(1.0, 1.0, 1.0)
+            # sprite.modulate = Color(0.5, 0.5, 0.5)
+        0:
+            sprite.modulate = Color(0.3, 0.3, 0.3)
 
     # needed as sometimes the walking sound does not sto111p
     if state_name != "running":
@@ -99,7 +103,7 @@ func pre_process(delta):
         input.update_action(key, value)
 
     # record initial conditions (position, velocity, etc.)
-    if tick == 0:
+    if initial_conditions == null:
         initial_conditions = get_current_conditions()
 
     if Game.is_recording:

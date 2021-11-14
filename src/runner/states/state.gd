@@ -27,7 +27,7 @@ func set_state(state_name):
             runner.state.tick = 0
             # Call on_start() of new state
             runner.state.on_start(old_state_name)
-            # print("state: %s -> %s" % [old_state_name, state_name])
+            print("state: %s -> %s" % [old_state_name, state_name])
 
 # Return true if the runner's current state is this state.
 func is_active():
@@ -41,6 +41,8 @@ func process(delta):
 
     if runner == null:
         return
+
+    update_grounded()
 
     if runner.airdashes_left > 0 and input.is_action_just_pressed("key_dodge", runner.BUFFER_AIRDASH):
         set_state("airdash")
@@ -69,6 +71,27 @@ func process(delta):
 # COMMON CHECKS
 #===============================================================================
 
+# Snap to platforms, forcing a grounded state when 
+# airdashing slightly under them by a set margin.
+func check_lazy_grounded(delta):
+    if not runner.is_on_floor() and runner.velocity.y == 0:
+        var margin = runner.AIRDASH_WAVELAND_MARGIN
+        # var top_collides = Util.intersect_ray(runner,
+        #     runner.position + Vector2(0, 32),
+        #     Vector2.DOWN * 4)
+        var bot_collides = Util.intersect_ray(runner,
+            Vector2(0, 32 - margin),
+            Vector2.DOWN * margin)
+        if bot_collides:
+            print("detected below floor")
+            runner.move_and_collide(Vector2.UP * margin * 2)
+            runner.move_and_slide(Vector2.DOWN * margin * 2 / delta, Vector2.UP)
+            set_state("idle")
+        # elif top_collides and not bot_collides:
+        #     print("detected above floor")
+        #     runner.move_and_collide(Vector2.DOWN * margin * 2)
+        #     set_state("idle")
+        
 # Set the runner state to either idle, running, dash, or airborne
 # depending on the current state of the runner.
 func goto_idle_or_dash():
@@ -118,28 +141,29 @@ func check_jump():
 # Check if the player wants to do a walljump.
 func check_wall_jump():
 
-    var space = runner.get_world_2d().direct_space_state
     var margin = 30
     var jump_mult = 0.8
-    var offset = Vector2(0, 32)
+    var top_offset = Vector2(0, 0)
+    var bot_offset = Vector2(0, 32)
+    var left = Vector2.LEFT * margin
+    var right = Vector2.RIGHT * margin
 
-    # raycast left
-    var left_result = space.intersect_ray(
-        runner.position + offset,
-        runner.position + offset + (Vector2.LEFT * margin),
-        [], 0b0001)
+    # raycast left (top and bottom rays)
+    var left_1 = Util.intersect_ray(runner, top_offset, left)
+    var left_2 = Util.intersect_ray(runner, bot_offset, left)
     # print("left ray: %s" % left_result)
-    if left_result and input.is_action_just_pressed("key_right"):
+
+    if left_1 and left_2 and input.is_action_just_pressed("key_right"):
         runner.jump(jump_mult, true, runner.MAX_SPEED)
         update_facing()
         runner.emit_signal("walljump_right")
 
-    var right_result = space.intersect_ray(
-        runner.position + offset,
-        runner.position + offset + (Vector2.RIGHT * margin),
-        [], 0b0001)
+    # raycast right (top and bottom rays)
+    var right_1 = Util.intersect_ray(runner, top_offset, right)
+    var right_2 = Util.intersect_ray(runner, bot_offset, right)
     # print("right ray: %s" % right_result)
-    if right_result and input.is_action_just_pressed("key_left"):
+
+    if right_1 and right_2 and input.is_action_just_pressed("key_left"):
         runner.jump(jump_mult, true, -runner.MAX_SPEED)
         update_facing()
         runner.emit_signal("walljump_left")
@@ -173,8 +197,14 @@ func check_idling():
 
 # Check if the player is now airborne.
 func check_airborne():
-    if not runner.is_on_floor():
+    if not runner.is_grounded():
         set_state("airborne")
+
+func update_grounded():
+    if not runner.is_grounded() and runner.is_on_floor():
+        runner.set_grounded(true)
+    elif runner.is_grounded() and not runner.is_on_floor():
+        runner.set_grounded(false)
 
 # Update the runner's facing direction based on movement direction.
 func update_facing():

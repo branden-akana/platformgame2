@@ -32,7 +32,7 @@ signal hitstun_end
 # general ground movement
 
 export var ACCELERATION = 8000
-export var FRICTION = 3000
+export var FRICTION = 2000
 export var MAX_SPEED = 800
 
 # airborne drifting
@@ -51,6 +51,7 @@ export var WALK_MAX_SPEED = 250
 export var AIRDASH_SPEED = 1000  # (mininum) speed at start of airdash
 export var AIRDASH_SPEED_END = 500  # speed at end of airdash
 export var AIRDASH_LENGTH = 12
+export var AIRDASH_WAVELAND_MARGIN = 20
 
 # jumping / gravity
 
@@ -72,7 +73,7 @@ export var DASH_STOP_SPEED = 80  # dash early stop speed
 export var DASH_INIT_SPEED = 200  # dash initial speed
 
 export var DASH_ACCELERATION = 20000  # dash acceleration
-export var DASH_ACCELERATION_REV = 11000  # dash reverse acceleration
+export var DASH_ACCELERATION_REV = 10000  # dash reverse acceleration
 
 export var DASH_MAX_SPEED = 800  # dash max speed
 export var DASH_MAX_SPEED_REV = 1500 # dash reverse max speed (moonwalking)
@@ -135,6 +136,8 @@ var lastcoin = null
 
 # current physics tick. restarting sets this back to 0.
 var tick: int = 0
+
+var grounded = false setget set_grounded, is_grounded
 
 # current player facing direction
 var facing: int = Direction.RIGHT
@@ -294,7 +297,7 @@ func _physics_process(delta):  # update input and physics
         return
 
     if is_on_floor():
-        if airdashes_left == 0:
+        if airdashes_left != 1:
             emit_signal("airdash_restored")
 
         airdashes_left = 1;
@@ -308,11 +311,24 @@ func _physics_process(delta):  # update input and physics
         state_.process(delta)
 
     # apply velocity
-    velocity = move_and_slide_with_snap(velocity, Vector2(0, 1), Vector2(0, -1), true)
-    position = position.round()
+    velocity = move(velocity)
     # velocity = move_and_slide(velocity, Vector2(0, -1), true)
 
     tick += 1
+
+func set_grounded(g):
+    if not grounded and g:
+        emit_signal("land")
+    grounded = g
+
+func is_grounded():
+    return grounded
+
+func move(velocity):
+    var vel = move_and_slide_with_snap(velocity, Vector2(0, 8), Vector2(0, -1), true)
+    position = position.round()
+    velocity = vel
+    return vel
 
 # Make the runner jump. If force is true, ignore how many jumps they have left.
 func jump(factor = 1.0, force = false, vel_x = null):
@@ -334,12 +350,12 @@ func jump(factor = 1.0, force = false, vel_x = null):
         if axis.y < -input.PRESS_THRESHOLD:
             velocity.x = 0
 
-    # if jumps_left > 0 or force:
-    if airdashes_left > 0 or force:
-        # if not force:
-        if not force and not is_on_floor():
-            # jumps_left -= 1
-            airdashes_left -= 1
+    if jumps_left > 0 or force:
+    # if airdashes_left > 0 or force:
+        if not force:
+        # if not force and not is_on_floor():
+            jumps_left -= 1
+            # airdashes_left -= 1
 
         if state_name == "airdash":
             velocity.y = -750 * factor
