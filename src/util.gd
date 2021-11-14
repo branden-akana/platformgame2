@@ -36,6 +36,13 @@ static func get_collision_contacts(a: Area2D, a_shape: Shape2D, b: Area2D, b_sha
     #     Util.get_shape(target, area_shape),
     #     target.global_transform)
 
+static func intersect_ray(node, offset, vector, layers = 0b0001):
+    var space = node.get_world_2d().direct_space_state
+    return space.intersect_ray(
+        node.global_position + offset,
+        node.global_position + offset + vector,
+        [], layers)
+
 static func format_time(time):
     var mins = floor(time / 60.0)
     var secs = floor(fmod(time, 60.0))
