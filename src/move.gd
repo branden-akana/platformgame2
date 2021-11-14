@@ -125,9 +125,9 @@ func on_hitbox_entered(area_id, target: Area2D, target_shape_id, hitbox_shape_id
         # on hit behavior
         if cancel_gravity_on_hit:
             runner.velocity.y = 0
-        # runner.jumps_left = 1  # restore jump
-        if runner.airdashes_left == 0: runner.emit_signal("airdash_restored")
+        if runner.airdashes_left != 1: runner.emit_signal("airdash_restored")
         runner.airdashes_left = 1 # restore dash
+        runner.jumps_left = 1  # restore jump
         runner.stun(stun_length)
 
         # on hit effects
