@@ -2,11 +2,14 @@
 
 [ext_resource path="res://assets/palette2.png" type="Texture" id=1]
 [ext_resource path="res://assets/palette4.png" type="Texture" id=2]
-[ext_resource path="res://shaders/retro_texture.gdshader" type="Shader" id=3]
+[ext_resource path="res://shaders/retro.gdshader" type="Shader" id=3]
 
 [resource]
 shader = ExtResource( 3 )
-shader_param/palette_blend = 0.0
+shader_param/screen = false
 shader_param/pixel_size = 4.0
+shader_param/antialiased = false
+shader_param/noise_strength = 0.015
+shader_param/palette_blend = 0.0
 shader_param/palette_a = ExtResource( 2 )
 shader_param/palette_b = ExtResource( 1 )
