@@ -34,12 +34,13 @@ signal hitstun_end
 export var ACCELERATION = 8000
 export var FRICTION = 2000
 export var MAX_SPEED = 800
+export var FLOOR_SNAP_TOP_MARGIN = 16
 
 # airborne drifting
 
 export var AIR_ACCELERATION = 3000
 export var AIR_FRICTION = 1000
-export var AIR_MAX_SPEED = 700
+export var AIR_MAX_SPEED = 800
 
 # idling / walking
 
@@ -57,10 +58,11 @@ export var AIRDASH_WAVELAND_MARGIN = 20
 
 export var JUMPSQUAT_LENGTH = 4  # amount of frames to stay grounded before jumping
 
-export var JUMP_VELOCITY = 800
-export var GRAVITY = 2400
-export var TERMINAL_VELOCITY = 1000  # maximum downwards velocity
-export var FAST_FALL_SPEED = 2500
+export var JUMP_VELOCITY = 1000
+export var DASHJUMP_VELOCITY = 800
+export var GRAVITY = 2500
+export var TERMINAL_VELOCITY = 1250  # maximum downwards velocity
+export var FAST_FALL_SPEED = 1250
 
 # dash
 
@@ -68,7 +70,7 @@ export var FAST_FALL_SPEED = 2500
 export var DASH_LENGTH = 16  # in frames
 export var DASH_SENSITIVITY = 0.3  # how fast you need to tilt the stick to start a dash (0 = more sensitive)
 
-export var DASH_STOP_SPEED = 80  # dash early stop speed
+export var DASH_STOP_SPEED = 100  # dash early stop speed
 
 export var DASH_INIT_SPEED = 200  # dash initial speed
 
@@ -316,8 +318,8 @@ func _physics_process(delta):  # update input and physics
 
     tick += 1
 
-func set_grounded(g):
-    if not grounded and g:
+func set_grounded(g, emit = true):
+    if not grounded and g and emit:
         emit_signal("land")
     grounded = g
 
@@ -327,7 +329,7 @@ func is_grounded():
 func move(velocity):
     var vel = move_and_slide_with_snap(velocity, Vector2(0, 8), Vector2(0, -1), true)
     position = position.round()
-    velocity = vel
+    # velocity = vel
     return vel
 
 # Make the runner jump. If force is true, ignore how many jumps they have left.
@@ -358,9 +360,9 @@ func jump(factor = 1.0, force = false, vel_x = null):
             # airdashes_left -= 1
 
         if state_name == "airdash":
-            velocity.y = -750 * factor
+            velocity.y = -DASHJUMP_VELOCITY * factor
         else:
-            velocity.y = -950 * factor
+            velocity.y = -JUMP_VELOCITY * factor
 
         if not force: emit_signal("jump")
         

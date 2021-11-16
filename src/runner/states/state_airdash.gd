@@ -64,7 +64,7 @@ func on_update(delta):
             airdash_speed, runner.AIRDASH_SPEED_END, t
         ))
 
-        check_lazy_grounded(delta)
+        check_ground_snap_up(delta)
 
     if tick > runner.AIRDASH_LENGTH or (not on_ground and runner.is_on_floor()):
 

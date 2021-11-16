@@ -73,24 +73,36 @@ func process(delta):
 
 # Snap to platforms, forcing a grounded state when 
 # airdashing slightly under them by a set margin.
-func check_lazy_grounded(delta):
-    if not runner.is_on_floor() and runner.velocity.y == 0:
-        var margin = runner.AIRDASH_WAVELAND_MARGIN
-        # var top_collides = Util.intersect_ray(runner,
-        #     runner.position + Vector2(0, 32),
-        #     Vector2.DOWN * 4)
-        var bot_collides = Util.intersect_ray(runner,
+func check_ground_snap_up(delta, margin = runner.AIRDASH_WAVELAND_MARGIN, goto_state=null):
+    if runner.velocity.y >= 0:
+        var ray_length = margin
+        if runner.is_grounded():
+            ray_length = 2
+        var ray = Util.intersect_ray(runner,
             Vector2(0, 32 - margin),
-            Vector2.DOWN * margin)
-        if bot_collides:
-            print("detected below floor")
+            Vector2.DOWN * ray_length)
+        if ray:
+            # print("detected below floor")
             runner.move_and_collide(Vector2.UP * margin * 2)
             runner.move_and_slide(Vector2.DOWN * margin * 2 / delta, Vector2.UP)
-            set_state("idle")
-        # elif top_collides and not bot_collides:
-        #     print("detected above floor")
-        #     runner.move_and_collide(Vector2.DOWN * margin * 2)
-        #     set_state("idle")
+            if runner.is_on_floor():
+                runner.set_grounded(true, false)
+                if goto_state and goto_state != runner.state_name:
+                    set_state(goto_state)
+                return true
+    return false
+
+func check_ground_snap_down(delta, margin = runner.FLOOR_SNAP_TOP_MARGIN, goto_state = null):
+    var ray = Util.intersect_ray(runner, Vector2(0, 32 + margin), Vector2.DOWN)
+    if runner.velocity.y >= 0 and ray and not runner.is_grounded():
+        runner.move_and_slide(Vector2.DOWN * margin * 2 / delta, Vector2.UP)
+        if runner.is_on_floor():
+            # print("floor snap down")
+            runner.set_grounded(true, false)
+            if goto_state and goto_state != runner.state_name:
+                set_state(goto_state)
+            return true
+    return false
         
 # Set the runner state to either idle, running, dash, or airborne
 # depending on the current state of the runner.
@@ -118,7 +130,10 @@ func goto_idle_or_run():
 # Check if the player wants to drop-down a platform.
 func check_dropdown_platforms():
     if runner.is_on_floor() and input.is_action_just_pressed("key_down"):
-        runner.position += Vector2(0, 4)
+        # check if the tile is a drop-down
+        if not Util.collide_point(runner, runner.position + Vector2(0, 96)):
+            runner.position += Vector2(0, 4)
+            set_state("airborne")
 
 # Check if the player wants to do a grounded jump.
 func check_ground_jump():
@@ -170,7 +185,7 @@ func check_wall_jump():
 
 # Check if the player wants to fastfall.
 func check_fastfall():
-    if input.is_action_just_pressed("key_down") and runner.velocity.y > 0:
+    if input.is_action_just_pressed("key_down", 10) and runner.velocity.y > 0:
         runner.velocity.y = runner.FAST_FALL_SPEED
     
 # Check if the player wants to dash.
