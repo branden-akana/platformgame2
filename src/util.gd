@@ -43,6 +43,10 @@ static func intersect_ray(node, offset, vector, layers = 0b0001):
         node.global_position + offset + vector,
         [], layers)
 
+static func collide_point(node, point, layers = 0b0001):
+    var space = node.get_world_2d().direct_space_state
+    return space.intersect_point(point, 32, [], layers)
+
 static func format_time(time):
     var mins = floor(time / 60.0)
     var secs = floor(fmod(time, 60.0))

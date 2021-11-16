@@ -79,17 +79,11 @@ func fade_in(time):
     return tween
 
 func fade_out(time):
-    tween.interpolate_property($fade, "color",
-        Color(0.0, 0.0, 0.0, 0.0),
-        Color(0.0, 0.0, 0.0, 1.0),
+    tween.interpolate_property($fade, "color:a", 0, 1,
         time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-    tween.interpolate_property(Game.get_foreground_container(), "modulate",
-        Color(1.0, 1.0, 1.0, 1.0),
-        Color(1.0, 1.0, 1.0, 0.0),
+    tween.interpolate_property(Game.get_foreground_container(), "modulate:a", 1, 0,
         time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-    tween.interpolate_property(Game.get_fg2_container(), "modulate",
-        Color(1.0, 1.0, 1.0, 1.0),
-        Color(1.0, 1.0, 1.0, 0.0),
+    tween.interpolate_property(Game.get_fg2_container(), "modulate:a", 1, 0,
         time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
     tween.start()
     yield(tween, "tween_all_completed")
@@ -97,20 +91,24 @@ func fade_out(time):
     return tween
 
 func lbox_in(time):
-    $letterbox1.position.y = 0
-    $letterbox2.position.y = 590
-    tween.interpolate_property($letterbox1, "color",
-        Color(0.0, 0.0, 0.0, 0.0),
-        Color(0.0, 0.0, 0.0, 1.0),
+    tween.reset_all()
+    tween.interpolate_property($letterbox1, "color:a", 0, 1,
         time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-    tween.interpolate_property($letterbox2, "color",
-        Color(0.0, 0.0, 0.0, 0.0),
-        Color(0.0, 0.0, 0.0, 1.0),
+    tween.interpolate_property($letterbox2, "color:a", 0, 1,
+        time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+    tween.interpolate_property($letterbox1, "position:y",
+        -128,
+        0,
+        time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+    tween.interpolate_property($letterbox2, "position:y",
+        590 + 128,
+        590,
         time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
     tween.start()
     yield(tween, "tween_completed")
 
 func lbox_out(time):
+    tween.reset_all()
     tween.interpolate_property($letterbox1, "position:y",
         0,
         -128,
@@ -121,3 +119,18 @@ func lbox_out(time):
         time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
     tween.start()
     yield(tween, "tween_completed")
+
+func area_title_in(title, time):
+    var tween = Util.new_tween(self)
+    $"area_title/label".text = title
+    tween.interpolate_property($"area_title", "modulate:a", 0, 1, time)
+    tween.interpolate_property($"area_title", "rect_position:y", 620 + 128, 620, time)
+    tween.start()
+    Util.await_tween(tween)
+
+func area_title_out(time):
+    var tween = Util.new_tween(self)
+    tween.interpolate_property($"area_title", "modulate:a", 1, 0, time)
+    tween.interpolate_property($"area_title", "rect_position:y", 620, 620 + 128, time)
+    tween.start()
+    Util.await_tween(tween)

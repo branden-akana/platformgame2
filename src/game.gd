@@ -389,15 +389,15 @@ func clear_best_times():
 # ========================================================================
 
 # Foreground 1: used by the player
-func get_foreground() -> Viewport:
-    return $"/root/main/viewports/fg/viewport" as Viewport
+func get_foreground():
+    return $"/root/main/viewports/fg/viewport"
 
 func get_foreground_container() -> ViewportContainer:
     return $"/root/main/viewports/fg" as ViewportContainer
 
 # Foreground 2: used for enemies
-func get_fg2() -> Viewport:
-    return $"/root/main/viewports/fg2/viewport" as Viewport
+func get_fg2():
+    return $"/root/main/viewports/fg2/viewport"
 
 func get_fg2_container() -> ViewportContainer:
     return $"/root/main/viewports/fg2" as ViewportContainer

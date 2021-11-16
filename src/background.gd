@@ -20,7 +20,7 @@ func _process(_delta):
     if Engine.editor_hint:
         modulate = Color(opacity, opacity, opacity)
     else:
-        position = origin + (Game.get_camera().get_camera_origin() - origin) * 0.9
+        position = origin + (Game.get_camera().get_camera_focus() - origin) * 0.9
     
     
     
