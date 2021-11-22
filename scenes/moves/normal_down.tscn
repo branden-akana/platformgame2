@@ -10,12 +10,11 @@ extents = Vector2( 44, 72 )
 
 [node name="sprite" parent="." index="0"]
 visible = true
-position = Vector2( -56, 96 )
+position = Vector2( -88, 92 )
 rotation = 1.5708
 scale = Vector2( 8, 8 )
-playing = true
 flip_v = true
 
 [node name="collision" parent="0" index="0"]
-position = Vector2( 0, 92 )
+position = Vector2( -36, 92 )
 shape = SubResource( 1 )

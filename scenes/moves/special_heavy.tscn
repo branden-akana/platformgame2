@@ -4,21 +4,21 @@
 [ext_resource path="res://scenes/moves/move.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/hitbox_data.gd" type="Script" id=3]
 
-[sub_resource type="Resource" id=9]
+[sub_resource type="Resource" id=1]
 resource_local_to_scene = true
 script = ExtResource( 3 )
 frame_start = 12
 frame_end = 18
 
-[sub_resource type="AtlasTexture" id=10]
+[sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 1 )
 region = Rect2( 112, 80, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=11]
+[sub_resource type="AtlasTexture" id=3]
 atlas = ExtResource( 1 )
 region = Rect2( 16, 64, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=12]
+[sub_resource type="AtlasTexture" id=4]
 atlas = ExtResource( 1 )
 region = Rect2( 48, 64, 16, 16 )
 
@@ -26,14 +26,14 @@ region = Rect2( 48, 64, 16, 16 )
 atlas = ExtResource( 1 )
 region = Rect2( 80, 64, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=13]
+[sub_resource type="AtlasTexture" id=6]
 atlas = ExtResource( 1 )
 region = Rect2( 112, 64, 16, 16 )
 
-[sub_resource type="SpriteFrames" id=14]
+[sub_resource type="SpriteFrames" id=7]
 resource_local_to_scene = true
 animations = [ {
-"frames": [ SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 12 ), SubResource( 5 ), SubResource( 5 ), SubResource( 13 ), SubResource( 13 ), SubResource( 10 ) ],
+"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 4 ), SubResource( 5 ), SubResource( 5 ), SubResource( 6 ), SubResource( 6 ), SubResource( 2 ) ],
 "loop": false,
 "name": "swing",
 "speed": 5.0
@@ -45,7 +45,7 @@ extents = Vector2( 168, 32 )
 
 [node name="special_heavy" instance=ExtResource( 2 )]
 frame_length = 40
-hitbox_data = [ SubResource( 9 ) ]
+hitbox_data = [ SubResource( 1 ) ]
 dmg = 3
 cancel_gravity_on_start = true
 
@@ -53,7 +53,7 @@ cancel_gravity_on_start = true
 modulate = Color( 1, 1, 1, 0.3 )
 position = Vector2( 184, 0 )
 scale = Vector2( 24, 6 )
-frames = SubResource( 14 )
+frames = SubResource( 7 )
 frame = 8
 
 [node name="collision" parent="0" index="0"]

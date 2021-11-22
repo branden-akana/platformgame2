@@ -8,10 +8,6 @@ extents = Vector2( 104, 32 )
 
 [node name="normal_forward" instance=ExtResource( 1 )]
 
-[node name="sprite" parent="." index="0"]
-visible = true
-playing = true
-
 [node name="collision" parent="0" index="0"]
 position = Vector2( 112, 0 )
 shape = SubResource( 1 )

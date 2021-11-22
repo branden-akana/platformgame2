@@ -413,16 +413,16 @@ z_as_relative = false
 size = Vector2( 32, 15 )
 
 [node name="enemy4" parent="room_2" instance=ExtResource( 7 )]
-position = Vector2( 1984, 400 )
+position = Vector2( 704, 384 )
 
 [node name="enemy5" parent="room_2" instance=ExtResource( 7 )]
-position = Vector2( 3200, 464 )
+position = Vector2( 1920, 448 )
 
 [node name="enemy6" parent="room_2" instance=ExtResource( 7 )]
-position = Vector2( 2592, 272 )
+position = Vector2( 1312, 256 )
 
 [node name="enemy7" parent="room_2" instance=ExtResource( 7 )]
-position = Vector2( 1984, 656 )
+position = Vector2( 704, 640 )
 
 [node name="death_zone2" parent="room_2" instance=ExtResource( 8 )]
 position = Vector2( 0, 962.843 )
@@ -439,13 +439,13 @@ z_as_relative = false
 size = Vector2( 20, 20 )
 
 [node name="enemy8" parent="room_3" instance=ExtResource( 7 )]
-position = Vector2( 3968, 336 )
+position = Vector2( 640, 720 )
 
 [node name="enemy10" parent="room_3" instance=ExtResource( 7 )]
-position = Vector2( 3968, 80 )
+position = Vector2( 640, 464 )
 
 [node name="enemy11" parent="room_3" instance=ExtResource( 7 )]
-position = Vector2( 4448, 272 )
+position = Vector2( 1120, 656 )
 
 [node name="death_zone3" parent="room_3" instance=ExtResource( 8 )]
 position = Vector2( 0, 1283.79 )
@@ -468,7 +468,7 @@ position = Vector2( 1248, 834.464 )
 scale = Vector2( 1, 1.00296 )
 
 [node name="enemy12" parent="room_4/door2" instance=ExtResource( 7 )]
-position = Vector2( -160, 128 )
+position = Vector2( -160, -321.512 )
 
 [node name="room_5" parent="." instance=ExtResource( 4 )]
 position = Vector2( -2560, -256 )
@@ -519,13 +519,13 @@ size = Vector2( 20, 17 )
 palette_idx = 2
 
 [node name="enemy15" parent="room_9" instance=ExtResource( 7 )]
-position = Vector2( -192, -1088 )
+position = Vector2( 1088, 384 )
 
 [node name="enemy14" parent="room_9" instance=ExtResource( 7 )]
-position = Vector2( -320, -704 )
+position = Vector2( 960, 768 )
 
 [node name="enemy16" parent="room_9" instance=ExtResource( 7 )]
-position = Vector2( -960, -832 )
+position = Vector2( 320, 640 )
 
 [node name="background" type="Sprite" parent="."]
 pause_mode = 2

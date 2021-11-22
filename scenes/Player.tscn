@@ -116,23 +116,22 @@ region_rect = Rect2( 0, 0, 56, 56 )
 
 [node name="sprite" type="AnimatedSprite" parent="."]
 material = SubResource( 8 )
-position = Vector2( 0, -4 )
 scale = Vector2( 4, 4 )
 z_index = 1
 frames = ExtResource( 7 )
 animation = "idle"
-frame = 1
+frame = 3
 playing = true
-offset = Vector2( 0, 1 )
 script = ExtResource( 2 )
 
 [node name="collision" type="CollisionPolygon2D" parent="."]
-visible = false
 position = Vector2( 0, 8 )
 scale = Vector2( 4, 4 )
-polygon = PoolVector2Array( 4, 6, -4, 6, -4, 0, 0, -5, 4, 0 )
+z_index = 1
+polygon = PoolVector2Array( 5, 6, -5, 6, -5, -2, 0, -7, 5, -2 )
 
 [node name="moveset" type="Node2D" parent="."]
+visible = false
 
 [node name="special_heavy" parent="moveset" instance=ExtResource( 9 )]
 runner_path = NodePath("../..")
@@ -159,5 +158,4 @@ collision_layer = 128
 collision_mask = 4
 
 [node name="collision_shape_2d" type="CollisionShape2D" parent="hurtbox"]
-position = Vector2( 0, 8 )
 shape = SubResource( 9 )

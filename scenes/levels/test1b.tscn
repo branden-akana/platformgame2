@@ -122,22 +122,22 @@ size = Vector2( 32, 1 )
 position = Vector2( 96, -480 )
 
 [node name="enemy" parent="room_2" instance=ExtResource( 14 )]
-position = Vector2( 2016, 640 )
+position = Vector2( 736, 640 )
 
 [node name="enemy2" parent="room_2" instance=ExtResource( 14 )]
-position = Vector2( 2592, 768 )
+position = Vector2( 1312, 768 )
 
 [node name="enemy3" parent="room_2" instance=ExtResource( 14 )]
-position = Vector2( 2048, 400 )
+position = Vector2( 768, 400 )
 
 [node name="enemy4" parent="room_2" instance=ExtResource( 14 )]
-position = Vector2( 2688, 192 )
+position = Vector2( 1408, 192 )
 
 [node name="enemy5" parent="room_2" instance=ExtResource( 14 )]
-position = Vector2( 2624, 448 )
+position = Vector2( 1344, 448 )
 
 [node name="enemy6" parent="room_2" instance=ExtResource( 14 )]
-position = Vector2( 2624, 448 )
+position = Vector2( 1344, 448 )
 
 [node name="room_3" parent="." instance=ExtResource( 3 )]
 position = Vector2( 3328, -384 )
@@ -161,19 +161,19 @@ size = Vector2( 40, 1 )
 position = Vector2( 96, -480 )
 
 [node name="enemy" parent="room_3" instance=ExtResource( 14 )]
-position = Vector2( 3584, 192 )
+position = Vector2( 256, 576 )
 
 [node name="enemy2" parent="room_3" instance=ExtResource( 14 )]
-position = Vector2( 3968, 320 )
+position = Vector2( 640, 704 )
 
 [node name="enemy3" parent="room_3" instance=ExtResource( 14 )]
-position = Vector2( 4224, 448 )
+position = Vector2( 896, 832 )
 
 [node name="enemy4" parent="room_3" instance=ExtResource( 14 )]
-position = Vector2( 3968, 64 )
+position = Vector2( 640, 448 )
 
 [node name="enemy5" parent="room_3" instance=ExtResource( 14 )]
-position = Vector2( 4672, 320 )
+position = Vector2( 1344, 704 )
 
 [node name="background" type="Sprite" parent="."]
 pause_mode = 2

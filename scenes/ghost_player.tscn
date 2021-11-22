@@ -6,21 +6,18 @@
 [node name="ghost_player" instance=ExtResource( 1 )]
 script = ExtResource( 5 )
 
-[node name="sprite" parent="." index="2"]
+[node name="sprite" parent="." index="1"]
 modulate = Color( 0.4, 0.4, 0.4, 1 )
-frame = 3
+frame = 1
 
-[node name="moveset" parent="." index="4"]
+[node name="special_heavy" parent="moveset" index="0"]
 visible = false
 
-[node name="normal_up" parent="moveset" index="0"]
-damage = null
-cancel_gravity_on_start = null
+[node name="normal_up" parent="moveset" index="1"]
+visible = false
 
-[node name="normal_down" parent="moveset" index="1"]
-damage = null
-cancel_gravity_on_start = null
+[node name="normal_down" parent="moveset" index="2"]
+visible = false
 
-[node name="normal_forward" parent="moveset" index="2"]
-damage = null
-cancel_gravity_on_start = null
+[node name="normal_forward" parent="moveset" index="3"]
+visible = false
