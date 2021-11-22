@@ -7,9 +7,9 @@
 [resource]
 shader = ExtResource( 3 )
 shader_param/screen = true
-shader_param/pixel_size = 4.0
-shader_param/antialiased = true
-shader_param/noise_strength = 0.015
+shader_param/pixel_size = 1.0
+shader_param/antialiased = false
 shader_param/palette_blend = 0.0
+shader_param/noise_strength = 0.015
 shader_param/palette_a = ExtResource( 1 )
 shader_param/palette_b = ExtResource( 2 )

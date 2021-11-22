@@ -1,0 +1,40 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://shaders/retro_bg.tres" type="Material" id=1]
+[ext_resource path="res://src/post_process.gd" type="Script" id=2]
+[ext_resource path="res://assets/palette.png" type="Texture" id=3]
+[ext_resource path="res://assets/palette2.png" type="Texture" id=4]
+[ext_resource path="res://shaders/pixelate.tres" type="Material" id=5]
+[ext_resource path="res://assets/palette3.png" type="Texture" id=6]
+[ext_resource path="res://assets/palette6.png" type="Texture" id=7]
+[ext_resource path="res://assets/palette7.png" type="Texture" id=8]
+
+[node name="post_process" type="Node2D"]
+script = ExtResource( 2 )
+palettes = [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ) ]
+
+[node name="pixelizer" type="CanvasLayer" parent="."]
+layer = 4
+
+[node name="shader" type="ColorRect" parent="pixelizer"]
+material = ExtResource( 5 )
+margin_left = -8192.0
+margin_top = -8192.0
+rect_scale = Vector2( 2, 2 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="palette_bg" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="shader" type="ColorRect" parent="palette_bg"]
+material = ExtResource( 1 )
+margin_left = -8192.0
+margin_top = -8192.0
+rect_scale = Vector2( 2, 2 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}

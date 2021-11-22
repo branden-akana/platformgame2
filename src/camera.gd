@@ -86,13 +86,13 @@ func set_room_focus(room, smooth_transition = true):
 
     if smooth_transition:
         # print("[camera] moving camera with transition")
-        var tween_2 = HUD.change_palette(room.palette_idx)
+        var tween_2 = Game.get_post_processor().change_palette(room.palette_idx)
         var tween_1 = move_focus(to, 0.5)
         yield(tween_1, "completed")
         yield(tween_2, "completed")
     else:
         # print("[camera] moving camera without transition")
-        HUD.change_palette(room.palette_idx, 0.2)
+        Game.get_post_processor().change_palette(room.palette_idx, 0.2)
         move_focus(to)
         yield(get_tree(), "idle_frame")
 

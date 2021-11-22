@@ -20,10 +20,6 @@ uniform bool screen = true;
 uniform float pixel_size = 4.0;
 uniform bool antialiased = false;
 
-// noise params
-
-uniform float noise_strength = 0.015;
-
 // palette params
 
 uniform sampler2D palette_a;
@@ -31,12 +27,14 @@ uniform sampler2D palette_b;
 
 uniform float palette_blend = 0.0;
 
+// noise params
+
+uniform float noise_strength = 0.015;
 
 // "random" number generator
 float rand(vec2 co) {
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
-
 vec2 get_pixel_ratio(float pixsize, sampler2D tex) {
     // pixel size / texture size
     return pixsize / vec2(textureSize(tex, 0));
@@ -70,7 +68,7 @@ void fragment() {
         if (screen) { COLOR = texelFetch(SCREEN_TEXTURE, ivec2(pixel_uv), 0); }
         else { COLOR = texelFetch(TEXTURE, ivec2(pixel_uv), 0); }
     }
-
+    
     // noise
     // =========================================================================
     

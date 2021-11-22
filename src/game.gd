@@ -421,6 +421,9 @@ func reparent_to_fg2(node):
     node.get_parent().remove_child(node)
     node.set_as_toplevel(true)
     get_fg2().add_child(node)
+
+func get_post_processor():
+    return $"/root/main/post_process"
     
 
 # Start Point / Checkpoints
