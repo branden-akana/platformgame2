@@ -10,6 +10,7 @@
 */
 
 shader_type canvas_item;
+render_mode skip_vertex_transform;
 
 // texture params
 
@@ -25,6 +26,7 @@ uniform bool antialiased = false;
 uniform sampler2D palette_a;
 uniform sampler2D palette_b;
 
+uniform float palette_layer = 0;
 uniform float palette_blend = 0.0;
 
 // noise params
@@ -38,6 +40,12 @@ float rand(vec2 co) {
 vec2 get_pixel_ratio(float pixsize, sampler2D tex) {
     // pixel size / texture size
     return pixsize / vec2(textureSize(tex, 0));
+}
+
+void vertex() {
+    vec4 world_vertex = WORLD_MATRIX * vec4(VERTEX, 0.0, 1.0);
+    world_vertex = floor(world_vertex / pixel_size) * pixel_size;
+    VERTEX = world_vertex.xy;
 }
 
 void fragment() {
@@ -55,8 +63,8 @@ void fragment() {
         if (screen) { screen_ratio = get_pixel_ratio(pixel_size, SCREEN_TEXTURE); }
         else { screen_ratio = get_pixel_ratio(pixel_size, TEXTURE); }
         
-        //vec2 pixel_uv = (floor(SCREEN_UV / screen_ratio) * screen_ratio) + (screen_ratio / 2.0);
-        pixel_uv = (floor(uv / screen_ratio) * screen_ratio);
+        pixel_uv = (floor(uv / screen_ratio) * screen_ratio) + (screen_ratio / 2.0);
+        //pixel_uv = (floor(uv / screen_ratio) * screen_ratio);
         
         if (screen) { COLOR = textureLod(SCREEN_TEXTURE, pixel_uv, 0.0); }
         else { COLOR = textureLod(TEXTURE, pixel_uv, 0.0); }
@@ -81,7 +89,7 @@ void fragment() {
     // =========================================================================
     
     float u = (floor(COLOR.g * 4.0) / 4.0) + (1.0 / 8.0);
-    float v = 0.0; // selects which row of the palette to use
+    float v = palette_layer; // selects which row of the palette to use
     vec4 palette_color_a = texture(palette_a, vec2(u, v));
     vec4 palette_color_b = texture(palette_b, vec2(u, v));
     vec4 palette_color = mix(palette_color_a, palette_color_b, palette_blend);

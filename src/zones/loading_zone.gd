@@ -22,7 +22,7 @@ func _process(delta):
     if Engine.editor_hint:
         # update the position and content of the text
         $spritetext.position = $collision.position + Vector2($collision.shape.extents.x, 0)
-        $spritetext.text = to_level.resource_path
+        $spritetext.text = to_level.resource_path.split("/")[-1]
         update()
 
 func set_size(new_size):

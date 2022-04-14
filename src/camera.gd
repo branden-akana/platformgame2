@@ -134,8 +134,9 @@ func set_camera_focus(new_focus):
     
         target.get_viewport().canvas_transform.origin = -origin
         # need to also set the origins of each viewport manually
-        Game.get_foreground().canvas_transform.origin = -origin
+        Game.get_fg1().canvas_transform.origin = -origin
         Game.get_fg2().canvas_transform.origin = -origin
+        Game.get_fg3().canvas_transform.origin = -origin
 
 func _process(delta):
     

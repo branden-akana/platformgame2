@@ -18,7 +18,7 @@ func on_start(state_name):
 
     # determine airdash direction
     if runner.airdashes_left == 0 or axis == Vector2.ZERO:
-        set_state("airborne")
+        goto_airborne()
         return
     else:
         on_ground = state_name in ["idle", "dash", "running", "attack"]
@@ -36,8 +36,8 @@ func on_start(state_name):
 func on_update(delta):
 
     # jump out of dash
-    check_air_jump(true)
-    check_wall_jump()
+    air_jump_if_able(true)
+    walljump_if_able()
 
     if not is_active():
         return
@@ -64,7 +64,7 @@ func on_update(delta):
             airdash_speed, runner.AIRDASH_SPEED_END, t
         ))
 
-        check_ground_snap_up(delta)
+        snap_up_to_ground(delta)
 
     if tick > runner.AIRDASH_LENGTH or (not on_ground and runner.is_on_floor()):
 
@@ -73,10 +73,10 @@ func on_update(delta):
         if runner.is_on_floor():
             if is_instance_valid(particles):
                 particles.emitting = false
-            set_state("idle")
+            goto_idle()
             # goto_idle_or_dash()
         else:
-            set_state("airborne")
+            goto_airborne()
 
     if not is_active() and is_instance_valid(particles):
         particles.emitting = false

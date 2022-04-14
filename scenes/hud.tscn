@@ -1,37 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://src/vignette_focus.gd" type="Script" id=2]
 [ext_resource path="res://src/hud.gd" type="Script" id=5]
 [ext_resource path="res://scenes/spritetext.tscn" type="PackedScene" id=8]
 [ext_resource path="res://src/hud/enemy_indicator.gd" type="Script" id=10]
 
-[sub_resource type="Shader" id=1]
-code = "shader_type canvas_item;
-
-uniform vec2 focus = vec2(0.5, 0.5);
-
-varying vec2 screen_focus;
-varying mat4 world_mat;
-varying float len;
-
-
-void fragment() {
-    COLOR = texture(SCREEN_TEXTURE, SCREEN_UV);
-    float dist = distance(UV.xy * vec2(1.0, 0.56), focus.xy * vec2(1.0, 0.56));
-    
-    // vignette
-    float center_len = clamp(dist, 0.0, 1.0);
-    float vign = smoothstep(0.3, 3, dist / 0.5);
-    COLOR = vec4(vec3(0.0), vign);
-    //COLOR = mix(COLOR, vec4(vec3(0.0), 0.5), pow(center_len, 2));
-    //COLOR = mix(vec4(vec3(1.0), 1.0), vec4(vec3(0.0), 1.0), center_len);
-}"
-
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
-shader_param/focus = Vector2( 0.5, 0.5 )
-
-[sub_resource type="StyleBoxFlat" id=4]
+[sub_resource type="StyleBoxFlat" id=1]
 content_margin_left = 5.0
 content_margin_right = 5.0
 content_margin_top = 4.0
@@ -47,27 +20,16 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 anti_aliasing = false
 
-[sub_resource type="CanvasItemMaterial" id=3]
+[sub_resource type="CanvasItemMaterial" id=2]
 
 [node name="hud" type="CanvasLayer"]
 pause_mode = 2
-layer = 2
+layer = 8
 offset = Vector2( 2, 2 )
 transform = Transform2D( 1, 0, 0, 1, 2, 2 )
 script = ExtResource( 5 )
 __meta__ = {
 "_edit_vertical_guides_": [ 640.0 ]
-}
-
-[node name="post_processing2" type="ColorRect" parent="."]
-material = SubResource( 2 )
-margin_left = -2.0
-margin_top = -2.0
-margin_right = 1278.0
-margin_bottom = 718.0
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
 }
 
 [node name="fade" type="ColorRect" parent="."]
@@ -108,7 +70,7 @@ margin_right = 183.0
 margin_bottom = 22.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-custom_styles/normal = SubResource( 4 )
+custom_styles/normal = SubResource( 1 )
 text = "unnamed area"
 
 [node name="letterbox1" type="Polygon2D" parent="."]
@@ -142,7 +104,7 @@ script = ExtResource( 10 )
 
 [node name="enemy_display" type="Label" parent="control"]
 visible = false
-material = SubResource( 3 )
+material = SubResource( 2 )
 anchor_left = 0.7
 anchor_top = 0.03
 anchor_right = 0.803
@@ -162,7 +124,7 @@ __meta__ = {
 }
 
 [node name="death_display" type="Label" parent="control"]
-material = SubResource( 3 )
+material = SubResource( 2 )
 anchor_left = 0.7
 anchor_top = 0.03
 anchor_right = 0.803
@@ -183,7 +145,7 @@ __meta__ = {
 
 [node name="timer" type="Label" parent="control"]
 modulate = Color( 1, 1, 1, 0.823529 )
-material = SubResource( 3 )
+material = SubResource( 2 )
 anchor_left = 0.395
 anchor_top = 0.07
 anchor_right = 0.455
@@ -206,7 +168,7 @@ __meta__ = {
 
 [node name="timer_small" type="Label" parent="control"]
 modulate = Color( 1, 1, 1, 0.823529 )
-material = SubResource( 3 )
+material = SubResource( 2 )
 anchor_left = 0.395
 anchor_top = 0.07
 anchor_right = 0.455
@@ -229,7 +191,7 @@ __meta__ = {
 
 [node name="best" type="Label" parent="control"]
 modulate = Color( 1, 1, 1, 0.823529 )
-material = SubResource( 3 )
+material = SubResource( 2 )
 anchor_left = 0.395
 anchor_top = 0.07
 anchor_right = 0.455
@@ -251,7 +213,7 @@ __meta__ = {
 
 [node name="best_diff" type="Label" parent="control"]
 modulate = Color( 1, 1, 1, 0.823529 )
-material = SubResource( 3 )
+material = SubResource( 2 )
 anchor_left = 0.395
 anchor_top = 0.07
 anchor_right = 0.455

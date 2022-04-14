@@ -35,8 +35,6 @@ func is_active():
 
 # INPUTS
 #=======================================
-
-
 func process(delta):
 
     if runner == null:
@@ -44,55 +42,100 @@ func process(delta):
 
     update_grounded()
 
-    if runner.airdashes_left > 0 and input.is_action_just_pressed("key_dodge", runner.BUFFER_AIRDASH):
-        set_state("airdash")
-        return
+    # THE BELOW CHECKS WILL APPLY TO ALL STATES
+    #------------------------------------------
 
+    # allow airdash
+    if runner.airdashes_left > 0 and input.is_action_just_pressed("key_dodge", runner.BUFFER_AIRDASH):
+        if runner.state_name == "attack" and not runner.is_grounded() or runner.state_name != "attack":
+            print("initiated airdash")
+            goto_airdash()
+            return
+
+    # shoot projectile (unused)
     if input.is_action_just_pressed("shoot"):
         set_state("shootcoin")
         return
 
+    # allow attack
     if input.is_action_just_pressed("grapple"):
         if runner.lastcoin:
             set_state("grapple")
         elif not runner.state_name in ["attack", "special"]:
-            set_state("attack")
+            goto_attack()
         return
 
+    # allow special attack
     if input.is_action_just_pressed("special"):
         if not runner.state_name in ["attack", "special"]:
-            set_state("special")
+            goto_special()
 
+    # update current state
     if runner.state == self:
         on_update(delta)
         tick += 1
         time += delta
+
+# State Changers
+#================================================================================
+
+func goto_idle():      set_state("idle")
+func goto_running():   set_state("running")
+func goto_dash():      set_state("dash")
+
+func goto_jumpsquat(): set_state("jumpsquat")
+func goto_airborne():  set_state("airborne")
+
+func goto_airdash():   set_state("airdash")
+
+func goto_attack():    set_state("attack")
+func goto_special():   set_state("special")
+        
+# Set the runner state to either idle, running, dash, or airborne
+# depending on the current state of the runner.
+func goto_idle_or_dash():
+    if runner.is_on_floor():
+        if round(input.get_axis().x) == 0:
+            goto_idle()
+        elif is_facing_forward():
+            goto_running()
+        else:
+            goto_dash()
+    else:
+        goto_airborne()
+
+# Set the runner state to either idle, running, or airborne.
+func goto_idle_or_run():
+    if runner.is_on_floor():
+        if round(input.get_axis().x) == 0:
+            goto_idle()
+        else:
+            goto_running()
+    else:
+        goto_airborne()
 
 # COMMON CHECKS
 #===============================================================================
 
 # Snap to platforms, forcing a grounded state when 
 # airdashing slightly under them by a set margin.
-func check_ground_snap_up(delta, margin = runner.AIRDASH_WAVELAND_MARGIN, goto_state=null):
-    if runner.velocity.y >= 0:
-        var ray_length = margin
-        if runner.is_grounded():
-            ray_length = 2
-        var ray = Util.intersect_ray(runner,
-            Vector2(0, 32 - margin),
-            Vector2.DOWN * ray_length)
-        if ray:
-            # print("detected below floor")
-            runner.move_and_collide(Vector2.UP * margin * 2)
-            runner.move_and_slide(Vector2.DOWN * margin * 2 / delta, Vector2.UP)
-            if runner.is_on_floor():
-                runner.set_grounded(true, false)
-                if goto_state and goto_state != runner.state_name:
-                    set_state(goto_state)
-                return true
+func snap_up_to_ground(delta, margin = runner.AIRDASH_WAVELAND_MARGIN, goto_state=null):
+    var ray_length = margin
+    if runner.is_grounded(): ray_length = 2
+
+    var ray = Util.intersect_ray(runner, Vector2(0, 32 - margin), Vector2.DOWN * ray_length)
+    if runner.velocity.y >= 0 and ray:
+        # print("detected below floor")
+        runner.move_and_collide(Vector2.UP * margin * 2)
+        runner.move_and_slide(Vector2.DOWN * margin * 2 / delta, Vector2.UP)
+        if runner.is_on_floor():
+            runner.set_grounded(true, false)
+            if goto_state and goto_state != runner.state_name:
+                set_state(goto_state)
+            return true
     return false
 
-func check_ground_snap_down(delta, margin = runner.FLOOR_SNAP_TOP_MARGIN, goto_state = null):
+func snap_down_to_ground(delta, margin = runner.FLOOR_SNAP_TOP_MARGIN, goto_state = null):
     var ray = Util.intersect_ray(runner, Vector2(0, 32 + margin), Vector2.DOWN)
     if runner.velocity.y >= 0 and ray and not runner.is_grounded():
         runner.move_and_slide(Vector2.DOWN * margin * 2 / delta, Vector2.UP)
@@ -103,58 +146,35 @@ func check_ground_snap_down(delta, margin = runner.FLOOR_SNAP_TOP_MARGIN, goto_s
                 set_state(goto_state)
             return true
     return false
-        
-# Set the runner state to either idle, running, dash, or airborne
-# depending on the current state of the runner.
-func goto_idle_or_dash():
-    if runner.is_on_floor():
-        if round(input.get_axis().x) == 0:
-            set_state("idle")
-        elif is_facing_forward():
-            set_state("running")
-        else:
-            set_state("dash")
-    else:
-        set_state("airborne")
-
-# Set the runner state to either idle, running, or airborne.
-func goto_idle_or_run():
-    if runner.is_on_floor():
-        if round(input.get_axis().x) == 0:
-            set_state("idle")
-        else:
-            set_state("running")
-    else:
-        set_state("airborne")
 
 # Check if the player wants to drop-down a platform.
-func check_dropdown_platforms():
+func dropdown_platforms_if_able():
     if runner.is_on_floor() and input.is_action_just_pressed("key_down"):
         # check if the tile is a drop-down
         if not Util.collide_point(runner, runner.position + Vector2(0, 96)):
             runner.position += Vector2(0, 4)
-            set_state("airborne")
+            goto_airborne()
 
 # Check if the player wants to do a grounded jump.
-func check_ground_jump():
+func ground_jump_if_able():
     if runner.is_on_floor() and input.is_action_just_pressed("key_jump", runner.BUFFER_JUMP):
-        set_state("jumpsquat")
+        goto_jumpsquat()
 
 # Check if the player wants to do an air jump.
-func check_air_jump(force = false):
+func air_jump_if_able(force = false):
     if (!runner.is_on_floor() or force) and input.is_action_just_pressed("key_jump", runner.BUFFER_JUMP):
         runner.jump()
 
 # Check if the player wants to do a jump (air or grounded).
-func check_jump():
+func jump_if_able():
     if input.is_action_just_pressed("key_jump", runner.BUFFER_JUMP):
         if runner.is_on_floor():
-            set_state("jumpsquat")
+            goto_jumpsquat()
         else:
             runner.jump()
 
 # Check if the player wants to do a walljump.
-func check_wall_jump():
+func walljump_if_able():
 
     var margin = 30
     var jump_mult = 0.8
@@ -184,7 +204,7 @@ func check_wall_jump():
         runner.emit_signal("walljump_left")
 
 # Check if the player wants to fastfall.
-func check_fastfall():
+func fastfall_if_able():
     if input.is_action_just_pressed("key_down", 10) and runner.velocity.y > 0:
         runner.velocity.y = runner.FAST_FALL_SPEED
     
@@ -193,7 +213,7 @@ func check_fastfall():
 #              for it to register (lower = more sensitive)
 # require_neutral: if true, ignore dash inputs that don't go
 #                  through the center of the movement axis
-func check_dash(sensitivity = 0.0, require_neutral = false):
+func dash_if_able(sensitivity = 0.0, require_neutral = false):
     var other_inputs = []
     if require_neutral:
         other_inputs = ["key_up", "key_down"]
@@ -202,18 +222,18 @@ func check_dash(sensitivity = 0.0, require_neutral = false):
         input.is_axis_just_pressed("key_right", "key_left", other_inputs, 0.0, sensitivity)
         or input.is_axis_just_pressed("key_left", "key_right", other_inputs, 0.0, sensitivity)
     ):
-        set_state("dash")
+        goto_dash()
 
 # Check if player is trying to not move (no movement input)
-func check_idling():
+func idle_if_idling():
     var axis = input.get_axis()
     if axis.length() <= 0.01:
-        set_state("idle")
+        goto_idle()
 
 # Check if the player is now airborne.
-func check_airborne():
+func goto_airborne_if_not_grounded():
     if not runner.is_grounded():
-        set_state("airborne")
+        goto_airborne()
 
 func update_grounded():
     if not runner.is_grounded() and runner.is_on_floor():

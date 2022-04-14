@@ -8,7 +8,7 @@ script = ExtResource( 5 )
 
 [node name="sprite" parent="." index="1"]
 modulate = Color( 0.4, 0.4, 0.4, 1 )
-frame = 1
+frame = 3
 
 [node name="special_heavy" parent="moveset" index="0"]
 visible = false

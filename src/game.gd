@@ -9,8 +9,6 @@ signal scene_loaded
 const Textbox = preload("res://scenes/textbox.tscn")
 
 const Level_TestHub = preload("res://scenes/levels/test_hub.tscn")
-const Level_1 = preload("res://scenes/levels/test2.tscn")
-const Level_2 = preload("res://scenes/levels/test1.tscn")
 
 const GhostPlayer = preload("res://scenes/ghost_player.tscn")
 
@@ -101,6 +99,9 @@ func restart_level():
     # start replay recording and playback
     replay_start_recording()
     replay_playback_start()
+    
+    # reparent objects to respective canvaslayers
+    reparent_all()
 
     emit_signal("level_restarted")
 
@@ -129,20 +130,12 @@ func _load_scene(level_path):
     
     # clear all objects in other viewports
     clear_fg2()
+    clear_fg3()
 
     # debug_log("loading new scene")
 
     # load the new scene
-    var packed_scene
-    match(level_path):
-        1:
-            packed_scene = Level_TestHub
-        2:
-            packed_scene = Level_2
-        _:
-            packed_scene = level_path
-
-    var level = packed_scene.instance()
+    var level = level_path.instance()
     level.name = "level"
 
     # remove current scene and add new one
@@ -300,11 +293,9 @@ func _physics_process(delta):
 
 func _process(delta):
 
+    # load hub world
     if Input.is_action_just_pressed("debug_level1"):
-        load_scene(1)
-
-    if Input.is_action_just_pressed("debug_level2"):
-        load_scene(2)
+        load_scene(Level_TestHub)
 
     if Input.is_action_just_pressed("toggle_fullscreen"):
         OS.window_fullscreen = !OS.window_fullscreen
@@ -399,38 +390,82 @@ func clear_best_times():
 # ========================================================================
 
 # Foreground 1: used by the player
-func get_foreground():
-    return $"/root/main/viewports/fg/viewport"
+func get_fg1():
+    return $"/root/main/post_process/fg1/container/viewport"
 
-func get_foreground_container() -> ViewportContainer:
-    return $"/root/main/viewports/fg" as ViewportContainer
+func get_fg1_container() -> ViewportContainer:
+    return $"/root/main/post_process/fg1/container" as ViewportContainer
 
 # Foreground 2: used for enemies
 func get_fg2():
-    return $"/root/main/viewports/fg2/viewport"
+    return $"/root/main/post_process/fg2/container/viewport"
 
 func get_fg2_container() -> ViewportContainer:
-    return $"/root/main/viewports/fg2" as ViewportContainer
+    return $"/root/main/post_process/fg2/container" as ViewportContainer
 
 # Free all the children in foreground layer 2.
 func clear_fg2():
     for child in get_fg2().get_children():
         get_fg2().remove_child(child)
         child.queue_free()
+
+# Foreground 3: ???
+func get_fg3():
+    return $"/root/main/post_process/fg3/container/viewport"
+
+func get_fg3_container() -> ViewportContainer:
+    return $"/root/main/post_process/fg3/container" as ViewportContainer
+
+# Free all the children in foreground layer 2.
+func clear_fg3():
+    for child in get_fg3().get_children():
+        get_fg3().remove_child(child)
+        child.queue_free()
     
+func reparent_to_viewport(node, viewport):
+
+    if not node: return  # ignore null nodes
+    if node.get_parent() == viewport: return
+
+    var copy = node
+    if node is TileMap:
+        # create a copy instead of reparenting to retain collisions
+        copy = node.duplicate()
+        node.modulate = Color(0, 0, 0, 0)
+        copy.visible = true
+
+    if copy.get_parent():
+        copy.get_parent().call_deferred("remove_child", copy)
+        yield(get_tree(), "idle_frame")
+    
+    # shift copy to fix sub-pixels
+    copy.position = node.global_position + Vector2(2, -2)
+    copy.set_as_toplevel(true)
+    viewport.add_child(copy)
+
+
 # Reparent this node to FG1. Note that this node's position must now be handled manually.
 func reparent_to_fg1(node):
+    reparent_to_viewport(node, get_fg1())
 
-    node.get_parent().remove_child(node)
-    node.set_as_toplevel(true)
-    get_foreground().add_child(node)
-    
+
 # Reparent this node to FG2. Note that this node's position must now be handled manually.
 func reparent_to_fg2(node):
+    reparent_to_viewport(node, get_fg2())
 
-    node.get_parent().remove_child(node)
-    node.set_as_toplevel(true)
-    get_fg2().add_child(node)
+
+func reparent_to_fg3(node):
+    reparent_to_viewport(node, get_fg3())
+
+func reparent_all():
+    for node in get_tree().get_nodes_in_group("LAYER_FG1"):
+        reparent_to_fg1(node)
+
+    for node in get_tree().get_nodes_in_group("LAYER_FG2"):
+        reparent_to_fg2(node)
+
+    for node in get_tree().get_nodes_in_group("LAYER_FG3"):
+        reparent_to_fg3(node)
 
 func get_post_processor():
     return $"/root/main/post_process"

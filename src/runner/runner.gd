@@ -6,7 +6,9 @@ signal stop_walking
 signal land
 
 signal attack
-signal hit
+
+signal enemy_hit     # called when player hit an enemy
+signal enemy_killed  # called when player killed an enemy
 
 signal jump
 signal dragging
@@ -49,9 +51,9 @@ export var WALK_MAX_SPEED = 250
 
 # airdash
 
-export var AIRDASH_SPEED = 1000  # (mininum) speed at start of airdash
-export var AIRDASH_SPEED_END = 500  # speed at end of airdash
-export var AIRDASH_LENGTH = 12
+export var AIRDASH_SPEED = 1200  # (mininum) speed at start of airdash
+export var AIRDASH_SPEED_END = 600  # speed at end of airdash
+export var AIRDASH_LENGTH = 9
 export var AIRDASH_WAVELAND_MARGIN = 20
 
 # jumping / gravity
@@ -82,8 +84,8 @@ export var DASH_MAX_SPEED_REV = 1500 # dash reverse max speed (moonwalking)
 
 # buffers (frame window to accept these actions before they are actionable)
 
-export var BUFFER_JUMP = 12
-export var BUFFER_AIRDASH = 20
+export var BUFFER_JUMP = 4
+export var BUFFER_AIRDASH = 1
 
 # other consts
 
@@ -130,6 +132,9 @@ onready var input: BufferedInput = BufferedInput.new()
 # when active, "stun" the player (skip all physics processing)
 var stun_timer = Timer.new()
 
+# when active, ignore gravity
+var air_stall_timer = Timer.new()
+
 # ref to last thrown coin
 var lastcoin = null
 
@@ -152,6 +157,9 @@ var no_effects = false
 
 # if true, runner can hit dead enemies
 var ignore_enemy_hp = false
+
+# if true, do not apply gravity to the runner (state-dependant)
+var ignore_gravity = false
 
 # number of jumps allowed to perform until the runner touches the floor
 var jumps_left = 1
@@ -183,6 +191,10 @@ func _ready():
     stun_timer.name = "stun_timer"
     stun_timer.one_shot = true
     add_child(stun_timer)
+
+    air_stall_timer.name = "air_stall_timer"
+    air_stall_timer.one_shot = true
+    add_child(air_stall_timer)
 
     sprite.set_as_toplevel(true)
 
@@ -220,7 +232,7 @@ func respawn(pos):
     # print("[runner] setting pos to %s" % pos)
     position = pos
     velocity = Vector2(0, 0)
-    get_state().set_state("idle")
+    get_state().goto_idle()
     input.reset()
     emit_signal("respawned")
 
@@ -337,6 +349,8 @@ func jump(factor = 1.0, force = false, vel_x = null):
 
     var axis = input.get_axis()
 
+    if jumps_left == 0 and not force: return
+
     if not is_on_floor():
         # airborne jump direction switch
         if vel_x:
@@ -352,25 +366,32 @@ func jump(factor = 1.0, force = false, vel_x = null):
         if axis.y < -input.PRESS_THRESHOLD:
             velocity.x = 0
 
-    if jumps_left > 0 or force:
     # if airdashes_left > 0 or force:
-        if not force:
-        # if not force and not is_on_floor():
-            jumps_left -= 1
-            # airdashes_left -= 1
+    if not force:
+    # if not force and not is_on_floor():
+        jumps_left -= 1
+        # airdashes_left -= 1
 
-        if state_name == "airdash":
-            velocity.y = -DASHJUMP_VELOCITY * factor
-        else:
-            velocity.y = -JUMP_VELOCITY * factor
+    if state_name == "airdash":
+        velocity.y = -DASHJUMP_VELOCITY * factor
+    else:
+        velocity.y = -JUMP_VELOCITY * factor
 
-        if not force: emit_signal("jump")
+    if not force: emit_signal("jump")
         
-    state.set_state("airborne")
+    state.goto_airborne()
 
+# Stall the runner (vertically) in the air for a certain number of frames.
+func do_air_stall(frames = 18):
+    velocity.y = 0
+    ignore_gravity = true
+    air_stall_timer.start(frames * get_physics_process_delta_time())
+
+    yield(air_stall_timer, "timeout")
+    ignore_gravity = false
     
 func apply_gravity(delta):
-    if not is_on_floor():
+    if not is_on_floor() and not ignore_gravity:
         velocity.y = min(TERMINAL_VELOCITY, velocity.y + (GRAVITY * delta))
         # if input.is_action_just_pressed("key_down") and velocity.y > 0 and velocity.y < GRAVITY:
         # velocity.y = GRAVITY
@@ -402,7 +423,7 @@ func apply_friction(delta, friction = FRICTION):
     velocity.x = move_toward(velocity.x, 0, friction * delta)
 
 # Stun the runner for a specified amount of time
-func stun(frames):
+func hitlag(frames):
 
     # convert frames to seconds
     var time = frames / float(Engine.iterations_per_second)
@@ -438,3 +459,30 @@ func on_hurtbox_entered(from):
     else:
         hurt()
 
+# Hit an enemy.
+func hit(enemy = null, dmg := 1, contacts := [], stun_frames := 0, airstall := false):
+
+    # airstall player if applicable
+    if airstall:
+        do_air_stall()
+
+    # restore airdashes/jumps
+    if airdashes_left != 1: emit_signal("airdash_restored")
+    airdashes_left = 1 # restore dash
+    jumps_left = 1  # restore jump
+
+    # put player in hitlag
+    hitlag(stun_frames)
+
+    # hurt enemy
+    if not no_damage:
+        # print("[moveset] hit for %s damage" % dmg)
+        if dmg:
+            enemy.hurt(self, dmg)
+        else:
+            enemy.hurt(self)
+
+        if enemy.health == 0:
+            emit_signal("enemy_killed", enemy, contacts)
+
+    emit_signal("enemy_hit", enemy, contacts)

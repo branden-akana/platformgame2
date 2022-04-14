@@ -1,13 +1,12 @@
 extends Sprite
+tool
 
-export (Texture) var bg_texture;
 export (float, 0.0, 1.0) var opacity = 0.5;
 
 var origin
 
 func _ready():
-    
-    texture = bg_texture
+
     centered = false
     modulate = Color(opacity, opacity, opacity)
     material = ShaderMaterial.new()

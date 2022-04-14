@@ -3,8 +3,8 @@ class_name AirborneState
 
 func on_update(delta):
 
-    check_air_jump()
-    check_fastfall()
+    air_jump_if_able()
+    fastfall_if_able()
 
     if runner.is_on_floor():
         goto_idle_or_dash()
@@ -12,6 +12,6 @@ func on_update(delta):
         process_gravity(delta)
         process_air_acceleration(delta)
         process_air_friction(delta)
-        check_wall_jump()
+        walljump_if_able()
 
 

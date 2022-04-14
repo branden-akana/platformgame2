@@ -22,4 +22,4 @@ __meta__ = {
 
 [node name="spritetext" parent="." instance=ExtResource( 2 )]
 position = Vector2( 128, 64 )
-text = "res://scenes/levels/test1.tscn"
+text = "test1.tscn"

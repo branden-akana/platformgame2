@@ -47,8 +47,8 @@ func on_start(_state_name):
 func on_update(delta):
 
     if current_move.hit_detected:
-        check_wall_jump()  # allow walljump canceling
-        check_jump()  # allow jump canceling
+        walljump_if_able()  # allow walljump canceling
+        jump_if_able()  # allow jump canceling
 
     if not is_active():
         return
@@ -57,7 +57,7 @@ func on_update(delta):
         is_grounded = true
         process_friction(delta)
     else:
-        check_fastfall()
+        fastfall_if_able()
         process_air_acceleration(delta)
 
     # end of move or edge cancelled
@@ -66,3 +66,4 @@ func on_update(delta):
 
 func on_end():
     current_move.stop()
+    runner.ignore_gravity = false

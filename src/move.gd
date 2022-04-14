@@ -92,16 +92,18 @@ func _physics_process(delta):
             $sprite.modulate.a = 1 - ((frame - 12) / float(frame_length))
 
             # apply gravity when:
-            if (
-                # no hit was detected yet or
-                not hit_detected or
-                # the move doesn't cancel gravity or
-                not cancel_gravity_on_hit or
-                # the move cancels gravity and is within the frame window
-                cancel_gravity_on_hit and frame > cancel_gravity_length
-                ):
-                    if runner:
-                        runner.apply_gravity(delta)
+            # if (
+            #     # no hit was detected yet or
+            #     not hit_detected or
+            #     # the move doesn't cancel gravity or
+            #     not cancel_gravity_on_hit or
+            #     # the move cancels gravity and is within the frame window
+            #     cancel_gravity_on_hit and frame > cancel_gravity_length
+            #     ):
+            #         if runner:
+            #             runner.apply_gravity(delta)
+            if runner:
+                runner.apply_gravity(delta)
 
         frame += 1
 
@@ -122,43 +124,15 @@ func on_hitbox_entered(area_id, target: Area2D, target_shape_id, hitbox_shape_id
         # var hitbox_col = hitbox.get_node("collision")
         # print("[move] %s: hitbox %s hit enemy (%s)" % [name, hitbox.name, hitbox_col.disabled])
 
-        # on hit behavior
-        if cancel_gravity_on_hit:
-            runner.velocity.y = 0
-        if runner.airdashes_left != 1: runner.emit_signal("airdash_restored")
-        runner.airdashes_left = 1 # restore dash
-        runner.jumps_left = 1  # restore jump
-        runner.stun(stun_length)
+        # compute contact points
+        var target_shape = Util.get_shape(target, target_shape_id)
+        var hitbox_shape = Util.get_shape(hitbox, hitbox_shape_id)
+        var contacts = Util.get_collision_contacts(
+            target, target_shape,
+            hitbox, hitbox_shape
+        )
 
-        # on hit effects
-        if not runner.no_effects:
-            var target_shape = Util.get_shape(target, target_shape_id)
-            var hitbox_shape = Util.get_shape(hitbox, hitbox_shape_id)
-            var contacts = Util.get_collision_contacts(
-                target, target_shape,
-                hitbox, hitbox_shape
-            )
-            if len(contacts):
-                var effect = Effects.play_anim(Effects.HitEffect)
-                effect.position = (contacts[0] / 4).floor() * 4
-                effect.frame = 0
-
-        # on hit damage
-        if not runner.no_damage:
-            # print("[moveset] hit for %s damage" % dmg)
-            if dmg:
-                target.hurt(runner, dmg)
-            else:
-                target.hurt(runner)
-
-            if target.health == 0:
-                var effect = Effects.play(Effects.HitParticles)
-                effect.position = target.position
-                effect.direction = runner.position.direction_to(target.position)
-
-            Game.get_camera().screen_shake(1.0, 0.2)
-            runner.emit_signal("hit")
-
+        runner.hit(target, damage, contacts, stun_length, cancel_gravity_on_hit)
         hit_detected = true
         emit_signal("move_hit")
 

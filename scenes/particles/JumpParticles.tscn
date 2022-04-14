@@ -1,4 +1,6 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/circle.png" type="Texture" id=1]
 
 [sub_resource type="Curve" id=1]
 _data = [ Vector2( 0, 0 ), 0.0, 14.3333, 0, 1, Vector2( 0.0697674, 1 ), 0.0, -3.90909, 0, 0, Vector2( 1, 0 ), -0.0446753, 0.0, 0, 0 ]
@@ -16,6 +18,7 @@ one_shot = true
 explosiveness = 1.0
 lifetime_randomness = 0.5
 local_coords = false
+texture = ExtResource( 1 )
 emission_shape = 3
 emission_points = PoolVector2Array( 16, 0, -16, 0, 0, 0 )
 emission_colors = PoolColorArray(  )
@@ -24,6 +27,6 @@ spread = 100.0
 gravity = Vector2( 0, 0 )
 initial_velocity = 500.0
 initial_velocity_random = 0.5
-scale_amount = 24.0
+scale_amount = 0.1
 scale_amount_curve = SubResource( 1 )
 color_ramp = SubResource( 2 )

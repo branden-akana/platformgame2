@@ -6,7 +6,7 @@
 #===============================================================================
 
 extends Area2D
-class_name Room
+class_name RoomZone
 tool
 
 signal room_entered

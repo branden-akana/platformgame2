@@ -5,6 +5,7 @@
 */
 
 shader_type canvas_item;
+render_mode skip_vertex_transform;
 
 // texture params
 
@@ -28,6 +29,12 @@ vec2 get_pixel_ratio(float pixsize, sampler2D tex) {
 // "random" number generator
 float rand(vec2 co) {
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+void vertex() { 
+    vec4 world_vertex = WORLD_MATRIX * vec4(VERTEX, 0.0, 1.0);
+    world_vertex = floor(world_vertex / pixel_size) * pixel_size;
+    VERTEX = world_vertex.xy;
 }
 
 void fragment() {

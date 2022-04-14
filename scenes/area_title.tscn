@@ -3,6 +3,7 @@
 [ext_resource path="res://src/area_title.gd" type="Script" id=1]
 
 [sub_resource type="RectangleShape2D" id=1]
+resource_local_to_scene = true
 extents = Vector2( 256, 64 )
 
 [node name="area_title" type="Area2D"]

@@ -9,22 +9,22 @@ func on_start(old_state):
 
 func on_update(delta):
 
-    check_dash()
-    check_ground_jump()
-    check_dropdown_platforms()
-    check_idling()
+    dash_if_able()
+    ground_jump_if_able()
+    dropdown_platforms_if_able()
+    idle_if_idling()
 
     if is_active():
 
-        check_ground_snap_down(delta, 16)
-        check_ground_snap_up(delta, 16)
+        snap_down_to_ground(delta, 16)
+        snap_up_to_ground(delta, 16)
 
         if is_facing_forward():
             process_ground_acceleration(delta)
         else:
-            set_state("idle")
+            goto_idle()
 
-    check_airborne()
+    goto_airborne_if_not_grounded()
 
 func on_end():
     # print("stopped running")

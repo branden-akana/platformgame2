@@ -12,24 +12,44 @@ export (Array, Texture) var palettes
 export var current_palette = 0
 
 var palette_tween
-var palette_shader_bg
+var master_shader
+var bg_shader
+var fg1_shader
+var fg2_shader
+var fg3_shader
 
 func _ready():
     palette_tween = Util.new_tween(self)
-    palette_shader_bg = $"palette_bg/shader"
+    master_shader = $"master_palette/shader"
+    bg_shader = $"palette_bg/shader"
+    fg1_shader = $"fg1/container"
+    fg2_shader = $"fg2/container"
+    fg3_shader = $"fg3/container"
 
 func set_palette(idx):
     if idx < len(palettes):
         current_palette = idx
-        palette_shader_bg.get_material().set_shader_param("palette_a", palettes[idx])
+        master_shader.get_material().set_shader_param("palette", palettes[idx])
+        bg_shader.get_material().set_shader_param("palette_a", palettes[idx])
+        fg1_shader.get_material().set_shader_param("palette_a", palettes[idx])
+        fg2_shader.get_material().set_shader_param("palette_a", palettes[idx])
+        fg3_shader.get_material().set_shader_param("palette_a", palettes[idx])
         
 func set_palette_back(idx):
     if idx < len(palettes):
-        palette_shader_bg.get_material().set_shader_param("palette_b", palettes[idx])
+        master_shader.get_material().set_shader_param("palette_b", palettes[idx])
+        bg_shader.get_material().set_shader_param("palette_b", palettes[idx])
+        fg1_shader.get_material().set_shader_param("palette_b", palettes[idx])
+        fg2_shader.get_material().set_shader_param("palette_b", palettes[idx])
+        fg3_shader.get_material().set_shader_param("palette_b", palettes[idx])
         
 # 0.0 => palette A, 1.0 => palette B
 func set_palette_blend(n):
-    palette_shader_bg.get_material().set_shader_param("palette_blend", n)
+    master_shader.get_material().set_shader_param("palette_blend", n)
+    bg_shader.get_material().set_shader_param("palette_blend", n)
+    fg1_shader.get_material().set_shader_param("palette_blend", n)
+    fg2_shader.get_material().set_shader_param("palette_blend", n)
+    fg3_shader.get_material().set_shader_param("palette_blend", n)
     
 func change_palette(idx, time = 0.5):
     if idx != current_palette:

@@ -2,7 +2,9 @@ extends Node
 class_name Util
 
 # Round a vector to the nearest grid position
-static func gridsnap(vec: Vector2, grid_size):
+static func gridsnap(vec: Vector2, grid_size, subpixel_center = true):
+    if subpixel_center:
+        return (vec / grid_size).floor() * grid_size + (Vector2(grid_size, grid_size) / 2)
     return (vec / grid_size).floor() * grid_size
 
 # Yield using the given object and wait for the "completed" signal

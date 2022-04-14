@@ -16,7 +16,7 @@ blend_mode = 1
 
 [node name="debug" type="CanvasLayer"]
 pause_mode = 2
-layer = 5
+layer = 10
 script = ExtResource( 5 )
 __meta__ = {
 "_edit_vertical_guides_": [ 640.0 ]

@@ -23,10 +23,10 @@ func on_update(delta):
     # transition checks
     # =================
 
-    check_dash(0.0, true)  # dash-dancing
-    check_ground_jump()
-    check_dropdown_platforms()
-    check_idling()
+    dash_if_able(0.0, true)  # dash-dancing
+    ground_jump_if_able()
+    dropdown_platforms_if_able()
+    idle_if_idling()
 
     # =================
 
@@ -35,8 +35,8 @@ func on_update(delta):
 
     if is_active():
 
-        check_ground_snap_down(delta)
-        check_ground_snap_up(delta, 16)
+        snap_down_to_ground(delta)
+        snap_up_to_ground(delta, 16)
 
         var axis = input.get_axis()
 
@@ -76,7 +76,7 @@ func on_update(delta):
         if tick >= runner.DASH_LENGTH and axis.length() > 0.1:
             goto_idle_or_run()
 
-    check_airborne()
+    goto_airborne_if_not_grounded()
 
 
     

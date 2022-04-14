@@ -2,6 +2,13 @@ extends Node2D
 class_name Level
 tool
 
+onready var tm_blockout =  get_node("tilemaps/blockouts")
+onready var tm_details =   get_node("tilemaps/details")
+
+func _ready():
+    Game.reparent_to_fg3(tm_blockout)
+    Game.reparent_to_fg3(tm_details)
+    
 func _draw():
     if Engine.editor_hint:
         draw_start_point()

@@ -1,12 +1,9 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://scenes/levels/test5.tscn" type="PackedScene" id=1]
-[ext_resource path="res://assets/bg.png" type="Texture" id=2]
+[ext_resource path="res://scenes/levels/test2.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/camera.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/debug.tscn" type="PackedScene" id=5]
-[ext_resource path="res://shaders/retro_fg1.tres" type="Material" id=6]
-[ext_resource path="res://shaders/retro_fg2.tres" type="Material" id=7]
 [ext_resource path="res://scenes/debug/temp.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scenes/hud.tscn" type="PackedScene" id=9]
 [ext_resource path="res://scenes/post_process.tscn" type="PackedScene" id=10]
@@ -22,47 +19,6 @@
 [node name="player" parent="." instance=ExtResource( 3 )]
 
 [node name="post_process" parent="." instance=ExtResource( 10 )]
-
-[node name="viewports" type="CanvasLayer" parent="."]
-layer = 3
-
-[node name="fg" type="ViewportContainer" parent="viewports"]
-material = ExtResource( 6 )
-margin_right = 1280.0
-margin_bottom = 720.0
-stretch = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="viewport" type="Viewport" parent="viewports/fg"]
-size = Vector2( 1280, 720 )
-transparent_bg = true
-handle_input_locally = false
-render_target_update_mode = 3
-
-[node name="sprite" type="Sprite" parent="viewports/fg/viewport"]
-visible = false
-texture = ExtResource( 2 )
-
-[node name="fg2" type="ViewportContainer" parent="viewports"]
-material = ExtResource( 7 )
-margin_right = 1280.0
-margin_bottom = 720.0
-stretch = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="viewport" type="Viewport" parent="viewports/fg2"]
-size = Vector2( 1280, 720 )
-transparent_bg = true
-handle_input_locally = false
-render_target_update_mode = 3
-
-[node name="sprite" type="Sprite" parent="viewports/fg2/viewport"]
-visible = false
-texture = ExtResource( 2 )
 
 [node name="temp" parent="." instance=ExtResource( 8 )]
 

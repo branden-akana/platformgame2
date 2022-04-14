@@ -7,6 +7,10 @@ var replay_frames = {}
 # frames where the player's pos and vel are stored,
 # used to check for ghost replay deviation
 var pos_frames = {}
+
+# frames where a signal should be sent
+var signal_frames = {}
+
 var fix_interval = 20
 
 var ghost = null
@@ -19,7 +23,6 @@ func _ready():
     connect("stop_walking", Sound, "stop", ["walk"])
     connect("jump", Sound, "play", ["jump", -10, 1, false])
     connect("land", Sound, "play", ["land", -20, 0.9])
-    connect("hit", Sound, "play", ["hit", -10])
     connect("dash", Sound, "play", ["dash", -20, 0.8, false, true])
     connect("attack", Sound, "play", ["attack", -20, 0.7, false, true])
 
@@ -38,6 +41,9 @@ func _ready():
     # connect("walljump_left", self, "play_flash_effect")
     # connect("walljump_right", self, "play_flash_effect")
 
+    connect("enemy_hit", self, "on_enemy_hit")
+    connect("enemy_killed", self, "on_enemy_killed")
+
     # sprite setup
     Game.reparent_to_fg1(sprite)
 
@@ -52,6 +58,22 @@ func on_airdash_restored():
 func on_airdash():
     if flash_tween:
         flash_tween.reset_all()
+
+func on_enemy_hit(enemy, contacts):
+    signal_frames[tick] = "hit"
+
+    Sound.play("hit", -10)
+    Game.get_camera().screen_shake(1.0, 0.2)
+
+    if not no_effects and len(contacts):
+        var effect = Effects.play_anim(Effects.HitEffect)
+        effect.position = (contacts[0] / 4).floor() * 4
+        effect.frame = 0
+
+func on_enemy_killed(enemy, contacts):
+    var effect = Effects.play(Effects.HitParticles)
+    effect.position = enemy.position
+    effect.direction = position.direction_to(enemy.position)
 
 func pre_process(delta):
 
