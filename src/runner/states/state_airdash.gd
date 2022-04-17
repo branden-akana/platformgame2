@@ -18,10 +18,15 @@ func on_start(state_name):
 
     # determine airdash direction
     if runner.airdashes_left == 0 or axis == Vector2.ZERO:
-        goto_airborne()
+        sm.goto_airborne()
         return
     else:
-        on_ground = state_name in ["idle", "dash", "running", "attack"]
+        on_ground = (
+            state_name is IdleState
+            or state_name is DashState
+            or state_name is RunningState
+            or state_name is AttackState
+        )
 
         runner.airdashes_left -= 1
         airdash_dir = Vector2(axis.x, axis.y).normalized();
@@ -73,10 +78,10 @@ func on_update(delta):
         if runner.is_on_floor():
             if is_instance_valid(particles):
                 particles.emitting = false
-            goto_idle()
-            # goto_idle_or_dash()
+            sm.goto_idle()
+            # sm.goto_idle_or_dash()
         else:
-            goto_airborne()
+            sm.goto_airborne()
 
     if not is_active() and is_instance_valid(particles):
         particles.emitting = false

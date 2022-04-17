@@ -22,7 +22,7 @@ func on_update(delta):
         if is_facing_forward():
             process_ground_acceleration(delta)
         else:
-            goto_idle()
+            sm.goto_idle()
 
     goto_airborne_if_not_grounded()
 

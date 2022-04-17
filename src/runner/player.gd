@@ -88,7 +88,7 @@ func pre_process(delta):
             sprite.modulate = Color(0.3, 0.3, 0.3)
 
     # needed as sometimes the walking sound does not sto111p
-    if state_name != "running":
+    if sm.current_state is RunningState:
         Sound.stop("walk")
 
     if Game.game_paused:
@@ -148,7 +148,7 @@ func get_current_conditions():
     var conditions = RunnerInitialState.new()
     conditions.position = position
     conditions.velocity = velocity
-    conditions.state_name = state_name
+    conditions.state_type = sm.current_type
     conditions.input = input.duplicate()
     return conditions
 

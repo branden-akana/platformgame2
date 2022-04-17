@@ -7,7 +7,7 @@ func on_update(delta):
     fastfall_if_able()
 
     if runner.is_on_floor():
-        goto_idle_or_dash()
+        sm.goto_idle_or_dash()
     else:
         process_gravity(delta)
         process_air_acceleration(delta)

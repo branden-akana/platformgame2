@@ -154,6 +154,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/spritefont.gd"
 }, {
+"base": "Reference",
+"class": "State",
+"language": "GDScript",
+"path": "res://src/runner/states/state_type.gd"
+}, {
+"base": "Reference",
+"class": "StateMachine",
+"language": "GDScript",
+"path": "res://src/runner/states/state_machine.gd"
+}, {
 "base": "Node",
 "class": "Util",
 "language": "GDScript",
@@ -189,6 +199,8 @@ _global_script_class_icons={
 "ShootCoinState": "",
 "SpecialState": "",
 "SpriteFont": "",
+"State": "",
+"StateMachine": "",
 "Util": ""
 }
 

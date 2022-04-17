@@ -62,7 +62,7 @@ func on_update(delta):
 
     # end of move or edge cancelled
     if !current_move.playing or (is_grounded and not runner.is_on_floor()):
-        goto_idle_or_dash()
+        sm.goto_idle_or_dash()
 
 func on_end():
     current_move.stop()

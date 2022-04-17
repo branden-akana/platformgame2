@@ -288,7 +288,7 @@ func _physics_process(delta):
     HUD.get_node("control/death_display").text = "deaths %d" % num_deaths
 
     var velocity = get_player().velocity
-    var state_name = get_player().state_name
+    var state_name = get_player().sm.current_type
     get_node("/root/main/debug/info").text = "speed: %3.2f (x=%3.2f, y=%3.2f)\nstate: %s" % [velocity.length(), velocity.x, velocity.y, state_name]
 
 func _process(delta):
@@ -562,7 +562,7 @@ func replay_save():
     print("[demo] new replay saved! (%d frames)" % len(replay.input_frames))
     print("    position: %s" % replay.start_position)
     print("    velocity: %s" % replay.start_velocity)
-    print("    state: %s" % replay.start_state_name)
+    print("    state: %s" % replay.start_state_type)
     debug_ping("recording saved")
 
 # Start playback of the last replay (using a ghost).

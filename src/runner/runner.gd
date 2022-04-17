@@ -94,24 +94,8 @@ const MAX_COINS = 3
 # states
 # ===========================================
 
-var states = {
-    "idle": IdleState.new(),
-    "dash": DashState.new(),
-    "running": RunningState.new(),
-    "airborne": AirborneState.new(),
-    "airdash": AirdashState.new(),
-    "jumpsquat": JumpsquatState.new(),
-
-    "shootcoin": ShootCoinState.new(),
-    "grapple": GrappleState.new(),
-    "reeling": ReelingState.new(),
-
-    "attack": AttackState.new(),
-    "special": SpecialState.new()
-}
-
-var state_name = "idle"
-var state setget , get_state  # the state the player is in
+# state machine
+var sm = StateMachine.new()
 
 # resources
 # ===========================================
@@ -200,10 +184,8 @@ func _ready():
 
     $moveset.visible = true
 
-    # state setup
-    
-    for s in states.values():
-        s.init(self)
+    # state machine setup
+    sm.init(self)
 
     # event setup
 
@@ -212,14 +194,9 @@ func _ready():
 func _exit_tree():
     sprite.queue_free()
 
-func get_state() -> RunnerState:
-    if state_name in states:
-        return states[state_name]
-    return null
-
 func set_input_handler(input_):
     self.input = input_
-    for state in states.values():
+    for state in sm.states.values():
         state.input = input_
 
 # Respawn the player at the start point of the level
@@ -232,7 +209,7 @@ func respawn(pos):
     # print("[runner] setting pos to %s" % pos)
     position = pos
     velocity = Vector2(0, 0)
-    get_state().goto_idle()
+    sm.goto_idle()
     input.reset()
     emit_signal("respawned")
 
@@ -265,19 +242,19 @@ func _process(_delta):
             sprite.flip_h = true		
 
     # update sprite animation
-    match state_name:
-        "idle":
-            sprite.animation = "idle"
-        "dash":
-            sprite.animation = "running"
-        "running":
-            sprite.animation = "running"
-        "airborne":
-            sprite.animation = "airborne"
-        # "grapple":
-            # grapple_line.set_default_color(Color(1.0, 1.0, 1.0))
-        # "reeling":
-            # grapple_line.set_default_color(Color(1.0, 1.0, 1.0))
+    if sm.current_state is IdleState:
+        sprite.animation = "idle"
+    elif sm.current_state is DashState:
+        sprite.animation = "running"
+    elif sm.current_state is RunningState:
+        sprite.animation = "running"
+    elif sm.current_state is AirborneState:
+        sprite.animation = "airborne"
+
+    # "grapple":
+        # grapple_line.set_default_color(Color(1.0, 1.0, 1.0))
+    # "reeling":
+        # grapple_line.set_default_color(Color(1.0, 1.0, 1.0))
 
     # update grapple visuals
     # if state_name in ["grapple", "reeling"]:
@@ -320,9 +297,7 @@ func _physics_process(delta):  # update input and physics
         if num_coins() >= 1:
             coins_left = MAX_COINS;
 
-    var state_ = get_state()
-    if state_:
-        state_.process(delta)
+    sm.current_state.process(delta)
 
     # apply velocity
     velocity = move(velocity)
@@ -372,14 +347,14 @@ func jump(factor = 1.0, force = false, vel_x = null):
         jumps_left -= 1
         # airdashes_left -= 1
 
-    if state_name == "airdash":
+    if sm.current_state is AirdashState:
         velocity.y = -DASHJUMP_VELOCITY * factor
     else:
         velocity.y = -JUMP_VELOCITY * factor
 
     if not force: emit_signal("jump")
         
-    state.goto_airborne()
+    sm.goto_airborne()
 
 # Stall the runner (vertically) in the air for a certain number of frames.
 func do_air_stall(frames = 18):

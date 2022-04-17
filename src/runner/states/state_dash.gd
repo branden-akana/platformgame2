@@ -30,7 +30,7 @@ func on_update(delta):
 
     # =================
 
-    if runner.state_name == "idle":
+    if sm.current_state is IdleState:
         runner.velocity.x = runner.DASH_STOP_SPEED
 
     if is_active():
@@ -74,7 +74,7 @@ func on_update(delta):
 
         # end of dash
         if tick >= runner.DASH_LENGTH and axis.length() > 0.1:
-            goto_idle_or_run()
+            sm.goto_idle_or_run()
 
     goto_airborne_if_not_grounded()
 

@@ -13,4 +13,4 @@ func on_update(delta):
         if time >= 0.5 or pivot.distance_to(runner.position) < 30 or input.is_action_just_pressed("key_jump"):
         # if state_time >= 0.5 or pivot.distance_to(position) < 48:
             runner.release_grapple()
-            goto_idle_or_dash()
+            sm.goto_idle_or_dash()

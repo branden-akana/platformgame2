@@ -44,4 +44,4 @@ func on_update(delta):
 
         runner.coins_left -= 1
 
-        goto_idle_or_dash()
+        sm.goto_idle_or_dash()

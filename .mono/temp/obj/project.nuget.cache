@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "0Z2dJwduiMZAWkMsr5eHA/Lnu2TDi+4u/4wu6iHsFUuxBo4IK1r6RdGeEevujTPKV4kJIc7gS6zZIKisyhthFg==",
+  "success": true,
+  "projectFilePath": "J:\\code\\+games\\untitled-platform-game\\untitled platform game.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\brand\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.2\\microsoft.netframework.referenceassemblies.1.0.2.nupkg.sha512",
+    "C:\\Users\\brand\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net472\\1.0.2\\microsoft.netframework.referenceassemblies.net472.1.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -68,7 +68,7 @@ func advance_text():
     else:
         skip()
         # if line_finished():
-        #     goto_next_line()
+        #     sm.goto_next_line()
         # else:
         #     skip()
     

@@ -41,7 +41,7 @@ func restart():
     replay_finished = false
     position = replay.start_position
     velocity = replay.start_velocity
-    state_name = replay.start_state_name
+    sm.current_type = replay.start_state_type
     set_input_handler(replay.start_input)
     playing = true
 

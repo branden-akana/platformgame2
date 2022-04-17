@@ -5,5 +5,5 @@ class_name RunnerInitialState
 
 var position
 var velocity
-var state_name
+var state_type
 var input

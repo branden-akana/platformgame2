@@ -1,6 +1,10 @@
 class_name RunnerState
 
+var current_state setget , get_current_state
+var current_type setget , get_current_type
+
 var runner
+var sm  # state machine
 var input: BufferedInput
 
 # var game: Game
@@ -11,27 +15,21 @@ var tick: int = 0
 func init(runner_):
     self.runner = runner_
     self.input = runner.input
+    self.sm = runner_.sm
     # self.game = $"/root/World" as Game
     on_init()
 
-# Set the state of the handle
-func set_state(state_name):
-    if runner and state_name in runner.states:
-        var old_state_name = runner.state_name
-        var new_state = runner.states[state_name]
-        if new_state.can_start():
-            # Call on_end() of previous state
-            on_end()
-            runner.state_name = state_name
-            runner.state.time = 0.0
-            runner.state.tick = 0
-            # Call on_start() of new state
-            runner.state.on_start(old_state_name)
-            print("state: %s -> %s" % [old_state_name, state_name])
-
 # Return true if the runner's current state is this state.
 func is_active():
-    return runner.state == self
+    return sm.current_state == self
+
+# Return the currently active state
+func get_current_state():
+    return sm.current_state
+
+# Return the enum of the currently active state
+func get_current_type():
+    return sm.current_type
 
 # INPUTS
 #=======================================
@@ -47,72 +45,36 @@ func process(delta):
 
     # allow airdash
     if runner.airdashes_left > 0 and input.is_action_just_pressed("key_dodge", runner.BUFFER_AIRDASH):
-        if runner.state_name == "attack" and not runner.is_grounded() or runner.state_name != "attack":
+        if current_type == State.ATTACK and not runner.is_grounded() or current_type != State.ATTACK:
             print("initiated airdash")
-            goto_airdash()
+            sm.goto_airdash()
             return
 
     # shoot projectile (unused)
     if input.is_action_just_pressed("shoot"):
-        set_state("shootcoin")
+        #sm.set_state(StateMachine.State.SHOOTCOIN)
         return
 
     # allow attack
     if input.is_action_just_pressed("grapple"):
         if runner.lastcoin:
-            set_state("grapple")
-        elif not runner.state_name in ["attack", "special"]:
-            goto_attack()
+            #sm.set_state(StateMachine.State.GRAPPLE)
+            return
+        elif not current_type in [State.ATTACK, State.SPECIAL]:
+            sm.goto_attack()
         return
 
     # allow special attack
     if input.is_action_just_pressed("special"):
-        if not runner.state_name in ["attack", "special"]:
-            goto_special()
+        if not current_type in [State.ATTACK, State.SPECIAL]:
+            sm.goto_special()
 
     # update current state
-    if runner.state == self:
+    if sm.current_state == self:
         on_update(delta)
         tick += 1
         time += delta
 
-# State Changers
-#================================================================================
-
-func goto_idle():      set_state("idle")
-func goto_running():   set_state("running")
-func goto_dash():      set_state("dash")
-
-func goto_jumpsquat(): set_state("jumpsquat")
-func goto_airborne():  set_state("airborne")
-
-func goto_airdash():   set_state("airdash")
-
-func goto_attack():    set_state("attack")
-func goto_special():   set_state("special")
-        
-# Set the runner state to either idle, running, dash, or airborne
-# depending on the current state of the runner.
-func goto_idle_or_dash():
-    if runner.is_on_floor():
-        if round(input.get_axis().x) == 0:
-            goto_idle()
-        elif is_facing_forward():
-            goto_running()
-        else:
-            goto_dash()
-    else:
-        goto_airborne()
-
-# Set the runner state to either idle, running, or airborne.
-func goto_idle_or_run():
-    if runner.is_on_floor():
-        if round(input.get_axis().x) == 0:
-            goto_idle()
-        else:
-            goto_running()
-    else:
-        goto_airborne()
 
 # COMMON CHECKS
 #===============================================================================
@@ -131,7 +93,7 @@ func snap_up_to_ground(delta, margin = runner.AIRDASH_WAVELAND_MARGIN, goto_stat
         if runner.is_on_floor():
             runner.set_grounded(true, false)
             if goto_state and goto_state != runner.state_name:
-                set_state(goto_state)
+                sm.set_state(goto_state)
             return true
     return false
 
@@ -143,7 +105,7 @@ func snap_down_to_ground(delta, margin = runner.FLOOR_SNAP_TOP_MARGIN, goto_stat
             # print("floor snap down")
             runner.set_grounded(true, false)
             if goto_state and goto_state != runner.state_name:
-                set_state(goto_state)
+                sm.set_state(goto_state)
             return true
     return false
 
@@ -153,12 +115,12 @@ func dropdown_platforms_if_able():
         # check if the tile is a drop-down
         if not Util.collide_point(runner, runner.position + Vector2(0, 96)):
             runner.position += Vector2(0, 4)
-            goto_airborne()
+            sm.goto_airborne()
 
 # Check if the player wants to do a grounded jump.
 func ground_jump_if_able():
     if runner.is_on_floor() and input.is_action_just_pressed("key_jump", runner.BUFFER_JUMP):
-        goto_jumpsquat()
+        sm.goto_jumpsquat()
 
 # Check if the player wants to do an air jump.
 func air_jump_if_able(force = false):
@@ -169,7 +131,7 @@ func air_jump_if_able(force = false):
 func jump_if_able():
     if input.is_action_just_pressed("key_jump", runner.BUFFER_JUMP):
         if runner.is_on_floor():
-            goto_jumpsquat()
+            sm.goto_jumpsquat()
         else:
             runner.jump()
 
@@ -222,18 +184,18 @@ func dash_if_able(sensitivity = 0.0, require_neutral = false):
         input.is_axis_just_pressed("key_right", "key_left", other_inputs, 0.0, sensitivity)
         or input.is_axis_just_pressed("key_left", "key_right", other_inputs, 0.0, sensitivity)
     ):
-        goto_dash()
+        sm.goto_dash()
 
 # Check if player is trying to not move (no movement input)
 func idle_if_idling():
     var axis = input.get_axis()
     if axis.length() <= 0.01:
-        goto_idle()
+        sm.goto_idle()
 
 # Check if the player is now airborne.
 func goto_airborne_if_not_grounded():
     if not runner.is_grounded():
-        goto_airborne()
+        sm.goto_airborne()
 
 func update_grounded():
     if not runner.is_grounded() and runner.is_on_floor():
