@@ -167,7 +167,7 @@ func walljump_if_able():
 
 # Check if the player wants to fastfall.
 func fastfall_if_able():
-    if input.is_action_just_pressed("key_down", 10) and runner.velocity.y > 0:
+    if input.is_action_just_pressed("key_down") and runner.velocity.y > 0:
         runner.velocity.y = runner.FAST_FALL_SPEED
     
 # Check if the player wants to dash.
