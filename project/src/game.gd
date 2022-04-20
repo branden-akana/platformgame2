@@ -439,8 +439,10 @@ func reparent_to_viewport(node, viewport):
         yield(get_tree(), "idle_frame")
     
     # shift copy to fix sub-pixels
-    copy.position = node.global_position + Vector2(2, -2)
-    copy.set_as_toplevel(true)
+    if node.is_inside_tree():
+        copy.position = node.global_position + Vector2(2, -2)
+        copy.set_as_toplevel(true)
+        
     viewport.add_child(copy)
 
 
