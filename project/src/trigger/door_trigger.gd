@@ -1,5 +1,11 @@
-extends Area2D
+#================================================================================
+# DoorTrigger
+#
+# A 2D area that triggers opening a door.
+#================================================================================
+
 class_name DoorTrigger
+extends Area2D
 
 export (NodePath) var door_path
 

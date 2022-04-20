@@ -1,4 +1,4 @@
-extends "res://src/interactable.gd"
+extends "res://src/objects/interactable.gd"
 
 const Textbox = preload("res://scenes/textbox.tscn")
 

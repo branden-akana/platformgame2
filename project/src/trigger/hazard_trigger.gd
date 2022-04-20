@@ -1,3 +1,13 @@
+#================================================================================
+# HazardTrigger
+#
+# A 2D area that triggers hurting the runner.
+# If the runner dies while in the trigger, respawn at a set location.
+#
+# The respawn location will be taken from a child Node2D named 'respawn'.
+#================================================================================
+
+class_name HazardTrigger
 extends StaticBody2D
 tool
 

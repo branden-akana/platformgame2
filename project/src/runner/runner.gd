@@ -239,7 +239,7 @@ func _process(_delta):
         Direction.RIGHT:
             sprite.flip_h = false
         Direction.LEFT:
-            sprite.flip_h = true		
+            sprite.flip_h = true        
 
     # update sprite animation
     if sm.current_state is IdleState:

@@ -1,3 +1,7 @@
+#================================================================================
+# A sound manager that contains and plays various runner sounds.
+#================================================================================
+
 extends Node2D
 
 onready var sounds = {

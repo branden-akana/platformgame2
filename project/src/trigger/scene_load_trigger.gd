@@ -1,3 +1,10 @@
+#================================================================================
+# SceneLoadTrigger
+#
+# A 2D area that triggers loading a different level.
+#================================================================================
+
+class_name SceneLoadTrigger
 extends Area2D
 tool
 

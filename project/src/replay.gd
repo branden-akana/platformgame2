@@ -1,9 +1,9 @@
 #===============================================================================
 # Replay
 #
-# Contains data on a player's input every frame, their initial conditions,
-# as well as their pos/vel per frame.
-# 
+# Contains data on a player's input as well as their pos/vel per tick.
+# Also contains the player's "initial conditions" including their starting pos/vel,
+# state, and initial inputs.
 #===============================================================================
 class_name Replay
 

@@ -1,3 +1,8 @@
+"""
+The spritesheet equivalent of a Label.
+This Node uses a spritesheet image instead of a font file.
+"""
+class_name SpriteLabel
 extends SpriteTextRenderer
 tool
 

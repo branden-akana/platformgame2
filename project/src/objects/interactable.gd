@@ -1,3 +1,14 @@
+#================================================================================
+# Interactable
+#
+# A base class for a 2D area that,
+# if a runner is inside and presses an interact key,
+# calls the on_interact() method.
+#
+# If a runner leaves the 2D area or is finished interacting,
+# the on_dismiss() method is called.
+#================================================================================
+
 class_name Interactable
 extends Area2D
 
