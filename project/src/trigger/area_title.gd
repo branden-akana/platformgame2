@@ -1,3 +1,8 @@
+#================================================================================
+# Area Title Trigger
+#
+# When a player enters this area, show a level title effect.
+#================================================================================
 extends Area2D
 tool
 
@@ -16,13 +21,13 @@ func get_extents():
     return extents
 
 func on_body_entered(body):
-    if body is Player:
+    if body is PlayerRunner:
         print("showing title")
         HUD.lbox_in(0.5)
         HUD.area_title_in(title, 0.5)
 
 func on_body_exited(body):
-    if body is Player:
+    if body is PlayerRunner:
         print("unshowing title")
         HUD.lbox_out(0.5)
         HUD.area_title_out(0.5)

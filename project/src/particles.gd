@@ -16,7 +16,7 @@ func play(scene, parent = get_node("/root/main"), params = {}):
     parent.add_child(effect)
 
     # don't play any effects from a ghost
-    if parent is GhostPlayer:
+    if parent is GhostRunner:
         effect.visible = false
 
     for key in params:

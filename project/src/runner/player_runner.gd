@@ -1,5 +1,5 @@
 extends Runner
-class_name Player
+class_name PlayerRunner
 
 var initial_conditions = null
 var replay_frames = {}

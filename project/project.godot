@@ -65,9 +65,9 @@ _global_script_classes=[ {
 "path": "res://src/camera.gd"
 }, {
 "base": "Runner",
-"class": "GhostPlayer",
+"class": "GhostRunner",
 "language": "GDScript",
-"path": "res://src/runner/ghost_player.gd"
+"path": "res://src/runner/ghost_runner.gd"
 }, {
 "base": "RunnerState",
 "class": "GrappleState",
@@ -105,9 +105,9 @@ _global_script_classes=[ {
 "path": "res://src/level.gd"
 }, {
 "base": "Runner",
-"class": "Player",
+"class": "PlayerRunner",
 "language": "GDScript",
-"path": "res://src/runner/player.gd"
+"path": "res://src/runner/player_runner.gd"
 }, {
 "base": "RunnerState",
 "class": "ReelingState",
@@ -196,7 +196,7 @@ _global_script_class_icons={
 "DoorTrigger": "",
 "Enemy": "",
 "GameCamera": "",
-"GhostPlayer": "",
+"GhostRunner": "",
 "GrappleState": "",
 "HazardTrigger": "",
 "HitboxData": "",
@@ -204,7 +204,7 @@ _global_script_class_icons={
 "Interactable": "",
 "JumpsquatState": "",
 "Level": "",
-"Player": "",
+"PlayerRunner": "",
 "ReelingState": "",
 "Replay": "",
 "RoomZone": "",
@@ -247,6 +247,7 @@ gdscript/warnings/return_value_discarded=false
 window/size/width=1280
 window/size/height=720
 window/dpi/allow_hidpi=true
+window/vsync/vsync_via_compositor=true
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 

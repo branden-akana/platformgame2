@@ -1,3 +1,13 @@
+#================================================================================
+# Runner State Machine
+#
+# A state machine for RunnerStates. A runner will contain one instance of this class.
+#
+# Contains an instance of every state a runner can be in.
+# Methods are provided to change the runner's state, however,
+# the changing of states is managed by each individual state.
+#================================================================================
+
 class_name StateMachine
 
 var states = {

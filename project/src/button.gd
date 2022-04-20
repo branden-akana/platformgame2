@@ -47,7 +47,7 @@ func _physics_process(delta):
 
 
 func on_body_entered(body):
-    if not body is Player:
+    if not body is PlayerRunner:
         return
 
     if tween.is_active():
@@ -67,7 +67,7 @@ func on_body_entered(body):
 
 
 func on_body_exited(body):
-    if not body is Player:
+    if not body is PlayerRunner:
         return
 
     if tween.is_active():

@@ -74,7 +74,7 @@ func get_alive_enemies():
     return enemies
 
 func on_body_entered(body):
-    if body is Player:
+    if body is PlayerRunner:
         emit_signal("room_entered", self, body)
 
 # debug visuals

@@ -1,5 +1,5 @@
 extends Runner 
-class_name GhostPlayer
+class_name GhostRunner
 
 signal replay_finish
 

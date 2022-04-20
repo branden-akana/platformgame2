@@ -1,16 +1,32 @@
+#================================================================================
+# Runner State
+#
+# Represents a state a runner can be in.
+#
+# on_start(state_from)
+# Called when the runner enters this state, given the runner's previous state.
+#
+# on_update()
+# Called every tick while the runner is in this state.
+#
+# on_end()
+# Called when the runner leaves this state.
+#================================================================================
 class_name RunnerState
 
+# the runner's current state
 var current_state setget , get_current_state
+
+# the int (enum) representing the runner's current state
 var current_type setget , get_current_type
 
-var runner
-var sm  # state machine
-var input: BufferedInput
+# references to common variables for ease of access
+var runner  # the runner this state belongs to
+var sm      # the state machine containing this state
+var input: BufferedInput  # the runner's input handler
 
-# var game: Game
-
-var time: float = 0.0
-var tick: int = 0
+var time: float = 0.0  # the amount of time (in seconds) the runner has been in this state
+var tick: int = 0      # the amount of time (in ticks) the runner has been in this state
 
 func init(runner_):
     self.runner = runner_
@@ -33,6 +49,8 @@ func get_current_type():
 
 # INPUTS
 #=======================================
+# Called every tick (by the runner's _physics_process() loop).
+# Will only be called while the runner is in this state.
 func process(delta):
 
     if runner == null:

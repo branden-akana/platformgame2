@@ -40,7 +40,7 @@ func set_size(new_size):
         update()
 
 func on_body_entered(body):
-    if body is Player:
+    if body is PlayerRunner:
         Game.load_scene(to_level)
 
 func _draw():
