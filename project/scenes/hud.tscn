@@ -94,7 +94,6 @@ __meta__ = {
 
 [node name="death_display" parent="control" instance=ExtResource( 8 )]
 position = Vector2( 998, 658 )
-text = "deaths: 0"
 
 [node name="enemy_indicator" type="Node2D" parent="control"]
 position = Vector2( 640, 64 )

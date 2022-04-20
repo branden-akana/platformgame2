@@ -27,7 +27,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "BufferedInput",
 "language": "GDScript",
-"path": "res://src/buffered_input.gd"
+"path": "res://src/util/buffered_input.gd"
 }, {
 "base": "KinematicBody2D",
 "class": "Coin",
@@ -52,7 +52,7 @@ _global_script_classes=[ {
 "base": "Area2D",
 "class": "DoorTrigger",
 "language": "GDScript",
-"path": "res://src/door_trigger.gd"
+"path": "res://src/trigger/door_trigger.gd"
 }, {
 "base": "Area2D",
 "class": "Enemy",
@@ -74,6 +74,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/runner/states/state_grapple.gd"
 }, {
+"base": "StaticBody2D",
+"class": "HazardTrigger",
+"language": "GDScript",
+"path": "res://src/trigger/hazard_trigger.gd"
+}, {
 "base": "Resource",
 "class": "HitboxData",
 "language": "GDScript",
@@ -87,7 +92,7 @@ _global_script_classes=[ {
 "base": "Area2D",
 "class": "Interactable",
 "language": "GDScript",
-"path": "res://src/interactable.gd"
+"path": "res://src/objects/interactable.gd"
 }, {
 "base": "RunnerState",
 "class": "JumpsquatState",
@@ -139,6 +144,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/runner/states/state_running.gd"
 }, {
+"base": "Area2D",
+"class": "SceneLoadTrigger",
+"language": "GDScript",
+"path": "res://src/trigger/scene_load_trigger.gd"
+}, {
 "base": "RunnerState",
 "class": "ShootCoinState",
 "language": "GDScript",
@@ -149,10 +159,15 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/runner/states/state_special.gd"
 }, {
+"base": "SpriteTextRenderer",
+"class": "SpriteLabel",
+"language": "GDScript",
+"path": "res://src/objects/sprite_label.gd"
+}, {
 "base": "Node2D",
 "class": "SpriteTextRenderer",
 "language": "GDScript",
-"path": "res://src/spritetextrenderer.gd"
+"path": "res://src/util/spritetextrenderer.gd"
 }, {
 "base": "Reference",
 "class": "State",
@@ -183,6 +198,7 @@ _global_script_class_icons={
 "GameCamera": "",
 "GhostPlayer": "",
 "GrappleState": "",
+"HazardTrigger": "",
 "HitboxData": "",
 "IdleState": "",
 "Interactable": "",
@@ -196,8 +212,10 @@ _global_script_class_icons={
 "RunnerInitialState": "",
 "RunnerState": "",
 "RunningState": "",
+"SceneLoadTrigger": "",
 "ShootCoinState": "",
 "SpecialState": "",
+"SpriteLabel": "",
 "SpriteTextRenderer": "",
 "State": "",
 "StateMachine": "",
@@ -228,7 +246,7 @@ gdscript/warnings/return_value_discarded=false
 
 window/size/width=1280
 window/size/height=720
-window/vsync/use_vsync=false
+window/dpi/allow_hidpi=true
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 
@@ -428,12 +446,12 @@ name_casing=2
 
 [physics]
 
-common/physics_jitter_fix=0.0
+2d/thread_model=2
 
 [rendering]
 
 quality/intended_usage/framebuffer_allocation=0
 2d/snapping/use_gpu_pixel_snap=true
+threads/thread_model=2
 quality/filters/use_nearest_mipmap_filter=true
 environment/default_clear_color=Color( 0.1, 0.1, 0.1, 1 )
-quality/dynamic_fonts/use_oversampling=false
