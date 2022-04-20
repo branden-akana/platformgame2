@@ -10,7 +10,7 @@ var textbox
 
 func _ready():
     if Engine.editor_hint:
-        _spritefont = SpriteFont.new()
+        _spritefont = SpriteTextRenderer.new()
         add_child(_spritefont)
 
 func on_interact():

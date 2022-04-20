@@ -1,13 +1,15 @@
 extends Node2D
-class_name SpriteFont
+class_name SpriteTextRenderer
 
+# a pre-loaded default spritesheet
+const SMALL_FONT = preload("res://assets/charmap-oldschool_white.png")
+
+# a mapping of characters to their location on the spritesheet
 const CHARS = (
     ' !"#$%&' + "'" + '()*+,-./0123456789:;<=>?@' + 
     'ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`' + 
     'abcdefghijklmnopqrstuvwxyz{|}~'
 )
-
-const SMALL_FONT = preload("res://assets/charmap-oldschool_white.png")
 
 export (Vector2) var CHAR_SIZE = Vector2(7, 9)
 export (int)     var LINE_LENGTH = 30

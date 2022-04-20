@@ -39,7 +39,7 @@ onready var current_level = get_level()
 var current_room = null setget set_current_room
 
 # used to draw sprite text
-onready var spritefont = SpriteFont.new()
+onready var spritefont = SpriteTextRenderer.new()
 
 # flags
 var practice_mode = false

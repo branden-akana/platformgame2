@@ -25,8 +25,6 @@ anti_aliasing = false
 [node name="hud" type="CanvasLayer"]
 pause_mode = 2
 layer = 8
-offset = Vector2( 2, 2 )
-transform = Transform2D( 1, 0, 0, 1, 2, 2 )
 script = ExtResource( 5 )
 __meta__ = {
 "_edit_vertical_guides_": [ 640.0 ]
@@ -94,8 +92,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="spritetext" parent="control" instance=ExtResource( 8 )]
-position = Vector2( 990, 126 )
+[node name="death_display" parent="control" instance=ExtResource( 8 )]
+position = Vector2( 998, 658 )
+text = "deaths: 0"
 
 [node name="enemy_indicator" type="Node2D" parent="control"]
 position = Vector2( 640, 64 )
@@ -118,26 +117,6 @@ custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
 custom_constants/shadow_as_outline = 0
 text = "enemies: 0"
-align = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="death_display" type="Label" parent="control"]
-material = SubResource( 2 )
-anchor_left = 0.7
-anchor_top = 0.03
-anchor_right = 0.803
-anchor_bottom = 0.15
-margin_left = 98.0
-margin_top = 636.4
-margin_right = 66.16
-margin_bottom = 564.0
-rect_scale = Vector2( 2.5, 2.5 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
-custom_constants/shadow_as_outline = 0
-text = "deaths: 0"
 align = 2
 __meta__ = {
 "_edit_use_anchors_": false

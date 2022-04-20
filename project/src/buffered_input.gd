@@ -36,6 +36,14 @@ func duplicate() -> BufferedInput:
     copy.action_holds = action_holds.duplicate(true)
     return copy
 
+# Return the current time.
+func get_current_time():
+    return OS.get_ticks_msec()
+
+# Return the difference between the current time and the given time.
+func get_delta_time(time):
+    return (get_current_time() - time) / 1000.0
+
 # Manually trigger a press for this input. This input will be stored in the buffer map
 # along with the time it was pressed.
 func update_action(input, value=1):
@@ -53,12 +61,12 @@ func update_action(input, value=1):
     # detect press
     if past_value < PRESS_THRESHOLD and value >= PRESS_THRESHOLD:
         # print("read press (%s) delta: %.2f" % [input, input_delta])
-        action_press_times[input] = OS.get_ticks_msec()
-        action_holds[input] = OS.get_ticks_msec()
+        action_press_times[input] = get_current_time()
+        action_holds[input] = get_current_time()
 
     # detect unpress
     elif past_value >= PRESS_THRESHOLD and value < PRESS_THRESHOLD:
-        action_unpress_times[input] = OS.get_ticks_msec()
+        action_unpress_times[input] = get_current_time()
         action_holds.erase(input)
 
     # update values
@@ -69,7 +77,7 @@ func get_time_since_last_pressed(input):
     if not input in action_press_times:
         return INF
     else:
-        var buffer = (OS.get_ticks_msec() - action_press_times[input]) / 1000.0
+        var buffer = get_delta_time(action_press_times[input])
         return buffer 
 
 # Get the time (in seconds) from the last time this input has been unpressed.
@@ -77,13 +85,13 @@ func get_time_since_last_unpressed(input):
     if not input in action_unpress_times:
         return INF
     else:
-        var buffer = (OS.get_ticks_msec() - action_unpress_times[input]) / 1000.0
+        var buffer = get_delta_time(action_unpress_times[input])
         return buffer 
 
 # Get the time (in seconds) that this input has been held down.
 func get_time_held(input):
     if input in action_holds:
-        return (OS.get_ticks_msec() - action_holds[input]) / 1000.0
+        return get_delta_time(action_holds[input])
     return 0
 
 # Read an input with a buffer (in seconds).

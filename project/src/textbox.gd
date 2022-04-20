@@ -1,22 +1,20 @@
-extends Node2D
+extends SpriteTextRenderer
 tool
 
 signal textbox_closed
 
-export (Texture) var font
 export (String) var text = "placeholder text"
 
-var spritefont: SpriteFont
+# the tick sound when scrolling text
 var audio: AudioStreamPlayer = AudioStreamPlayer.new()
 
 # var current_line = 0
 var max_chars = 1  # number of characters to show
 
-func _ready():
-    spritefont = SpriteFont.new()
-    spritefont.FONT = font
-    add_child(spritefont)
+# line width
+var line_width = 20
 
+func _ready():
     audio.stream = load("res://assets/tick.wav")
     audio.pitch_scale = 2
     audio.volume_db = -10
@@ -101,4 +99,4 @@ func _draw():
         # s = lines[current_line].substr(0, max_chars)
         s = text.substr(0, max_chars)
 
-    spritefont.draw_text(self, s)
+    draw_text(self, s, line_width)
