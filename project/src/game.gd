@@ -7,10 +7,10 @@ signal level_cleared
 signal scene_loaded
 
 const Textbox = preload("res://scenes/textbox.tscn")
-
 const Level_TestHub = preload("res://scenes/levels/test_hub.tscn")
-
 const GhostPlayer = preload("res://scenes/ghost_player.tscn")
+const PlayerRunner = preload("res://scenes/player.tscn")
+const MainMenu = preload("res://scenes/main_menu.tscn")
 
 var frame: int = 0
 
@@ -28,6 +28,7 @@ var num_deaths = 0
 # game pausing variables
 var game_pause_requests = []  # contains refs to nodes that want to pause the game
 var game_paused: bool setget , is_paused
+var menu
 
 # amount of time user has held pause
 var pause_hold_time = 0.0
@@ -39,11 +40,12 @@ onready var current_level = get_level()
 var current_room = null setget set_current_room
 
 # used to draw sprite text
-onready var spritefont = SpriteTextRenderer.new()
+onready var spritefont = SpriteLabel.new()
 
 # flags
 var practice_mode = false
 var is_recording = true   # if true, record the player
+var is_in_menu = false    # if true, remove control from the player
 var replay = null         # ref to the last saved replay
 var replay_ghost = null   # ref to the ghost that plays replays
 
@@ -60,10 +62,24 @@ func _ready():
 
     print("Feel free to minimize this window! It needs to be open for some reason to avoid a crash.")
 
-    get_player().connect("died", self, "on_player_death")
+    # initialize menu
+
+    menu = MainMenu.instance()
+    $"/root/main".add_child(menu)
+
+    # initialize player
+
+    var player
+    if $"/root/main".has_node("player"):  # try to find a player
+        player = get_player()  
+    else:  # or manually spawn the player
+        player = PlayerRunner.instance()
+        $"/root/main".add_child(player)
+
+    player.connect("died", self, "on_player_death")
+    yield(player, "ready")
+
     connect("level_cleared", self, "on_level_clear")
-    
-    yield(get_player(), "ready")
 
     reinitialize_game()
 
@@ -330,17 +346,12 @@ func _process(delta):
         else:
             hud.scale = Vector2.ONE
 
-
-    # hold to quit
-    if Input.is_action_pressed("pause"):
-        if pause_hold_time == 0:
-            debug_ping("Hold to quit")
-        pause_hold_time += delta
-        if pause_hold_time > 1.0:
-            get_tree().quit()
-    else:
-        pause_hold_time = 0
-
+    # pause menu
+    if Input.is_action_just_pressed("pause"):
+        if menu.visible:
+            menu.hide()
+        else:
+            menu.show()
         
 # func _input(event):
     

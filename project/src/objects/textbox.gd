@@ -1,9 +1,7 @@
-extends SpriteTextRenderer
+extends SpriteLabel
 tool
 
 signal textbox_closed
-
-export (String) var text = "placeholder text"
 
 # the tick sound when scrolling text
 var audio: AudioStreamPlayer = AudioStreamPlayer.new()
@@ -99,4 +97,4 @@ func _draw():
         # s = lines[current_line].substr(0, max_chars)
         s = text.substr(0, max_chars)
 
-    draw_text(self, s, line_width)
+    draw_text(s, line_width)

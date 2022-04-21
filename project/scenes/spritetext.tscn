@@ -8,3 +8,4 @@ blend_mode = 1
 [node name="spritetext" type="Node2D"]
 material = SubResource( 1 )
 script = ExtResource( 1 )
+text = "aaaa"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://shaders/retro_bg.tres" type="Material" id=1]
 [ext_resource path="res://src/post_process.gd" type="Script" id=2]
@@ -6,7 +6,6 @@
 [ext_resource path="res://assets/palette2.png" type="Texture" id=4]
 [ext_resource path="res://shaders/pixelate.tres" type="Material" id=5]
 [ext_resource path="res://assets/palette3.png" type="Texture" id=6]
-[ext_resource path="res://assets/palette6.png" type="Texture" id=7]
 [ext_resource path="res://assets/palette7.png" type="Texture" id=8]
 [ext_resource path="res://shaders/retro_fg2.tres" type="Material" id=11]
 [ext_resource path="res://assets/bg.png" type="Texture" id=12]
@@ -190,7 +189,7 @@ shader_param/focus = Vector2( 0.5, 0.5 )
 
 [node name="post_process" type="Node2D"]
 script = ExtResource( 2 )
-palettes = [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ) ]
+palettes = [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 6 ), ExtResource( 8 ) ]
 
 [node name="pixelizer_2" type="CanvasLayer" parent="."]
 layer = 10

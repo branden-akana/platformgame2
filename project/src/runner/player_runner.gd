@@ -87,11 +87,11 @@ func pre_process(delta):
         0:
             sprite.modulate = Color(0.3, 0.3, 0.3)
 
-    # needed as sometimes the walking sound does not sto111p
+    # needed as sometimes the walking sound does not stop
     if sm.current_state is RunningState:
         Sound.stop("walk")
 
-    if Game.game_paused:
+    if Game.game_paused or Game.is_in_menu:
         return
 
     if Input.is_action_just_pressed("reset"):

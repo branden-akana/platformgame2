@@ -19,6 +19,18 @@ func _ready():
     tween.pause_mode = PAUSE_MODE_PROCESS
     add_child(tween)
 
+func toggle_visible():
+    if layer == 5:
+        layer = -1
+    else:
+        layer = 5
+
+func hide():
+    layer = -1
+
+func show():
+    layer = 5
+
 func blink(time):
     tween.interpolate_property($white_fade, "color:a", 0.1, 0.0, time)
     tween.start()
