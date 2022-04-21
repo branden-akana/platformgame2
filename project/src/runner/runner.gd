@@ -441,14 +441,6 @@ func hit(enemy = null, dmg := 1, contacts := [], stun_frames := 0, airstall := f
     if airstall:
         do_air_stall()
 
-    # restore airdashes/jumps
-    if airdashes_left != 1: emit_signal("airdash_restored")
-    airdashes_left = 1 # restore dash
-    jumps_left = 1  # restore jump
-
-    # put player in hitlag
-    hitlag(stun_frames)
-
     # hurt enemy
     if not no_damage:
         # print("[moveset] hit for %s damage" % dmg)
@@ -459,5 +451,15 @@ func hit(enemy = null, dmg := 1, contacts := [], stun_frames := 0, airstall := f
 
         if enemy.health == 0:
             emit_signal("enemy_killed", enemy, contacts)
+
+    # restore airdashes/jumps
+    if enemy.health <= 0:
+        if airdashes_left != 1: emit_signal("airdash_restored")
+        airdashes_left = 1 # restore dash
+        #jumps_left = 1  # restore jump
+
+    # put player in hitlag
+    hitlag(stun_frames)
+
 
     emit_signal("enemy_hit", enemy, contacts)
