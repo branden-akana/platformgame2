@@ -5,4 +5,4 @@ func get_label():
     return "back"
 
 func on_select(menu):
-    menu.reset_items()
+    menu.menu_return()

@@ -7,4 +7,4 @@ func get_label():
     return label
 
 func on_select(menu):
-    menu.set_items([SelectVsync.new(), SelectReturn.new()])
+    menu.menu_change([SelectVsync.new(), SelectPalette.new(), SelectReturn.new()])

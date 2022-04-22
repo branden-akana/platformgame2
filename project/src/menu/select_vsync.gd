@@ -1,8 +1,8 @@
 class_name SelectVsync
 extends MenuSelection
 
-var label_on  = "vsync:  on [off]"
-var label_off = "vsync: [on] off"
+var label_on  = "vsync:[on] off"
+var label_off = "vsync: on [off]"
 
 func get_label():
     if OS.is_vsync_enabled():
