@@ -10,7 +10,6 @@ const Textbox = preload("res://scenes/textbox.tscn")
 const Level_TestHub = preload("res://scenes/levels/test_hub.tscn")
 const GhostPlayer = preload("res://scenes/ghost_player.tscn")
 const PlayerRunner = preload("res://scenes/player.tscn")
-const MainMenu = preload("res://scenes/main_menu.tscn")
 
 var frame: int = 0
 
@@ -63,12 +62,9 @@ func _ready():
     print("Feel free to minimize this window! It needs to be open for some reason to avoid a crash.")
 
     # initialize menu
-
-    menu = MainMenu.instance()
-    $"/root/main".add_child(menu)
+    menu = HUD.get_node("main_menu")
 
     # initialize player
-
     var player
     if $"/root/main".has_node("player"):  # try to find a player
         player = get_player()  
