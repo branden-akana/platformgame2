@@ -431,6 +431,8 @@ func clear_fg3():
     
 func reparent_to_viewport(node, viewport):
 
+    return
+
     if not node: return  # ignore null nodes
     if node.get_parent() == viewport: return
 

@@ -12,45 +12,23 @@ export (Array, Texture) var palettes
 export var current_palette = 0
 
 var palette_tween
-var master_shader
-var bg_shader
-var fg1_shader
-var fg2_shader
-var fg3_shader
+var shader
 
 func _ready():
     palette_tween = Util.new_tween(self)
-    master_shader = $"master_palette/shader"
-    bg_shader = $"palette_bg/shader"
-    fg1_shader = $"fg1/container"
-    fg2_shader = $"fg2/container"
-    fg3_shader = $"fg3/container"
+    shader = $"retrorizer/rect"
 
 func set_palette(idx):
     idx = idx % len(palettes)
-
-    master_shader.get_material().set_shader_param("palette", palettes[idx])
-    bg_shader.get_material().set_shader_param("palette_a", palettes[idx])
-    fg1_shader.get_material().set_shader_param("palette_a", palettes[idx])
-    fg2_shader.get_material().set_shader_param("palette_a", palettes[idx])
-    fg3_shader.get_material().set_shader_param("palette_a", palettes[idx])
+    shader.get_material().set_shader_param("palette_a", palettes[idx])
         
 func set_palette_back(idx):
     idx = idx % len(palettes)
-
-    master_shader.get_material().set_shader_param("palette_b", palettes[idx])
-    bg_shader.get_material().set_shader_param("palette_b", palettes[idx])
-    fg1_shader.get_material().set_shader_param("palette_b", palettes[idx])
-    fg2_shader.get_material().set_shader_param("palette_b", palettes[idx])
-    fg3_shader.get_material().set_shader_param("palette_b", palettes[idx])
+    shader.get_material().set_shader_param("palette_b", palettes[idx])
         
 # 0.0 => palette A, 1.0 => palette B
 func set_palette_blend(n):
-    master_shader.get_material().set_shader_param("palette_blend", n)
-    bg_shader.get_material().set_shader_param("palette_blend", n)
-    fg1_shader.get_material().set_shader_param("palette_blend", n)
-    fg2_shader.get_material().set_shader_param("palette_blend", n)
-    fg3_shader.get_material().set_shader_param("palette_blend", n)
+    shader.get_material().set_shader_param("palette_blend", n)
     
 # Change the game's color palette over a set amount of time.
 func change_palette(idx, time = 0.5):

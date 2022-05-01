@@ -1,165 +1,22 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://shaders/retro_bg.tres" type="Material" id=1]
 [ext_resource path="res://src/post_process.gd" type="Script" id=2]
-[ext_resource path="res://assets/palette.png" type="Texture" id=3]
-[ext_resource path="res://assets/palette2.png" type="Texture" id=4]
-[ext_resource path="res://shaders/pixelate.tres" type="Material" id=5]
-[ext_resource path="res://assets/palette3.png" type="Texture" id=6]
-[ext_resource path="res://assets/palette7.png" type="Texture" id=8]
-[ext_resource path="res://shaders/retro_fg2.tres" type="Material" id=11]
-[ext_resource path="res://assets/bg.png" type="Texture" id=12]
-[ext_resource path="res://shaders/retro_fg1.tres" type="Material" id=13]
-[ext_resource path="res://shaders/retro_fg3.tres" type="Material" id=14]
+[ext_resource path="res://assets/palettes/cool.png" type="Texture" id=9]
+[ext_resource path="res://assets/palettes/base.png" type="Texture" id=10]
 [ext_resource path="res://src/vignette_focus.gd" type="Script" id=15]
+[ext_resource path="res://shaders/retrorize.gdshader" type="Shader" id=16]
 
-[sub_resource type="Shader" id=1]
-code = "/*
-    Pixelization (with a specified pixel size)
-    
-    This version samples SCREEN_TEXTURE which will process the entire screen.
-*/
-
-shader_type canvas_item;
-
-// texture params
-
-uniform bool screen = true;
-
-// pixelation params
-
-uniform float pixel_size = 4.0;
-uniform float pixel_smoothing = 0.5;
-
-// noise params
-
-uniform float noise_strength = 0.015;
-uniform float noise_brightness = 0.0;
-
-vec2 get_pixel_ratio(float pixsize, sampler2D tex) {
-    // pixel size / texture size
-    return pixsize / vec2(textureSize(tex, 0));
-}
-
-
-// \"random\" number generator
-float rand(vec2 co) {
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-}
-
-void fragment() {
-    vec2 uv;
-    if (screen) { uv = SCREEN_UV; } else { uv = UV; }
-
-    // pixelize screen
-    // =========================================================================
-      
-    vec2 pixel_uv;
-    vec4 color_aa;
-    vec4 color;
-    
-    // anti-aliased pixel color
-    // ------------------------
-    
-    vec2 screen_ratio;
-    if (screen) { screen_ratio = get_pixel_ratio(pixel_size, SCREEN_TEXTURE); }
-    else { screen_ratio = get_pixel_ratio(pixel_size, TEXTURE); }
-    
-    pixel_uv = (floor(uv / screen_ratio) * screen_ratio) + (screen_ratio / 2.0);
-    //pixel_uv = (floor(uv / screen_ratio) * screen_ratio);
-    
-    if (screen) { color_aa = textureLod(SCREEN_TEXTURE, pixel_uv, 0.0); }
-    else { color_aa = textureLod(TEXTURE, pixel_uv, 0.0); }
-
-    // raw pixel color
-    // ---------------
-    
-    pixel_uv = floor((FRAGCOORD.xy) / pixel_size) * pixel_size;
-    
-    if (screen) { color = texelFetch(SCREEN_TEXTURE, ivec2(pixel_uv), 0); }
-    else { color = texelFetch(TEXTURE, ivec2(pixel_uv), 0); }
-    
-    // blend final color
-    COLOR = mix(color, color_aa, pixel_smoothing);
-
-    // noise
-    // =========================================================================
-    
-    //COLOR = mix(COLOR, vec4(vec3(rand(pixel_uv + rand(vec2(TIME)))), 1.0), 0.03);
-    float n = abs(rand(UV + rand(vec2(floor(TIME * 10.0))))) + noise_brightness;
-    //n = clamp(n, 0.0, 1.0);
-    COLOR = mix(COLOR, COLOR + vec4(vec3(n), 1.0), noise_strength);
-}"
-
-[sub_resource type="ShaderMaterial" id=2]
-resource_local_to_scene = true
-shader = SubResource( 1 )
+[sub_resource type="ShaderMaterial" id=7]
+shader = ExtResource( 16 )
 shader_param/screen = true
 shader_param/pixel_size = 4.0
-shader_param/pixel_smoothing = 0.5
+shader_param/antialiased = true
+shader_param/palette_size = Vector2( 8, 2 )
+shader_param/palette_blend = 1.0
 shader_param/noise_strength = 0.015
-shader_param/noise_brightness = -0.5
-
-[sub_resource type="Shader" id=3]
-code = "shader_type canvas_item;
-
-uniform sampler2D palette;
-uniform sampler2D palette_b;
-uniform float palette_blend = 0.0;
-
-uniform int size_x = 4;
-uniform int size_y = 4;
-
-uniform float blend = 1.0;
-
-const mat3 YUV = mat3(vec3(0.299, 0.587, 0.114), vec3(-0.14713, -0.28886, 0.436), vec3(0.615, -0.51499, -0.10001));
-
-vec4 get_palette_color(int x, int y) {
-    vec2 uv = vec2(
-        (float(x) / float(size_x)) + (1.0 / (float(size_x) * 2.0)),
-        //(float(x) / float(size_x)), 0
-        (float(y) / float(size_y)) + (1.0 / (float(size_y) * 2.0))
-    );
-    /*
-    switch(y) {
-        case 1:
-            return texture(fg1, uv);
-        case 2:
-            return texture(fg2, uv);
-        case 3:
-            return texture(fg3, uv);
-        case 0: default:
-            return texture(bg, uv);
-       }
-    */
-    vec4 color_a = texture(palette, uv);
-    vec4 color_b = texture(palette_b, uv);
-    return mix(color_a, color_b, palette_blend);
-}
-
-void fragment() {
-    vec4 color = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0);
-    vec4 final_color = get_palette_color(0, 0);
-    for(int i = 0; i < size_x; i++) {
-        for(int j = 0; j < size_y; j++) {
-            vec4 palette_color = get_palette_color(i, j);
-            //if( distance((YUV * color.rgb).xyz, (YUV * palette_color.rgb).xyz) <= distance((YUV * color.rgb).xyz, (YUV * COLOR.rgb).xyz) ) {
-            if( distance(color.rgb, palette_color.rgb) <= distance(color.rgb, final_color.rgb) ) {
-                final_color = palette_color;
-            } 
-        }
-    }
-    
-    COLOR = mix(color, final_color, blend);
-}"
-
-[sub_resource type="ShaderMaterial" id=4]
-shader = SubResource( 3 )
-shader_param/palette_blend = 0.0
-shader_param/size_x = 4
-shader_param/size_y = 4
-shader_param/blend = 1.0
-shader_param/palette = ExtResource( 3 )
+shader_param/palette_key = ExtResource( 10 )
+shader_param/palette_a = ExtResource( 9 )
+shader_param/palette_b = ExtResource( 10 )
 
 [sub_resource type="Shader" id=5]
 code = "shader_type canvas_item;
@@ -189,137 +46,17 @@ shader_param/focus = Vector2( 0.5, 0.5 )
 
 [node name="post_process" type="Node2D"]
 script = ExtResource( 2 )
-palettes = [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 6 ), ExtResource( 8 ) ]
+palettes = [ ExtResource( 10 ), ExtResource( 9 ) ]
 
-[node name="pixelizer_2" type="CanvasLayer" parent="."]
-layer = 10
-
-[node name="shader_2" type="ColorRect" parent="pixelizer_2"]
-material = SubResource( 2 )
-margin_left = -8192.0
-margin_top = -8192.0
-rect_scale = Vector2( 2, 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="master_palette" type="CanvasLayer" parent="."]
+[node name="retrorizer" type="CanvasLayer" parent="."]
 layer = 9
 
-[node name="shader" type="ColorRect" parent="master_palette"]
-material = SubResource( 4 )
-margin_left = -8192.0
-margin_top = -8192.0
-rect_scale = Vector2( 2, 2 )
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="fg1" type="CanvasLayer" parent="."]
-layer = 6
-__meta__ = {
-"_editor_description_": "Contains the player"
-}
-
-[node name="container" type="ViewportContainer" parent="fg1"]
-material = ExtResource( 13 )
-margin_right = 1280.0
-margin_bottom = 720.0
-stretch = true
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="viewport" type="Viewport" parent="fg1/container"]
-size = Vector2( 1280, 720 )
-transparent_bg = true
-handle_input_locally = false
-render_target_update_mode = 3
-
-[node name="sprite" type="Sprite" parent="fg1/container/viewport"]
-visible = false
-position = Vector2( 500, 200 )
-scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 12 )
-
-[node name="fg2" type="CanvasLayer" parent="."]
-layer = 5
-
-[node name="container" type="ViewportContainer" parent="fg2"]
-material = ExtResource( 11 )
-margin_right = 1280.0
-margin_bottom = 720.0
-stretch = true
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="viewport" type="Viewport" parent="fg2/container"]
-size = Vector2( 1280, 720 )
-transparent_bg = true
-handle_input_locally = false
-render_target_update_mode = 3
-
-[node name="sprite" type="Sprite" parent="fg2/container/viewport"]
-visible = false
-position = Vector2( 500, 600 )
-scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 12 )
-
-[node name="fg3" type="CanvasLayer" parent="."]
-layer = 4
-
-[node name="container" type="ViewportContainer" parent="fg3"]
-material = ExtResource( 14 )
-margin_right = 1280.0
-margin_bottom = 720.0
-stretch = true
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="viewport" type="Viewport" parent="fg3/container"]
-size = Vector2( 1280, 720 )
-transparent_bg = true
-handle_input_locally = false
-render_target_update_mode = 3
-
-[node name="sprite" type="Sprite" parent="fg3/container/viewport"]
-visible = false
-position = Vector2( 1200, 200 )
-scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 12 )
-
-[node name="pixelizer" type="CanvasLayer" parent="."]
-layer = 3
-
-[node name="shader_2" type="ColorRect" parent="pixelizer"]
-visible = false
-material = ExtResource( 5 )
-margin_left = -8192.0
-margin_top = -8192.0
-rect_scale = Vector2( 2, 2 )
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="palette_bg" type="CanvasLayer" parent="."]
-layer = 2
-
-[node name="shader" type="ColorRect" parent="palette_bg"]
-material = ExtResource( 1 )
-margin_left = -8192.0
-margin_top = -8192.0
-rect_scale = Vector2( 2, 2 )
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
+[node name="rect" type="ColorRect" parent="retrorizer"]
+material = SubResource( 7 )
+margin_left = -4096.0
+margin_top = -4096.0
+margin_right = 4096.0
+margin_bottom = 4096.0
 
 [node name="canvas_layer" type="CanvasLayer" parent="."]
 

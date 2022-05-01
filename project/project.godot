@@ -170,6 +170,11 @@ _global_script_classes=[ {
 "path": "res://src/menu/select_options.gd"
 }, {
 "base": "MenuSelection",
+"class": "SelectPalette",
+"language": "GDScript",
+"path": "res://src/menu/select_palette.gd"
+}, {
+"base": "MenuSelection",
 "class": "SelectReturn",
 "language": "GDScript",
 "path": "res://src/menu/select_return.gd"
@@ -247,6 +252,7 @@ _global_script_class_icons={
 "SceneLoadTrigger": "",
 "SelectExit": "",
 "SelectOptions": "",
+"SelectPalette": "",
 "SelectReturn": "",
 "SelectStart": "",
 "SelectVsync": "",

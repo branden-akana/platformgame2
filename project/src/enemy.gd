@@ -38,6 +38,8 @@ func _ready():
         self.set_as_toplevel(true)
         self.position += get_parent().global_position
         sprite.set_as_toplevel(true)
+    else:
+        update_color()
 
     reset()
     
@@ -72,15 +74,15 @@ func get_hp_color(hp):
     match(hp):
         0:
             if is_visible_when_dead:
-                return Color(0.2, 0.2, 0.2, 0.5)
+                return Color(0.7, 0.1, 0.7, 0.5)
             else:
-                return Color(0.2, 0.2, 0.2, 0.0)
+                return Color(0.3, 0.1, 0.3, 0.0)
         1:
-            return Color(0.3, 0.3, 0.3)
+            return Color(0.7, 0.1, 0.7)
         2:
-            return Color(0.7, 0.7, 0.7)
+            return Color(1.0, 0.1, 1.0)
         _:
-            return Color(1.0, 1.0, 1.0)
+            return Color(1.0, 1.1, 1.0)
 
 func update_color():
     sprite.color = get_hp_color(health)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://src/runner/player_runner.gd" type="Script" id=1]
 [ext_resource path="res://src/animated_sprite.gd" type="Script" id=2]
@@ -10,9 +10,6 @@
 [ext_resource path="res://shaders/grayscale.gdshader" type="Shader" id=8]
 [ext_resource path="res://scenes/moves/special_heavy.tscn" type="PackedScene" id=9]
 
-[sub_resource type="CanvasItemMaterial" id=1]
-light_mode = 1
-
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 8 )
 
@@ -20,14 +17,10 @@ shader = ExtResource( 8 )
 atlas = ExtResource( 3 )
 region = Rect2( 56, 0, 14, 14 )
 
-[sub_resource type="CanvasItemMaterial" id=4]
-light_mode = 1
-
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 16, 24 )
 
 [node name="player" type="KinematicBody2D"]
-material = SubResource( 1 )
 z_index = 1
 collision_layer = 2
 collision_mask = 257
@@ -43,12 +36,11 @@ texture = SubResource( 3 )
 region_rect = Rect2( 0, 0, 56, 56 )
 
 [node name="sprite" type="AnimatedSprite" parent="."]
-material = SubResource( 4 )
 scale = Vector2( 4, 4 )
 z_index = 1
 frames = ExtResource( 7 )
 animation = "idle"
-frame = 3
+frame = 1
 playing = true
 offset = Vector2( -0.5, -0.5 )
 script = ExtResource( 2 )
