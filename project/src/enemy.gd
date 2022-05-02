@@ -99,6 +99,9 @@ func hurt(from, dmg = 1):
         is_alive = false
 
     # fade enemy color
+    if !is_alive:
+        tween.interpolate_property(self, "modulate:a", 1.0, 0.0, 0.2)
+
     tween.interpolate_property(sprite, "color",
         get_hp_color(health + 1), get_hp_color(health), 0.2
     )

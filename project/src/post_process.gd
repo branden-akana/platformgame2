@@ -7,16 +7,16 @@
 #===============================================================================
 
 extends Node2D
+tool
 
 export (Array, Texture) var palettes
-export var current_palette = 0
+export var current_palette = 0 setget change_palette
 
 var palette_tween
-var shader
+onready var shader = $"2_retrorizer/rect"
 
 func _ready():
     palette_tween = Util.new_tween(self)
-    shader = $"retrorizer/rect"
 
 func set_palette(idx):
     idx = idx % len(palettes)
@@ -46,3 +46,6 @@ func change_palette(idx, time = 0.5):
     yield(palette_tween, "tween_all_completed")
 
     current_palette = idx
+
+    if Engine.editor_hint:
+        property_list_changed_notify()

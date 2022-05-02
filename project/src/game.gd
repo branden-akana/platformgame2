@@ -412,6 +412,7 @@ func get_fg2_container() -> ViewportContainer:
 
 # Free all the children in foreground layer 2.
 func clear_fg2():
+    return
     for child in get_fg2().get_children():
         get_fg2().remove_child(child)
         child.queue_free()
@@ -425,6 +426,7 @@ func get_fg3_container() -> ViewportContainer:
 
 # Free all the children in foreground layer 2.
 func clear_fg3():
+    return
     for child in get_fg3().get_children():
         get_fg3().remove_child(child)
         child.queue_free()

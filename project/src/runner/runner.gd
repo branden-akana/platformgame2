@@ -266,7 +266,7 @@ func _process(_delta):
     #     grapple_line.visible = false
 
     # pixel snap the sprite's position
-    sprite.position = Util.gridsnap(position, 4)
+    sprite.position = Util.gridsnap(position, 4, false)
 
 #================================================================================
 # PHYSICS LOOP

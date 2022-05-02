@@ -15,6 +15,7 @@ render_mode skip_vertex_transform;
 // texture params
 
 uniform bool screen = true;
+uniform bool subpixel_fix = false;
 
 // pixelation params
 
@@ -34,6 +35,7 @@ uniform float palette_blend = 0.0;
 // noise params
 
 uniform float noise_strength = 0.015;
+uniform float noise_speed = 10.0;
 
 // "random" number generator
 float rand(vec2 co) {
@@ -56,17 +58,19 @@ void fragment() {
 
     // pixelize screen
     // =========================================================================
-      
     vec2 pixel_uv;
-      
+
     if (antialiased) {
         
         vec2 screen_ratio;
         if (screen) { screen_ratio = get_pixel_ratio(pixel_size, SCREEN_TEXTURE); }
         else { screen_ratio = get_pixel_ratio(pixel_size, TEXTURE); }
         
-        pixel_uv = (floor(uv / screen_ratio) * screen_ratio) + (screen_ratio / 2.0);
-        //pixel_uv = (floor(uv / screen_ratio) * screen_ratio);
+        if (subpixel_fix) {
+            pixel_uv = (floor(uv / screen_ratio) * screen_ratio) + (screen_ratio / 2.0);
+        } else {
+            pixel_uv = (floor(uv / screen_ratio) * screen_ratio); 
+        }
         
         if (screen) { COLOR = textureLod(SCREEN_TEXTURE, pixel_uv, 0.0); }
         else { COLOR = textureLod(TEXTURE, pixel_uv, 0.0); }
@@ -83,8 +87,8 @@ void fragment() {
     // =========================================================================
     
     //COLOR = mix(COLOR, vec4(vec3(rand(pixel_uv + rand(vec2(TIME)))), 1.0), 0.03);
-    float n = abs(rand(pixel_uv + rand(vec2(floor(TIME * 10.0)))));
-    //n = clamp(n, 0.0, 1.0);
+    float n = abs(rand(pixel_uv + rand(vec2(floor(TIME * noise_speed)))));
+    n = clamp(n, 0.0, 1.0);
     COLOR = mix(COLOR, COLOR + vec4(vec3(n), 1.0), noise_strength);
     
     // color palette

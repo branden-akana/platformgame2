@@ -10,6 +10,7 @@ render_mode skip_vertex_transform;
 // texture params
 
 uniform bool screen = true;
+uniform bool subpixel_fix = false;
 
 // pixelation params
 
@@ -55,8 +56,12 @@ void fragment() {
     if (screen) { screen_ratio = get_pixel_ratio(pixel_size, SCREEN_TEXTURE); }
     else { screen_ratio = get_pixel_ratio(pixel_size, TEXTURE); }
     
-    //vec2 pixel_uv = (floor(SCREEN_UV / screen_ratio) * screen_ratio) + (screen_ratio / 2.0);
-    pixel_uv = (floor(uv / screen_ratio) * screen_ratio);
+    if (subpixel_fix) {
+        pixel_uv = (floor(uv / screen_ratio) * screen_ratio) + (screen_ratio / 2.0);
+    }
+    else {
+        pixel_uv = (floor(uv / screen_ratio) * screen_ratio);
+    }
     
     if (screen) { color_aa = textureLod(SCREEN_TEXTURE, pixel_uv, 0.0); }
     else { color_aa = textureLod(TEXTURE, pixel_uv, 0.0); }
