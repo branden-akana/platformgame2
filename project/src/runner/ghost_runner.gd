@@ -11,6 +11,7 @@ var replay = null
 var initial_conditions = null
 var replay_frames = null
 var pos_frames = null
+var last_tick = 0
 
 var playing = false
 
@@ -27,6 +28,7 @@ func _ready():
 
 func load_replay(new_replay):
     replay = new_replay
+    last_tick = replay.input_frames.keys().max()
 
 # stop playing this ghost
 func stop():
@@ -66,11 +68,12 @@ func pre_process(_delta):
         var action_map = replay.input_frames[tick]
         for action in action_map:
             input.update_action(action, action_map[action])
+    elif tick > last_tick and not replay_finished:
+        print("[ghost] reached end of replay (tick = %s)" % tick)
+        replay_finished = true
+        emit_signal("replay_finish")
     else:
-        if not replay_finished:
-            print("[ghost] reached end of replay")
-            replay_finished = true
-            emit_signal("replay_finish")
+        print("[ghost] missing tick: %s" % tick)
 
     # else:
     #     restart()
