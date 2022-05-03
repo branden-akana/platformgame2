@@ -7,22 +7,39 @@
 #===============================================================================
 class_name Replay
 
-var start_position      # the runner's starting position
-var start_velocity      # the runner's starting velocity
-var start_state_type    # the runner's starting state
-var start_input         # the init state of the runner's input
 
-var initial_conditions
-var input_frames
-var pos_frames
+# how often (in ticks) to sync the runner
+# with the replay during playback
+const SYNC_INTERVAL = 20
 
-# Create a new replay.
-func init(init_conds, input_frames_, pos_frames_):
+var b_ready_for_playback = false
 
-    start_position = init_conds.position
-    start_velocity = init_conds.velocity
-    start_state_type = init_conds.state_type
-    start_input = init_conds.input
+# the runner's starting position
+var start_position      
 
-    input_frames = input_frames_
-    pos_frames = pos_frames_
+# the runner's starting velocity
+var start_velocity      
+
+# the runner's starting state
+var start_state_type    
+
+# the init state of the runner's input
+var start_input         
+
+var input_frames = {}
+var sync_frames = {}
+
+
+# record this runner's state on n tick
+func record_tick(runner, n):
+    # duplicate this runner's input action map
+    # (map of current inputs)
+    input_frames[n] = runner.input.action_map.duplicate()
+
+    if n % SYNC_INTERVAL == 0:
+        sync_frames[n] = [runner.position, runner.velocity]
+
+
+# mark this recording as ready for playback
+func stop_recording():
+    b_ready_for_playback = true

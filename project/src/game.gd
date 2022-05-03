@@ -10,7 +10,6 @@ signal post_ready
 const PostProcessor = preload("res://scenes/post_process.tscn")
 const Textbox = preload("res://scenes/textbox.tscn")
 const Level_TestHub = preload("res://scenes/levels/test_hub.tscn")
-const GhostPlayer = preload("res://scenes/ghost_player.tscn")
 const PlayerRunner = preload("res://scenes/player.tscn")
 
 var frame: int = 0
@@ -43,18 +42,18 @@ var current_room = null setget set_current_room
 # used to draw sprite text
 onready var spritefont = SpriteLabel.new()
 
+onready var replay_manager = ReplayManager.new()
+
 # flags
 var practice_mode = false
 var is_recording = true   # if true, record the player
 var is_in_menu = false    # if true, remove control from the player
-var replay = null         # ref to the last saved replay
-var replay_ghost = null   # ref to the ghost that plays replays
+
 
 func _ready():
-    
-
-
     add_child(spritefont)
+
+    replay_manager.init(self)
 
     # Game initialization stuff
 
@@ -106,7 +105,7 @@ func reinitialize_game():
 
     # reset best time / ghost
     clear_best_times()
-    replay_clear()
+    replay_manager.clear_playback()
 
     restart_player()
     restart_level()
@@ -115,7 +114,7 @@ func reinitialize_game():
 func restart_level():
 
     # stop replay recording
-    replay_stop_recording()
+    replay_manager.stop_recording()
 
     # reset stats / timers
     num_deaths = 0
@@ -129,8 +128,8 @@ func restart_level():
     get_camera().init()
 
     # start replay recording and playback
-    replay_start_recording()
-    replay_playback_start()
+    replay_manager.start_recording()
+    replay_manager.start_playback()
     
     emit_signal("level_restarted")
 
@@ -403,7 +402,7 @@ func stop_timer():
         print("[timer] new best time recorded")
         time_best = time
         # create a new ghost replay
-        replay_save()
+        replay_manager.save_recording()
 
 # Reset the ingame timer
 func reset_timer():
@@ -492,60 +491,6 @@ func unpause(node):
 
 func is_paused():
     return len(game_pause_requests) > 0
-
-# Replay / Ghost functions
-#===============================================================================
-
-# Start recording a replay.
-func replay_start_recording():
-    get_player().clear_recorded_data()
-    is_recording = true
-    print("[demo] recording started")
-    debug_ping("recording started")
-
-# Stop recording a replay.
-func replay_stop_recording():
-    is_recording = false
-    print("[demo] recording stopped")
-    debug_ping("recording stopped")
-
-func replay_save():
-    replay = get_player().export_replay()
-    print("[demo] new replay saved! (%d frames)" % len(replay.input_frames))
-    print("    position: %s" % replay.start_position)
-    print("    velocity: %s" % replay.start_velocity)
-    print("    state: %s" % replay.start_state_type)
-    debug_ping("recording saved")
-
-# Start playback of the last replay (using a ghost).
-func replay_playback_start():
-    if is_instance_valid(replay):
-        print("[demo] playback started")
-
-        if not is_instance_valid(replay_ghost):
-            print("[ghost] creating new ghost")
-            replay_ghost = GhostPlayer.instance()
-            $"/root/main".add_child(replay_ghost)
-
-        replay_ghost.load_replay(replay)
-        replay_ghost.restart()
-    else:
-        print("[demo] no replay to playback!")
-
-func replay_playback_stop():
-    print("[demo] playback stopped")
-    if is_instance_valid(replay_ghost):
-        replay_ghost.stop()
-
-# Stop playback.
-func replay_clear():
-    print("[demo] recording cleared")
-    replay = null
-    if is_instance_valid(replay_ghost):
-        print("[ghost] deleting ghost")
-        replay_ghost.queue_free()
-
-
 
 # Debug functions
 #===============================================================================

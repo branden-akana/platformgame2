@@ -52,9 +52,9 @@ func pre_process(_delta):
     if not playing:
         return
 
-    if tick in replay.pos_frames:
-        var expected_pos = replay.pos_frames[tick][0]
-        var expected_vel = replay.pos_frames[tick][1]
+    if tick in replay.sync_frames:
+        var expected_pos = replay.sync_frames[tick][0]
+        var expected_vel = replay.sync_frames[tick][1]
         var delta_pos = position.distance_to(expected_pos)
         # var delta_vel = velocity.distance_to(expected_vel)
         # print("Frame %d: delt pos = %0.2f, delt vel = %0.2f" % [tick, delta_pos, delta_vel])
@@ -71,6 +71,7 @@ func pre_process(_delta):
     elif tick > last_tick and not replay_finished:
         print("[ghost] reached end of replay (tick = %s)" % tick)
         replay_finished = true
+        playing = false
         emit_signal("replay_finish")
     else:
         print("[ghost] missing tick: %s" % tick)

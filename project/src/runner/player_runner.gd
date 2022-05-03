@@ -1,17 +1,11 @@
 extends Runner
 class_name PlayerRunner
 
-var initial_conditions = null
-var replay_frames = {}
-
-# frames where the player's pos and vel are stored,
-# used to check for ghost replay deviation
-var pos_frames = {}
+# the currently recording replay
+var replay = null
 
 # frames where a signal should be sent
 var signal_frames = {}
-
-var fix_interval = 20
 
 var ghost = null
 
@@ -121,17 +115,9 @@ func pre_process(delta):
         var value = Input.get_action_strength(key)
         input.update_action(key, value)
 
-    # record initial conditions (position, velocity, etc.)
-    if initial_conditions == null:
-        initial_conditions = get_current_conditions()
-
+    # record this tick into the replay
     if Game.is_recording:
-        # record pos/vel periodically (for replay pos checking)
-        if tick % fix_interval == 0:
-            pos_frames[tick] = [position, velocity]
-
-        # record current inputs for this frame
-        replay_frames[tick] = input.action_map.duplicate()
+        replay.record_tick(self, tick)
 
 # Do an animated restart
 func player_restart():
@@ -141,29 +127,9 @@ func hurt(damage = 100, respawn_point = null):
     Game.call_with_fade_transition(self, "_hurt", [damage, respawn_point])
     # .hurt(damage, respawn_point)
 
-func get_current_conditions():
-    var conditions = RunnerInitialState.new()
-    conditions.position = position
-    conditions.velocity = velocity
-    conditions.state_type = sm.current_type
-    conditions.input = input.duplicate()
-    return conditions
-
-# Clear all recorded data of the player.
-# Use this before starting a recording.
-func clear_recorded_data():
-    initial_conditions = null
-    replay_frames = {}
-    pos_frames = {}
-
 func respawn(pos):
     .respawn(pos)
     if pos == Game.get_start_point():
         Game.restart_level()
     else:
         Game.restart_room()
-
-func export_replay():
-    var replay = Replay.new()
-    replay.init(initial_conditions, replay_frames, pos_frames)
-    return replay
