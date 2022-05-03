@@ -87,8 +87,14 @@ __meta__ = {
 [node name="version" parent="." instance=ExtResource( 1 )]
 modulate = Color( 1, 1, 1, 0.0784314 )
 material = SubResource( 1 )
-position = Vector2( 16, 632 )
-text = "v0.3.1"
+position = Vector2( 1094, 671 )
+text = "v0.4.0"
+
+[node name="tick" parent="." instance=ExtResource( 1 )]
+modulate = Color( 1, 0.984314, 0, 0.501961 )
+material = SubResource( 1 )
+position = Vector2( 16, 624 )
+text = "0"
 
 [node name="fps" parent="." instance=ExtResource( 1 )]
 modulate = Color( 0, 1, 0, 0.5 )

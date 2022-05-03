@@ -44,9 +44,6 @@ func _ready():
     connect("enemy_hit", self, "on_enemy_hit")
     connect("enemy_killed", self, "on_enemy_killed")
 
-    # sprite setup
-    Game.reparent_to_fg1(sprite)
-
 # Start an effect where the player flashes
 func play_flash_effect():
     flash_tween.interpolate_property(sprite, "modulate:g", 10.0, 1.0, 0.2)

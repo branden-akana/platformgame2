@@ -40,12 +40,6 @@ func fade_in(time):
         Color(0.0, 0.0, 0.0, 1.0),
         Color(0.0, 0.0, 0.0, 0.0),
         time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-    tween.interpolate_property(Game.get_fg1_container(), "modulate:a", 0, 1,
-        time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-    tween.interpolate_property(Game.get_fg2_container(), "modulate:a", 0, 1,
-        time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-    tween.interpolate_property(Game.get_fg3_container(), "modulate:a", 0, 1,
-        time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
     tween.start()
     yield(tween, "tween_all_completed")
     emit_signal("fade_in_finished")
@@ -53,12 +47,6 @@ func fade_in(time):
 
 func fade_out(time):
     tween.interpolate_property($fade, "color:a", 0, 1,
-        time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-    tween.interpolate_property(Game.get_fg1_container(), "modulate:a", 1, 0,
-        time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-    tween.interpolate_property(Game.get_fg2_container(), "modulate:a", 1, 0,
-        time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-    tween.interpolate_property(Game.get_fg3_container(), "modulate:a", 1, 0,
         time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
     tween.start()
     yield(tween, "tween_all_completed")

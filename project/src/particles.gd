@@ -30,7 +30,6 @@ func play(scene, parent = get_node("/root/main"), params = {}):
     timer.connect("timeout", self, "on_effect_finished", [effect])
 
     effect.emitting = true
-    Game.reparent_to_fg3(effect)
     return effect
 
 func play_anim(scene, parent = get_node("/root/main")):

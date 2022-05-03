@@ -5,7 +5,9 @@ signal unpaused
 signal level_restarted
 signal level_cleared
 signal scene_loaded
+signal post_ready
 
+const PostProcessor = preload("res://scenes/post_process.tscn")
 const Textbox = preload("res://scenes/textbox.tscn")
 const Level_TestHub = preload("res://scenes/levels/test_hub.tscn")
 const GhostPlayer = preload("res://scenes/ghost_player.tscn")
@@ -49,6 +51,8 @@ var replay = null         # ref to the last saved replay
 var replay_ghost = null   # ref to the ghost that plays replays
 
 func _ready():
+    
+
 
     add_child(spritefont)
 
@@ -60,7 +64,7 @@ func _ready():
     Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
     print("Feel free to minimize this window! It needs to be open for some reason to avoid a crash.")
-
+    
     # initialize menu
     menu = HUD.get_node("main_menu")
 
@@ -78,6 +82,22 @@ func _ready():
     connect("level_cleared", self, "on_level_clear")
 
     reinitialize_game()
+    
+    # wait for editor nodes to free
+    yield(free_editor_nodes(), "completed")
+    
+    # initialize post process manager
+    var pp = PostProcessor.instance()
+    $"/root/main".add_child(pp)
+    
+    emit_signal("post_ready")
+    
+    
+func free_editor_nodes():
+    # remove all "editor only" nodes
+    for node in get_tree().get_nodes_in_group("editor_only"):
+        yield(node, "tree_exiting")
+
 
 # Initialize the game. Use after loading a new level.
 func reinitialize_game():
@@ -112,9 +132,6 @@ func restart_level():
     replay_start_recording()
     replay_playback_start()
     
-    # reparent objects to respective canvaslayers
-    reparent_all()
-
     emit_signal("level_restarted")
 
 # Restart the current room.
@@ -137,12 +154,6 @@ func load_scene(level):
     # debug_log("finished!")
 
 func _load_scene(level_path):
-
-    # debug_log("clearing children")
-    
-    # clear all objects in other viewports
-    clear_fg2()
-    clear_fg3()
 
     # debug_log("loading new scene")
 
@@ -179,9 +190,22 @@ func get_level() -> Level:
 func get_rooms() -> Array:
     return get_tree().get_nodes_in_group("room")
 
-func set_current_room(room):
+# Sets the current room to focus on.
+#
+# The camera will now be bound within this room.
+# If smooth_transition is true, briefly pause the game and transition
+# the camera to the new room. Otherwise, move the camera to the
+# new room instantly.
+func set_current_room(room, do_transition = true):
     # print("entered new room")
+    # NOOP if screen is invalid or is already current screen
+    if room == null or current_room == room: return
     current_room = room
+
+    # lock camera to this screen area
+    var bounds = room.get_bounds()
+    get_camera().set_bounds(bounds[0], bounds[1], do_transition, room.palette_idx)
+
 
 # Attempt to find a room at this position. If none is found, return null.
 func get_room_at_point(pos):
@@ -217,7 +241,7 @@ func get_room_at_node(node):
 
 func on_room_entered(room, player):
     print("[game] new room entered %s" % room)
-    get_camera().set_room_focus(room)
+    set_current_room(room)
 
 func on_level_clear():
     print("[game] level cleared!")
@@ -393,96 +417,11 @@ func clear_best_times():
     time_best = INF
     HUD.get_node("control/best").text = ""
 
-# Palettes / Viewports
+# Palettes / Post Processing
 # ========================================================================
-
-# Foreground 1: used by the player
-func get_fg1():
-    return $"/root/main/post_process/fg1/container/viewport"
-
-func get_fg1_container() -> ViewportContainer:
-    return $"/root/main/post_process/fg1/container" as ViewportContainer
-
-# Foreground 2: used for enemies
-func get_fg2():
-    return $"/root/main/post_process/fg2/container/viewport"
-
-func get_fg2_container() -> ViewportContainer:
-    return $"/root/main/post_process/fg2/container" as ViewportContainer
-
-# Free all the children in foreground layer 2.
-func clear_fg2():
-    return
-    for child in get_fg2().get_children():
-        get_fg2().remove_child(child)
-        child.queue_free()
-
-# Foreground 3: ???
-func get_fg3():
-    return $"/root/main/post_process/fg3/container/viewport"
-
-func get_fg3_container() -> ViewportContainer:
-    return $"/root/main/post_process/fg3/container" as ViewportContainer
-
-# Free all the children in foreground layer 2.
-func clear_fg3():
-    return
-    for child in get_fg3().get_children():
-        get_fg3().remove_child(child)
-        child.queue_free()
-    
-func reparent_to_viewport(node, viewport):
-
-    return
-
-    if not node: return  # ignore null nodes
-    if node.get_parent() == viewport: return
-
-    var copy = node
-    if node is TileMap:
-        # create a copy instead of reparenting to retain collisions
-        copy = node.duplicate()
-        node.modulate = Color(0, 0, 0, 0)
-        copy.visible = true
-
-    if copy.get_parent():
-        copy.get_parent().call_deferred("remove_child", copy)
-        yield(get_tree(), "idle_frame")
-    
-    # shift copy to fix sub-pixels
-    if node.is_inside_tree():
-        copy.position = node.global_position + Vector2(2, -2)
-        copy.set_as_toplevel(true)
-        
-    viewport.add_child(copy)
-
-
-# Reparent this node to FG1. Note that this node's position must now be handled manually.
-func reparent_to_fg1(node):
-    reparent_to_viewport(node, get_fg1())
-
-
-# Reparent this node to FG2. Note that this node's position must now be handled manually.
-func reparent_to_fg2(node):
-    reparent_to_viewport(node, get_fg2())
-
-
-func reparent_to_fg3(node):
-    reparent_to_viewport(node, get_fg3())
-
-func reparent_all():
-    for node in get_tree().get_nodes_in_group("LAYER_FG1"):
-        reparent_to_fg1(node)
-
-    for node in get_tree().get_nodes_in_group("LAYER_FG2"):
-        reparent_to_fg2(node)
-
-    for node in get_tree().get_nodes_in_group("LAYER_FG3"):
-        reparent_to_fg3(node)
 
 func get_post_processor():
     return $"/root/main/post_process"
-    
 
 # Start Point / Checkpoints
 # ========================================================================

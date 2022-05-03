@@ -1,26 +1,39 @@
 extends Node2D
 class_name GameCamera
 
+# how much to smooth the camera's movements
 export var smoothing: float = 10;
-export var snapping: float = 4.0;
+
+# the amount of units to snap the camera to.
+# this avoids any rendering issues with the pixel shader
+export var pixel_snap: float = 4.0;
+
+# the amount of offset to apply to the camera
 export (Vector2) var offset = Vector2(0.0, 0.0);
+
+# the path to the target node to follow
 export (NodePath) var target_path;
 
 # camera bounds
-# =============
+# -------------
+# these two vectors define an area in which
+# the camera is locked inside such that anything
+# outside the area will not be visible to the player
 
-# top-left corner of region
+# top-left corner of area
 var min_position = Vector2(0, 0)
-# bottom-right corner of region
+# bottom-right corner of area
 var max_position = Vector2(1280, 720)
 
-# tween to use to move focus
+# tween for focus change transitions
 var transition_tween = Tween.new()
 
-var focus = Vector2.ZERO setget set_camera_focus, get_camera_focus
-
+# tween for the screen shake effect
 var shake_tween = Tween.new()
 var shake_size = 0.0
+
+# the point the camera will be looking at (center of screen)
+var focus = Vector2.ZERO setget set_camera_focus, get_camera_focus
 
 func _ready():
     add_child(transition_tween)
@@ -32,26 +45,39 @@ func _ready():
 func init():
     # print("[camera] init")
 
+    # follow the player by default
     set_target(Game.get_player().get_path())
     yield(Game.get_player(), "respawned")
-    set_room_focus(get_room_at_target(), false)
+
+    # try to get the screen the player is on
+    Game.set_current_room(get_room_at_target(), false)
     transition_tween.reset_all()
 
+
+# get the size of the window as a vector
 func get_window_size() -> Vector2:
     return get_viewport().size
     # return OS.window_size
 
-func get_target():
-    return get_node(target_path)
 
+# get the node that this camera is following
+func get_target():
+    return get_node_or_null(target_path)
+
+
+# get the position of the node that this camera is following
+# (adjusting to center the node on screen)
 func get_target_camera_pos() -> Vector2:
     # the camera origin is relative to the top-left corner of the screen,
     # so shift the position by half the screen size to center it
     return get_target().position - (get_window_size() / 2)
 
+
+# set the node for the camera to follow
 func set_target(nodepath):
     print("[camera] setting target to %s" % nodepath)
     target_path = nodepath
+
 
 # Clamp the camera focus to fit within the current bounds.
 # Returns the adjusted focus.
@@ -60,41 +86,34 @@ func clamp_focus(vec):
     var mx = max_position - get_window_size()
     return Vector2(clamp(vec.x, mn.x, mx.x), clamp(vec.y, mn.y, mx.y))
 
+
 # Return true if the camera focus is inside the current bounds.
 func is_in_bounds(vec, mn, mx):
     return (mn.x >= vec.x and vec.x >= mx.x) and (mn.y >= vec.y and vec.y >= mx.y)
 
-# Sets the current room to focus on.
-#
-# The camera will now be bound within this room.
-# If smooth_transition is true, briefly pause the game and transition
-# the camera to the new room. Otherwise, move the camera to the
-# new room instantly.
-func set_room_focus(room, smooth_transition = true):
-    if room == null or Game.current_room == room:
-        return
 
-    Game.current_room = room
-    var bounds = room.get_bounds()
 
-    min_position = bounds[0]
-    max_position = bounds[1]
+
+func set_bounds(tl_pos, br_pos, do_transition = true, color_palette = 0):
+
+    min_position = tl_pos
+    max_position = br_pos
 
     # print("new bounds: %s, %s" % bounds)
-    
     var to = clamp_focus(get_target_camera_pos())
 
-    if smooth_transition:
+    if do_transition:
         # print("[camera] moving camera with transition")
-        var tween_2 = Game.get_post_processor().change_palette(room.palette_idx)
+        var tween_2 = Game.get_post_processor().change_palette(color_palette)
         var tween_1 = move_focus(to, 0.5)
         yield(tween_1, "completed")
         yield(tween_2, "completed")
     else:
         # print("[camera] moving camera without transition")
-        Game.get_post_processor().change_palette(room.palette_idx, 0.2)
+        Game.get_post_processor().change_palette(color_palette, 0.2)
         move_focus(to)
         yield(get_tree(), "idle_frame")
+
 
 # Smoothly transition the origin of the camera to a specified location.
 #
@@ -130,13 +149,9 @@ func set_camera_focus(new_focus):
         focus = new_focus
 
         # pixel snap camera
-        var origin = (new_focus / snapping).floor() * snapping + Vector2(snapping/2, snapping/2);
-    
+        var origin = (new_focus / pixel_snap).floor() * pixel_snap + Vector2(pixel_snap/2, pixel_snap/2);
         target.get_viewport().canvas_transform.origin = -origin
-        # need to also set the origins of each viewport manually
-        #Game.get_fg1().canvas_transform.origin = -origin
-        #Game.get_fg2().canvas_transform.origin = -origin
-        #Game.get_fg3().canvas_transform.origin = -origin
+
 
 func _process(delta):
     

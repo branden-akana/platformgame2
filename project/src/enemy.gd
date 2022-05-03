@@ -22,7 +22,6 @@ var color_blend: float = 0.0
 # flags
 
 var is_alive = true
-
 var is_visible_when_dead = false
 
 # children
@@ -32,15 +31,6 @@ onready var tween = Tween.new()
 
 func _ready():
     add_child(tween)
-
-    if not Engine.editor_hint:
-        Game.reparent_to_fg2(sprite)
-        self.set_as_toplevel(true)
-        self.position += get_parent().global_position
-        sprite.set_as_toplevel(true)
-    else:
-        update_color()
-
     reset()
     
 func _process(delta):
@@ -57,7 +47,7 @@ func _process(delta):
         hit_elasticity -= delta
 
     # shift sprite in hit direction
-    sprite.position = position + lerp(Vector2.ZERO, hit_shift, ease(hit_elasticity / HIT_ELASTICITY, 3))
+    sprite.position = lerp(Vector2.ZERO, hit_shift, ease(hit_elasticity / HIT_ELASTICITY, 3))
 
 func set_max_health(max_hp):
     max_health = max_hp
@@ -66,6 +56,7 @@ func set_max_health(max_hp):
 func reset():
     health = max_health
     is_alive = true
+    modulate.a = 1.0
 
     if is_instance_valid(sprite):
         update_color()

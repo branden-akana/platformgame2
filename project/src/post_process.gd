@@ -18,6 +18,7 @@ onready var shader = $"2_retrorizer/rect"
 func _ready():
     palette_tween = Util.new_tween(self)
 
+
 func set_palette(idx):
     idx = idx % len(palettes)
     shader.get_material().set_shader_param("palette_a", palettes[idx])

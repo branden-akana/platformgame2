@@ -17,7 +17,7 @@ var b_rotate_palettes = true
 onready var title_origin = $title.position
 
 func _ready():
-    yield(get_tree().root, "ready")
+    yield(Game, "post_ready")
 
     show()
 

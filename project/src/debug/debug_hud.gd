@@ -14,3 +14,6 @@ func _ready():
 func update_fps():
     $fps.text = "%d fps" % Engine.get_frames_per_second()
     
+func _physics_process(delta):
+    $tick.text = Game.get_player().tick
+    
