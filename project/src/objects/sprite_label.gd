@@ -9,7 +9,7 @@ class_name SpriteLabel
 tool
 
 # a pre-loaded default spritesheet
-const SMALL_FONT = preload("res://assets/spritefont.png")
+const SMALL_FONT = preload("res://assets/spritesheets/spritefont.png")
 
 # a mapping of characters to their location on the spritesheet
 const CHARS = (

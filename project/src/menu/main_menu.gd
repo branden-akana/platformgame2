@@ -22,7 +22,7 @@ func _ready():
     show()
 
     while b_rotate_palettes:
-        var pp = Game.get_post_processor()
+        var pp = Game.get_display_manager()
         var next_palette = (pp.current_palette + 1) % len(pp.palettes)
         yield(pp.change_palette(next_palette, 5), "completed")
 

@@ -78,7 +78,7 @@ func process(delta):
         if runner.lastcoin:
             #sm.set_state(StateMachine.State.GRAPPLE)
             return
-        elif not current_type in [State.ATTACK, State.SPECIAL]:
+        elif not get_current_type() in [State.ATTACK, State.SPECIAL]:
             sm.goto_attack()
         return
 
@@ -170,7 +170,7 @@ func walljump_if_able():
 
     if left_1 and left_2 and input.is_action_just_pressed("key_right"):
         runner.jump(jump_mult, true, runner.MAX_SPEED)
-        update_facing()
+        runner.facing = Direction.RIGHT
         runner.emit_signal("walljump_right")
 
     # raycast right (top and bottom rays)
@@ -180,7 +180,7 @@ func walljump_if_able():
 
     if right_1 and right_2 and input.is_action_just_pressed("key_left"):
         runner.jump(jump_mult, true, -runner.MAX_SPEED)
-        update_facing()
+        runner.facing = Direction.LEFT
         runner.emit_signal("walljump_left")
 
 # Check if the player wants to fastfall.
@@ -273,7 +273,7 @@ func can_start():
     return true
 
 # called at the beginning of the state
-func on_start(state_name):
+func on_start(state_from):
     pass
 
 # called every physics process
@@ -281,6 +281,6 @@ func on_update(_delta: float):
     pass
 
 # called at the end of the state
-func on_end():
+func on_end(state_to):
     pass
 

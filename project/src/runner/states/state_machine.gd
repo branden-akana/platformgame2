@@ -52,7 +52,7 @@ func set_state(state_type):
         if new_state.can_start():
             # Call on_end() of previous state
             if current_state:
-                current_state.on_end()
+                current_state.on_end(state_type)
             current_type = state_type
             current_state = states[current_type]
             current_state.time = 0.0
@@ -89,9 +89,13 @@ func goto_idle_or_dash():
 # Set the runner state to either idle, running, or airborne.
 func goto_idle_or_run():
     if runner.is_on_floor():
-        if round(current_state.input.get_axis().x) == 0:
-            goto_idle()
-        else:
+        if current_state.is_facing_forward():
             goto_running()
+        else:
+            goto_idle()
+        # if round(current_state.input.get_axis().x) == 0:
+        #     goto_idle()
+        # else:
+        #     goto_running()
     else:
         goto_airborne()

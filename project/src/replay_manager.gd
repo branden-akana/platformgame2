@@ -18,14 +18,7 @@ func init(game):
 
 # create a new replay of a runner to be recorded
 func create_replay(runner):
-    var replay = load("res://src/replay.gd").new()
-
-    replay.start_position = runner.position
-    replay.start_velocity = runner.velocity
-    replay.start_state_type = runner.sm.current_type
-    replay.start_input = runner.input.duplicate()
-
-    return replay
+    return Replay.new(runner)
 
 
 # Start recording a replay.

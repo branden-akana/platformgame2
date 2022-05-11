@@ -30,6 +30,13 @@ var input_frames = {}
 var sync_frames = {}
 
 
+func _init(runner):
+    start_position = runner.position
+    start_velocity = runner.velocity
+    start_state_type = runner.sm.current_type
+    start_input = runner.input.duplicate()
+
+
 # record this runner's state on n tick
 func record_tick(runner, n):
     # duplicate this runner's input action map

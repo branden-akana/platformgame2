@@ -1,8 +1,10 @@
 [gd_resource type="ShaderMaterial" load_steps=4 format=2]
 
-[ext_resource path="res://assets/palette.png" type="Texture" id=1]
-[ext_resource path="res://assets/palette2.png" type="Texture" id=2]
 [ext_resource path="res://shaders/retro.gdshader" type="Shader" id=3]
+
+[sub_resource type="StreamTexture" id=1]
+
+[sub_resource type="StreamTexture" id=2]
 
 [resource]
 shader = ExtResource( 3 )
@@ -12,5 +14,5 @@ shader_param/antialiased = false
 shader_param/palette_layer = 0.25
 shader_param/palette_blend = 0.0
 shader_param/noise_strength = 0.015
-shader_param/palette_a = ExtResource( 1 )
-shader_param/palette_b = ExtResource( 2 )
+shader_param/palette_a = SubResource( 1 )
+shader_param/palette_b = SubResource( 2 )

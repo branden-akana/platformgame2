@@ -96,6 +96,12 @@ material = SubResource( 1 )
 position = Vector2( 16, 624 )
 text = "0"
 
+[node name="replay_tick" parent="." instance=ExtResource( 1 )]
+modulate = Color( 1, 0.329412, 0, 0.501961 )
+material = SubResource( 1 )
+position = Vector2( 16, 576 )
+text = "0"
+
 [node name="fps" parent="." instance=ExtResource( 1 )]
 modulate = Color( 0, 1, 0, 0.5 )
 material = SubResource( 1 )

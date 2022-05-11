@@ -4,6 +4,7 @@
 [ext_resource path="res://src/runner/ghost_runner.gd" type="Script" id=2]
 
 [node name="ghost_player" instance=ExtResource( 1 )]
+z_index = 0
 script = ExtResource( 2 )
 
 [node name="sprite" parent="." index="1"]

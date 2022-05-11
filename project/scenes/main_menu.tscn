@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://src/menu/main_menu.gd" type="Script" id=1]
 [ext_resource path="res://src/objects/sprite_label.gd" type="Script" id=2]
 [ext_resource path="res://assets/pixel.png" type="Texture" id=3]
+[ext_resource path="res://assets/palettes/sample.png" type="Texture" id=4]
 
 [sub_resource type="CanvasItemMaterial" id=2]
 light_mode = 1
@@ -74,3 +75,17 @@ margin_top = 79.0
 margin_right = 1185.0
 margin_bottom = 1079.0
 color = Color( 0.192157, 0.192157, 0.192157, 1 )
+
+[node name="sample" type="Sprite" parent="."]
+position = Vector2( 898, 610 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 4 )
+region_enabled = true
+region_rect = Rect2( 0, 20, 128, 40 )
+
+[node name="sample_2" type="Sprite" parent="."]
+position = Vector2( 322, 610 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 4 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 128, 16 )

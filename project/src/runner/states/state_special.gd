@@ -43,5 +43,5 @@ func on_update(delta):
     if !current_move.playing or (is_grounded and not runner.is_on_floor()):
         sm.goto_idle_or_dash()
 
-func on_end():
+func on_end(state_to):
     current_move.stop()

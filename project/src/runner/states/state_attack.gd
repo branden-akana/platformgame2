@@ -27,18 +27,22 @@ func on_start(_state_name):
     # check move facing direction
     update_facing()
 
+    # update animation
+    runner.sprite.animation = "attack"
+    runner.sprite.frame = 0
+
     # check which move to use
     var attack_direction = MoveDirection.FORWARD
     if round(axis.y) == -1: # aiming up
         attack_direction = MoveDirection.UP
+        runner.sprite.animation = "u_attack"
     elif not runner.is_on_floor() and round(axis.y) == 1: # aiming down
         attack_direction = MoveDirection.DOWN
+        runner.sprite.animation = "d_attack"
 
     current_move = moves[attack_direction]
     current_move.start()
 
-    runner.sprite.animation = "attack"
-    runner.sprite.frame = 0
     
     runner.emit_signal("attack")
 
@@ -64,6 +68,6 @@ func on_update(delta):
     if !current_move.playing or (is_grounded and not runner.is_on_floor()):
         sm.goto_idle_or_dash()
 
-func on_end():
+func on_end(state_to):
     current_move.stop()
     runner.ignore_gravity = false

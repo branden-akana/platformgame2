@@ -16,4 +16,5 @@ func update_fps():
     
 func _physics_process(delta):
     $tick.text = Game.get_player().tick
+    $tick.text = Game.get_player().tick
     

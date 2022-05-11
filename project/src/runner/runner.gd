@@ -180,7 +180,7 @@ func _ready():
     air_stall_timer.one_shot = true
     add_child(air_stall_timer)
 
-    sprite.set_as_toplevel(true)
+    #sprite.set_as_toplevel(true)
 
     $moveset.visible = true
 
@@ -266,7 +266,7 @@ func _process(_delta):
     #     grapple_line.visible = false
 
     # pixel snap the sprite's position
-    sprite.position = Util.gridsnap(position, 4, false)
+    #sprite.position = Util.gridsnap(position, 4, false)
 
 #================================================================================
 # PHYSICS LOOP
@@ -348,11 +348,15 @@ func jump(factor = 1.0, force = false, vel_x = null):
         # airdashes_left -= 1
 
     if sm.current_state is AirdashState:
-        velocity.y = -DASHJUMP_VELOCITY * factor
+        velocity.y = min(velocity.y, -DASHJUMP_VELOCITY * factor)
     else:
         velocity.y = -JUMP_VELOCITY * factor
 
     if not force: emit_signal("jump")
+
+    # reset jump animation 
+    if sprite.animation == "airborne":
+        sprite.frame = 0
         
     sm.goto_airborne()
 

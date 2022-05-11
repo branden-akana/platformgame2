@@ -4,15 +4,16 @@
 
 [sub_resource type="RectangleShape2D" id=1]
 resource_local_to_scene = true
-extents = Vector2( 64, 64 )
+extents = Vector2( 76, 116 )
 
 [node name="normal_up" instance=ExtResource( 1 )]
 cancel_gravity_on_hit = false
 
 [node name="sprite" parent="." index="0"]
-position = Vector2( 56, -56 )
-scale = Vector2( 6, 12 )
+position = Vector2( 80, 16 )
+scale = Vector2( 6, 24 )
+frame = 0
 
 [node name="collision" parent="0" index="0"]
-position = Vector2( 40, -72 )
+position = Vector2( 52, -20 )
 shape = SubResource( 1 )

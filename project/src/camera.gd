@@ -1,6 +1,9 @@
 extends Node2D
 class_name GameCamera
 
+# length of transition when moving between screens
+export var screen_transition_time = 0.5
+
 # how much to smooth the camera's movements
 export var smoothing: float = 10;
 
@@ -92,8 +95,14 @@ func is_in_bounds(vec, mn, mx):
     return (mn.x >= vec.x and vec.x >= mx.x) and (mn.y >= vec.y and vec.y >= mx.y)
 
 
-
-
+# Set the rectangle (world space) that the camera
+# will be bound to.
+#
+# If `do_transition` is true, the game will temporarily pause
+# and the camera will smoothly transition to its new bounds.
+#
+# If `color_palette` is given, the game's color palette
+# will also change to the new palette.
 func set_bounds(tl_pos, br_pos, do_transition = true, color_palette = 0):
 
     min_position = tl_pos
@@ -104,13 +113,13 @@ func set_bounds(tl_pos, br_pos, do_transition = true, color_palette = 0):
 
     if do_transition:
         # print("[camera] moving camera with transition")
-        var tween_2 = Game.get_post_processor().change_palette(color_palette)
-        var tween_1 = move_focus(to, 0.5)
+        var tween_2 = Game.get_display_manager().change_palette(color_palette)
+        var tween_1 = move_focus(to, screen_transition_time)
         yield(tween_1, "completed")
         yield(tween_2, "completed")
     else:
         # print("[camera] moving camera without transition")
-        Game.get_post_processor().change_palette(color_palette, 0.2)
+        Game.get_display_manager().change_palette(color_palette, 0.2)
         move_focus(to)
         yield(get_tree(), "idle_frame")
 

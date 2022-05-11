@@ -26,6 +26,8 @@ func on_update(delta):
 
     goto_airborne_if_not_grounded()
 
-func on_end():
+func on_end(state_to):
+    if state_to == State.IDLE:
+        runner.velocity.x = clamp(runner.velocity.x, -200, 200)
     # print("stopped running")
     runner.emit_signal("stop_walking")

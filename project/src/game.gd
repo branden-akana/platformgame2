@@ -7,7 +7,7 @@ signal level_cleared
 signal scene_loaded
 signal post_ready
 
-const PostProcessor = preload("res://scenes/post_process.tscn")
+const DisplayManager = preload("res://scenes/display_manager.tscn")
 const Textbox = preload("res://scenes/textbox.tscn")
 const Level_TestHub = preload("res://scenes/levels/test_hub.tscn")
 const PlayerRunner = preload("res://scenes/player.tscn")
@@ -86,7 +86,7 @@ func _ready():
     yield(free_editor_nodes(), "completed")
     
     # initialize post process manager
-    var pp = PostProcessor.instance()
+    var pp = DisplayManager.instance()
     $"/root/main".add_child(pp)
     
     emit_signal("post_ready")
@@ -419,7 +419,7 @@ func clear_best_times():
 # Palettes / Post Processing
 # ========================================================================
 
-func get_post_processor():
+func get_display_manager():
     return $"/root/main/post_process"
 
 # Start Point / Checkpoints
