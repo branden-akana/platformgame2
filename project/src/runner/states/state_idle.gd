@@ -10,8 +10,8 @@ func on_update(delta):
     # state behavior
     if is_active():
 
-        snap_down_to_ground(delta)
-        snap_up_to_ground(delta, 16)
+        #snap_down_to_ground(delta)
+        #snap_up_to_ground(delta, 16)
     
         var axis = input.get_axis()
         var effective_max_walk_speed = runner.WALK_MAX_SPEED * abs(axis.x)

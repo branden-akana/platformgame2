@@ -54,7 +54,7 @@ export var WALK_MAX_SPEED = 250
 export var AIRDASH_SPEED = 1200  # (mininum) speed at start of airdash
 export var AIRDASH_SPEED_END = 600  # speed at end of airdash
 export var AIRDASH_LENGTH = 9
-export var AIRDASH_WAVELAND_MARGIN = 20
+export var AIRDASH_WAVELAND_MARGIN = 32
 
 # jumping / gravity
 
@@ -128,7 +128,11 @@ var lastcoin = null
 # current physics tick. restarting sets this back to 0.
 var tick: int = 0
 
-var grounded = false setget set_grounded, is_grounded
+# if false, then vertical movement should be processed
+var b_is_grounded = true setget set_grounded, is_grounded
+
+# if true, then gravity should be applied
+var b_gravity_enabled = false
 
 # current player facing direction
 var facing: int = Direction.RIGHT
@@ -141,9 +145,6 @@ var no_effects = false
 
 # if true, runner can hit dead enemies
 var ignore_enemy_hp = false
-
-# if true, do not apply gravity to the runner (state-dependant)
-var ignore_gravity = false
 
 # number of jumps allowed to perform until the runner touches the floor
 var jumps_left = 1
@@ -227,6 +228,9 @@ func clear_coins():
     for child in get_children():
         if child is Coin:
             child.queue_free()
+            
+func get_current_state():
+    return sm.current_state
 
 #================================================================================
 # UPDATE LOOP (UPDATE VISUALS)
@@ -299,25 +303,99 @@ func _physics_process(delta):  # update input and physics
 
     sm.current_state.process(delta)
 
-    # apply velocity
-    velocity = move(velocity)
+    # apply gravity to velocity
+    if b_gravity_enabled:
+        apply_gravity(delta)
+
+    # apply final movement
+    velocity = move(delta, velocity)
     # velocity = move_and_slide(velocity, Vector2(0, -1), true)
 
     tick += 1
 
+
 func set_grounded(g, emit = true):
-    if not grounded and g and emit:
+    if not b_is_grounded and g and emit:
         emit_signal("land")
-    grounded = g
+    b_is_grounded = g
+
 
 func is_grounded():
-    return grounded
+    return b_is_grounded
 
-func move(velocity):
-    var vel = move_and_slide_with_snap(velocity, Vector2(0, 8), Vector2(0, -1), true)
+
+func move(delta, velocity):
+
+    var new_velocity
+    if is_grounded():
+        new_velocity = move_and_slide_with_snap(
+            Vector2(velocity.x, 0),
+            Vector2.DOWN,
+            Vector2.UP)
+    else:
+        new_velocity = move_and_slide_with_snap(
+            velocity,
+            Vector2.DOWN,
+            Vector2.UP)
+
+    # lazy ledge alignment
+
+    var collision = $test_body_bot.move_and_collide(Vector2(velocity.x * delta, 0), true, true, true)
+    var top_collision = $test_body_top.move_and_collide(Vector2(velocity.x * delta, 0), true, true, true)
+    
+    if collision and collision.normal != Vector2.UP and not top_collision:
+        var collider = collision.get_collider()
+        var shape_idx = collision.get_collider_shape_index()
+
+        var owner_idx = collider.shape_find_owner(shape_idx)
+        var tilemap = collider.shape_owner_get_owner(owner_idx)
+        #var shape = collider.shape_owner_get_shape(owner_idx, shape_idx)
+        
+        var tilepos = tilemap.map_to_world(
+            tilemap.world_to_map(tilemap.to_local(collision.position))
+        ) * 4
+        
+        # align y-axis to ledge if within margin
+        var margin = round(position.y - tilepos.y)
+        print("ledge margin = %s" % margin)
+        if position.y != tilepos.y and margin <= AIRDASH_WAVELAND_MARGIN:
+            position.y = tilepos.y
+            position.x += velocity.x * delta
+            print("snapped to y=%s" % tilepos.y)
+
     position = position.round()
-    # velocity = vel
-    return vel
+    return new_velocity
+
+
+
+# Snap to platforms, forcing a grounded state when 
+# airdashing slightly under them by a set margin.
+func snap_up_to_ground(delta, margin = AIRDASH_WAVELAND_MARGIN):
+    # if is_grounded(): ray_length = 2
+
+    # cast a ray down below the runner to try and detect the floor
+    var lray = Util.intersect_ray(self, Vector2(-24, 32 - margin), Vector2.DOWN * margin)
+    var rray = Util.intersect_ray(self, Vector2(24, 32 - margin), Vector2.DOWN * margin)
+
+    # only apply snap when runner is moving perfectly horizontal
+    if velocity.y >= 0 and (lray or rray):
+        print("detected below floor")
+
+        # move runner up then down to attempt snap to floor
+        if lray:
+            position.y = lray.position.y
+        else:
+            position.y = rray.position.y
+        # move_and_collide(Vector2.UP * margin * 2)
+        # move_and_slide(Vector2.DOWN * margin * 2 / delta, Vector2.UP)
+
+        # set runner's state if on floor
+        # if is_on_floor():
+            # set_grounded(true, false)
+        return true
+
+    return false
+
 
 # Make the runner jump. If force is true, ignore how many jumps they have left.
 func jump(factor = 1.0, force = false, vel_x = null):
@@ -363,14 +441,14 @@ func jump(factor = 1.0, force = false, vel_x = null):
 # Stall the runner (vertically) in the air for a certain number of frames.
 func do_air_stall(frames = 18):
     velocity.y = 0
-    ignore_gravity = true
+    b_gravity_enabled = false
     air_stall_timer.start(frames * get_physics_process_delta_time())
 
     yield(air_stall_timer, "timeout")
-    ignore_gravity = false
+    b_gravity_enabled = true
     
 func apply_gravity(delta):
-    if not is_on_floor() and not ignore_gravity:
+    if not is_on_floor():
         velocity.y = min(TERMINAL_VELOCITY, velocity.y + (GRAVITY * delta))
         # if input.is_action_just_pressed("key_down") and velocity.y > 0 and velocity.y < GRAVITY:
         # velocity.y = GRAVITY
@@ -416,12 +494,14 @@ func hitlag(frames):
     emit_signal("hitstun_end")
     sprite.play()
 
+
 # Hurt the player.
 #
 # If the player dies from being hurt, they will respawn at the specified
 # respawn point, or the start point if one isn't provided.
 func hurt(damage = 100, respawn_point = null):
     _hurt(damage, respawn_point)
+
 
 func _hurt(damage, respawn_point):
     emit_signal("died")
@@ -430,6 +510,7 @@ func _hurt(damage, respawn_point):
     else:
         respawn(Game.get_start_point())
 
+
 # Called when a body intersects this runner's hurtbox.
 func on_hurtbox_entered(from):
     # print("hurtbox triggered: %s" % from)
@@ -437,6 +518,7 @@ func on_hurtbox_entered(from):
         hurt(from.damage, from.get_respawn_point())
     else:
         hurt()
+
 
 # Hit an enemy.
 func hit(enemy = null, dmg := 1, contacts := [], stun_frames := 0, airstall := false):
@@ -465,5 +547,6 @@ func hit(enemy = null, dmg := 1, contacts := [], stun_frames := 0, airstall := f
     # put player in hitlag
     hitlag(stun_frames)
 
-
     emit_signal("enemy_hit", enemy, contacts)
+
+

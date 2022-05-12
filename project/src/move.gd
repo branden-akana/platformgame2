@@ -102,8 +102,8 @@ func _physics_process(delta):
             #     ):
             #         if runner:
             #             runner.apply_gravity(delta)
-            if runner:
-                runner.apply_gravity(delta)
+            # if runner:
+                # runner.apply_gravity(delta)
 
         frame += 1
 

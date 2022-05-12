@@ -199,6 +199,30 @@ modulate = Color( 0.776471, 0.564706, 0, 1 )
 material = SubResource( 1 )
 text = "1234"
 
+[node name="pos_x" parent="." instance=ExtResource( 1 )]
+modulate = Color( 0.776471, 0.564706, 0, 1 )
+material = SubResource( 1 )
+position = Vector2( 40, 192 )
+text = "0000"
+
+[node name="pos_y" parent="." instance=ExtResource( 1 )]
+modulate = Color( 0.776471, 0.564706, 0, 1 )
+material = SubResource( 1 )
+position = Vector2( 160, 192 )
+text = "0000"
+
+[node name="vel_x" parent="." instance=ExtResource( 1 )]
+modulate = Color( 0.133333, 0.803922, 0.176471, 1 )
+material = SubResource( 1 )
+position = Vector2( 40, 232 )
+text = "0000"
+
+[node name="vel_y" parent="." instance=ExtResource( 1 )]
+modulate = Color( 0.133333, 0.803922, 0.176471, 1 )
+material = SubResource( 1 )
+position = Vector2( 160, 232 )
+text = "0000"
+
 [node name="pause_display" type="Node2D" parent="."]
 script = ExtResource( 4 )
 

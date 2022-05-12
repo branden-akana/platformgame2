@@ -7,7 +7,7 @@ func on_start(_old_state):
 
 func on_update(delta):
 
-    snap_up_to_ground(delta, 16)
+    #snap_up_to_ground(delta, 16)
 
     if tick == runner.JUMPSQUAT_LENGTH:
         if input.is_action_pressed("key_jump"):

@@ -28,6 +28,9 @@ var input: BufferedInput  # the runner's input handler
 var time: float = 0.0  # the amount of time (in seconds) the runner has been in this state
 var tick: int = 0      # the amount of time (in ticks) the runner has been in this state
 
+# flags
+# ----
+
 func init(runner_):
     self.runner = runner_
     self.input = runner.input
@@ -100,19 +103,25 @@ func process(delta):
 # Snap to platforms, forcing a grounded state when 
 # airdashing slightly under them by a set margin.
 func snap_up_to_ground(delta, margin = runner.AIRDASH_WAVELAND_MARGIN, goto_state=null):
-    var ray_length = margin
-    if runner.is_grounded(): ray_length = 2
 
-    var ray = Util.intersect_ray(runner, Vector2(0, 32 - margin), Vector2.DOWN * ray_length)
+    # shoot a ray down below the runner to try and detect the floor
+    var ray = Util.intersect_ray(runner, Vector2(0, -margin), Vector2.DOWN * margin)
+
+    # only apply snap when runner is moving perfectly horizontal
     if runner.velocity.y >= 0 and ray:
         # print("detected below floor")
+
+        # move runner up then down to attempt snap to floor
         runner.move_and_collide(Vector2.UP * margin * 2)
-        runner.move_and_slide(Vector2.DOWN * margin * 2 / delta, Vector2.UP)
+        runner.move_and_collide(Vector2.DOWN * margin * 2)
+
+        # set runner's state if on floor
         if runner.is_on_floor():
             runner.set_grounded(true, false)
             if goto_state and goto_state != runner.state_name:
                 sm.set_state(goto_state)
             return true
+
     return false
 
 func snap_down_to_ground(delta, margin = runner.FLOOR_SNAP_TOP_MARGIN, goto_state = null):
@@ -239,10 +248,6 @@ func is_facing_forward():
         return true
     return false
 
-# Process gravity for a frame.
-func process_gravity(delta):
-    runner.apply_gravity(delta)
-
 func process_acceleration(delta, accel, max_speed):
     var x = input.get_axis().x
     runner.apply_acceleration(delta, x, accel, max_speed)
@@ -263,6 +268,7 @@ func process_air_friction(delta):
     var x = input.get_axis().x
     if x == 0:
         runner.apply_friction(delta, runner.AIR_FRICTION)
+
 
 # called when this state is instantiated
 func on_init():

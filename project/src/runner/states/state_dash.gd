@@ -35,8 +35,8 @@ func on_update(delta):
 
     if is_active():
 
-        snap_down_to_ground(delta)
-        snap_up_to_ground(delta, 16)
+        #snap_down_to_ground(delta)
+        #snap_up_to_ground(delta, 16)
 
         var axis = input.get_axis()
 

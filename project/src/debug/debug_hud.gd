@@ -17,4 +17,9 @@ func update_fps():
 func _physics_process(delta):
     $tick.text = Game.get_player().tick
     $tick.text = Game.get_player().tick
+    $pos_x.text = Game.get_player().global_position.x
+    $pos_y.text = Game.get_player().global_position.y
+    $vel_x.text = round(Game.get_player().velocity.x)
+    $vel_y.text = round(Game.get_player().velocity.y)
+    
     

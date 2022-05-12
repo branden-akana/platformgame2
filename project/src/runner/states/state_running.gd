@@ -16,8 +16,8 @@ func on_update(delta):
 
     if is_active():
 
-        snap_down_to_ground(delta, 16)
-        snap_up_to_ground(delta, 16)
+        #snap_down_to_ground(delta, 16)
+        #snap_up_to_ground(delta, 16)
 
         if is_facing_forward():
             process_ground_acceleration(delta)

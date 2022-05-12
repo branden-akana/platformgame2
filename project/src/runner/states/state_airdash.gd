@@ -63,6 +63,7 @@ func on_update(delta):
 
         # middle of airdashing
 
+        # update airdash speed
         var airdash_speed = max(runner.AIRDASH_SPEED, runner.velocity.length())
         var t = pow(tick / float(runner.AIRDASH_LENGTH), 2)
         runner.velocity = (airdash_dir * lerp(

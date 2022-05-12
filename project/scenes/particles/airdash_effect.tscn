@@ -177,11 +177,13 @@ offsets = PoolRealArray( 0.00671141, 0.577181, 1 )
 colors = PoolColorArray( 1, 1, 1, 0.3, 1, 1, 1, 0, 1, 1, 1, 0 )
 
 [node name="airdash_particles" type="Node2D"]
+position = Vector2( 0, -64 )
 script = SubResource( 14 )
 
 [node name="trail" type="CPUParticles2D" parent="."]
 material = SubResource( 11 )
 scale = Vector2( 4, 4 )
+emitting = false
 amount = 100
 lifetime = 2.0
 speed_scale = 2.0

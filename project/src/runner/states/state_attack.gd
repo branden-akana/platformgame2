@@ -9,7 +9,7 @@ var moves = {}
 var current_move
 
 # if true, this attack was done on the ground
-var is_grounded: bool = false
+var b_grounded_attack: bool = false
 
 func get_name(): return "attack_state"
 
@@ -20,7 +20,8 @@ func on_init():
 
 func on_start(_state_name):
 
-    is_grounded = false
+    runner.b_gravity_enabled = true
+    b_grounded_attack = false
 
     var axis = input.get_axis()
 
@@ -58,16 +59,16 @@ func on_update(delta):
         return
 
     if runner.is_on_floor():
-        is_grounded = true
+        b_grounded_attack = true
         process_friction(delta)
     else:
         fastfall_if_able()
         process_air_acceleration(delta)
 
     # end of move or edge cancelled
-    if !current_move.playing or (is_grounded and not runner.is_on_floor()):
+    if !current_move.playing or (b_grounded_attack and not runner.is_on_floor()):
         sm.goto_idle_or_dash()
 
 func on_end(state_to):
     current_move.stop()
-    runner.ignore_gravity = false
+    
