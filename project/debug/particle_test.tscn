@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://debug/particle_test_display.gd" type="Script" id=1]
+
+
+[node name="ParticleTest" type="Node2D"]
+position = Vector2( 328.058, 338.499 )
+script = ExtResource( 1 )

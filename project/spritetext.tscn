@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://objects/sprite_label.gd" type="Script" id=1]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+blend_mode = 1
+
+[node name="spritetext" type="Node2D"]
+material = SubResource( 1 )
+script = ExtResource( 1 )
+text = "aaaa"
