@@ -10,7 +10,7 @@ light_mode = 1
 
 [sub_resource type="OccluderPolygon2D" id=3]
 closed = false
-polygon = PoolVector2Array( -200, 14, 1080, 14, 1080, 734, -200, 734 )
+polygon = PoolVector2Array( -200, 14, 1720, 14, 1720, 1094, -200, 1094 )
 
 [sub_resource type="CanvasItemMaterial" id=1]
 
@@ -19,6 +19,10 @@ light_mask = 0
 material = SubResource( 2 )
 z_index = 10
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_horizontal_guides_": [ 544.0 ],
+"_edit_vertical_guides_": [ 960.0 ]
+}
 
 [node name="light_occluder_2d" type="LightOccluder2D" parent="."]
 position = Vector2( 200, -14 )
@@ -29,7 +33,7 @@ position = Vector2( 200, -14 )
 occluder = SubResource( 3 )
 
 [node name="title" type="Node2D" parent="."]
-position = Vector2( 152, 212 )
+position = Vector2( 470, 296 )
 scale = Vector2( 1.5, 1.5 )
 z_index = 1
 script = ExtResource( 2 )
@@ -38,7 +42,7 @@ bold = true
 
 [node name="label" type="Node2D" parent="."]
 material = SubResource( 1 )
-position = Vector2( 352, 344 )
+position = Vector2( 670, 428 )
 z_index = 1
 script = ExtResource( 2 )
 text = "> enter
@@ -46,18 +50,18 @@ text = "> enter
   exit"
 
 [node name="polygon_2d" type="Polygon2D" parent="."]
-position = Vector2( 322, 314 )
+position = Vector2( 640, 398 )
 color = Color( 0.133333, 0.133333, 0.133333, 1 )
 polygon = PoolVector2Array( 0, 0, 640, 0, 640, 176, 0, 176 )
 
 [node name="polygon_2d_2" type="Polygon2D" parent="."]
-position = Vector2( 322, 314 )
+position = Vector2( 640, 398 )
 invert_enable = true
 invert_border = 8.0
 polygon = PoolVector2Array( 0, 0, 640, 0, 640, 176, 0, 176 )
 
 [node name="light_2d" type="Light2D" parent="." groups=["lights"]]
-position = Vector2( 314, 306 )
+position = Vector2( 632, 390 )
 scale = Vector2( 656, 192 )
 texture = ExtResource( 3 )
 offset = Vector2( 0.5, 0.5 )
@@ -77,14 +81,14 @@ margin_bottom = 1079.0
 color = Color( 0.192157, 0.192157, 0.192157, 1 )
 
 [node name="sample" type="Sprite" parent="."]
-position = Vector2( 898, 610 )
+position = Vector2( 1216, 694 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 4 )
 region_enabled = true
 region_rect = Rect2( 0, 20, 128, 40 )
 
 [node name="sample_2" type="Sprite" parent="."]
-position = Vector2( 322, 610 )
+position = Vector2( 640, 694 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 4 )
 region_enabled = true
