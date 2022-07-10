@@ -1,0 +1,175 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://shaders/pixelate.gdshader" type="Shader" id=1]
+[ext_resource path="res://shaders/retrorize.gdshader" type="Shader" id=2]
+[ext_resource path="res://effects/vignette_focus.gd" type="Script" id=3]
+[ext_resource path="res://assets/palettes/base.png" type="Texture" id=4]
+[ext_resource path="res://assets/palettes/na16_aamatniekss.png" type="Texture" id=5]
+
+[sub_resource type="GDScript" id=99]
+script/source = "#===============================================================================
+# Post-Processor
+#
+# Contains scripting for the game's shaders
+# This script also contains:
+# - controls for the color palette used by the levels
+#===============================================================================
+
+extends Node2D
+tool
+
+export (Array, Texture) var palettes
+export var current_palette = 0 setget change_palette
+
+var palette_tween
+onready var shader = $\"2_retrorizer/rect\"
+
+func _ready():
+    palette_tween = Util.new_tween(self)
+
+
+func set_palette(idx):
+    idx = idx % len(palettes)
+    shader.get_material().set_shader_param(\"palette_a\", palettes[idx])
+        
+func set_palette_back(idx):
+    idx = idx % len(palettes)
+    shader.get_material().set_shader_param(\"palette_b\", palettes[idx])
+        
+# 0.0 => palette A, 1.0 => palette B
+func set_palette_blend(n):
+    shader.get_material().set_shader_param(\"palette_blend\", n)
+
+func get_palette_blend():
+    return shader.get_material().get_shader_param(\"palette_blend\")
+    
+# Change the game's color palette over a set amount of time.
+func change_palette(idx, time = 0.5):
+
+    # print(\"changing color palette from %s to %s in %s seconds\" % [current_palette, idx, time])
+    set_palette_back(current_palette)
+    set_palette(idx)
+
+    current_palette = idx
+    if Engine.editor_hint:
+        property_list_changed_notify()
+
+    palette_tween.remove_all()
+    palette_tween.interpolate_method(self, \"set_palette_blend\",
+        1.0 - get_palette_blend(), 0.0,
+        time, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+    palette_tween.start()
+    yield(palette_tween, \"tween_all_completed\")
+"
+
+[sub_resource type="Environment" id=9]
+background_canvas_max_layer = 10
+tonemap_mode = 1
+ssao_intensity = 59.26
+glow_enabled = true
+glow_strength = 1.1
+glow_blend_mode = 0
+glow_high_quality = true
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = ExtResource( 2 )
+shader_param/screen = true
+shader_param/subpixel_fix = true
+shader_param/pixel_size = 1.0
+shader_param/antialiased = true
+shader_param/palette_size = Vector2( 8, 2 )
+shader_param/palette_blend = 0.0
+shader_param/noise_strength = 0.015
+shader_param/noise_speed = 10.0
+shader_param/palette_key = ExtResource( 4 )
+shader_param/palette_a = ExtResource( 4 )
+shader_param/palette_b = ExtResource( 5 )
+
+[sub_resource type="ShaderMaterial" id=97]
+shader = ExtResource( 1 )
+shader_param/screen = true
+shader_param/subpixel_fix = false
+shader_param/pixel_size = 4.0
+shader_param/pixel_smoothing = 0.5
+shader_param/noise_strength = 0.005
+
+[sub_resource type="Shader" id=95]
+code = "shader_type canvas_item;
+
+uniform vec2 focus = vec2(0.5, 0.5);
+
+varying vec2 screen_focus;
+varying mat4 world_mat;
+varying float len;
+
+
+void fragment() {
+    COLOR = texture(SCREEN_TEXTURE, SCREEN_UV);
+    float dist = distance(UV.xy * vec2(1.0, 0.56), focus.xy * vec2(1.0, 0.56));
+    
+    // vignette
+    float center_len = clamp(dist, 0.0, 1.0);
+    float vign = smoothstep(0.3, 3, dist / 0.5);
+    COLOR = vec4(vec3(0.0), vign);
+    //COLOR = mix(COLOR, vec4(vec3(0.0), 0.5), pow(center_len, 2));
+    //COLOR = mix(vec4(vec3(1.0), 1.0), vec4(vec3(0.0), 1.0), center_len);
+}"
+
+[sub_resource type="ShaderMaterial" id=98]
+shader = SubResource( 95 )
+shader_param/focus = Vector2( 0.5, 0.5 )
+
+[node name="post_process" type="Node2D"]
+script = SubResource( 99 )
+palettes = [ ExtResource( 4 ) ]
+
+[node name="world_environment" type="WorldEnvironment" parent="."]
+environment = SubResource( 9 )
+
+[node name="2_retrorizer_2" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="rect" type="ColorRect" parent="2_retrorizer_2"]
+visible = false
+material = SubResource( 7 )
+margin_left = -4096.0
+margin_top = -4096.0
+margin_right = 4096.0
+margin_bottom = 4096.0
+
+[node name="3_pixelator" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="rect" type="ColorRect" parent="3_pixelator"]
+material = SubResource( 97 )
+margin_left = -4096.0
+margin_top = -4096.0
+margin_right = 4096.0
+margin_bottom = 4096.0
+
+[node name="2_retrorizer" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="rect" type="ColorRect" parent="2_retrorizer"]
+material = SubResource( 7 )
+margin_left = -4096.0
+margin_top = -4096.0
+margin_right = 4096.0
+margin_bottom = 4096.0
+
+[node name="canvas_layer" type="CanvasLayer" parent="."]
+
+[node name="vignette" type="ColorRect" parent="canvas_layer"]
+material = SubResource( 98 )
+anchor_left = 0.0015625
+anchor_top = 0.00277778
+anchor_right = 0.0015625
+anchor_bottom = 0.00277778
+margin_left = -2.0
+margin_top = -2.0
+margin_right = 1278.0
+margin_bottom = 718.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

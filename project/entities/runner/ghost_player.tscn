@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://entities/runner/player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://entities/runner/ghost_runner.gd" type="Script" id=2]
+
+[node name="ghost_player" instance=ExtResource( 1 )]
+z_index = 0
+script = ExtResource( 2 )
+
+[node name="sprite" parent="." index="1"]
+self_modulate = Color( 1, 0, 0, 1 )
+frame = 2
+
+[node name="special_heavy" parent="moveset" index="0"]
+visible = false
+
+[node name="normal_up" parent="moveset" index="1"]
+visible = false
+
+[node name="normal_down" parent="moveset" index="2"]
+visible = false
+
+[node name="normal_forward" parent="moveset" index="3"]
+visible = false

@@ -12,17 +12,17 @@ _global_script_classes=[ {
 "base": "RunnerState",
 "class": "AirborneState",
 "language": "GDScript",
-"path": "res://runner/states/state_airborne.gd"
+"path": "res://entities/runner/states/state_airborne.gd"
 }, {
 "base": "RunnerState",
 "class": "AirdashState",
 "language": "GDScript",
-"path": "res://runner/states/state_airdash.gd"
+"path": "res://entities/runner/states/state_airdash.gd"
 }, {
 "base": "RunnerState",
 "class": "AttackState",
 "language": "GDScript",
-"path": "res://runner/states/state_attack.gd"
+"path": "res://entities/runner/states/state_attack.gd"
 }, {
 "base": "Reference",
 "class": "BufferedInput",
@@ -32,122 +32,117 @@ _global_script_classes=[ {
 "base": "KinematicBody2D",
 "class": "Coin",
 "language": "GDScript",
-"path": "res://Coin.gd"
+"path": "res://entities/Coin.gd"
 }, {
 "base": "Reference",
 "class": "Config",
 "language": "GDScript",
-"path": "res://config.gd"
+"path": "res://util/config.gd"
 }, {
 "base": "RunnerState",
 "class": "DashState",
 "language": "GDScript",
-"path": "res://runner/states/state_dash.gd"
+"path": "res://entities/runner/states/state_dash.gd"
 }, {
 "base": "Reference",
 "class": "Direction",
 "language": "GDScript",
-"path": "res://direction.gd"
+"path": "res://util/direction.gd"
 }, {
 "base": "Area2D",
 "class": "DoorTrigger",
 "language": "GDScript",
 "path": "res://trigger/door_trigger.gd"
 }, {
-"base": "EditorProperty",
-"class": "EC_CreateCategory",
-"language": "GDScript",
-"path": "res://addons/export_categories/ec_create_category.gd"
-}, {
 "base": "Area2D",
 "class": "Enemy",
 "language": "GDScript",
-"path": "res://enemy.gd"
+"path": "res://entities/enemy/enemy.gd"
 }, {
 "base": "Node2D",
 "class": "GameCamera",
 "language": "GDScript",
-"path": "res://camera.gd"
+"path": "res://ui/camera.gd"
 }, {
 "base": "Runner",
 "class": "GhostRunner",
 "language": "GDScript",
-"path": "res://runner/ghost_runner.gd"
+"path": "res://entities/runner/ghost_runner.gd"
 }, {
 "base": "StaticBody2D",
 "class": "HazardTrigger",
 "language": "GDScript",
 "path": "res://trigger/hazard_trigger.gd"
 }, {
-"base": "Resource",
+"base": "Reference",
 "class": "HitboxData",
 "language": "GDScript",
-"path": "res://hitbox_data.gd"
+"path": "res://entities/runner/moves/hitbox_data.gd"
 }, {
 "base": "RunnerState",
 "class": "IdleState",
 "language": "GDScript",
-"path": "res://runner/states/state_idle.gd"
+"path": "res://entities/runner/states/state_idle.gd"
 }, {
 "base": "Area2D",
 "class": "Interactable",
 "language": "GDScript",
-"path": "res://objects/interactable.gd"
+"path": "res://entities/interactable.gd"
 }, {
 "base": "RunnerState",
 "class": "JumpsquatState",
 "language": "GDScript",
-"path": "res://runner/states/state_jumpsquat.gd"
+"path": "res://entities/runner/states/state_jumpsquat.gd"
 }, {
 "base": "Node2D",
 "class": "Level",
 "language": "GDScript",
-"path": "res://level.gd"
+"path": "res://levels/level.gd"
 }, {
 "base": "Node2D",
 "class": "MainMenu",
 "language": "GDScript",
-"path": "res://menu/main_menu.gd"
+"path": "res://ui/menu/main_menu.gd"
 }, {
 "base": "Reference",
 "class": "MenuSelection",
 "language": "GDScript",
-"path": "res://menu/selection.gd"
+"path": "res://ui/menu/selection.gd"
 }, {
 "base": "Runner",
 "class": "PlayerRunner",
 "language": "GDScript",
-"path": "res://runner/player_runner.gd"
+"path": "res://entities/runner/player_runner.gd"
 }, {
 "base": "Reference",
 "class": "Replay",
 "language": "GDScript",
-"path": "res://replay.gd"
+"path": "res://replay/replay.gd"
 }, {
 "base": "Reference",
 "class": "ReplayManager",
 "language": "GDScript",
-"path": "res://replay_manager.gd"
+"path": "res://replay/replay_manager.gd"
 }, {
 "base": "Area2D",
 "class": "RoomZone",
 "language": "GDScript",
-"path": "res://room.gd"
+"path": "res://entities/room.gd"
 }, {
 "base": "KinematicBody2D",
 "class": "Runner",
 "language": "GDScript",
-"path": "res://runner/runner.gd"
+"path": "res://entities/runner/runner.gd"
 }, {
 "base": "Reference",
 "class": "RunnerState",
 "language": "GDScript",
-"path": "res://runner/state.gd"
+"path": "res://entities/runner/state.gd"
 }, {
 "base": "RunnerState",
 "class": "RunningState",
 "language": "GDScript",
-"path": "res://runner/states/state_running.gd"
+"path": "res://entities/runner/states/state_running.gd"
 }, {
 "base": "Area2D",
 "class": "SceneLoadTrigger",
@@ -157,62 +152,62 @@ _global_script_classes=[ {
 "base": "MenuSelection",
 "class": "SelectExit",
 "language": "GDScript",
-"path": "res://menu/select_exit.gd"
+"path": "res://ui/menu/select_exit.gd"
 }, {
 "base": "MenuSelection",
 "class": "SelectLights",
 "language": "GDScript",
-"path": "res://menu/select_lights.gd"
+"path": "res://ui/menu/select_lights.gd"
 }, {
 "base": "MenuSelection",
 "class": "SelectOptions",
 "language": "GDScript",
-"path": "res://menu/select_options.gd"
+"path": "res://ui/menu/select_options.gd"
 }, {
 "base": "MenuSelection",
 "class": "SelectPalette",
 "language": "GDScript",
-"path": "res://menu/select_palette.gd"
+"path": "res://ui/menu/select_palette.gd"
 }, {
 "base": "MenuSelection",
 "class": "SelectReturn",
 "language": "GDScript",
-"path": "res://menu/select_return.gd"
+"path": "res://ui/menu/select_return.gd"
 }, {
 "base": "MenuSelection",
 "class": "SelectStart",
 "language": "GDScript",
-"path": "res://menu/select_start.gd"
+"path": "res://ui/menu/select_start.gd"
 }, {
 "base": "MenuSelection",
 "class": "SelectVsync",
 "language": "GDScript",
-"path": "res://menu/select_vsync.gd"
+"path": "res://ui/menu/select_vsync.gd"
 }, {
 "base": "RunnerState",
 "class": "SpecialState",
 "language": "GDScript",
-"path": "res://runner/states/state_special.gd"
+"path": "res://entities/runner/states/state_special.gd"
 }, {
 "base": "Node2D",
 "class": "SpriteLabel",
 "language": "GDScript",
-"path": "res://objects/sprite_label.gd"
+"path": "res://entities/sprite_label.gd"
 }, {
 "base": "Reference",
 "class": "State",
 "language": "GDScript",
-"path": "res://runner/state_type.gd"
+"path": "res://entities/runner/state_type.gd"
 }, {
 "base": "Reference",
 "class": "StateMachine",
 "language": "GDScript",
-"path": "res://runner/state_machine.gd"
+"path": "res://entities/runner/state_machine.gd"
 }, {
 "base": "Node",
 "class": "Util",
 "language": "GDScript",
-"path": "res://util.gd"
+"path": "res://util/util.gd"
 } ]
 _global_script_class_icons={
 "AirborneState": "",
@@ -224,7 +219,6 @@ _global_script_class_icons={
 "DashState": "",
 "Direction": "",
 "DoorTrigger": "",
-"EC_CreateCategory": "",
 "Enemy": "",
 "GameCamera": "",
 "GhostRunner": "",
@@ -266,10 +260,10 @@ config/icon="res://icon.png"
 
 [autoload]
 
-HUD="*res://hud.tscn"
+HUD="*res://ui/hud/hud.tscn"
 Game="*res://game.gd"
-Sound="*res://sound.gd"
-Effects="*res://particles.gd"
+Sound="*res://effects/sound.gd"
+Effects="*res://effects/particles/particles.gd"
 
 [debug]
 
@@ -280,8 +274,9 @@ gdscript/warnings/return_value_discarded=false
 
 [display]
 
-window/size/width=1280
-window/size/height=720
+window/size/width=1920
+window/size/height=1080
+window/size/fullscreen=true
 window/dpi/allow_hidpi=true
 window/vsync/vsync_via_compositor=true
 window/stretch/mode="viewport"
@@ -289,7 +284,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/export_categories/plugin.cfg" )
+enabled=PoolStringArray(  )
 
 [gdnative]
 

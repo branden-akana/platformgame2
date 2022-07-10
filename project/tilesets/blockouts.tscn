@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/tilesets/test_blockout.tres" type="TileSet" id=1]
-[ext_resource path="res://hazard_tiles.tscn" type="PackedScene" id=2]
+[ext_resource path="res://entities/hazard_tiles.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/tilesets/test_detail.tres" type="TileSet" id=3]
 
 [sub_resource type="CanvasItemMaterial" id=1]

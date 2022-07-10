@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://entities/runner/moves/move.tscn" type="PackedScene" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+resource_local_to_scene = true
+extents = Vector2( 44, 72 )
+
+[node name="normal_down" instance=ExtResource( 1 )]
+move_hitboxes = [ {
+"end": 4,
+"start": 0
+} ]
+animation = "d_attack"
+
+[node name="sprite" parent="." index="0"]
+position = Vector2( -55.9998, 92 )
+rotation = 1.5708
+scale = Vector2( 8, 8 )
+flip_v = true
+
+[node name="0" parent="." index="1"]
+position = Vector2( 32.0002, 0 )
+
+[node name="collision" parent="0" index="0"]
+position = Vector2( -36, 92 )
+shape = SubResource( 1 )

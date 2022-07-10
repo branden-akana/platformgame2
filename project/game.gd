@@ -7,10 +7,10 @@ signal level_cleared
 signal scene_loaded
 signal post_ready
 
-const DisplayManager = preload("res://display_manager.tscn")
-const Textbox = preload("res://textbox.tscn")
+const DisplayManager = preload("res://effects/display_manager.tscn")
+const Textbox = preload("res://ui/textbox.tscn")
 const Level_TestHub = preload("res://levels/test_hub.tscn")
-const PlayerRunner = preload("res://player.tscn")
+const PlayerRunner = preload("res://entities/runner/player.tscn")
 
 var frame: int = 0
 
