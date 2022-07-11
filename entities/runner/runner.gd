@@ -33,38 +33,38 @@ signal stun_end
 
 # general ground movement
 
-export var ACCELERATION = 8000
-export var FRICTION = 2000
-export var MAX_SPEED = 800
-export var FLOOR_SNAP_TOP_MARGIN = 16
+export var ACCELERATION = 2000
+export var FRICTION = 500
+export var MAX_SPEED = 250
+export var FLOOR_SNAP_TOP_MARGIN = 4
 
 # airborne drifting
 
-export var AIR_ACCELERATION = 3000
-export var AIR_FRICTION = 1000
-export var AIR_MAX_SPEED = 800
+export var AIR_ACCELERATION = 1000
+export var AIR_FRICTION = 250
+export var AIR_MAX_SPEED = 250
 
 # idling / walking
 
 export var WALK_THRESHOLD = 0.2
-export var WALK_MAX_SPEED = 250
+export var WALK_MAX_SPEED = 100
 
 # airdash
 
-export var AIRDASH_SPEED = 1200  # (mininum) speed at start of airdash
-export var AIRDASH_SPEED_END = 600  # speed at end of airdash
+export var AIRDASH_SPEED = 300  # (mininum) speed at start of airdash
+export var AIRDASH_SPEED_END = 150  # speed at end of airdash
 export var AIRDASH_LENGTH = 9
-export var AIRDASH_WAVELAND_MARGIN = 40
+export var AIRDASH_WAVELAND_MARGIN = 10
 
 # jumping / gravity
 
 export var JUMPSQUAT_LENGTH = 4  # amount of frames to stay grounded before jumping
 
-export var JUMP_VELOCITY = 1000
-export var DASHJUMP_VELOCITY = 800
-export var GRAVITY = 2500
-export var TERMINAL_VELOCITY = 1250  # maximum downwards velocity
-export var FAST_FALL_SPEED = 1250
+export var JUMP_VELOCITY = 250
+export var DASHJUMP_VELOCITY = 200
+export var GRAVITY = 650
+export var TERMINAL_VELOCITY = 300  # maximum downwards velocity
+export var FAST_FALL_SPEED = 300
 
 # dash
 
@@ -72,15 +72,15 @@ export var FAST_FALL_SPEED = 1250
 export var DASH_LENGTH = 16  # in frames
 export var DASH_SENSITIVITY = 0.3  # how fast you need to tilt the stick to start a dash (0 = more sensitive)
 
-export var DASH_STOP_SPEED = 100  # dash early stop speed
+export var DASH_STOP_SPEED = 25  # dash early stop speed
 
-export var DASH_INIT_SPEED = 200  # dash initial speed
+export var DASH_INIT_SPEED = 100  # dash initial speed
 
-export var DASH_ACCELERATION = 20000  # dash acceleration
-export var DASH_ACCELERATION_REV = 10000  # dash reverse acceleration
+export var DASH_ACCELERATION = 5000  # dash acceleration
+export var DASH_ACCELERATION_REV = 2500  # dash reverse acceleration
 
-export var DASH_MAX_SPEED = 800  # dash max speed
-export var DASH_MAX_SPEED_REV = 1500 # dash reverse max speed (moonwalking)
+export var DASH_MAX_SPEED = 300  # dash max speed
+export var DASH_MAX_SPEED_REV = 500 # dash reverse max speed (moonwalking)
 
 # buffers (frame window to accept these actions before they are actionable)
 
@@ -494,7 +494,7 @@ func move(delta, velocity):
     align_to_ledge(delta)
 
     position = position.round()
-    return new_velocity
+    return new_velocity.floor()
 
 
 # Align the runner to the top of a ledge they were about to collide with if
@@ -514,7 +514,7 @@ func align_to_ledge(delta):
         
         var tilepos = tilemap.map_to_world(
             tilemap.world_to_map(tilemap.to_local(collision.position))
-        ) * 4
+        )
         
         # align y-axis to ledge if within margin
         var margin = round(position.y - tilepos.y)
@@ -613,8 +613,8 @@ func do_dropdown():
     # if is_on_floor():
     if b_is_grounded:
         # check if the tile is a drop-down
-        if not Util.collide_point(self, position + Vector2(0, 96)):
-            position += Vector2(0, 4)
+        if not Util.collide_point(self, position + Vector2(0, 24)):
+            position += Vector2(0, 1)
             fsm.goto_airborne()
 
 
@@ -648,9 +648,9 @@ func do_dash():
 # Perform a walljump in the specified direction if possible.
 func _walljump(dir = Direction.RIGHT):
 
-    var margin = 40
+    var margin = 10
     var jump_mult = 0.8
-    var top_offset = Vector2(0, -48)
+    var top_offset = Vector2(0, -12)
     var bot_offset = Vector2(0, 0)
 
     var x_speed  # horizontal speed of walljump

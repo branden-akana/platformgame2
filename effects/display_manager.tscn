@@ -75,12 +75,12 @@ glow_high_quality = true
 shader = ExtResource( 2 )
 shader_param/screen = true
 shader_param/subpixel_fix = true
-shader_param/pixel_size = 1.0
+shader_param/pixel_size = 4.0
 shader_param/antialiased = true
 shader_param/palette_size = Vector2( 8, 2 )
 shader_param/palette_blend = 0.0
-shader_param/noise_strength = 0.015
-shader_param/noise_speed = 10.0
+shader_param/noise_strength = 0.0
+shader_param/noise_speed = 0.0
 shader_param/palette_key = ExtResource( 4 )
 shader_param/palette_a = ExtResource( 4 )
 shader_param/palette_b = ExtResource( 5 )
@@ -109,7 +109,7 @@ void fragment() {
     
     // vignette
     float center_len = clamp(dist, 0.0, 1.0);
-    float vign = smoothstep(0.3, 3, dist / 0.5);
+    float vign = smoothstep(1, 3, dist / 0.35);
     COLOR = vec4(vec3(0.0), vign);
     //COLOR = mix(COLOR, vec4(vec3(0.0), 0.5), pow(center_len, 2));
     //COLOR = mix(vec4(vec3(1.0), 1.0), vec4(vec3(0.0), 1.0), center_len);
@@ -141,6 +141,7 @@ margin_bottom = 4096.0
 layer = 3
 
 [node name="rect" type="ColorRect" parent="3_pixelator"]
+visible = false
 material = SubResource( 97 )
 margin_left = -4096.0
 margin_top = -4096.0

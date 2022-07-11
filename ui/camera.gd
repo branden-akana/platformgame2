@@ -10,7 +10,7 @@ export var smoothing: float = 1.2;
 
 # the amount of units to snap the camera to.
 # this avoids any rendering issues with the pixel shader
-export var pixel_snap: float = 4.0;
+export var pixel_snap: float = 1.0;
 
 # the amount of offset to apply to the camera
 export (Vector2) var offset = Vector2(0.0, 0.0);
@@ -27,7 +27,7 @@ export (NodePath) var target_path;
 # top-left corner of area
 var min_position = Vector2(0, 0)
 # bottom-right corner of area
-var max_position = Vector2(1280, 720)
+var max_position = Vector2(1920, 1080)
 
 # tween for focus change transitions
 var transition_tween = Tween.new()

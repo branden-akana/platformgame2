@@ -31,7 +31,6 @@ animations = [ {
 } ]
 
 [node name="sprite" type="AnimatedSprite"]
-scale = Vector2( 4, 4 )
 z_index = 2
 frames = SubResource( 6 )
 frame = 4

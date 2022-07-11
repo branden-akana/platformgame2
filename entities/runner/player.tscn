@@ -158,70 +158,6 @@ region = Rect2( 256, 320, 64, 64 )
 atlas = ExtResource( 17 )
 region = Rect2( 320, 320, 64, 64 )
 
-[sub_resource type="AtlasTexture" id=72]
-atlas = ExtResource( 17 )
-region = Rect2( 0, 0, 64, 32 )
-
-[sub_resource type="AtlasTexture" id=73]
-atlas = ExtResource( 17 )
-region = Rect2( 64, 0, 64, 32 )
-
-[sub_resource type="AtlasTexture" id=74]
-atlas = ExtResource( 17 )
-region = Rect2( 128, 0, 64, 32 )
-
-[sub_resource type="AtlasTexture" id=75]
-atlas = ExtResource( 17 )
-region = Rect2( 192, 0, 64, 32 )
-
-[sub_resource type="AtlasTexture" id=76]
-atlas = ExtResource( 17 )
-region = Rect2( 256, 0, 64, 32 )
-
-[sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 17 )
-region = Rect2( 0, 128, 32, 64 )
-
-[sub_resource type="AtlasTexture" id=39]
-atlas = ExtResource( 17 )
-region = Rect2( 64, 128, 32, 64 )
-
-[sub_resource type="AtlasTexture" id=41]
-atlas = ExtResource( 17 )
-region = Rect2( 128, 128, 32, 64 )
-
-[sub_resource type="AtlasTexture" id=44]
-atlas = ExtResource( 17 )
-region = Rect2( 224, 128, 32, 64 )
-
-[sub_resource type="AtlasTexture" id=45]
-atlas = ExtResource( 17 )
-region = Rect2( 256, 128, 32, 64 )
-
-[sub_resource type="AtlasTexture" id=46]
-atlas = ExtResource( 17 )
-region = Rect2( 288, 128, 32, 64 )
-
-[sub_resource type="AtlasTexture" id=47]
-atlas = ExtResource( 17 )
-region = Rect2( 320, 128, 32, 64 )
-
-[sub_resource type="AtlasTexture" id=48]
-atlas = ExtResource( 17 )
-region = Rect2( 352, 128, 32, 64 )
-
-[sub_resource type="AtlasTexture" id=49]
-atlas = ExtResource( 17 )
-region = Rect2( 0, 192, 32, 64 )
-
-[sub_resource type="AtlasTexture" id=50]
-atlas = ExtResource( 17 )
-region = Rect2( 32, 192, 32, 64 )
-
-[sub_resource type="AtlasTexture" id=51]
-atlas = ExtResource( 17 )
-region = Rect2( 64, 192, 32, 64 )
-
 [sub_resource type="AtlasTexture" id=64]
 atlas = ExtResource( 17 )
 region = Rect2( 128, 384, 64, 64 )
@@ -302,6 +238,70 @@ region = Rect2( 256, 640, 64, 64 )
 atlas = ExtResource( 17 )
 region = Rect2( 320, 640, 64, 64 )
 
+[sub_resource type="AtlasTexture" id=72]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 0, 64, 32 )
+
+[sub_resource type="AtlasTexture" id=73]
+atlas = ExtResource( 17 )
+region = Rect2( 64, 0, 64, 32 )
+
+[sub_resource type="AtlasTexture" id=74]
+atlas = ExtResource( 17 )
+region = Rect2( 128, 0, 64, 32 )
+
+[sub_resource type="AtlasTexture" id=75]
+atlas = ExtResource( 17 )
+region = Rect2( 192, 0, 64, 32 )
+
+[sub_resource type="AtlasTexture" id=76]
+atlas = ExtResource( 17 )
+region = Rect2( 256, 0, 64, 32 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 128, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=39]
+atlas = ExtResource( 17 )
+region = Rect2( 64, 128, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=41]
+atlas = ExtResource( 17 )
+region = Rect2( 128, 128, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=44]
+atlas = ExtResource( 17 )
+region = Rect2( 224, 128, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=45]
+atlas = ExtResource( 17 )
+region = Rect2( 256, 128, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=46]
+atlas = ExtResource( 17 )
+region = Rect2( 288, 128, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=47]
+atlas = ExtResource( 17 )
+region = Rect2( 320, 128, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=48]
+atlas = ExtResource( 17 )
+region = Rect2( 352, 128, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=49]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 192, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=50]
+atlas = ExtResource( 17 )
+region = Rect2( 32, 192, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=51]
+atlas = ExtResource( 17 )
+region = Rect2( 64, 192, 32, 64 )
+
 [sub_resource type="SpriteFrames" id=11]
 animations = [ {
 "frames": [ SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 36 ) ],
@@ -314,16 +314,6 @@ animations = [ {
 "name": "attack",
 "speed": 15.0
 }, {
-"frames": [ SubResource( 72 ), SubResource( 73 ), SubResource( 74 ), SubResource( 75 ), SubResource( 76 ) ],
-"loop": true,
-"name": "running",
-"speed": 15.0
-}, {
-"frames": [ SubResource( 37 ), SubResource( 39 ), SubResource( 41 ), SubResource( 44 ), SubResource( 45 ), SubResource( 46 ), SubResource( 47 ), SubResource( 48 ), SubResource( 49 ), SubResource( 50 ), SubResource( 51 ) ],
-"loop": false,
-"name": "airborne",
-"speed": 25.0
-}, {
 "frames": [ SubResource( 64 ), SubResource( 65 ), SubResource( 66 ), SubResource( 67 ), SubResource( 68 ), SubResource( 69 ), SubResource( 70 ), SubResource( 71 ) ],
 "loop": false,
 "name": "u_attack",
@@ -333,18 +323,28 @@ animations = [ {
 "loop": false,
 "name": "d_attack",
 "speed": 25.0
+}, {
+"frames": [ SubResource( 72 ), SubResource( 73 ), SubResource( 74 ), SubResource( 75 ), SubResource( 76 ) ],
+"loop": true,
+"name": "running",
+"speed": 15.0
+}, {
+"frames": [ SubResource( 37 ), SubResource( 39 ), SubResource( 41 ), SubResource( 44 ), SubResource( 45 ), SubResource( 46 ), SubResource( 47 ), SubResource( 48 ), SubResource( 49 ), SubResource( 50 ), SubResource( 51 ) ],
+"loop": false,
+"name": "airborne",
+"speed": 25.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 24, 72 )
+extents = Vector2( 6, 18 )
 
 [sub_resource type="RectangleShape2D" id=89]
 resource_local_to_scene = true
-extents = Vector2( 36, 10 )
+extents = Vector2( 9, 2 )
 
 [sub_resource type="RectangleShape2D" id=90]
 resource_local_to_scene = true
-extents = Vector2( 24, 22 )
+extents = Vector2( 6, 5.5 )
 
 [sub_resource type="GDScript" id=94]
 script/source = "#===============================================================================
@@ -1137,8 +1137,8 @@ collision_layer = 2
 collision_mask = 257
 script = ExtResource( 13 )
 __meta__ = {
-"_edit_horizontal_guides_": [ -192.0, 0.0 ],
-"_edit_vertical_guides_": [ -64.0, 64.0 ]
+"_edit_horizontal_guides_": [ -192.0, 0.0, -48.0 ],
+"_edit_vertical_guides_": [ -64.0, 64.0, -16.0, 16.0 ]
 }
 
 [node name="interact_sprite" type="Sprite" parent="."]
@@ -1161,42 +1161,37 @@ frame = 16
 script = ExtResource( 14 )
 
 [node name="collision" type="CollisionPolygon2D" parent="."]
-visible = false
-position = Vector2( 0, -24 )
-scale = Vector2( 4, 4 )
+position = Vector2( 0, -6 )
 z_index = 1
 polygon = PoolVector2Array( 10, 6, -10, 6, -10, -28, 0, -38, 10, -28 )
 
 [node name="hurtbox" type="Area2D" parent="."]
-visible = false
 collision_layer = 128
 collision_mask = 4
 
 [node name="collision_shape_2d" type="CollisionShape2D" parent="hurtbox"]
-position = Vector2( 0, -88 )
+position = Vector2( 0, -24 )
 shape = SubResource( 5 )
 
 [node name="test_body_bot" type="KinematicBody2D" parent="."]
-visible = false
 position = Vector2( 0, -16 )
 collision_layer = 0
 
 [node name="collision_shape_2d" type="CollisionShape2D" parent="test_body_bot"]
-position = Vector2( 0, 4 )
+position = Vector2( 0, 8 )
 shape = SubResource( 89 )
 
 [node name="test_body_top" type="KinematicBody2D" parent="."]
-visible = false
 position = Vector2( 0, -80 )
 collision_layer = 0
 
 [node name="collision_shape_2d" type="CollisionShape2D" parent="test_body_top"]
-position = Vector2( 0, -54 )
+position = Vector2( 0, 40 )
 shape = SubResource( 90 )
 
 [node name="moveset" type="Node2D" parent="."]
 visible = false
-position = Vector2( 0, -24 )
+position = Vector2( 0, -6 )
 
 [node name="special_heavy" parent="moveset" instance=ExtResource( 5 )]
 script = SubResource( 94 )
@@ -1206,7 +1201,7 @@ move_hitboxes = [ {
 } ]
 
 [node name="normal_up" parent="moveset" instance=ExtResource( 6 )]
-position = Vector2( -32, -40 )
+position = Vector2( -8, -10 )
 script = SubResource( 93 )
 move_hitboxes = [ {
 "end": 4,
@@ -1221,22 +1216,19 @@ move_hitboxes = [ {
 } ]
 
 [node name="normal_forward" parent="moveset" instance=ExtResource( 2 )]
-position = Vector2( 32, -40 )
+position = Vector2( 8, -10 )
 script = SubResource( 92 )
 
 [node name="viewport_container" type="ViewportContainer" parent="."]
-margin_left = -296.0
-margin_top = -384.0
-margin_right = 304.0
-margin_bottom = 216.0
+margin_left = -72.0
+margin_top = -96.0
+margin_right = 78.0
+margin_bottom = 54.0
 rect_clip_content = true
 stretch = true
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="viewport" type="Viewport" parent="viewport_container"]
-size = Vector2( 600, 600 )
+size = Vector2( 150, 150 )
 transparent_bg = true
 handle_input_locally = false
 usage = 3

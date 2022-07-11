@@ -12,7 +12,7 @@ extends StaticBody2D
 tool
 
 export (int) var damage = 100
-export (Vector2) var size = Vector2(20, 1) setget set_size
+export (Vector2) var size = Vector2(480, 32) setget set_size
 
 # flag needed for setget
 var ready = false
@@ -41,8 +41,8 @@ func get_respawn_point() -> Vector2:
 func set_size(new_size):
     size = new_size
     if ready:
-        $collision.position = (size * 32)
-        $collision.shape.extents = (size * 32)
+        $collision.position = size / 2.0
+        $collision.shape.extents = size / 2.0
         update()
 
 func _process(delta):
@@ -55,7 +55,7 @@ func _draw():
         var color = Color(1.0, 0.0, 0.0)  # red
 
         # outline the collision box
-        Util.draw_zone(self, color)
+        Util.draw_zone(self, color, 0.0, 4.0)
 
         # draw a line from the collision box to the respawn point
         var respawn_point = to_local(get_respawn_point())

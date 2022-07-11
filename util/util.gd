@@ -85,5 +85,5 @@ static func draw_zone(node, color, size_offset = 0, inner_box_radius = 16):
     var inner_origin = Vector2(inner_box_radius, inner_box_radius)
     var inner_size = size - (inner_origin * 2)
 
-    node.draw_rect(Rect2(origin + outer_origin - offset, size), color, false, 4.0)
-    node.draw_rect(Rect2(origin + inner_origin - offset, inner_size), color, false, 4.0)
+    node.draw_rect(Rect2(origin + outer_origin - offset, size), color, false, 2.0)
+    node.draw_rect(Rect2(origin + inner_origin - offset, inner_size), color, false, 2.0)

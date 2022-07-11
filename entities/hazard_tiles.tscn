@@ -4,7 +4,6 @@
 [ext_resource path="res://entities/hazard_tiles.gd" type="Script" id=2]
 
 [node name="hazard_tiles" type="TileMap" groups=["LAYER_FG3"]]
-scale = Vector2( 4, 4 )
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 8, 8 )
 collision_layer = 20

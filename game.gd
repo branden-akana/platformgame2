@@ -79,7 +79,7 @@ func _ready():
         player = get_player()  
     else:  # or manually spawn the player
         player = PlayerRunner.instance()
-        $"/root/main".add_child(player)
+        $"/root/main/screen/viewport".add_child(player)
 
     player.connect("died", self, "on_player_death")
     yield(player, "ready")
@@ -92,8 +92,8 @@ func _ready():
     yield(free_editor_nodes(), "completed")
     
     # initialize post process manager
-    var pp = DisplayManager.instance()
-    $"/root/main".add_child(pp)
+    #var pp = DisplayManager.instance()
+    #$"/root/main".add_child(pp)
     
     emit_signal("post_ready")
     
@@ -189,7 +189,7 @@ func _load_scene(level_path):
 # ========================================================================
 
 func get_level() -> Level:
-    return $"/root/main/level" as Level
+    return $"/root/main/screen/viewport/level" as Level
 
 # Get a list of all rooms in the current level.
 func get_rooms() -> Array:
@@ -309,7 +309,7 @@ func reset_entities():
         door.close_door(false)
 
 func get_player() -> Node:
-    return $"/root/main/player"
+    return $"/root/main/screen/viewport/player"
 
 func get_debug_hud() -> Node:
     return $"/root/main/debug"

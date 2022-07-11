@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://shaders/retro_fg3.tres" type="Material" id=1]
 [ext_resource path="res://effects/display_manager.tscn" type="PackedScene" id=2]
@@ -8,17 +8,8 @@
 [ext_resource path="res://entities/hazard_zone.tscn" type="PackedScene" id=6]
 [ext_resource path="res://entities/room.tscn" type="PackedScene" id=7]
 [ext_resource path="res://entities/light.tscn" type="PackedScene" id=8]
-[ext_resource path="res://assets/bgs/clouds_indexed.png" type="Texture" id=9]
+[ext_resource path="res://background.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/circle.png" type="Texture" id=10]
-
-[sub_resource type="GDScript" id=1]
-script/source = "extends Sprite
-
-onready var origin = position
-
-func _process(delta):
-    position = origin + Game.get_camera().focus * 0.9
-"
 
 [node name="level" instance=ExtResource( 4 )]
 
@@ -160,14 +151,7 @@ position = Vector2( 128, -480 )
 [node name="__temp" parent="." index="5"]
 visible = false
 
-[node name="bg" type="Sprite" parent="." index="6"]
-modulate = Color( 0.635294, 0.635294, 0.635294, 1 )
-position = Vector2( -360, -160 )
-scale = Vector2( 2, 2 )
-z_index = -10
-texture = ExtResource( 9 )
-centered = false
-script = SubResource( 1 )
+[node name="bg" parent="." index="6" instance=ExtResource( 9 )]
 
 [editable path="==EDITOR ONLY==/post_process"]
 [editable path="tilemaps"]
