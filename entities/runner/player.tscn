@@ -1,0 +1,1322 @@
+[gd_scene load_steps=103 format=2]
+
+[ext_resource path="res://entities/runner/moves/normal_down.tscn" type="PackedScene" id=1]
+[ext_resource path="res://entities/runner/moves/normal_forward.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui/debug/editor_only.tscn" type="PackedScene" id=3]
+[ext_resource path="res://entities/runner/runner_model.tscn" type="PackedScene" id=4]
+[ext_resource path="res://entities/runner/moves/special_heavy.tscn" type="PackedScene" id=5]
+[ext_resource path="res://entities/runner/moves/normal_up.tscn" type="PackedScene" id=6]
+[ext_resource path="res://shaders/pixelate.gdshader" type="Shader" id=7]
+[ext_resource path="res://shaders/grayscale.gdshader" type="Shader" id=8]
+[ext_resource path="res://shaders/retrorize.gdshader" type="Shader" id=9]
+[ext_resource path="res://effects/vignette_focus.gd" type="Script" id=10]
+[ext_resource path="res://assets/palettes/base.png" type="Texture" id=11]
+[ext_resource path="res://assets/palettes/na16_aamatniekss.png" type="Texture" id=12]
+[ext_resource path="res://entities/runner/player_runner.gd" type="Script" id=13]
+[ext_resource path="res://entities/runner/animated_sprite.gd" type="Script" id=14]
+[ext_resource path="res://assets/bgs/clouds_indexed.png" type="Texture" id=15]
+[ext_resource path="res://assets/PS4.png" type="Texture" id=16]
+[ext_resource path="res://assets/spritesheets/falcon.png" type="Texture" id=17]
+[ext_resource path="res://effects/display_manager.gd" type="Script" id=18]
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 8 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 16 )
+region = Rect2( 56, 0, 14, 14 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 17 )
+region = Rect2( 32, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 17 )
+region = Rect2( 64, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 17 )
+region = Rect2( 96, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 17 )
+region = Rect2( 128, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 17 )
+region = Rect2( 160, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 17 )
+region = Rect2( 192, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 17 )
+region = Rect2( 224, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=20]
+atlas = ExtResource( 17 )
+region = Rect2( 256, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 17 )
+region = Rect2( 288, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 17 )
+region = Rect2( 320, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 17 )
+region = Rect2( 352, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 17 )
+region = Rect2( 32, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 17 )
+region = Rect2( 64, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=27]
+atlas = ExtResource( 17 )
+region = Rect2( 96, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=28]
+atlas = ExtResource( 17 )
+region = Rect2( 128, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=29]
+atlas = ExtResource( 17 )
+region = Rect2( 160, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=30]
+atlas = ExtResource( 17 )
+region = Rect2( 192, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=31]
+atlas = ExtResource( 17 )
+region = Rect2( 224, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=32]
+atlas = ExtResource( 17 )
+region = Rect2( 256, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=33]
+atlas = ExtResource( 17 )
+region = Rect2( 288, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=34]
+atlas = ExtResource( 17 )
+region = Rect2( 320, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=35]
+atlas = ExtResource( 17 )
+region = Rect2( 352, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=36]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 96, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=56]
+atlas = ExtResource( 17 )
+region = Rect2( 256, 256, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=57]
+atlas = ExtResource( 17 )
+region = Rect2( 320, 256, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=58]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 320, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=59]
+atlas = ExtResource( 17 )
+region = Rect2( 64, 320, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=60]
+atlas = ExtResource( 17 )
+region = Rect2( 128, 320, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=61]
+atlas = ExtResource( 17 )
+region = Rect2( 192, 320, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=62]
+atlas = ExtResource( 17 )
+region = Rect2( 256, 320, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=63]
+atlas = ExtResource( 17 )
+region = Rect2( 320, 320, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=72]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 0, 64, 32 )
+
+[sub_resource type="AtlasTexture" id=73]
+atlas = ExtResource( 17 )
+region = Rect2( 64, 0, 64, 32 )
+
+[sub_resource type="AtlasTexture" id=74]
+atlas = ExtResource( 17 )
+region = Rect2( 128, 0, 64, 32 )
+
+[sub_resource type="AtlasTexture" id=75]
+atlas = ExtResource( 17 )
+region = Rect2( 192, 0, 64, 32 )
+
+[sub_resource type="AtlasTexture" id=76]
+atlas = ExtResource( 17 )
+region = Rect2( 256, 0, 64, 32 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 128, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=39]
+atlas = ExtResource( 17 )
+region = Rect2( 64, 128, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=41]
+atlas = ExtResource( 17 )
+region = Rect2( 128, 128, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=44]
+atlas = ExtResource( 17 )
+region = Rect2( 224, 128, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=45]
+atlas = ExtResource( 17 )
+region = Rect2( 256, 128, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=46]
+atlas = ExtResource( 17 )
+region = Rect2( 288, 128, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=47]
+atlas = ExtResource( 17 )
+region = Rect2( 320, 128, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=48]
+atlas = ExtResource( 17 )
+region = Rect2( 352, 128, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=49]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 192, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=50]
+atlas = ExtResource( 17 )
+region = Rect2( 32, 192, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=51]
+atlas = ExtResource( 17 )
+region = Rect2( 64, 192, 32, 64 )
+
+[sub_resource type="AtlasTexture" id=64]
+atlas = ExtResource( 17 )
+region = Rect2( 128, 384, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=65]
+atlas = ExtResource( 17 )
+region = Rect2( 192, 384, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=66]
+atlas = ExtResource( 17 )
+region = Rect2( 256, 384, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=67]
+atlas = ExtResource( 17 )
+region = Rect2( 320, 384, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=68]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 448, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=69]
+atlas = ExtResource( 17 )
+region = Rect2( 64, 448, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=70]
+atlas = ExtResource( 17 )
+region = Rect2( 128, 448, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=71]
+atlas = ExtResource( 17 )
+region = Rect2( 192, 448, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=77]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 576, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=78]
+atlas = ExtResource( 17 )
+region = Rect2( 64, 576, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=79]
+atlas = ExtResource( 17 )
+region = Rect2( 128, 576, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=80]
+atlas = ExtResource( 17 )
+region = Rect2( 192, 576, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=81]
+atlas = ExtResource( 17 )
+region = Rect2( 256, 576, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=82]
+atlas = ExtResource( 17 )
+region = Rect2( 320, 576, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=83]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 640, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=84]
+atlas = ExtResource( 17 )
+region = Rect2( 64, 640, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=85]
+atlas = ExtResource( 17 )
+region = Rect2( 128, 640, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=86]
+atlas = ExtResource( 17 )
+region = Rect2( 192, 640, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=87]
+atlas = ExtResource( 17 )
+region = Rect2( 256, 640, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=88]
+atlas = ExtResource( 17 )
+region = Rect2( 320, 640, 64, 64 )
+
+[sub_resource type="SpriteFrames" id=11]
+animations = [ {
+"frames": [ SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 36 ) ],
+"loop": true,
+"name": "idle",
+"speed": 25.0
+}, {
+"frames": [ SubResource( 56 ), SubResource( 57 ), SubResource( 58 ), SubResource( 59 ), SubResource( 60 ), SubResource( 61 ), SubResource( 62 ), SubResource( 63 ) ],
+"loop": false,
+"name": "attack",
+"speed": 15.0
+}, {
+"frames": [ SubResource( 72 ), SubResource( 73 ), SubResource( 74 ), SubResource( 75 ), SubResource( 76 ) ],
+"loop": true,
+"name": "running",
+"speed": 15.0
+}, {
+"frames": [ SubResource( 37 ), SubResource( 39 ), SubResource( 41 ), SubResource( 44 ), SubResource( 45 ), SubResource( 46 ), SubResource( 47 ), SubResource( 48 ), SubResource( 49 ), SubResource( 50 ), SubResource( 51 ) ],
+"loop": false,
+"name": "airborne",
+"speed": 25.0
+}, {
+"frames": [ SubResource( 64 ), SubResource( 65 ), SubResource( 66 ), SubResource( 67 ), SubResource( 68 ), SubResource( 69 ), SubResource( 70 ), SubResource( 71 ) ],
+"loop": false,
+"name": "u_attack",
+"speed": 25.0
+}, {
+"frames": [ SubResource( 77 ), SubResource( 78 ), SubResource( 79 ), SubResource( 80 ), SubResource( 81 ), SubResource( 82 ), SubResource( 83 ), SubResource( 84 ), SubResource( 85 ), SubResource( 86 ), SubResource( 87 ), SubResource( 88 ) ],
+"loop": false,
+"name": "d_attack",
+"speed": 25.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 24, 72 )
+
+[sub_resource type="RectangleShape2D" id=89]
+resource_local_to_scene = true
+extents = Vector2( 36, 10 )
+
+[sub_resource type="RectangleShape2D" id=90]
+resource_local_to_scene = true
+extents = Vector2( 24, 22 )
+
+[sub_resource type="GDScript" id=94]
+script/source = "#===============================================================================
+# Move
+#
+# Contains scripting for a move (i.e. attacks, specials).
+# This script contains:
+# - animation
+# - frame data
+#===============================================================================
+
+extends Node2D
+tool
+
+signal move_started
+signal move_hit
+signal move_finished
+signal move_stopped  # called when the move ended manually
+
+# reference to the runner containing this move
+onready var runner = $\"../..\"
+
+# if true, this move is currently playing
+export var playing: bool = false
+export var tick = 0
+
+# if true, flip this move horizontally
+var flipped = false setget set_flipped
+
+# if true, this move hit something
+var hit_detected = false
+
+# move properties
+# =================================
+
+export (int) var move_length = 30
+export (int) var move_damage = 1
+
+export (Array, Dictionary) var move_hitboxes = [
+    {
+        \"start\": 0,
+        \"end\": 4,
+    }
+]
+
+# how long to put the player in hitstun on hit (in frames, from time of hit)
+export (int) var hitlag_on_hit = 6
+
+# the animation to play when performing this move
+export (String) var animation = \"attack\"
+
+# if true, stops the player's vertical velocity at the start
+export var disable_gravity_on_start = false
+
+# if greater than 0, the amount of ticks gravity will be disabled on hit
+export var disable_gravity_on_hit = 18
+
+
+func _ready():
+    runner = $\"../..\"
+    runner.connect(\"stun_start\", self, \"pause\")
+    runner.connect(\"stun_end\", self, \"resume\")
+
+    for hitbox in get_children(): if hitbox is Area2D:
+        # emit \"move_hit\" if anything enters a hitbox
+        hitbox.connect(\"area_shape_entered\", self, \"on_hitbox_entered\", [hitbox])
+
+
+func start():
+    print(\"[move] %s: started\" % name)
+    # reset flags
+    tick = 0
+    playing = true
+    hit_detected = false
+
+    # play move animation
+    $sprite.visible = true
+    $sprite.frame = 0  # restart animation
+
+    runner.play_animation(animation)
+
+    # flip if directed to the left
+    if runner:
+        set_flipped(runner.facing == Direction.LEFT)
+    
+    resume()
+
+
+func pause():
+    playing = false
+    $sprite.stop()
+
+
+func resume():
+    playing = true
+    $sprite.play()
+
+
+func stop(forced = true):
+    if playing:
+        tick = 0
+        playing = false
+        $sprite.visible = false
+        pause()
+        if forced:
+            # print(\"[move] %s: finished\" % name)
+            emit_signal(\"move_finished\")
+        else:
+            # print(\"[move] %s: stopped\" % name)
+            emit_signal(\"move_stopped\")
+        property_list_changed_notify()
+
+
+func move_update(delta):
+
+    if tick > move_length:
+        stop(false)
+
+    elif playing:
+
+        # print(\"[move] %s: frame %s\" % [name, frame])
+
+        # disable gravity at start of move
+        if disable_gravity_on_start and tick == 0:
+            if runner:
+                runner.velocity.y = 0
+
+        for i in range(len(move_hitboxes)):
+
+            var hitbox = get_node(String(i))
+
+            # enable hitbox if inside window
+            if tick == move_hitboxes[i][\"start\"]:
+                # print(\"[move] %s: enabling hitbox\" % name)
+                hitbox.monitoring = true
+                hitbox.get_node(\"collision\").disabled = false
+                hitbox.modulate = Color(4.0, 0.0, 0.0)
+
+            # disable hitbox if outside window
+            elif tick == move_hitboxes[i][\"end\"] + 1:
+                # print(\"[move] %s: disabling hitbox\" % name)
+                hitbox.monitoring = false
+                hitbox.get_node(\"collision\").disabled = true
+                hitbox.modulate = Color(1.0, 1.0, 1.0)
+
+            $sprite.modulate.a = 1 - ((tick - 12) / float(move_length))
+
+        tick += 1
+        property_list_changed_notify()
+
+func _physics_process(delta):
+    if Engine.editor_hint:
+        move_update(delta)
+
+# Flip the move horizontally.
+func set_flipped(flip):
+    flipped = flip
+    if flipped:
+        scale = Vector2(-1, 1)
+    else:
+        scale = Vector2(1, 1)
+
+# called when an object enters a hitbox
+#
+# target: the object that was hit
+# hitbox: the collision of the hitbox that was triggered
+func on_hitbox_entered(area_id, target: Area2D, target_shape_id, hitbox_shape_id, hitbox: Area2D):
+    if(hitbox.monitoring and playing and target is Enemy and (target.health > 0 or runner.ignore_enemy_hp)):
+        # print(\"[move] %s: hitbox %s hit enemy (%s)\" % [name, hitbox.name, hitbox_col.disabled])
+
+        # compute contact points
+        var target_shape = Util.get_shape(target, target_shape_id)
+        var hitbox_shape = Util.get_shape(hitbox, hitbox_shape_id)
+        var contacts = Util.get_collision_contacts(
+            target, target_shape,
+            hitbox, hitbox_shape
+        )
+
+        emit_signal(\"move_hit\")
+        runner.hit(target, move_damage, contacts, hitlag_on_hit, disable_gravity_on_hit)
+        hit_detected = true
+"
+
+[sub_resource type="GDScript" id=93]
+script/source = "#===============================================================================
+# Move
+#
+# Contains scripting for a move (i.e. attacks, specials).
+# This script contains:
+# - animation
+# - frame data
+#===============================================================================
+
+extends Node2D
+tool
+
+signal move_started
+signal move_hit
+signal move_finished
+signal move_stopped  # called when the move ended manually
+
+# reference to the runner containing this move
+onready var runner = $\"../..\"
+
+# if true, this move is currently playing
+export var playing: bool = false
+export var tick = 0
+
+# if true, flip this move horizontally
+var flipped = false setget set_flipped
+
+# if true, this move hit something
+var hit_detected = false
+
+# move properties
+# =================================
+
+export (int) var move_length = 30
+export (int) var move_damage = 1
+
+export (Array, Dictionary) var move_hitboxes = [
+    {
+        \"start\": 0,
+        \"end\": 4,
+    }
+]
+
+# how long to put the player in hitstun on hit (in frames, from time of hit)
+export (int) var hitlag_on_hit = 6
+
+# the animation to play when performing this move
+export (String) var animation = \"attack\"
+
+# if true, stops the player's vertical velocity at the start
+export var disable_gravity_on_start = false
+
+# if greater than 0, the amount of ticks gravity will be disabled on hit
+export var disable_gravity_on_hit = 18
+
+
+func _ready():
+    runner = $\"../..\"
+    runner.connect(\"stun_start\", self, \"pause\")
+    runner.connect(\"stun_end\", self, \"resume\")
+
+    for hitbox in get_children(): if hitbox is Area2D:
+        # emit \"move_hit\" if anything enters a hitbox
+        hitbox.connect(\"area_shape_entered\", self, \"on_hitbox_entered\", [hitbox])
+
+
+func start():
+    print(\"[move] %s: started\" % name)
+    # reset flags
+    tick = 0
+    playing = true
+    hit_detected = false
+
+    # play move animation
+    $sprite.visible = true
+    $sprite.frame = 0  # restart animation
+
+    runner.play_animation(animation)
+
+    # flip if directed to the left
+    if runner:
+        set_flipped(runner.facing == Direction.LEFT)
+    
+    resume()
+
+
+func pause():
+    playing = false
+    $sprite.stop()
+
+
+func resume():
+    playing = true
+    $sprite.play()
+
+
+func stop(forced = true):
+    if playing:
+        tick = 0
+        playing = false
+        $sprite.visible = false
+        pause()
+        if forced:
+            # print(\"[move] %s: finished\" % name)
+            emit_signal(\"move_finished\")
+        else:
+            # print(\"[move] %s: stopped\" % name)
+            emit_signal(\"move_stopped\")
+        property_list_changed_notify()
+
+
+func move_update(delta):
+
+    if tick > move_length:
+        stop(false)
+
+    elif playing:
+
+        # print(\"[move] %s: frame %s\" % [name, frame])
+
+        # disable gravity at start of move
+        if disable_gravity_on_start and tick == 0:
+            if runner:
+                runner.velocity.y = 0
+
+        for i in range(len(move_hitboxes)):
+
+            var hitbox = get_node(String(i))
+
+            # enable hitbox if inside window
+            if tick == move_hitboxes[i][\"start\"]:
+                # print(\"[move] %s: enabling hitbox\" % name)
+                hitbox.monitoring = true
+                hitbox.get_node(\"collision\").disabled = false
+                hitbox.modulate = Color(4.0, 0.0, 0.0)
+
+            # disable hitbox if outside window
+            elif tick == move_hitboxes[i][\"end\"] + 1:
+                # print(\"[move] %s: disabling hitbox\" % name)
+                hitbox.monitoring = false
+                hitbox.get_node(\"collision\").disabled = true
+                hitbox.modulate = Color(1.0, 1.0, 1.0)
+
+            $sprite.modulate.a = 1 - ((tick - 12) / float(move_length))
+
+        tick += 1
+        property_list_changed_notify()
+
+func _physics_process(delta):
+    if Engine.editor_hint:
+        move_update(delta)
+
+# Flip the move horizontally.
+func set_flipped(flip):
+    flipped = flip
+    if flipped:
+        scale = Vector2(-1, 1)
+    else:
+        scale = Vector2(1, 1)
+
+# called when an object enters a hitbox
+#
+# target: the object that was hit
+# hitbox: the collision of the hitbox that was triggered
+func on_hitbox_entered(area_id, target: Area2D, target_shape_id, hitbox_shape_id, hitbox: Area2D):
+    if(hitbox.monitoring and playing and target is Enemy and (target.health > 0 or runner.ignore_enemy_hp)):
+        # print(\"[move] %s: hitbox %s hit enemy (%s)\" % [name, hitbox.name, hitbox_col.disabled])
+
+        # compute contact points
+        var target_shape = Util.get_shape(target, target_shape_id)
+        var hitbox_shape = Util.get_shape(hitbox, hitbox_shape_id)
+        var contacts = Util.get_collision_contacts(
+            target, target_shape,
+            hitbox, hitbox_shape
+        )
+
+        emit_signal(\"move_hit\")
+        runner.hit(target, move_damage, contacts, hitlag_on_hit, disable_gravity_on_hit)
+        hit_detected = true
+"
+
+[sub_resource type="GDScript" id=91]
+script/source = "#===============================================================================
+# Move
+#
+# Contains scripting for a move (i.e. attacks, specials).
+# This script contains:
+# - animation
+# - frame data
+#===============================================================================
+
+extends Node2D
+tool
+
+signal move_started
+signal move_hit
+signal move_finished
+signal move_stopped  # called when the move ended manually
+
+# reference to the runner containing this move
+onready var runner = $\"../..\"
+
+# if true, this move is currently playing
+export var playing: bool = false
+export var tick = 0
+
+# if true, flip this move horizontally
+var flipped = false setget set_flipped
+
+# if true, this move hit something
+var hit_detected = false
+
+# move properties
+# =================================
+
+export (int) var move_length = 30
+export (int) var move_damage = 1
+
+export (Array, Dictionary) var move_hitboxes = [
+    {
+        \"start\": 0,
+        \"end\": 4,
+    }
+]
+
+# how long to put the player in hitstun on hit (in frames, from time of hit)
+export (int) var hitlag_on_hit = 6
+
+# the animation to play when performing this move
+export (String) var animation = \"attack\"
+
+# if true, stops the player's vertical velocity at the start
+export var disable_gravity_on_start = false
+
+# if greater than 0, the amount of ticks gravity will be disabled on hit
+export var disable_gravity_on_hit = 18
+
+
+func _ready():
+    runner = $\"../..\"
+    runner.connect(\"stun_start\", self, \"pause\")
+    runner.connect(\"stun_end\", self, \"resume\")
+
+    for hitbox in get_children(): if hitbox is Area2D:
+        # emit \"move_hit\" if anything enters a hitbox
+        hitbox.connect(\"area_shape_entered\", self, \"on_hitbox_entered\", [hitbox])
+
+
+func start():
+    print(\"[move] %s: started\" % name)
+    # reset flags
+    tick = 0
+    playing = true
+    hit_detected = false
+
+    # play move animation
+    $sprite.visible = true
+    $sprite.frame = 0  # restart animation
+
+    runner.play_animation(animation)
+
+    # flip if directed to the left
+    if runner:
+        set_flipped(runner.facing == Direction.LEFT)
+    
+    resume()
+
+
+func pause():
+    playing = false
+    $sprite.stop()
+
+
+func resume():
+    playing = true
+    $sprite.play()
+
+
+func stop(forced = true):
+    if playing:
+        tick = 0
+        playing = false
+        $sprite.visible = false
+        pause()
+        if forced:
+            # print(\"[move] %s: finished\" % name)
+            emit_signal(\"move_finished\")
+        else:
+            # print(\"[move] %s: stopped\" % name)
+            emit_signal(\"move_stopped\")
+        property_list_changed_notify()
+
+
+func move_update(delta):
+
+    if tick > move_length:
+        stop(false)
+
+    elif playing:
+
+        # print(\"[move] %s: frame %s\" % [name, frame])
+
+        # disable gravity at start of move
+        if disable_gravity_on_start and tick == 0:
+            if runner:
+                runner.velocity.y = 0
+
+        for i in range(len(move_hitboxes)):
+
+            var hitbox = get_node(String(i))
+
+            # enable hitbox if inside window
+            if tick == move_hitboxes[i][\"start\"]:
+                # print(\"[move] %s: enabling hitbox\" % name)
+                hitbox.monitoring = true
+                hitbox.get_node(\"collision\").disabled = false
+                hitbox.modulate = Color(4.0, 0.0, 0.0)
+
+            # disable hitbox if outside window
+            elif tick == move_hitboxes[i][\"end\"] + 1:
+                # print(\"[move] %s: disabling hitbox\" % name)
+                hitbox.monitoring = false
+                hitbox.get_node(\"collision\").disabled = true
+                hitbox.modulate = Color(1.0, 1.0, 1.0)
+
+            $sprite.modulate.a = 1 - ((tick - 12) / float(move_length))
+
+        tick += 1
+        property_list_changed_notify()
+
+func _physics_process(delta):
+    if Engine.editor_hint:
+        move_update(delta)
+
+# Flip the move horizontally.
+func set_flipped(flip):
+    flipped = flip
+    if flipped:
+        scale = Vector2(-1, 1)
+    else:
+        scale = Vector2(1, 1)
+
+# called when an object enters a hitbox
+#
+# target: the object that was hit
+# hitbox: the collision of the hitbox that was triggered
+func on_hitbox_entered(area_id, target: Area2D, target_shape_id, hitbox_shape_id, hitbox: Area2D):
+    if(hitbox.monitoring and playing and target is Enemy and (target.health > 0 or runner.ignore_enemy_hp)):
+        # print(\"[move] %s: hitbox %s hit enemy (%s)\" % [name, hitbox.name, hitbox_col.disabled])
+
+        # compute contact points
+        var target_shape = Util.get_shape(target, target_shape_id)
+        var hitbox_shape = Util.get_shape(hitbox, hitbox_shape_id)
+        var contacts = Util.get_collision_contacts(
+            target, target_shape,
+            hitbox, hitbox_shape
+        )
+
+        emit_signal(\"move_hit\")
+        runner.hit(target, move_damage, contacts, hitlag_on_hit, disable_gravity_on_hit)
+        hit_detected = true
+"
+
+[sub_resource type="GDScript" id=92]
+script/source = "#===============================================================================
+# Move
+#
+# Contains scripting for a move (i.e. attacks, specials).
+# This script contains:
+# - animation
+# - frame data
+#===============================================================================
+
+extends Node2D
+tool
+
+signal move_started
+signal move_hit
+signal move_finished
+signal move_stopped  # called when the move ended manually
+
+# reference to the runner containing this move
+onready var runner = $\"../..\"
+
+# if true, this move is currently playing
+export var playing: bool = false
+export var tick = 0
+
+# if true, flip this move horizontally
+var flipped = false setget set_flipped
+
+# if true, this move hit something
+var hit_detected = false
+
+# move properties
+# =================================
+
+var move_length = 30
+var move_damage = 1
+
+var move_hitboxes = [
+    {
+        \"start\": 0,
+        \"end\": 4,
+    }
+]
+
+# how long to put the player in hitstun on hit (in frames, from time of hit)
+var hitlag_on_hit = 6
+
+# the animation to play when performing this move
+var animation = \"attack\"
+
+# if true, stops the player's vertical velocity at the start
+var disable_gravity_on_start = false
+
+# if greater than 0, the amount of ticks gravity will be disabled on hit
+var disable_gravity_on_hit = 18
+
+
+func _ready():
+    runner = $\"../..\"
+    runner.connect(\"stun_start\", self, \"pause\")
+    runner.connect(\"stun_end\", self, \"resume\")
+
+    for hitbox in get_children(): if hitbox is Area2D:
+        # emit \"move_hit\" if anything enters a hitbox
+        hitbox.connect(\"area_shape_entered\", self, \"on_hitbox_entered\", [hitbox])
+
+
+func start():
+    print(\"[move] %s: started\" % name)
+    # reset flags
+    tick = 0
+    playing = true
+    hit_detected = false
+
+    # play move animation
+    $sprite.visible = true
+    $sprite.frame = 0  # restart animation
+
+    runner.play_animation(animation)
+
+    # flip if directed to the left
+    if runner:
+        set_flipped(runner.facing == Direction.LEFT)
+    
+    resume()
+
+
+func pause():
+    playing = false
+    $sprite.stop()
+
+
+func resume():
+    playing = true
+    $sprite.play()
+
+
+func stop(forced = true):
+    if playing:
+        tick = 0
+        playing = false
+        $sprite.visible = false
+        pause()
+        if forced:
+            # print(\"[move] %s: finished\" % name)
+            emit_signal(\"move_finished\")
+        else:
+            # print(\"[move] %s: stopped\" % name)
+            emit_signal(\"move_stopped\")
+        property_list_changed_notify()
+
+
+func move_update(delta):
+
+    if tick > move_length:
+        stop(false)
+
+    elif playing:
+
+        # print(\"[move] %s: frame %s\" % [name, frame])
+
+        # disable gravity at start of move
+        if disable_gravity_on_start and tick == 0:
+            if runner:
+                runner.velocity.y = 0
+
+        for i in range(len(move_hitboxes)):
+
+            var hitbox = get_node(String(i))
+
+            # enable hitbox if inside window
+            if tick == move_hitboxes[i][\"start\"]:
+                # print(\"[move] %s: enabling hitbox\" % name)
+                hitbox.monitoring = true
+                hitbox.get_node(\"collision\").disabled = false
+                hitbox.modulate = Color(4.0, 0.0, 0.0)
+
+            # disable hitbox if outside window
+            elif tick == move_hitboxes[i][\"end\"] + 1:
+                # print(\"[move] %s: disabling hitbox\" % name)
+                hitbox.monitoring = false
+                hitbox.get_node(\"collision\").disabled = true
+                hitbox.modulate = Color(1.0, 1.0, 1.0)
+
+            $sprite.modulate.a = 1 - ((tick - 12) / float(move_length))
+
+        tick += 1
+        property_list_changed_notify()
+
+func _physics_process(delta):
+    if Engine.editor_hint:
+        move_update(delta)
+
+# Flip the move horizontally.
+func set_flipped(flip):
+    flipped = flip
+    if flipped:
+        scale = Vector2(-1, 1)
+    else:
+        scale = Vector2(1, 1)
+
+# called when an object enters a hitbox
+#
+# target: the object that was hit
+# hitbox: the collision of the hitbox that was triggered
+func on_hitbox_entered(area_id, target: Area2D, target_shape_id, hitbox_shape_id, hitbox: Area2D):
+    if(hitbox.monitoring and playing and target is Enemy and (target.health > 0 or runner.ignore_enemy_hp)):
+        # print(\"[move] %s: hitbox %s hit enemy (%s)\" % [name, hitbox.name, hitbox_col.disabled])
+
+        # compute contact points
+        var target_shape = Util.get_shape(target, target_shape_id)
+        var hitbox_shape = Util.get_shape(hitbox, hitbox_shape_id)
+        var contacts = Util.get_collision_contacts(
+            target, target_shape,
+            hitbox, hitbox_shape
+        )
+
+        emit_signal(\"move_hit\")
+        runner.hit(target, move_damage, contacts, hitlag_on_hit, disable_gravity_on_hit)
+        hit_detected = true
+"
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = ExtResource( 9 )
+shader_param/screen = true
+shader_param/subpixel_fix = true
+shader_param/pixel_size = 1.0
+shader_param/antialiased = true
+shader_param/palette_size = Vector2( 8, 2 )
+shader_param/palette_blend = 0.0
+shader_param/noise_strength = 0.015
+shader_param/noise_speed = 10.0
+shader_param/palette_key = ExtResource( 11 )
+shader_param/palette_a = ExtResource( 11 )
+shader_param/palette_b = ExtResource( 12 )
+
+[sub_resource type="ShaderMaterial" id=97]
+shader = ExtResource( 7 )
+shader_param/screen = true
+shader_param/subpixel_fix = false
+shader_param/pixel_size = 4.0
+shader_param/pixel_smoothing = 0.5
+shader_param/noise_strength = 0.005
+
+[sub_resource type="Shader" id=95]
+code = "shader_type canvas_item;
+
+uniform vec2 focus = vec2(0.5, 0.5);
+
+varying vec2 screen_focus;
+varying mat4 world_mat;
+varying float len;
+
+
+void fragment() {
+    COLOR = texture(SCREEN_TEXTURE, SCREEN_UV);
+    float dist = distance(UV.xy * vec2(1.0, 0.56), focus.xy * vec2(1.0, 0.56));
+    
+    // vignette
+    float center_len = clamp(dist, 0.0, 1.0);
+    float vign = smoothstep(0.3, 3, dist / 0.5);
+    COLOR = vec4(vec3(0.0), vign);
+    //COLOR = mix(COLOR, vec4(vec3(0.0), 0.5), pow(center_len, 2));
+    //COLOR = mix(vec4(vec3(1.0), 1.0), vec4(vec3(0.0), 1.0), center_len);
+}"
+
+[sub_resource type="ShaderMaterial" id=98]
+shader = SubResource( 95 )
+shader_param/focus = Vector2( 0.5, 0.5 )
+
+[sub_resource type="GDScript" id=96]
+script/source = "extends Sprite
+
+onready var origin = position
+
+func _process(delta):
+    position = origin + Game.get_camera().focus * 0.9
+"
+
+[node name="player" type="KinematicBody2D"]
+z_index = 1
+collision_layer = 2
+collision_mask = 257
+script = ExtResource( 13 )
+__meta__ = {
+"_edit_horizontal_guides_": [ -192.0, 0.0 ],
+"_edit_vertical_guides_": [ -64.0, 64.0 ]
+}
+
+[node name="interact_sprite" type="Sprite" parent="."]
+visible = false
+modulate = Color( 0.694118, 0.694118, 0.694118, 1 )
+material = SubResource( 2 )
+position = Vector2( 8, -76 )
+scale = Vector2( 4, 4 )
+texture = SubResource( 3 )
+region_rect = Rect2( 0, 0, 56, 56 )
+
+[node name="sprite" type="AnimatedSprite" parent="."]
+visible = false
+position = Vector2( 0, -64 )
+scale = Vector2( 4, 4 )
+z_index = 1
+frames = SubResource( 11 )
+animation = "idle"
+frame = 16
+script = ExtResource( 14 )
+
+[node name="collision" type="CollisionPolygon2D" parent="."]
+visible = false
+position = Vector2( 0, -24 )
+scale = Vector2( 4, 4 )
+z_index = 1
+polygon = PoolVector2Array( 10, 6, -10, 6, -10, -28, 0, -38, 10, -28 )
+
+[node name="hurtbox" type="Area2D" parent="."]
+visible = false
+collision_layer = 128
+collision_mask = 4
+
+[node name="collision_shape_2d" type="CollisionShape2D" parent="hurtbox"]
+position = Vector2( 0, -88 )
+shape = SubResource( 5 )
+
+[node name="test_body_bot" type="KinematicBody2D" parent="."]
+visible = false
+position = Vector2( 0, -16 )
+collision_layer = 0
+
+[node name="collision_shape_2d" type="CollisionShape2D" parent="test_body_bot"]
+position = Vector2( 0, 4 )
+shape = SubResource( 89 )
+
+[node name="test_body_top" type="KinematicBody2D" parent="."]
+visible = false
+position = Vector2( 0, -80 )
+collision_layer = 0
+
+[node name="collision_shape_2d" type="CollisionShape2D" parent="test_body_top"]
+position = Vector2( 0, -54 )
+shape = SubResource( 90 )
+
+[node name="moveset" type="Node2D" parent="."]
+visible = false
+position = Vector2( 0, -24 )
+
+[node name="special_heavy" parent="moveset" instance=ExtResource( 5 )]
+script = SubResource( 94 )
+move_hitboxes = [ {
+"end": 4,
+"start": 0
+} ]
+
+[node name="normal_up" parent="moveset" instance=ExtResource( 6 )]
+position = Vector2( -32, -40 )
+script = SubResource( 93 )
+move_hitboxes = [ {
+"end": 4,
+"start": 0
+} ]
+
+[node name="normal_down" parent="moveset" instance=ExtResource( 1 )]
+script = SubResource( 91 )
+move_hitboxes = [ {
+"end": 4,
+"start": 0
+} ]
+
+[node name="normal_forward" parent="moveset" instance=ExtResource( 2 )]
+position = Vector2( 32, -40 )
+script = SubResource( 92 )
+
+[node name="viewport_container" type="ViewportContainer" parent="."]
+margin_left = -296.0
+margin_top = -384.0
+margin_right = 304.0
+margin_bottom = 216.0
+rect_clip_content = true
+stretch = true
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="viewport" type="Viewport" parent="viewport_container"]
+size = Vector2( 600, 600 )
+transparent_bg = true
+handle_input_locally = false
+usage = 3
+render_target_update_mode = 3
+gui_disable_input = true
+
+[node name="captain" parent="viewport_container/viewport" instance=ExtResource( 4 )]
+
+[node name="==EDITOR ONLY==" parent="." instance=ExtResource( 3 )]
+
+[node name="post_process" type="Node2D" parent="==EDITOR ONLY=="]
+visible = false
+script = ExtResource( 18 )
+palettes = [ ExtResource( 11 ) ]
+
+[node name="2_retrorizer_2" type="CanvasLayer" parent="==EDITOR ONLY==/post_process"]
+layer = 3
+
+[node name="rect" type="ColorRect" parent="==EDITOR ONLY==/post_process/2_retrorizer_2"]
+visible = false
+material = SubResource( 7 )
+margin_left = -4096.0
+margin_top = -4096.0
+margin_right = 4096.0
+margin_bottom = 4096.0
+
+[node name="3_pixelator" type="CanvasLayer" parent="==EDITOR ONLY==/post_process"]
+layer = 3
+
+[node name="rect" type="ColorRect" parent="==EDITOR ONLY==/post_process/3_pixelator"]
+visible = false
+material = SubResource( 97 )
+margin_left = -4096.0
+margin_top = -4096.0
+margin_right = 4096.0
+margin_bottom = 4096.0
+
+[node name="2_retrorizer" type="CanvasLayer" parent="==EDITOR ONLY==/post_process"]
+layer = 2
+
+[node name="rect" type="ColorRect" parent="==EDITOR ONLY==/post_process/2_retrorizer"]
+visible = false
+material = SubResource( 7 )
+margin_left = -4208.0
+margin_top = -3864.0
+margin_right = 3984.0
+margin_bottom = 4328.0
+
+[node name="canvas_layer" type="CanvasLayer" parent="==EDITOR ONLY==/post_process"]
+
+[node name="vignette" type="ColorRect" parent="==EDITOR ONLY==/post_process/canvas_layer"]
+visible = false
+material = SubResource( 98 )
+anchor_left = 0.0015625
+anchor_top = 0.00277778
+anchor_right = 0.0015625
+anchor_bottom = 0.00277778
+margin_left = -2.0
+margin_top = -2.0
+margin_right = 1278.0
+margin_bottom = 718.0
+script = ExtResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="tween" type="Tween" parent="==EDITOR ONLY==/post_process"]
+
+[node name="tween_2" type="Tween" parent="==EDITOR ONLY==/post_process"]
+
+[node name="bg" type="Sprite" parent="==EDITOR ONLY==/post_process"]
+modulate = Color( 0, 0.647059, 0.843137, 1 )
+position = Vector2( -656, -1096 )
+scale = Vector2( 2, 2 )
+z_index = -10
+texture = ExtResource( 15 )
+centered = false
+script = SubResource( 96 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[editable path="viewport_container/viewport/captain"]

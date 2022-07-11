@@ -1,0 +1,15 @@
+# Import cache
+.import/
+
+# Binaries
+bin/
+build/
+lib/
+
+*.zip
+*.exe
+*.ACT
+*.txt
+
+# Linux binary
+*.x86_64

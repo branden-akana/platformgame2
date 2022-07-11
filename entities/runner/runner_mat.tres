@@ -1,0 +1,11 @@
+[gd_resource type="SpatialMaterial" format=2]
+
+[resource]
+flags_vertex_lighting = true
+flags_disable_ambient_light = true
+flags_ensure_correct_normals = true
+params_diffuse_mode = 4
+params_specular_mode = 3
+metallic = 0.8
+metallic_specular = 1.0
+roughness = 0.57
