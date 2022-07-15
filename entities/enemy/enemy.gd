@@ -72,11 +72,21 @@ func get_hp_color(hp):
             return Color(1.0, 1.0, 0.5)
         2:
             return Color(1.0, 1.0, 1.0)
-        _:
-            return Color(1.0, 1.0, 1.0)
+        3, _:
+            return Color(1.0, 0.0, 1.0)
 
 func update_color():
     sprite.color = get_hp_color(health)
+    update_size()
+
+func update_size():
+    match(health):
+        0, 1:
+            $sprite.scale = Vector2(1.5, 1.5)
+        2:
+            $sprite.scale = Vector2(2, 2)
+        3, _:
+            $sprite.scale = Vector2(2.5, 2.5)
 
 func hurt(from, dmg = 1):
     hit_shift = Vector2.ZERO
@@ -97,6 +107,9 @@ func hurt(from, dmg = 1):
         get_hp_color(health + 1), get_hp_color(health), 0.2
     )
     tween.start()
+
+    update_size()
+
 
 # func on_area_enter(area):
 #     var no_damage = area.get_parent().no_damage
