@@ -1,6 +1,6 @@
 [gd_resource type="TileSet" load_steps=19 format=2]
 
-[ext_resource path="res://assets/spikes.png" type="Texture" id=1]
+[ext_resource path="res://assets/sprites/spikes.png" type="Texture" id=1]
 [ext_resource path="res://assets/tilesets/dev.png" type="Texture" id=2]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]

@@ -23,8 +23,8 @@ func _process(delta):
         var x = origin.x + camera.focus.x * parallax * 0.0005
         $sprite.position = origin + camera.focus
 
-        box_1.material.uv1_offset.x = fmod(x, 1.0)
-        box_2.material.uv1_offset.x = fmod(x, 1.0)
+        box_1.material.uv1_offset.x = fmod(-x, 1.0)
+        box_2.material.uv1_offset.x = fmod(-x, 1.0)
 
     box_1.material.uv1_offset.z = fmod(box_1.material.uv1_offset.z + z, 1.0)
     box_2.material.uv1_offset.z = fmod(box_2.material.uv1_offset.z + z, 1.0)

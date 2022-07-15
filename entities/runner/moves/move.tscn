@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://assets/spritesheets/player_sheet.png" type="Texture" id=1]
+[ext_resource path="res://assets/sprites/player_sheet.png" type="Texture" id=1]
 [ext_resource path="res://entities/runner/moves/move.gd" type="Script" id=2]
 
 [sub_resource type="AtlasTexture" id=1]

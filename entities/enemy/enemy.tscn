@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://entities/enemy/enemy.gd" type="Script" id=1]
-[ext_resource path="res://assets/circle.png" type="Texture" id=2]
+[ext_resource path="res://assets/textures/circle.png" type="Texture" id=2]
 
 [sub_resource type="Curve" id=2]
 _data = [ Vector2( 0, 0 ), 0.0, 7.45007, 0, 0, Vector2( 0.137019, 1 ), 10.4755, -3.12352, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]

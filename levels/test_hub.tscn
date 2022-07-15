@@ -5,7 +5,7 @@
 [ext_resource path="res://tilesets/blockouts.tscn" type="PackedScene" id=3]
 [ext_resource path="res://entities/room.tscn" type="PackedScene" id=4]
 [ext_resource path="res://levels/level.gd" type="Script" id=6]
-[ext_resource path="res://assets/circle.png" type="Texture" id=7]
+[ext_resource path="res://assets/textures/circle.png" type="Texture" id=7]
 [ext_resource path="res://entities/sign.tscn" type="PackedScene" id=10]
 
 [node name="level" type="Node2D"]

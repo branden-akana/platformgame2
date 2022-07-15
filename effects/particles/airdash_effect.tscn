@@ -1,6 +1,6 @@
 [gd_scene load_steps=19 format=2]
 
-[ext_resource path="res://assets/spritesheets/falcon.png" type="Texture" id=1]
+[ext_resource path="res://assets/sprites/falcon.png" type="Texture" id=1]
 [ext_resource path="res://effects/particles/JumpParticles.tscn" type="PackedScene" id=2]
 
 [sub_resource type="GDScript" id=14]

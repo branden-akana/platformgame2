@@ -9,7 +9,7 @@
 [ext_resource path="res://entities/runner/prunner.gd" type="Script" id=7]
 [ext_resource path="res://ui/debug/ecb_display.tscn" type="PackedScene" id=8]
 [ext_resource path="res://shaders/grayscale.gdshader" type="Shader" id=9]
-[ext_resource path="res://assets/PS4.png" type="Texture" id=19]
+[ext_resource path="res://assets/sprites/PS4.png" type="Texture" id=19]
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 9 )

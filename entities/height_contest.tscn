@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://ui/spritetext.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ui/sprite_label.tscn" type="PackedScene" id=1]
 [ext_resource path="res://ui/debug/height_contest.gd" type="Script" id=2]
 
 [node name="height_contest" type="Node2D"]

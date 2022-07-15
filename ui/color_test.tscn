@@ -7,7 +7,7 @@
 [ext_resource path="res://shaders/retrorize.gdshader" type="Shader" id=5]
 [ext_resource path="res://assets/palettes/cool.png" type="Texture" id=6]
 [ext_resource path="res://entities/light.tscn" type="PackedScene" id=7]
-[ext_resource path="res://assets/bg.png" type="Texture" id=8]
+[ext_resource path="res://assets/bgs/bg.png" type="Texture" id=8]
 [ext_resource path="res://effects/display_manager.tscn" type="PackedScene" id=9]
 
 [sub_resource type="ShaderMaterial" id=1]

@@ -6,7 +6,7 @@
 [ext_resource path="res://entities/hazard_zone.tscn" type="PackedScene" id=6]
 [ext_resource path="res://entities/room.tscn" type="PackedScene" id=7]
 [ext_resource path="res://entities/background.tscn" type="PackedScene" id=9]
-[ext_resource path="res://assets/circle.png" type="Texture" id=10]
+[ext_resource path="res://assets/textures/circle.png" type="Texture" id=10]
 
 [node name="level" instance=ExtResource( 4 )]
 

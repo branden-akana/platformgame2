@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://entities/runner/moves/move.tscn" type="PackedScene" id=1]
-[ext_resource path="res://assets/spritesheets/player_sheet.png" type="Texture" id=2]
+[ext_resource path="res://assets/sprites/player_sheet.png" type="Texture" id=2]
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 2 )

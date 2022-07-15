@@ -207,7 +207,7 @@ _global_script_classes=[ {
 "base": "Node2D",
 "class": "SpriteLabel",
 "language": "GDScript",
-"path": "res://entities/sprite_label.gd"
+"path": "res://ui/sprite_label.gd"
 }, {
 "base": "Reference",
 "class": "State",
