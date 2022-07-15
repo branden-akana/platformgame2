@@ -1,0 +1,50 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://entities/runner/prunner.tscn" type="PackedScene" id=1]
+[ext_resource path="res://entities/runner/grunner.gd" type="Script" id=2]
+
+[sub_resource type="ViewportTexture" id=1]
+viewport_path = NodePath("3d")
+
+[node name="player" instance=ExtResource( 1 )]
+z_index = 0
+script = ExtResource( 2 )
+MAX_SPEED = 1500
+DASH_STOP_SPEED = 400
+DASH_INIT_SPEED = 500
+DASH_MAX_SPEED = 1500
+
+[node name="hurtbox" parent="." index="3"]
+visible = false
+
+[node name="special_heavy" parent="moveset" index="0"]
+visible = false
+move_hitboxes = [ {
+"end": 4,
+"start": 0
+} ]
+
+[node name="normal_up" parent="moveset" index="1"]
+visible = false
+move_hitboxes = [ {
+"end": 4,
+"start": 0
+} ]
+
+[node name="normal_down" parent="moveset" index="2"]
+visible = false
+move_hitboxes = [ {
+"end": 4,
+"start": 0
+} ]
+
+[node name="normal_forward" parent="moveset" index="3"]
+visible = false
+
+[node name="3d_proj" parent="." index="5"]
+color = Color( 0.109804, 0.109804, 0.109804, 1 )
+texture = SubResource( 1 )
+
+[node name="3d_proj_2" parent="." index="6"]
+color = Color( 0.0431373, 0.0431373, 0.0431373, 1 )
+texture = SubResource( 1 )

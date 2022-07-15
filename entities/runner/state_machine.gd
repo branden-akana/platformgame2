@@ -39,10 +39,12 @@ func init(runner):
 
 # Set the state of the handle
 func set_state(state_type):
+    # if state_type == current_type: return
+
     if runner and state_type in states:
         var old_state_name = current_type
         var new_state = states[state_type]
-        if new_state.can_start():
+        if new_state.can_start(runner):
             # Call on_end() of previous state
             if current_state:
                 current_state.on_end(state_type, runner, runner.fsm)

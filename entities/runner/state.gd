@@ -35,9 +35,10 @@ func process(delta, runner, fsm):
     if runner.airdashes_left > 0 and runner.pressed_airdash():
         var axis = runner.get_axis()
         if (
-            current_type == State.ATTACK and
-            not runner.is_grounded() or current_type != State.ATTACK and
-            round(axis.length()) != 0
+            not axis.is_equal_approx(Vector2.ZERO)
+            and current_type == State.ATTACK
+            and not runner.is_grounded() or current_type != State.ATTACK
+            and round(axis.length()) != 0
         ):
             print("initiated airdash")
             fsm.goto_airdash()
@@ -79,8 +80,19 @@ func allow_jump_out(runner):
 
 # Check if the player wants to do a walljump.
 func allow_walljump(runner):
-    if runner.pressed_right() or runner.pressed_left():
-        runner.do_walljump()
+
+    if runner.WALLJUMP_TYPE == runner.WalljumpType.JOYSTICK:
+
+        if runner.pressed_right():
+            runner.action_walljump_right()
+            
+        if runner.pressed_left():
+            runner.action_walljump_left()
+    
+    elif runner.WALLJUMP_TYPE == runner.WalljumpType.JUMP:
+
+        if runner.pressed_jump_raw():
+            runner.action_walljump_any()
 
 
 # Check if the player wants to fastfall.
@@ -105,10 +117,11 @@ func allow_land_out(runner):
 # require_neutral: if true, ignore dash inputs that don't go
 #                  through the center of the movement axis
 func allow_dash_out(runner):
-    if (
-        runner.pressed_left_thru_neutral()
-        or runner.pressed_right_thru_neutral()
-    ):
+    # if (
+    #     runner.pressed_left_thru_neutral()
+    #     or runner.pressed_right_thru_neutral()
+    # ):
+    if (runner.pressed_left() or runner.pressed_right()):
         runner.fsm.goto_dash()
 
 # Check if player is trying to not move (no movement input)
@@ -140,7 +153,7 @@ func on_init(runner):
     pass
 
 # checks if the runner can enter this state
-func can_start():
+func can_start(runner):
     return true
 
 # called at the beginning of the state

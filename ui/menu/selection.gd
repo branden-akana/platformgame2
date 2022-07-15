@@ -12,6 +12,15 @@ func get_label():
 func on_select(menu):
     pass
 
+# called when the user leaves this item
+func on_return(menu):
+    pass
+
+# get this selection's new menu items. if this array is empty,
+# this selection isn't a menu.
+func get_items() -> Array:
+    return []
+
 # called when the user presses right on this item
 func on_right(menu):
     pass
@@ -19,3 +28,4 @@ func on_right(menu):
 # called when the user presses left on this item
 func on_left(menu):
     pass
+

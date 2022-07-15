@@ -10,6 +10,7 @@ offsets = PoolRealArray( 0, 0.6 )
 colors = PoolColorArray( 1, 1, 1, 0.25, 1, 1, 1, 0 )
 
 [node name="CPUParticles2D" type="CPUParticles2D"]
+scale = Vector2( 4, 4 )
 z_index = 10
 emitting = false
 amount = 10
@@ -25,7 +26,7 @@ gravity = Vector2( 0, 10 )
 initial_velocity = 50.0
 initial_velocity_random = 0.35
 damping = 20.0
-scale_amount = 0.01
+scale_amount = 4.0
 scale_amount_random = 0.5
 scale_amount_curve = SubResource( 1 )
 color_ramp = SubResource( 2 )

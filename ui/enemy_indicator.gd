@@ -5,7 +5,7 @@ var total = 0
 var alive = 0
 var dead = 0
 
-const SPACING = 32
+const SPACING = 64
 
 func _physics_process(delta):
     if not Engine.editor_hint:
@@ -29,12 +29,12 @@ func _draw():
     
     for _i in range(dead):
         # draw_circle(Vector2(x, 0), 8, Color(0.0, 0.0, 0.0, 0.6))
-        draw_circle(Vector2(x, 0), 3, Color(1.0, 1.0, 1.0, 0.3))
+        draw_circle(Vector2(x, 0), 4, Color(1.0, 1.0, 1.0, 0.6))
         x += SPACING
         
     for _i in range(alive):
-        draw_circle(Vector2(x, 0), 14, Color(0.0, 0.0, 0.0, 0.6))
-        draw_circle(Vector2(x, 0), 10, Color(1.0, 1.0, 1.0, 0.3))
+        # draw_circle(Vector2(x, 0), 14, Color(0.0, 0.0, 0.0, 1.0))
+        draw_circle(Vector2(x, 0), 10, Color(1.0, 1.0, 1.0, 1.0))
 
         x += SPACING
         
@@ -42,7 +42,8 @@ func get_width(total):
     return total * SPACING
     
 func get_origin(total):
-    return (get_width(total) / 2.0) - (SPACING / 2.0)
+    return 0
+    # return (get_width(total) / 2.0) - (SPACING / 2.0)
     
 
     

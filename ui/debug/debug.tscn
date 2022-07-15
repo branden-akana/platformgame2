@@ -16,7 +16,7 @@ blend_mode = 1
 
 [node name="debug" type="CanvasLayer"]
 pause_mode = 2
-layer = 10
+layer = 11
 script = ExtResource( 5 )
 __meta__ = {
 "_edit_vertical_guides_": [ 640.0 ]
@@ -84,28 +84,48 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="ray_u" type="Polygon2D" parent="."]
+position = Vector2( 808, 784 )
+scale = Vector2( 0.5, 0.5 )
+polygon = PoolVector2Array( -1392, -416, -1424, -384, -1392, -352, -1360, -384 )
+
+[node name="ray_l" type="Polygon2D" parent="."]
+position = Vector2( 776, 832 )
+scale = Vector2( 0.5, 0.5 )
+polygon = PoolVector2Array( -1392, -416, -1424, -384, -1392, -352, -1360, -384 )
+
+[node name="ray_d" type="Polygon2D" parent="."]
+position = Vector2( 808, 880 )
+scale = Vector2( 0.5, 0.5 )
+polygon = PoolVector2Array( -1392, -416, -1424, -384, -1392, -352, -1360, -384 )
+
+[node name="ray_r" type="Polygon2D" parent="."]
+position = Vector2( 840, 832 )
+scale = Vector2( 0.5, 0.5 )
+polygon = PoolVector2Array( -1392, -416, -1424, -384, -1392, -352, -1360, -384 )
+
 [node name="version" parent="." instance=ExtResource( 1 )]
 modulate = Color( 1, 1, 1, 0.0784314 )
 material = SubResource( 1 )
-position = Vector2( 1094, 671 )
-text = "v0.4.0"
+position = Vector2( 1520, 992 )
+text = "v0.4.0 alpha"
 
 [node name="tick" parent="." instance=ExtResource( 1 )]
 modulate = Color( 1, 0.984314, 0, 0.501961 )
 material = SubResource( 1 )
-position = Vector2( 16, 624 )
+position = Vector2( 24, 976 )
 text = "0"
 
 [node name="replay_tick" parent="." instance=ExtResource( 1 )]
 modulate = Color( 1, 0.329412, 0, 0.501961 )
 material = SubResource( 1 )
-position = Vector2( 16, 576 )
+position = Vector2( 24, 928 )
 text = "0"
 
 [node name="fps" parent="." instance=ExtResource( 1 )]
 modulate = Color( 0, 1, 0, 0.5 )
 material = SubResource( 1 )
-position = Vector2( 16, 672 )
+position = Vector2( 24, 1024 )
 text = "0 fps"
 
 [node name="pingtext" parent="." instance=ExtResource( 1 )]
@@ -114,7 +134,7 @@ material = SubResource( 2 )
 position = Vector2( 40, 192 )
 
 [node name="input_display" type="Node2D" parent="."]
-position = Vector2( 60, 124 )
+position = Vector2( 1765, 73 )
 script = ExtResource( 3 )
 
 [node name="stick" type="Node2D" parent="input_display"]
@@ -191,7 +211,7 @@ __meta__ = {
 }
 
 [node name="speed_display" type="Node2D" parent="."]
-position = Vector2( 40, 32 )
+position = Vector2( 40, 272 )
 script = ExtResource( 2 )
 
 [node name="spritetext" parent="speed_display" instance=ExtResource( 1 )]
@@ -208,7 +228,7 @@ text = "0000"
 [node name="pos_y" parent="." instance=ExtResource( 1 )]
 modulate = Color( 0.776471, 0.564706, 0, 1 )
 material = SubResource( 1 )
-position = Vector2( 160, 192 )
+position = Vector2( 192, 192 )
 text = "0000"
 
 [node name="vel_x" parent="." instance=ExtResource( 1 )]
@@ -220,13 +240,13 @@ text = "0000"
 [node name="vel_y" parent="." instance=ExtResource( 1 )]
 modulate = Color( 0.133333, 0.803922, 0.176471, 1 )
 material = SubResource( 1 )
-position = Vector2( 160, 232 )
+position = Vector2( 192, 232 )
 text = "0000"
 
 [node name="grounded" parent="." instance=ExtResource( 1 )]
 modulate = Color( 0.803922, 0.698039, 0.133333, 1 )
 material = SubResource( 1 )
-position = Vector2( 40, 272 )
+position = Vector2( 40, 400 )
 text = "0000"
 
 [node name="pause_display" type="Node2D" parent="."]

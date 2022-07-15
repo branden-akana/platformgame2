@@ -33,7 +33,10 @@ func on_update(delta, runner, fsm):
     # =================
 
     if fsm.current_state is IdleState:
-        runner.velocity.x = runner.DASH_STOP_SPEED
+        if runner.facing == Direction.RIGHT:
+            runner.velocity.x = runner.DASH_STOP_SPEED
+        else:
+            runner.velocity.x = -runner.DASH_STOP_SPEED
 
     if is_current_state(fsm):
 

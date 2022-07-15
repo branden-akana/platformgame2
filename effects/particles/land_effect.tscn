@@ -24,7 +24,7 @@ func _physics_process(delta):
 "
 
 [node name="land_effect" type="Node2D"]
-scale = Vector2( 4, 4 )
+scale = Vector2( 5, 2 )
 z_index = -2
 script = SubResource( 1 )
 
@@ -32,7 +32,9 @@ script = SubResource( 1 )
 lifetime = 1.0
 direction = Vector2( -3, -0.5 )
 initial_velocity = 12.0
+scale_amount = 2.0
 
 [node name="right" parent="." instance=ExtResource( 1 )]
 lifetime = 1.0
 initial_velocity = 12.0
+scale_amount = 2.0

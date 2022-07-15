@@ -95,19 +95,34 @@ func resume():
 
 
 func stop(forced = true):
-    if playing:
-        tick = 0
-        playing = false
-        $sprite.visible = false
-        pause()
-        if forced:
-            # print("[move] %s: finished" % name)
-            emit_signal("move_finished")
-        else:
-            # print("[move] %s: stopped" % name)
-            emit_signal("move_stopped")
-        property_list_changed_notify()
+    tick = 0
+    playing = false
+    $sprite.visible = false
+    pause()
+    if forced:
+        # print("[move] %s: finished" % name)
+        emit_signal("move_finished")
+    else:
+        # print("[move] %s: stopped" % name)
+        emit_signal("move_stopped")
 
+    # disable all hitboxes
+    for i in range(len(move_hitboxes)):
+        disable_hitbox(i)
+
+    property_list_changed_notify()
+
+func enable_hitbox(i: int):
+
+    var hitbox = get_node(str(i))
+    hitbox.monitoring = true
+    hitbox.get_node("collision").set_deferred("disabled", false)
+
+func disable_hitbox(i: int):
+
+    var hitbox = get_node(str(i))
+    hitbox.monitoring = false
+    hitbox.get_node("collision").set_deferred("disabled", true)
 
 func move_update(delta):
 
@@ -130,15 +145,13 @@ func move_update(delta):
             # enable hitbox if inside window
             if tick == move_hitboxes[i]["start"]:
                 # print("[move] %s: enabling hitbox" % name)
-                hitbox.monitoring = true
-                hitbox.get_node("collision").disabled = false
+                enable_hitbox(i)
                 hitbox.modulate = Color(4.0, 0.0, 0.0)
 
             # disable hitbox if outside window
             elif tick == move_hitboxes[i]["end"] + 1:
                 # print("[move] %s: disabling hitbox" % name)
-                hitbox.monitoring = false
-                hitbox.get_node("collision").disabled = true
+                disable_hitbox(i)
                 hitbox.modulate = Color(1.0, 1.0, 1.0)
 
             $sprite.modulate.a = 1 - ((tick - 12) / float(move_length))
@@ -163,8 +176,12 @@ func set_flipped(flip):
 # target: the object that was hit
 # hitbox: the collision of the hitbox that was triggered
 func on_hitbox_entered(area_id, target: Area2D, target_shape_id, hitbox_shape_id, hitbox: Area2D):
+    if not runner.fsm.current_state is AttackState and hitbox.monitoring:
+        print("[warning] attack hitbox triggered outside of attack state!!")
+        hitbox.monitoring = false
+
     if(hitbox.monitoring and playing and target is Enemy and (target.health > 0 or runner.ignore_enemy_hp)):
-        # print("[move] %s: hitbox %s hit enemy (%s)" % [name, hitbox.name, hitbox_col.disabled])
+        print("[move] %s: hitbox %s hit enemy" % [name, hitbox.name])
 
         # compute contact points
         var target_shape = Util.get_shape(target, target_shape_id)

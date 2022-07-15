@@ -1,5 +1,10 @@
-extends Runner 
+#================================================================================
+# Ghost Runner
+#
+# A runner controlled by recorded inputs.
+#================================================================================
 class_name GhostRunner
+extends Runner 
 
 signal replay_finish
 
@@ -22,7 +27,7 @@ func _ready():
     no_damage = true
     no_effects = true
     ignore_enemy_hp = true
-    $sprite.visible = false
+    visible = false
 
     connect("replay_finish", Game, "replay_playback_stop")
 
@@ -39,7 +44,7 @@ func stop():
 func restart():
     print("[ghost] restarting replay")
     .restart()
-    $sprite.visible = true
+    visible = true
     replay_finished = false
     position = replay.start_position
     velocity = replay.start_velocity
@@ -74,7 +79,7 @@ func pre_process(_delta):
         playing = false
         emit_signal("replay_finish")
     else:
-        print("[ghost] missing tick: %s" % tick)
+        push_warning("[ghost] missing tick: %s" % tick)
 
     # else:
     #     restart()

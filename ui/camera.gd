@@ -10,7 +10,9 @@ export var smoothing: float = 1.2;
 
 # the amount of units to snap the camera to.
 # this avoids any rendering issues with the pixel shader
-export var pixel_snap: float = 1.0;
+export (int) var pixel_snap: float = 4.0;
+
+export (bool) var subpixel_fix = false;
 
 # the amount of offset to apply to the camera
 export (Vector2) var offset = Vector2(0.0, 0.0);
@@ -159,7 +161,12 @@ func set_camera_focus(new_focus):
         focus = new_focus
 
         # pixel snap camera
-        var origin = (new_focus / pixel_snap).floor() * pixel_snap + Vector2(pixel_snap/2, pixel_snap/2);
+        var origin
+        if subpixel_fix:
+            origin = (new_focus / pixel_snap).floor() * pixel_snap + Vector2(pixel_snap/2, pixel_snap/2);
+        else:
+            origin = (new_focus / pixel_snap).floor() * pixel_snap;
+
         target.get_viewport().canvas_transform.origin = -origin
 
 
@@ -171,8 +178,8 @@ func _process(delta):
         # current position of camera
         var origin = focus
 
-        # target position of camera
-        var pos = get_target_camera_pos() + (get_target().get_facing_dir() * 200)
+        # target position of camera + player offset
+        var pos = get_target_camera_pos() + (get_target().get_facing_dir() * 200) + Vector2(0, -100)
 
         # smooth movement
         # var new_origin = origin + (pos - origin) * delta * smoothing

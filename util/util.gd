@@ -45,9 +45,20 @@ static func intersect_ray(node, offset, vector, layers = 0b0001):
         node.global_position + offset + vector,
         [], layers)
 
-static func collide_point(node, point, layers = 0b0001):
+# Test collisions at a point. Returns an array of dictionaries containing
+# information about any shapes that were collided with.
+#
+# See Physics2DDirectSpaceState.intersect_point()
+#
+static func intersect_point(node: Node2D, position: Vector2, exclude: Array = [], layers = 0b0001) -> Array:
+
+    if len(exclude) == 0: exclude.append(node)
+
     var space = node.get_world_2d().direct_space_state
-    return space.intersect_point(point, 32, [], layers)
+    var collisions = space.intersect_point(node.global_position + position, 32, exclude, layers)
+    # if len(collisions) > 0: print(collisions)
+
+    return collisions
 
 static func format_time(time):
     var mins = floor(time / 60.0)
@@ -85,5 +96,5 @@ static func draw_zone(node, color, size_offset = 0, inner_box_radius = 16):
     var inner_origin = Vector2(inner_box_radius, inner_box_radius)
     var inner_size = size - (inner_origin * 2)
 
-    node.draw_rect(Rect2(origin + outer_origin - offset, size), color, false, 2.0)
-    node.draw_rect(Rect2(origin + inner_origin - offset, inner_size), color, false, 2.0)
+    node.draw_rect(Rect2(origin + outer_origin - offset, size), color, false, 4.0)
+    node.draw_rect(Rect2(origin + inner_origin - offset, inner_size), color, false, 4.0)

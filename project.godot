@@ -24,6 +24,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://entities/runner/states/state_attack.gd"
 }, {
+"base": "Node2D",
+"class": "Background",
+"language": "GDScript",
+"path": "res://entities/background.gd"
+}, {
 "base": "Reference",
 "class": "BufferedInput",
 "language": "GDScript",
@@ -67,7 +72,7 @@ _global_script_classes=[ {
 "base": "Runner",
 "class": "GhostRunner",
 "language": "GDScript",
-"path": "res://entities/runner/ghost_runner.gd"
+"path": "res://entities/runner/grunner.gd"
 }, {
 "base": "StaticBody2D",
 "class": "HazardTrigger",
@@ -112,7 +117,7 @@ _global_script_classes=[ {
 "base": "Runner",
 "class": "PlayerRunner",
 "language": "GDScript",
-"path": "res://entities/runner/player_runner.gd"
+"path": "res://entities/runner/prunner.gd"
 }, {
 "base": "Reference",
 "class": "Replay",
@@ -133,6 +138,11 @@ _global_script_classes=[ {
 "class": "Runner",
 "language": "GDScript",
 "path": "res://entities/runner/runner.gd"
+}, {
+"base": "Spatial",
+"class": "RunnerModel",
+"language": "GDScript",
+"path": "res://entities/runner/runner_model.gd"
 }, {
 "base": "Reference",
 "class": "RunnerState",
@@ -155,9 +165,19 @@ _global_script_classes=[ {
 "path": "res://ui/menu/select_exit.gd"
 }, {
 "base": "MenuSelection",
+"class": "SelectLevel",
+"language": "GDScript",
+"path": "res://ui/menu/select_level.gd"
+}, {
+"base": "MenuSelection",
 "class": "SelectLights",
 "language": "GDScript",
 "path": "res://ui/menu/select_lights.gd"
+}, {
+"base": "MenuSelection",
+"class": "SelectMain",
+"language": "GDScript",
+"path": "res://ui/menu/select_main.gd"
 }, {
 "base": "MenuSelection",
 "class": "SelectOptions",
@@ -178,11 +198,6 @@ _global_script_classes=[ {
 "class": "SelectStart",
 "language": "GDScript",
 "path": "res://ui/menu/select_start.gd"
-}, {
-"base": "MenuSelection",
-"class": "SelectVsync",
-"language": "GDScript",
-"path": "res://ui/menu/select_vsync.gd"
 }, {
 "base": "RunnerState",
 "class": "SpecialState",
@@ -213,6 +228,7 @@ _global_script_class_icons={
 "AirborneState": "",
 "AirdashState": "",
 "AttackState": "",
+"Background": "",
 "BufferedInput": "",
 "Coin": "",
 "Config": "",
@@ -235,16 +251,18 @@ _global_script_class_icons={
 "ReplayManager": "",
 "RoomZone": "",
 "Runner": "",
+"RunnerModel": "",
 "RunnerState": "",
 "RunningState": "",
 "SceneLoadTrigger": "",
 "SelectExit": "",
+"SelectLevel": "",
 "SelectLights": "",
+"SelectMain": "",
 "SelectOptions": "",
 "SelectPalette": "",
 "SelectReturn": "",
 "SelectStart": "",
-"SelectVsync": "",
 "SpecialState": "",
 "SpriteLabel": "",
 "State": "",
@@ -269,7 +287,6 @@ Effects="*res://effects/particles/particles.gd"
 
 gdscript/warnings/shadowed_variable=false
 gdscript/warnings/unused_argument=false
-gdscript/warnings/unused_signal=false
 gdscript/warnings/return_value_discarded=false
 
 [display]
@@ -296,6 +313,7 @@ singletons=[  ]
 
 canvas=false
 clear=false
+world=false
 
 [input]
 
@@ -488,8 +506,8 @@ name_casing=2
 
 [rendering]
 
-quality/intended_usage/framebuffer_allocation=0
 2d/snapping/use_gpu_pixel_snap=true
 threads/thread_model=2
-quality/filters/use_nearest_mipmap_filter=true
 environment/default_clear_color=Color( 0.1, 0.1, 0.1, 1 )
+quality/filters/msaa=2
+quality/filters/use_debanding=true

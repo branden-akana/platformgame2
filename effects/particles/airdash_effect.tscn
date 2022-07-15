@@ -177,12 +177,12 @@ offsets = PoolRealArray( 0.00671141, 0.577181, 1 )
 colors = PoolColorArray( 1, 1, 1, 0.3, 1, 1, 1, 0, 1, 1, 1, 0 )
 
 [node name="airdash_particles" type="Node2D"]
-position = Vector2( 0, -16 )
+position = Vector2( 0, -64 )
+z_index = -1
 script = SubResource( 14 )
 
 [node name="trail" type="CPUParticles2D" parent="."]
 material = SubResource( 11 )
-scale = Vector2( 4, 4 )
 emitting = false
 amount = 100
 lifetime = 2.0
@@ -191,9 +191,11 @@ explosiveness = 0.8
 local_coords = false
 texture = SubResource( 12 )
 gravity = Vector2( 0, 0 )
+scale_amount = 4.0
 color_ramp = SubResource( 13 )
 
 [node name="wave" parent="." instance=ExtResource( 2 )]
 position = Vector2( 0, 0 )
+scale_amount = 0.4
 scale_amount_curve = SubResource( 15 )
 color_ramp = SubResource( 16 )

@@ -7,17 +7,15 @@
 #===============================================================================
 
 extends Node2D
-tool
 
 export (Array, Texture) var palettes
 export var current_palette = 0 setget change_palette
 
-var palette_tween
-onready var shader = $"2_retrorizer/rect"
+onready var palette_tween = $tween
+onready var shader = $canvas_layer/color_indexer
 
-func _ready():
-    palette_tween = Util.new_tween(self)
-
+func _process(delta) -> void:
+    position = Game.get_camera().focus
 
 func set_palette(idx):
     idx = idx % len(palettes)

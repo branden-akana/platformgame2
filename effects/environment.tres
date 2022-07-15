@@ -1,0 +1,15 @@
+[gd_resource type="Environment" format=2]
+
+[resource]
+background_mode = 4
+background_energy = 0.0
+background_canvas_max_layer = 10
+tonemap_mode = 2
+dof_blur_near_enabled = true
+dof_blur_near_distance = 0.37
+dof_blur_near_amount = 0.14
+dof_blur_near_quality = 0
+glow_enabled = true
+glow_intensity = 0.2
+glow_strength = 1.2
+adjustment_enabled = true

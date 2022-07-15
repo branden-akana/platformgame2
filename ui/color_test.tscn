@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://tilesets/blockouts.tscn" type="PackedScene" id=1]
-[ext_resource path="res://entities/runner/player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://entities/runner/player_old.tscn" type="PackedScene" id=2]
 [ext_resource path="res://entities/enemy/enemy.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/palettes/base.png" type="Texture" id=4]
 [ext_resource path="res://shaders/retrorize.gdshader" type="Shader" id=5]

@@ -3,5 +3,5 @@
 [ext_resource path="res://effects/particles/land_effect.tscn" type="PackedScene" id=1]
 
 [node name="land_effect" instance=ExtResource( 1 )]
-position = Vector2( 6, 0 )
+position = Vector2( 32, 0 )
 rotation = 1.5708

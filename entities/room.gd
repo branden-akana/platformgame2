@@ -11,7 +11,7 @@ tool
 
 signal room_entered
 
-export (Vector2) var size = Vector2(480, 270) setget set_size
+export (Vector2) var size = Vector2(1920, 1080) setget set_size
 export var palette_idx = 0
 
 onready var collision: CollisionShape2D = $collision
@@ -83,5 +83,5 @@ func _draw():
         var color = Color(1.0, 1.0, 1.0)  # white
 
         # outline the collision box
-        Util.draw_zone(self, color, 4.0, 4.0)
+        Util.draw_zone(self, color, 4.0, 16.0)
 

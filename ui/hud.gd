@@ -26,17 +26,28 @@ func toggle_visible():
         layer = 5
 
 func hide():
-    layer = -1
+    scale = Vector2.ZERO
+    $ui_timer.visible = false
 
 func show():
-    layer = 5
+    scale = Vector2.ONE
+    $ui_timer.visible = true
 
 # Set the value of the HUD timer.
 func set_timer(time):
     var m = floor(time / 60.0)          # minutes
     var s = floor(fmod(time, 60.0))    # seconds
     var ms = fmod(time, 1.0) * 1000     # milliseconds
-    $ui_timer.set_time(m, s, ms)
+    $control/ui_timer.set_time(m, s, ms)
+
+func set_best_time(time: float) -> void:
+    $control/ui_timer.set_best_time(time)
+
+func set_diff_time(time: float, prev_best: float = INF) -> void:
+    $control/ui_timer.set_diff_time(time)
+
+func reset_best_time() -> void:
+    $control/ui_timer.reset_best_time()
 
 # Set the value of the HUD death counter.
 func set_deaths(num):

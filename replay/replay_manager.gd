@@ -1,6 +1,6 @@
 class_name ReplayManager
 
-const GhostPlayer = preload("res://entities/runner/ghost_player.tscn")
+const GhostPlayer = preload("res://entities/runner/grunner.tscn")
 
 var game
 

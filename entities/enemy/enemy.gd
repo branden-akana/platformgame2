@@ -69,11 +69,11 @@ func get_hp_color(hp):
             else:
                 return Color(0.3, 0.1, 0.3, 0.0)
         1:
-            return Color(0.7, 0.1, 0.7)
+            return Color(1.0, 1.0, 0.5)
         2:
-            return Color(1.0, 0.1, 1.0)
+            return Color(1.0, 1.0, 1.0)
         _:
-            return Color(1.0, 1.1, 1.0)
+            return Color(1.0, 1.0, 1.0)
 
 func update_color():
     sprite.color = get_hp_color(health)

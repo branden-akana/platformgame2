@@ -1,9 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://ui/menu/main_menu.gd" type="Script" id=1]
 [ext_resource path="res://entities/sprite_label.gd" type="Script" id=2]
 [ext_resource path="res://assets/pixel.png" type="Texture" id=3]
 [ext_resource path="res://assets/palettes/sample.png" type="Texture" id=4]
+[ext_resource path="res://assets/Metropolis-Light.otf" type="DynamicFontData" id=5]
+[ext_resource path="res://assets/Sk-Modernist-Mono.otf" type="DynamicFontData" id=6]
 
 [sub_resource type="CanvasItemMaterial" id=2]
 light_mode = 1
@@ -11,6 +13,21 @@ light_mode = 1
 [sub_resource type="OccluderPolygon2D" id=3]
 closed = false
 polygon = PoolVector2Array( -200, 14, 1720, 14, 1720, 1094, -200, 1094 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 72
+outline_size = 1
+extra_spacing_bottom = -50
+extra_spacing_char = 27
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 36
+outline_size = 1
+use_filter = true
+extra_spacing_bottom = -9
+extra_spacing_char = 2
+font_data = ExtResource( 6 )
 
 [sub_resource type="CanvasItemMaterial" id=1]
 
@@ -33,16 +50,31 @@ position = Vector2( 200, -14 )
 occluder = SubResource( 3 )
 
 [node name="title" type="Node2D" parent="."]
-position = Vector2( 470, 296 )
-scale = Vector2( 1.5, 1.5 )
-z_index = 1
-script = ExtResource( 2 )
-text = "untitled platform game"
-bold = true
+position = Vector2( 376, 288 )
 
-[node name="label" type="Node2D" parent="."]
+[node name="title" type="Label" parent="title"]
+margin_left = -128.0
+margin_right = 1296.0
+margin_bottom = 173.0
+custom_fonts/font = SubResource( 4 )
+text = "untitled platform game
+"
+align = 1
+
+[node name="label" type="Label" parent="."]
+margin_left = 320.0
+margin_top = 440.0
+margin_right = 2240.0
+margin_bottom = 1520.0
+custom_fonts/font = SubResource( 5 )
+text = "> enter
+  options
+  exit"
+
+[node name="label_old" type="Node2D" parent="."]
+visible = false
 material = SubResource( 1 )
-position = Vector2( 670, 428 )
+position = Vector2( 320, 448 )
 z_index = 1
 script = ExtResource( 2 )
 text = "> enter
@@ -50,11 +82,15 @@ text = "> enter
   exit"
 
 [node name="polygon_2d" type="Polygon2D" parent="."]
-position = Vector2( 640, 398 )
+position = Vector2( 0, 224 )
+scale = Vector2( 3, 3.68182 )
+z_index = -7
+z_as_relative = false
 color = Color( 0.133333, 0.133333, 0.133333, 1 )
 polygon = PoolVector2Array( 0, 0, 640, 0, 640, 176, 0, 176 )
 
 [node name="polygon_2d_2" type="Polygon2D" parent="."]
+visible = false
 position = Vector2( 640, 398 )
 invert_enable = true
 invert_border = 8.0
@@ -81,6 +117,7 @@ margin_bottom = 1079.0
 color = Color( 0.192157, 0.192157, 0.192157, 1 )
 
 [node name="sample" type="Sprite" parent="."]
+visible = false
 position = Vector2( 1216, 694 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 4 )
@@ -88,6 +125,7 @@ region_enabled = true
 region_rect = Rect2( 0, 20, 128, 40 )
 
 [node name="sample_2" type="Sprite" parent="."]
+visible = false
 position = Vector2( 640, 694 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 4 )

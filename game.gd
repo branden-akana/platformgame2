@@ -10,7 +10,7 @@ signal post_ready
 const DisplayManager = preload("res://effects/display_manager.tscn")
 const Textbox = preload("res://ui/textbox.tscn")
 const Level_TestHub = preload("res://levels/test_hub.tscn")
-const PlayerRunner = preload("res://entities/runner/player.tscn")
+const PlayerRunner = preload("res://entities/runner/prunner.tscn")
 
 # list of pause reasons
 enum PauseRequester {
@@ -79,7 +79,7 @@ func _ready():
         player = get_player()  
     else:  # or manually spawn the player
         player = PlayerRunner.instance()
-        $"/root/main/screen/viewport".add_child(player)
+        $"/root/main".add_child(player)
 
     player.connect("died", self, "on_player_death")
     yield(player, "ready")
@@ -102,6 +102,7 @@ func free_editor_nodes():
     # remove all "editor only" nodes
     for node in get_tree().get_nodes_in_group("editor_only"):
         yield(node, "tree_exiting")
+    yield(get_tree(), "idle_frame")
 
 
 # Initialize the game. Use after loading a new level.
@@ -189,7 +190,7 @@ func _load_scene(level_path):
 # ========================================================================
 
 func get_level() -> Level:
-    return $"/root/main/screen/viewport/level" as Level
+    return $"/root/main/level" as Level
 
 # Get a list of all rooms in the current level.
 func get_rooms() -> Array:
@@ -309,7 +310,7 @@ func reset_entities():
         door.close_door(false)
 
 func get_player() -> Node:
-    return $"/root/main/screen/viewport/player"
+    return get_node_or_null("/root/main/player")
 
 func get_debug_hud() -> Node:
     return $"/root/main/debug"
@@ -368,10 +369,8 @@ func _process(delta):
     # pause menu
     if Input.is_action_just_pressed("pause"):
         if menu.visible:
-            unpause(PauseRequester.MENU)
             menu.hide()
         else:
-            pause(PauseRequester.MENU)
             menu.show()
         
 # func _input(event):
@@ -396,13 +395,13 @@ func stop_timer():
     pause_timer()
 
     # calculate time difference
-    if time_best < INF:
-        HUD.get_node("control/best_diff").text = Util.format_time_diff(time - time_best)
+    HUD.set_diff_time(time, time_best)
 
     # check for new best time
     if is_best_time():
         print("[timer] new best time recorded")
         time_best = time
+        HUD.set_best_time(time_best)
         # create a new ghost replay
         replay_manager.save_recording()
 
@@ -410,13 +409,11 @@ func stop_timer():
 func reset_timer():
     time = 0.0
     time_paused = false
-    HUD.get_node("control/best_diff").text = ""
-    if time_best < INF:
-        HUD.get_node("control/best").text = "best %s" % Util.format_time(time_best)
+    HUD.set_best_time(time_best)
 
 func clear_best_times():
     time_best = INF
-    HUD.get_node("control/best").text = ""
+    HUD.reset_best_time()
 
 # Palettes / Post Processing
 # ========================================================================

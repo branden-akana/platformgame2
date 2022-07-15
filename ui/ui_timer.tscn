@@ -53,9 +53,17 @@ text = "000"
 align = 2
 
 [node name="best" type="Label" parent="."]
-margin_left = 29.0
-margin_top = 149.0
-margin_right = 700.0
-margin_bottom = 252.0
+margin_left = 32.0
+margin_top = 144.0
+margin_right = 703.0
+margin_bottom = 208.0
 custom_fonts/font = SubResource( 8 )
 text = "best: --:--.---"
+
+[node name="best_diff" type="Label" parent="."]
+margin_left = 32.0
+margin_top = 192.0
+margin_right = 377.0
+margin_bottom = 256.0
+custom_fonts/font = SubResource( 8 )
+align = 2

@@ -40,7 +40,9 @@ func _ready():
 
 # Start an effect where the player flashes
 func play_flash_effect():
-    flash_tween.interpolate_property($sprite, "modulate:g", 10.0, 1.0, 0.2)
+    flash_tween.interpolate_method(self, "set_color",
+        Color(10.0, 10.0, 10.0),
+        Color(1.0, 1.0, 1.0), 0.2)
     flash_tween.start()
 
 func on_airdash_restored():

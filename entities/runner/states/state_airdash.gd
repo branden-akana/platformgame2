@@ -2,9 +2,15 @@ extends RunnerState
 class_name AirdashState
 
 var airdash_dir: Vector2 = Vector2.ZERO
-var on_ground: bool = false
 
 var particles = null
+
+
+func can_start(runner) -> bool:
+    var axis = runner.get_axis().round().normalized()
+    if runner.is_grounded() and axis.is_equal_approx(Vector2.ZERO):
+        return false
+    return true
 
 
 func on_start(state_from, runner, fsm):
@@ -14,18 +20,19 @@ func on_start(state_from, runner, fsm):
     airdash_dir = Vector2.ZERO
 
     # determine airdash direction
-    on_ground = (
-        state_from is IdleState
-        or state_from is DashState
-        or state_from is RunningState
-        or state_from is AttackState
-    )
-
     runner.airdashes_left -= 1
     airdash_dir = Vector2(axis.x, axis.y).normalized();
     #Game.get_camera().screen_shake(1.0, 0.3)
 
+    if runner.is_grounded() and axis.y < 0:
+        runner.position.y -= 4
+
+    runner.b_can_slide = false
     runner.emit_signal("airdash")
+
+func on_end(state_to, runner, fsm):
+
+    runner.b_can_slide = true
 
 
 func on_update(delta, runner, fsm):
@@ -36,9 +43,6 @@ func on_update(delta, runner, fsm):
 
     if not is_current_state(fsm):
         return
-
-    if not runner.is_on_floor():
-        on_ground = false
 
     if tick == 1:
         # delayed start of particles
@@ -59,17 +63,19 @@ func on_update(delta, runner, fsm):
             airdash_speed, runner.AIRDASH_SPEED_END, t
         ))
 
-        runner.align_to_platform(delta)
-
     # end of airdashing
-    if tick > runner.AIRDASH_LENGTH or (not on_ground and runner.is_on_floor()):
+    if tick > runner.AIRDASH_LENGTH or runner.is_grounded():
 
         if runner.is_grounded():
             if is_instance_valid(particles):
                 particles.emitting = false
+            runner.velocity.y = 0
             fsm.goto_idle()
         else:
             fsm.goto_airborne()
 
+
     if not is_current_state(fsm) and is_instance_valid(particles):
         particles.emitting = false
+
+    runner.fix_incoming_collisions(delta, 32)
