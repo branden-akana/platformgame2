@@ -9,11 +9,6 @@ func on_start(state_from, runner, fsm):
 
 func on_update(delta, runner, fsm):
 
-    allow_jump_out(runner)
-    allow_fastfall(runner)
-    allow_walljump(runner)
-    allow_land_out(runner)
-
     process_air_acceleration(runner, delta)
     process_air_friction(runner, delta)
 

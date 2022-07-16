@@ -21,24 +21,13 @@ func on_start(state_from, runner, fsm):
 
 func on_update(delta, runner, fsm):
 
-    # transition checks
-    # =================
-
-    allow_dash_out(runner)  # dash-dancing
-    allow_jump_out(runner)
-    allow_dropdown(runner)
-    allow_idle_out(runner)
-    allow_air_out(runner)
-
-    # =================
-
-    if fsm.current_state is IdleState:
+    if fsm.is_in_state(RunnerStateType.IDLE):
         if runner.facing == Direction.RIGHT:
             runner.velocity.x = runner.DASH_STOP_SPEED
         else:
             runner.velocity.x = -runner.DASH_STOP_SPEED
 
-    if is_current_state(fsm):
+    if fsm.is_in_state(RunnerStateType.DASH):
 
         #snap_down_to_ground(delta)
         #snap_up_to_ground(delta, 16)
@@ -79,7 +68,4 @@ func on_update(delta, runner, fsm):
 
         # end of dash
         if tick >= runner.DASH_LENGTH and axis.length() > 0.1:
-            if runner.is_facing_forward():
-                fsm.goto_running()
-            else:
-                fsm.goto_idle()
+            fsm.try_land_cancel(self)  # goto any grounded state

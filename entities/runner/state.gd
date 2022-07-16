@@ -17,117 +17,23 @@ class_name RunnerState
 var time: float = 0.0  # the amount of time (in seconds) the runner has been in this state
 var tick: int = 0      # the amount of time (in ticks) the runner has been in this state
 
+var b_can_airdash_cancel = false
+var b_can_attack_cancel = false
+var b_can_special_cancel = false
+
+var b_can_dash_cancel = false
+var b_can_jump_cancel = false
+var b_can_walljump_cancel = false
+var b_can_edge_cancel = false
+var b_can_air_cancel = false
+var b_can_land_cancel = false
+var b_can_idle_cancel = false
+
+var b_can_dropdown = false
+var b_can_fastfall = false  # ?
+
 func is_current_state(fsm):
-    return fsm.current_state == self
-
-# INPUTS
-#=======================================
-# Called every tick (by the runner's _physics_process() loop).
-# Will only be called while the runner is in this state.
-func process(delta, runner, fsm):
-
-    # THE BELOW CHECKS WILL APPLY TO ALL STATES
-    #------------------------------------------
-
-    var current_type = fsm.current_type
-
-    # allow airdash
-    if runner.airdashes_left > 0 and runner.pressed_airdash():
-        var axis = runner.get_axis()
-        if (
-            not axis.is_equal_approx(Vector2.ZERO)
-            and current_type == State.ATTACK
-            and not runner.is_grounded() or current_type != State.ATTACK
-            and round(axis.length()) != 0
-        ):
-            print("initiated airdash")
-            fsm.goto_airdash()
-            return
-
-    # allow attack
-    if runner.pressed_attack():
-        if not current_type in [State.ATTACK, State.SPECIAL]:
-            runner.do_attack()
-        return
-
-    # allow special attack
-    if runner.pressed_special():
-        if not current_type in [State.ATTACK, State.SPECIAL]:
-            fsm.goto_special()
-
-    # update current state
-    if fsm.current_state == self:
-        on_update(delta, runner, fsm)
-        tick += 1
-        time += delta
-
-
-# COMMON CHECKS
-#===============================================================================
-
-
-# Check if the player wants to drop-down a platform.
-func allow_dropdown(runner):
-    if runner.pressed_down():
-        runner.do_dropdown()
-
-
-# Check if the player wants to do a jump (air or grounded).
-func allow_jump_out(runner):
-    if runner.pressed_jump():
-        runner.do_jump()
-
-
-# Check if the player wants to do a walljump.
-func allow_walljump(runner):
-
-    if runner.WALLJUMP_TYPE == runner.WalljumpType.JOYSTICK:
-
-        if runner.pressed_right():
-            runner.action_walljump_right()
-            
-        if runner.pressed_left():
-            runner.action_walljump_left()
-    
-    elif runner.WALLJUMP_TYPE == runner.WalljumpType.JUMP:
-
-        if runner.pressed_jump_raw():
-            runner.action_walljump_any()
-
-
-# Check if the player wants to fastfall.
-func allow_fastfall(runner):
-    if runner.pressed_down() and runner.velocity.y > 0:
-        runner.velocity.y = runner.FAST_FALL_SPEED
-
-
-# Switch player to the airborne state if not grounded.
-func allow_air_out(runner):
-    if not runner.is_grounded(): runner.fsm.goto_airborne()
-
-
-# Switch player to any grounded state if grounded.
-func allow_land_out(runner):
-    if runner.is_grounded(): runner.fsm.goto_grounded()
-    
-
-# Check if the player wants to dash.
-# sensitivity: sets how hard you need to press the direction
-#              for it to register (lower = more sensitive)
-# require_neutral: if true, ignore dash inputs that don't go
-#                  through the center of the movement axis
-func allow_dash_out(runner):
-    # if (
-    #     runner.pressed_left_thru_neutral()
-    #     or runner.pressed_right_thru_neutral()
-    # ):
-    if (runner.pressed_left() or runner.pressed_right()):
-        runner.fsm.goto_dash()
-
-# Check if player is trying to not move (no movement input)
-func allow_idle_out(runner):
-    if runner.is_axis_neutral():
-        runner.fsm.goto_idle()
+    return fsm._current_state() == self
 
 func process_acceleration(runner, delta, accel, max_speed):
     runner.apply_acceleration(delta, runner.get_axis_x(), accel, max_speed)
@@ -160,11 +66,52 @@ func can_start(runner):
 func on_start(state_from, runner, fsm):
     pass
 
-# called every physics process
+# Called every physics process.
+#
+# If this function returns a RunnerStateType, this state is considered
+# finished and the player should transition to that state.
 func on_update(delta: float, runner, fsm):
-    pass
+    return null
 
 # called at the end of the state
 func on_end(state_to, runner, fsm):
     pass
 
+# Allow leaving this state by dashing.
+func allow_dash_cancel() -> void: b_can_dash_cancel = true
+
+# Allow leaving this state by airdashing.
+func allow_airdash_cancel() -> void: b_can_airdash_cancel = true
+
+# Allow leaving this state by jumping.
+func allow_jump_cancel() -> void: b_can_jump_cancel = true
+
+# Allow leaving this state by walljumping.
+func allow_walljump_cancel() -> void: b_can_walljump_cancel = true
+
+# Allow leaving this state by leaving the ground after
+# touching the ground at any point.
+func allow_edge_cancel() -> void: b_can_edge_cancel = true
+
+# Allow leaving this state by being off the ground.
+func allow_air_cancel() -> void: b_can_air_cancel = true
+
+# Allow leaving this state by landing on the ground.
+func allow_land_cancel() -> void: b_can_land_cancel = true
+
+# Allow leaving this state by not moving.
+func allow_idle_cancel() -> void: b_can_idle_cancel = true
+
+# Allow leaving this state by attacking (normal).
+func allow_attack_cancel() -> void: b_can_attack_cancel = true
+
+# Allow leaving this state by attacking (normal).
+func allow_special_cancel() -> void: b_can_special_cancel = true
+
+
+# Allow the action of dropping down platforms.
+# This may cause the state to end early.
+func allow_dropdown() -> void: b_can_dropdown = true
+
+# Allow the action of fastfalling.
+func allow_fastfall() -> void: b_can_fastfall = true

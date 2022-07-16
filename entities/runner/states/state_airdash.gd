@@ -37,10 +37,6 @@ func on_end(state_to, runner, fsm):
 
 func on_update(delta, runner, fsm):
 
-    # jump out of dash
-    allow_jump_out(runner)
-    allow_walljump(runner)
-
     if not is_current_state(fsm):
         return
 
@@ -70,10 +66,9 @@ func on_update(delta, runner, fsm):
             if is_instance_valid(particles):
                 particles.emitting = false
             runner.velocity.y = 0
-            fsm.goto_idle()
+            return RunnerStateType.IDLE
         else:
-            fsm.goto_airborne()
-
+            return RunnerStateType.AIRBORNE
 
     if not is_current_state(fsm) and is_instance_valid(particles):
         particles.emitting = false

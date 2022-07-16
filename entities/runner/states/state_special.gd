@@ -26,7 +26,7 @@ func on_start(state_from, runner, fsm):
 func on_update(delta, runner, fsm):
 
     if current_move.hit_detected:
-        allow_walljump(runner)  # allow walljump canceling
+        fsm.try_walljump_cancel()  # allow walljump cancelling
         # jump_if_able()  # allow jump canceling
 
     if not is_current_state(fsm):
@@ -36,7 +36,7 @@ func on_update(delta, runner, fsm):
         is_grounded = true
         process_friction(delta, runner)
     else:
-        allow_fastfall(runner)
+        fsm.try_fastfall(self)
         process_air_acceleration(runner, delta)
 
     # end of move or edge cancelled

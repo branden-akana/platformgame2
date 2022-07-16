@@ -1,19 +1,18 @@
 extends RunnerState
 class_name AttackState
 
-
 # the move that is currently being used
-var move
+var move: Node2D
 
 # if true, this runner has landed on the ground at any point during the attack
 var b_grounded_attack: bool
 
-func get_name(): return "attack_state"
 
+func _init(move: Node2D):
+    self.move = move
 
 func on_start(state_from, runner, fsm):
     b_grounded_attack = false
-
 
 func on_update(delta, runner, fsm):
 
@@ -23,8 +22,9 @@ func on_update(delta, runner, fsm):
     move.move_update(delta)
 
     if move.hit_detected:
-        allow_walljump(runner)  # allow walljump canceling
-        allow_jump_out(runner)  # allow jump canceling
+        allow_airdash_cancel()
+        allow_jump_cancel()
+        allow_walljump_cancel()
 
     if not is_current_state(fsm): return
 
@@ -32,7 +32,7 @@ func on_update(delta, runner, fsm):
         b_grounded_attack = true
         process_friction(runner, delta)
     else:
-        allow_fastfall(runner)
+        fsm.try_fastfall(self)
         process_air_acceleration(runner, delta)
 
     # end of move or edge cancelled
@@ -40,5 +40,8 @@ func on_update(delta, runner, fsm):
         fsm.goto_any()
 
 func on_end(state_to, runner, fsm):
+    b_can_airdash_cancel = false
+    b_can_jump_cancel = false
+    b_can_walljump_cancel = false
     move.stop()
     

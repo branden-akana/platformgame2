@@ -1,9 +1,10 @@
-class_name State
+class_name RunnerStateType
 
 enum {
     IDLE, DASH, RUNNING, AIRBORNE, AIRDASH, JUMPSQUAT,
-    ATTACK, SPECIAL,
     SHOOTCOIN, GRAPPLE, REELING
+    ATT_FORWARD, ATT_DAIR, ATT_UAIR,
+    SPECIAL,
 }
 
 static func get_name(state) -> String:
@@ -20,8 +21,12 @@ static func get_name(state) -> String:
             return "airdash"
         JUMPSQUAT:
             return "jumpsquat"
-        ATTACK:
-            return "attack"
+        ATT_FORWARD:
+            return "att_forward"
+        ATT_DAIR:
+            return "att_dair"
+        ATT_UAIR:
+            return "att_uair"
         SPECIAL:
             return "special"
         SHOOTCOIN:
