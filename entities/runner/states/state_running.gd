@@ -15,7 +15,7 @@ func on_update(delta, runner, fsm):
 
 
 func on_end(state_to, runner, fsm):
-    if state_to == RunnerStateType.IDLE:
-        runner.velocity.x = clamp(runner.velocity.x, -runner.RUNNING_STOP_SPEED, runner.RUNNING_STOP_SPEED)
+    # if state_to == RunnerStateType.IDLE:
+        # runner.velocity.x = clamp(runner.velocity.x, -runner.RUNNING_STOP_SPEED, runner.RUNNING_STOP_SPEED)
     # print("stopped running")
     runner.emit_signal("stop_walking")

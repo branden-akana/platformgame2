@@ -12,6 +12,9 @@ extends CanvasLayer
 signal fade_in_finished
 signal fade_out_finished
 
+enum Mode {NORMAL, DEBUG}
+var current_mode: int = Mode.NORMAL
+
 onready var tween: Tween
 
 func _ready():
@@ -24,6 +27,17 @@ func toggle_visible():
         layer = -1
     else:
         layer = 5
+
+func toggle_mode():
+    current_mode = (current_mode + 1) % len(Mode)
+
+    match current_mode:
+        Mode.NORMAL:
+            $control.visible = true
+            $debug.visible = false
+        Mode.DEBUG:
+            $control.visible = true
+            $debug.visible = true
 
 func hide():
     scale = Vector2.ZERO

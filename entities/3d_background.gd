@@ -6,13 +6,14 @@ export (float) var parallax = 0.5
 
 onready var origin: Vector2 = position
 
+var camera
+
 func _ready():
     $sprite.set_as_toplevel(true)
 
 func _process(delta):
 
-    var camera
-    if Game and Game.has_method("get_camera"):
+    if Game.is_inside_tree():
         camera = Game.get_camera()
 
     var box_1 = $viewport/spatial/csg_box

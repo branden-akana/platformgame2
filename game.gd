@@ -63,9 +63,6 @@ func _ready():
 
     # Game initialization stuff
 
-    # hide debug hud
-    get_debug_hud().scale = Vector2.ZERO
-
     Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
     print("Feel free to minimize this window! It needs to be open for some reason to avoid a crash.")
@@ -325,7 +322,7 @@ func _physics_process(delta):
 
     var velocity = get_player().velocity
     var state_name = get_player().fsm.current_type
-    get_node("/root/main/debug/info").text = "speed: %3.2f (x=%3.2f, y=%3.2f)\nstate: %s" % [velocity.length(), velocity.x, velocity.y, state_name]
+    HUD.get_node("debug/info").text = "speed: %3.2f (x=%3.2f, y=%3.2f)\nstate: %s" % [velocity.length(), velocity.x, velocity.y, state_name]
 
 func _process(delta):
 
@@ -356,15 +353,7 @@ func _process(delta):
                 
     # toggle additional debug HUD info
     if Input.is_action_just_pressed("toggle_debug"):
-        var hud = get_debug_hud()
-        var info = hud.get_node("info")
-        if hud.scale == Vector2.ONE and not info.visible:
-            info.visible = true
-        elif hud.scale == Vector2.ONE and info.visible:
-            info.visible = false
-            hud.scale = Vector2.ZERO
-        else:
-            hud.scale = Vector2.ONE
+        HUD.toggle_mode()
 
     # pause menu
     if Input.is_action_just_pressed("pause"):
@@ -496,7 +485,7 @@ func is_paused():
 
 # Briefly show a message in the debug HUD.
 func debug_ping(message):
-    var pingtext = get_debug_hud().get_node("pingtext")
+    var pingtext = HUD.get_node("debug/pingtext")
     pingtext.text = message
     var tween = Tween.new()
     add_child(tween)

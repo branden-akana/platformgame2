@@ -102,7 +102,7 @@ func init(runner):
     state = _state(RunnerStateType.AIRDASH)
     state.allow_jump_cancel()
     state.allow_walljump_cancel()
-    state.allow_land_cancel()
+    # state.allow_land_cancel()
     state.allow_airdash_cancel()
     state.allow_attack_cancel()
     state.allow_special_cancel()
@@ -152,7 +152,7 @@ func set_state(state_type):
             var old_state_name = RunnerStateType.get_name(old_state_type)
             var new_state_name = RunnerStateType.get_name(state_type)
             emit_signal("state_changed", new_state_name, old_state_name)
-            current_state.on_start(old_state_name, runner, runner.fsm)
+            current_state.on_start(old_state_type, runner, runner.fsm)
 
 func process(delta):
     if runner == null: return
@@ -215,20 +215,21 @@ func process(delta):
     if state.b_can_idle_cancel and runner.is_axis_neutral():
         runner.action_neutral()
 
+    state = _current_state()
+
     # transition to queued state if any
     if queued_state_type != null:
         set_state(queued_state_type)
         queued_state_type = null
 
-    state = _current_state()
-
     # update current state
     var next_state = state.on_update(delta, runner, self)
-    if next_state:
+    if next_state != null:
+        print("next state: %s" % next_state)
         set_state(next_state)
-    else:
-        state.tick += 1
-        state.time += delta
+
+    state.tick += 1
+    state.time += delta
 
 func try_airdash_cancel(state):
     if state.b_can_airdash_cancel and runner.pressed_airdash():

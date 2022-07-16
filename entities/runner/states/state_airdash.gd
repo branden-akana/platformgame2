@@ -5,6 +5,8 @@ var airdash_dir: Vector2 = Vector2.ZERO
 
 var particles = null
 
+var b_grounded_airdash: bool = false
+
 
 func can_start(runner) -> bool:
     var axis = runner.get_axis().round().normalized()
@@ -24,6 +26,13 @@ func on_start(state_from, runner, fsm):
     airdash_dir = Vector2(axis.x, axis.y).normalized();
     #Game.get_camera().screen_shake(1.0, 0.3)
 
+    # grounded airdashes
+
+    # if runner.is_grounded() and state_from != RunnerStateType.JUMPSQUAT:
+    #     b_can_land_cancel = false
+    # else:
+    #     b_can_land_cancel = true
+
     if runner.is_grounded() and axis.y < 0:
         runner.position.y -= 4
 
@@ -33,6 +42,8 @@ func on_start(state_from, runner, fsm):
 func on_end(state_to, runner, fsm):
 
     runner.b_can_slide = true
+    if is_instance_valid(particles):
+        particles.emitting = false
 
 
 func on_update(delta, runner, fsm):
@@ -63,9 +74,8 @@ func on_update(delta, runner, fsm):
     if tick > runner.AIRDASH_LENGTH or runner.is_grounded():
 
         if runner.is_grounded():
-            if is_instance_valid(particles):
-                particles.emitting = false
             runner.velocity.y = 0
+            # fsm.goto_grounded()
             return RunnerStateType.IDLE
         else:
             return RunnerStateType.AIRBORNE

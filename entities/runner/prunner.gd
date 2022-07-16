@@ -12,12 +12,12 @@ var ghost = null
 onready var flash_tween = Util.new_tween(self)
 
 func _ready():
+
+    connect("action", self, "on_action")
+
     # connect signal to sound effects
     connect("walking", Sound, "play", ["walk", -20, 0.8, true, false])
     connect("stop_walking", Sound, "stop", ["walk"])
-    connect("jump", Sound, "play", ["jump", -10, 1, false])
-    connect("land", Sound, "play", ["land", -20, 0.9])
-    connect("dash", Sound, "play", ["dash", -20, 0.8, false, true])
     connect("attack", Sound, "play", ["attack", -20, 0.7, false, true])
 
     # connect signals to particle effects
@@ -25,18 +25,27 @@ func _ready():
     connect("jump", Effects, "play", [Effects.Jump, self]) 
     connect("dragging", Effects, "play", [Effects.Dust, self])
     connect("land", Effects, "play", [Effects.Land, self]) 
-    connect("walljump_left", Effects, "play", [Effects.WallJumpRight, self]) 
-    connect("walljump_right", Effects, "play", [Effects.WallJumpLeft, self]) 
 
     connect("airdash", self, "on_airdash")
     connect("airdash_restored", self, "on_airdash_restored")
-    connect("walljump_left", Sound, "play", ["land", -20, 0.8])
-    connect("walljump_right", Sound, "play", ["land", -20, 0.8])
     # connect("walljump_left", self, "play_flash_effect")
     # connect("walljump_right", self, "play_flash_effect")
 
     connect("enemy_hit", self, "on_enemy_hit")
     connect("enemy_killed", self, "on_enemy_killed")
+
+func on_action(action: String) -> void:
+    match action:
+        "dash":
+            Sound.play("dash", -20, 0.8, false, true)
+        "jump":
+            Sound.play("jump", -10, 1, false)
+        "walljump_left":
+            Effects.play(Effects.WallJumpRight, self)
+            Sound.play("land", -20, 0.8)
+        "walljump_right":
+            Effects.play(Effects.WallJumpLeft, self)
+            Sound.play("land", -20, 0.8)
 
 # Start an effect where the player flashes
 func play_flash_effect():
@@ -81,7 +90,7 @@ func pre_process(delta):
             set_color(Color(0.5, 0.5, 0.5))
 
     # needed as sometimes the walking sound does not stop
-    if fsm.current_state is RunningState:
+    if fsm.is_in_state(RunnerStateType.RUNNING):
         Sound.stop("walk")
 
     if Game.game_paused or Game.is_in_menu:

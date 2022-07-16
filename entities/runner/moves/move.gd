@@ -176,9 +176,9 @@ func set_flipped(flip):
 # target: the object that was hit
 # hitbox: the collision of the hitbox that was triggered
 func on_hitbox_entered(area_id, target: Area2D, target_shape_id, hitbox_shape_id, hitbox: Area2D):
-    if not runner.fsm.current_state is AttackState and hitbox.monitoring:
-        print("[warning] attack hitbox triggered outside of attack state!!")
-        hitbox.monitoring = false
+    # if not runner.fsm._current_state() !=  and hitbox.monitoring:
+        # print("[warning] attack hitbox triggered outside of attack state!!")
+        # hitbox.monitoring = false
 
     if(hitbox.monitoring and playing and target is Enemy and (target.health > 0 or runner.ignore_enemy_hp)):
         print("[move] %s: hitbox %s hit enemy" % [name, hitbox.name])

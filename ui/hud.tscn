@@ -1,9 +1,14 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://ui/menu/main_menu.tscn" type="PackedScene" id=1]
 [ext_resource path="res://ui/ui_timer.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ui/sprite_label.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/debug/input_display.gd" type="Script" id=4]
 [ext_resource path="res://ui/hud.gd" type="Script" id=5]
+[ext_resource path="res://ui/debug/debug_hud.gd" type="Script" id=6]
+[ext_resource path="res://ui/debug/pause_display.gd" type="Script" id=7]
+[ext_resource path="res://ui/debug/speed_display.gd" type="Script" id=8]
+[ext_resource path="res://font_small.tres" type="DynamicFont" id=9]
 [ext_resource path="res://ui/enemy_indicator.gd" type="Script" id=10]
 
 [sub_resource type="StyleBoxFlat" id=1]
@@ -23,6 +28,14 @@ corner_radius_bottom_left = 4
 anti_aliasing = false
 
 [sub_resource type="CanvasItemMaterial" id=2]
+
+[sub_resource type="CanvasItemMaterial" id=4]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=5]
+blend_mode = 1
+
+[sub_resource type="Theme" id=3]
 
 [node name="hud" type="CanvasLayer"]
 pause_mode = 2
@@ -169,3 +182,271 @@ __meta__ = {
 }
 
 [node name="ui_timer" parent="control" instance=ExtResource( 2 )]
+
+[node name="debug" type="Node2D" parent="."]
+pause_mode = 2
+visible = false
+script = ExtResource( 6 )
+
+[node name="Coin1" type="ColorRect" parent="debug"]
+visible = false
+margin_left = 13.0
+margin_top = 160.0
+margin_right = 21.0
+margin_bottom = 168.0
+color = Color( 0.141176, 0.921569, 0.666667, 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Coin2" type="ColorRect" parent="debug"]
+visible = false
+margin_left = 23.0
+margin_top = 160.0
+margin_right = 31.0
+margin_bottom = 168.0
+color = Color( 0.854902, 0.439216, 0.913725, 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Coin3" type="ColorRect" parent="debug"]
+visible = false
+margin_left = 33.0
+margin_top = 160.0
+margin_right = 41.0
+margin_bottom = 168.0
+color = Color( 0.890196, 0.878431, 0.172549, 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="info" type="Label" parent="debug"]
+visible = false
+margin_left = 4.15908
+margin_top = 5.42046
+margin_right = 170.159
+margin_bottom = 19.4205
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="controls" type="Label" parent="debug"]
+visible = false
+margin_left = 9.19875
+margin_top = 181.809
+margin_right = 175.199
+margin_bottom = 246.809
+text = "X: jump
+square: attack
+R1: dash
+"
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="ray_u" type="Polygon2D" parent="debug"]
+position = Vector2( 808, 784 )
+scale = Vector2( 0.5, 0.5 )
+polygon = PoolVector2Array( -1392, -416, -1424, -384, -1392, -352, -1360, -384 )
+
+[node name="ray_l" type="Polygon2D" parent="debug"]
+position = Vector2( 776, 832 )
+scale = Vector2( 0.5, 0.5 )
+polygon = PoolVector2Array( -1392, -416, -1424, -384, -1392, -352, -1360, -384 )
+
+[node name="ray_d" type="Polygon2D" parent="debug"]
+position = Vector2( 808, 880 )
+scale = Vector2( 0.5, 0.5 )
+polygon = PoolVector2Array( -1392, -416, -1424, -384, -1392, -352, -1360, -384 )
+
+[node name="ray_r" type="Polygon2D" parent="debug"]
+position = Vector2( 840, 832 )
+scale = Vector2( 0.5, 0.5 )
+polygon = PoolVector2Array( -1392, -416, -1424, -384, -1392, -352, -1360, -384 )
+
+[node name="version" parent="debug" instance=ExtResource( 3 )]
+modulate = Color( 1, 1, 1, 0.0784314 )
+material = SubResource( 4 )
+position = Vector2( 1520, 992 )
+text = "v0.4.0 alpha"
+
+[node name="tick" parent="debug" instance=ExtResource( 3 )]
+modulate = Color( 1, 0.984314, 0, 0.501961 )
+material = SubResource( 4 )
+position = Vector2( 24, 976 )
+text = "0"
+
+[node name="replay_tick" parent="debug" instance=ExtResource( 3 )]
+modulate = Color( 1, 0.329412, 0, 0.501961 )
+material = SubResource( 4 )
+position = Vector2( 24, 928 )
+text = "0"
+
+[node name="fps" parent="debug" instance=ExtResource( 3 )]
+modulate = Color( 0, 1, 0, 0.5 )
+material = SubResource( 4 )
+position = Vector2( 24, 1024 )
+text = "0 fps"
+
+[node name="pingtext" parent="debug" instance=ExtResource( 3 )]
+modulate = Color( 1, 1, 1, 0 )
+material = SubResource( 5 )
+position = Vector2( 40, 192 )
+
+[node name="input_display" type="Node2D" parent="debug"]
+position = Vector2( 504, 144 )
+script = ExtResource( 4 )
+
+[node name="stick" type="Node2D" parent="debug/input_display"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="dot" type="ColorRect" parent="debug/input_display/stick"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 8.0
+margin_bottom = 8.0
+theme = SubResource( 3 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="bg" type="ColorRect" parent="debug/input_display/stick"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 28.0
+margin_bottom = 28.0
+color = Color( 1, 1, 1, 0.0784314 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="jump" type="ColorRect" parent="debug/input_display"]
+margin_left = 36.0
+margin_top = -4.0
+margin_right = 68.0
+margin_bottom = 28.0
+color = Color( 0.905882, 0.905882, 0.905882, 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="attack" type="ColorRect" parent="debug/input_display"]
+margin_left = 76.0
+margin_top = -20.0
+margin_right = 108.0
+margin_bottom = 12.0
+color = Color( 0.309804, 0.694118, 0.286275, 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="dash" type="ColorRect" parent="debug/input_display"]
+margin_left = 76.0
+margin_top = -44.0
+margin_right = 108.0
+margin_bottom = -28.0
+color = Color( 0.701961, 0.388235, 0.917647, 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="reset" type="ColorRect" parent="debug/input_display"]
+margin_left = 36.0
+margin_top = -44.0
+margin_right = 68.0
+margin_bottom = -28.0
+color = Color( 0.917647, 0.388235, 0.486275, 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="speed_display" type="Node2D" parent="debug"]
+position = Vector2( 40, 272 )
+script = ExtResource( 8 )
+
+[node name="spritetext" parent="debug/speed_display" instance=ExtResource( 3 )]
+modulate = Color( 0.776471, 0.564706, 0, 1 )
+material = SubResource( 4 )
+text = "1234"
+
+[node name="pause_display" type="Node2D" parent="debug"]
+position = Vector2( 640, 112 )
+script = ExtResource( 7 )
+
+[node name="spritetext" parent="debug/pause_display" instance=ExtResource( 3 )]
+modulate = Color( 0.490196, 0.0784314, 0.317647, 1 )
+material = SubResource( 4 )
+text = "*PAUSED*"
+
+[node name="pos_x" parent="debug" instance=ExtResource( 3 )]
+modulate = Color( 0.776471, 0.564706, 0, 1 )
+material = SubResource( 4 )
+position = Vector2( 40, 192 )
+text = "0000"
+
+[node name="pos_y" parent="debug" instance=ExtResource( 3 )]
+modulate = Color( 0.776471, 0.564706, 0, 1 )
+material = SubResource( 4 )
+position = Vector2( 192, 192 )
+text = "0000"
+
+[node name="vel_x" parent="debug" instance=ExtResource( 3 )]
+modulate = Color( 0.133333, 0.803922, 0.176471, 1 )
+material = SubResource( 4 )
+position = Vector2( 40, 232 )
+text = "0000"
+
+[node name="vel_y" parent="debug" instance=ExtResource( 3 )]
+modulate = Color( 0.133333, 0.803922, 0.176471, 1 )
+material = SubResource( 4 )
+position = Vector2( 192, 232 )
+text = "0000"
+
+[node name="grounded" parent="debug" instance=ExtResource( 3 )]
+modulate = Color( 0.803922, 0.698039, 0.133333, 1 )
+material = SubResource( 4 )
+position = Vector2( 40, 400 )
+text = "is grounded:"
+
+[node name="state_display" type="Node2D" parent="debug"]
+position = Vector2( 1560, 152 )
+
+[node name="current_state" type="Label" parent="debug/state_display"]
+margin_right = 40.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 9 )
+text = "current state"
+
+[node name="past_states" type="Label" parent="debug/state_display"]
+margin_left = 16.0
+margin_top = 72.0
+margin_right = 154.0
+margin_bottom = 539.0
+custom_colors/font_color = Color( 0.576471, 0.576471, 0.576471, 1 )
+custom_colors/font_outline_modulate = Color( 0.576471, 0.576471, 0.576471, 1 )
+custom_fonts/font = ExtResource( 9 )
+text = "state1
+state2
+state3
+state4
+state5
+state6
+state7
+state8
+state9"

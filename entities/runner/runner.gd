@@ -1,6 +1,8 @@
 extends KinematicBody2D
 class_name Runner
 
+signal action
+
 signal walking
 signal stop_walking
 signal land
@@ -51,8 +53,8 @@ export var WALK_MAX_SPEED = 500
 
 # airdash
 
-export var AIRDASH_SPEED     = 1500  # (mininum) speed at start of airdash
-export var AIRDASH_SPEED_END = 800  # speed at end of airdash
+export var AIRDASH_SPEED     = 1300  # (mininum) speed at start of airdash
+export var AIRDASH_SPEED_END = 600  # speed at end of airdash
 export var AIRDASH_LENGTH    = 12
 export var AIRDASH_WAVELAND_MARGIN = 10
 
@@ -61,7 +63,7 @@ export var AIRDASH_WAVELAND_MARGIN = 10
 export var JUMPSQUAT_LENGTH = 4  # amount of frames to stay grounded before jumping
 
 export var JUMP_VELOCITY = 1300
-export var DASHJUMP_VELOCITY = 800
+export var DASHJUMP_VELOCITY = 1000
 export var GRAVITY = 3500
 export var TERMINAL_VELOCITY = 1200  # maximum downwards velocity
 export var FAST_FALL_SPEED = 1200
@@ -79,8 +81,8 @@ export var DASH_INIT_SPEED = 500  # dash initial speed
 export var DASH_ACCELERATION = 20000  # dash acceleration
 export var DASH_ACCELERATION_REV = 10000  # dash reverse acceleration
 
-export var DASH_MAX_SPEED = 1000  # dash max speed
-export var DASH_MAX_SPEED_REV = 2000 # dash reverse max speed (moonwalking)
+export var DASH_MAX_SPEED = 1200  # dash max speed
+export var DASH_MAX_SPEED_REV = 1400 # dash reverse max speed (moonwalking)
 
 export (int) var RUNNING_STOP_SPEED = 1000
 
@@ -178,9 +180,14 @@ func _ready():
 
     # state machine setup
     fsm.init(self)
+    connect("action", self, "on_action")
+    fsm.connect("change_state", self, "on_action")
 
     # event setup
     $hurtbox.connect("body_entered", self, "on_hurtbox_entered")
+
+    connect("action", self, "on_action")
+    fsm.connect("state_changed", self, "on_state_change")
 
     # animation player setup
     ap.set_blend_time("running", "idle", 0.1)
@@ -394,6 +401,23 @@ func set_color(color: Color) -> void:
     #$sprite.modulate = color
     model.set_color(color)
 
+func on_state_change(state_to: String, state_from: String) -> void:
+    # print("state change: %s" % state_to)
+    match state_to:
+        "idle":
+            play_animation("idle")
+        "dash":
+            play_animation("dash", false, true)
+        "running":
+            play_animation("running")
+        "jumpsquat":
+            play_animation("jumpsquat")
+
+func on_action(action: String) -> void:
+    match action:
+        "jump", "walljump_left", "walljump_right":
+            play_animation("jump", false, true)
+
 func _process(_delta):
 
     match facing:
@@ -402,46 +426,9 @@ func _process(_delta):
         Direction.LEFT:
             model.set_flipped(true)
         
-    if fsm.current_state is RunningState or fsm.current_state is DashState:    
-        play_animation("running")
-    elif fsm.current_state is IdleState:
-        play_animation("idle")
-    elif fsm.current_state is AirborneState and ap.current_animation != "jump":
+    if fsm.is_in_state(RunnerStateType.AIRBORNE) and ap.current_animation != "jump":
         play_animation("airborne", true)
 
-    # check player direction (for flipping sprites)
-    # match facing:
-    #     Direction.RIGHT:
-    #         $sprite.flip_h = false
-    #     Direction.LEFT:
-    #         $sprite.flip_h = true
-
-    # # update sprite animation
-    # if fsm.current_state is IdleState:
-    #     $sprite.animation = "idle"
-    # elif fsm.current_state is DashState:
-    #     $sprite.animation = "running"
-    # elif fsm.current_state is RunningState:
-    #     $sprite.animation = "running"
-    # elif fsm.current_state is AirborneState:
-    #     $sprite.animation = "airborne"
-
-    # "grapple":
-        # grapple_line.set_default_color(Color(1.0, 1.0, 1.0))
-    # "reeling":
-        # grapple_line.set_default_color(Color(1.0, 1.0, 1.0))
-
-    # update grapple visuals
-    # if state_name in ["grapple", "reeling"]:
-    #     grapple_line.visible = true
-    #     if lastcoin != null:
-    #         grapple_line.set_point_position(0, position)
-    #         grapple_line.set_point_position(1, lastcoin.position)
-    # else:
-    #     grapple_line.visible = false
-
-    # pixel snap the sprite's position
-    # $sprite.position = Util.gridsnap(global_position + Vector2(0, -64), 4, false)
 
 #================================================================================
 # PHYSICS LOOP
@@ -461,7 +448,7 @@ func _physics_process(delta):  # update input and physics
     pre_process(delta)
 
     # restore dashes/jumps if grounded
-    if b_is_grounded:
+    if is_grounded() and not fsm.is_in_state(RunnerStateType.AIRDASH):
         if airdashes_left != 1:
             emit_signal("airdash_restored")
 
@@ -469,7 +456,7 @@ func _physics_process(delta):  # update input and physics
         jumps_left = 1;
 
     # update state
-    fsm.current_state.process(delta, self, fsm)
+    fsm.process(delta)
 
     # apply gravity to velocity
     if b_gravity_enabled: apply_gravity(delta)
@@ -489,20 +476,17 @@ func _physics_process(delta):  # update input and physics
 
 # Play an animation from the beginning.
 func play_animation(anim, from_end = false, force = false):
-    if (
-        ap.has_animation(anim)
-        and (ap.current_animation != anim or force)
-    ):
+    if ap.current_animation != anim or force:
         # 3D model
-        var speed = 2.0  # playback speed
+        var speed = 1.0  # playback speed
         var seek = 0.0   # seconds in anim to skip to
 
         if anim == "attack_f":
-            speed = 1.5
             seek = 0.5
 
         ap.play(anim, -1, speed, from_end)
         ap.seek(seek)
+
 
 # Set the current animation without playing from beginning.
 func set_animation(anim):
@@ -513,10 +497,6 @@ func set_animation(anim):
         # 2D sprite
         $sprite.animation = anim
 
-
-# Restart the current animation.
-func restart_animation():
-    $sprite.frame = 0
 
 # detect hitting a platform from a non-one-way angle
 func _check_invalid_platform_collisions(use_slides: bool = true) -> bool:
@@ -804,54 +784,82 @@ func apply_friction(delta, friction = FRICTION):
 
 #--------------------------------------------------------------------------------
 # Actions
+#
+# action_x() functions will perform x action if possible.
+# Does not take into account any inputs the player has made
+# to call an action. (See StateMachine.process() for input checks).
 #--------------------------------------------------------------------------------
 
 # Drop down through a platform (only one-way platforms).
 # Will instantly send the runner to the "airborne" state.
-func do_dropdown():
+func action_dropdown():
     # check if the tile is a drop-down
     if is_grounded() and not Util.intersect_point(self, Vector2(0, 24)):
         # set_ignore_platforms(true)
         position.y += 4
         fsm.goto_airborne()
+        emit_signal("action", "dropdown")
         # yield(get_tree().create_timer(0.5), "timeout")
         # set_ignore_platforms(false)
 
 
-# Perform a jump.
-# If grounded, sends the runner to the "jumpsquat" state.
-# If airborne, instantly perform the jump.
-func do_jump():
-    if b_is_grounded:
-        fsm.goto_jumpsquat()
-    else:
-        jump()
-
-
 # If airborne and falling, instantly fall at the maximum speed.
-func do_fastfall():
-    if not b_is_grounded and velocity.y > 0:
+func action_fastfall():
+    if not is_grounded() and velocity.y > 0:
         velocity.y = FAST_FALL_SPEED
+        emit_signal("action", "fastfall")
+
+
+func action_neutral():
+    fsm.goto_idle()
+    emit_signal("action", "idle")
 
 
 # Initiate a dash. Direction depends on the current input direction.
-func do_dash():
+func action_dash():
     fsm.goto_dash() 
+    emit_signal("action", "dash")
 
+
+func action_airdash():
+    var axis = get_axis()
+    # if (
+    #     not axis.is_equal_approx(Vector2.ZERO)
+    #     and current_type == RunnerStateType.ATTACK
+    #     and not runner.is_grounded() or current_type != RunnerStateType.ATTACK
+    #     and round(axis.length()) != 0
+    # ):
+    if !axis.is_equal_approx(Vector2.ZERO) and airdashes_left > 0:
+        fsm.goto_airdash()
+
+
+func action_walljump():
+    var success = false
+    if WALLJUMP_TYPE == WalljumpType.JOYSTICK:
+        if pressed_right():
+            success = _walljump_right()
+        elif pressed_left():
+            success = _walljump_left()
+    
+    elif WALLJUMP_TYPE == WalljumpType.JUMP:
+        if pressed_jump_raw():
+            success = _walljump_any()
+
+    if success:
+        fsm.goto_airborne()
+
+func _walljump_left() -> bool:
+    return _walljump(Direction.LEFT)
+
+func _walljump_right() -> bool:
+    return _walljump(Direction.RIGHT)
 
 # Perform a walljump in either direction if possible.
-func action_walljump_left() -> void:
-    _walljump(Direction.LEFT)
-
-func action_walljump_right() -> void:
-    _walljump(Direction.RIGHT)
-
-func action_walljump_any() -> void:
-    _walljump()
-
+func _walljump_any() -> bool:
+    return _walljump()
 
 # Perform a walljump in the specified direction if possible.
-func _walljump(dir = null) -> void:
+func _walljump(dir = null) -> bool:
     
     print("attempting walljump")
 
@@ -861,16 +869,16 @@ func _walljump(dir = null) -> void:
         elif $ecb.left_collide_out():
             dir = Direction.RIGHT
         else:
-            return
+            return false
             
     if dir == Direction.LEFT and not $ecb.right_collide_out():
-        return
+        return false
 
     if dir == Direction.RIGHT and not $ecb.left_collide_out():
-        return
+        return false
 
     #var margin = 40
-    var jump_mult = 0.9
+    var jump_mult = 0.8
     #var top_offset = Vector2(0, -48)
     #var bot_offset = Vector2(0, 0)
 
@@ -892,20 +900,33 @@ func _walljump(dir = null) -> void:
     #var bot_ray = Util.intersect_ray(self, bot_offset, cast)
 
     # perform walljump if rays collided
-    jump(jump_mult, true, x_speed)
+    _jump(jump_mult, true, x_speed)
     self.facing = dir
-    emit_signal(sig)
+    emit_signal("action", sig)
+    
+    return true
 
+
+# Perform a jump.
+# If grounded, sends the runner to the "jumpsquat" state.
+# If airborne, instantly perform the jump.
+func action_jump(factor = 1.0):
+    if jumps_left > 0:
+        if (is_grounded() and
+            not fsm.is_in_state([RunnerStateType.JUMPSQUAT, RunnerStateType.AIRDASH])):
+            fsm.goto_jumpsquat()
+            emit_signal("action", "jumpsquat")
+        else:
+            _jump(factor)
+            fsm.goto_airborne()
+            emit_signal("action", "jump")
 
 # Make the runner jump. If force is true, ignore how many jumps they have left.
-func jump(factor = 1.0, force = false, vel_x = null):
+func _jump(factor = 1.0, force = false, vel_x = null):
 
     var axis = input.get_axis()
 
-    if jumps_left == 0 and not force: return
-
     # determine horizontal velocity
-
     if not is_grounded():
         # airborne jump direction switch
         if vel_x:
@@ -922,57 +943,42 @@ func jump(factor = 1.0, force = false, vel_x = null):
             velocity.x = 0
 
     # deplete total jumps
-
-    # if airdashes_left > 0 or force:
-    if not force:
-    # if not force and not is_on_floor():
-        jumps_left -= 1
-        # airdashes_left -= 1
+    jumps_left -= 1
         
     # determine jump height
-
-    if fsm.current_state is AirdashState:
+    if fsm.is_in_state(RunnerStateType.AIRDASH):
         velocity.y = min(velocity.y, -DASHJUMP_VELOCITY * factor)
     else:
         velocity.y = -JUMP_VELOCITY * factor
-
-    if not force: emit_signal("jump")
-
-    # reset jump animation 
-    play_animation("jump", false, true)
-        
-    fsm.goto_airborne()
 
 # Perform an attack.
 #
 # The attack that will be used will be different depending on the
 # runner's current joystick direction.
-func do_attack():
+func action_attack():
 
     # update facing direction
     set_facing_to_input()
 
-    # switch to attack state
-    fsm.goto_attack()
-
     if is_grounded():
         # grounded attacks
-        
-        fsm.current_state.move = $"moveset/normal_forward"
+        fsm.queue_state(RunnerStateType.ATT_FORWARD)
     else:
         # airborne attacks
-
         if holding_up():
-            fsm.current_state.move = $"moveset/normal_up"
+            fsm.queue_state(RunnerStateType.ATT_UAIR)
 
         elif holding_down():
-            fsm.current_state.move = $"moveset/normal_down"
+            fsm.queue_state(RunnerStateType.ATT_DAIR)
 
         else:
-            fsm.current_state.move = $"moveset/normal_forward"
+            fsm.queue_state(RunnerStateType.ATT_FORWARD)
 
-    emit_signal("attack")
+    emit_signal("action", "attack")
 
+
+func action_special():
+    fsm.goto_special()
 
 
 # Hurt the player.
@@ -1028,4 +1034,3 @@ func hit(enemy = null, dmg := 1, contacts := [], stun_frames := 0, airstall := f
     stun(stun_frames)
 
     emit_signal("enemy_hit", enemy, contacts)
-

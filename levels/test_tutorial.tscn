@@ -18,6 +18,7 @@ tile_data = PoolIntArray( 262250, 12, 0, 262251, 12, 0, 262252, 12, 0, 262253, 1
 [node name="room_1" parent="rooms" index="0"]
 position = Vector2( -1216, -448 )
 size = Vector2( 7680, 2480 )
+palette_idx = 0
 
 [node name="hazard_zone" parent="rooms/room_1" index="1"]
 position = Vector2( 0, 2480 )
@@ -25,6 +26,9 @@ size = Vector2( 7680, 32 )
 
 [node name="respawn" parent="rooms/room_1/hazard_zone" index="1"]
 position = Vector2( 2176, -1456 )
+
+[node name="light_2d" parent="rooms/room_1" index="2"]
+visible = false
 
 [node name="enemy" parent="rooms/room_1" index="3" instance=ExtResource( 3 )]
 position = Vector2( 3296, 928 )
