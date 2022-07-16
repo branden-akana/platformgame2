@@ -6,6 +6,7 @@ signal level_restarted
 signal level_cleared
 signal scene_loaded
 signal post_ready
+signal debug_mode_changed
 
 const DisplayManager = preload("res://effects/display_manager.tscn")
 const Textbox = preload("res://ui/textbox.tscn")
@@ -18,7 +19,12 @@ enum PauseRequester {
     MENU            # used for when player enters menu
 }
 
-var frame: int = 0
+enum DebugMode {NORMAL, DEBUG, HITBOXES}
+
+# total ticks for the currently loaded level
+var tick: int = 0
+
+# TODO: move these into a record/timer class
 
 # the total amount of time elapsed for the current level until completion
 var time: float = 0.0
@@ -55,6 +61,7 @@ var practice_mode = false
 var is_recording = true   # if true, record the player
 var is_in_menu = false    # if true, remove control from the player
 
+var debug_mode: int = DebugMode.NORMAL
 
 func _ready():
     add_child(spritefont)
@@ -105,7 +112,7 @@ func free_editor_nodes():
 # Initialize the game. Use after loading a new level.
 func reinitialize_game():
 
-    frame = 0
+    tick = 0
 
     # reset best time / ghost
     clear_best_times()
@@ -353,7 +360,7 @@ func _process(delta):
                 
     # toggle additional debug HUD info
     if Input.is_action_just_pressed("toggle_debug"):
-        HUD.toggle_mode()
+        toggle_debug_mode()
 
     # pause menu
     if Input.is_action_just_pressed("pause"):
@@ -361,6 +368,13 @@ func _process(delta):
             menu.hide()
         else:
             menu.show()
+
+# Switch between different debug modes.
+# Emits the "debug_mode_changed" signal.
+#
+func toggle_debug_mode() -> void:
+    debug_mode = (debug_mode + 1) % len(DebugMode)
+    emit_signal("debug_mode_changed", debug_mode)
         
 # func _input(event):
     

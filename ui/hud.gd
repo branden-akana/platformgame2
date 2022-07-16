@@ -12,9 +12,6 @@ extends CanvasLayer
 signal fade_in_finished
 signal fade_out_finished
 
-enum Mode {NORMAL, DEBUG}
-var current_mode: int = Mode.NORMAL
-
 onready var tween: Tween
 
 func _ready():
@@ -22,20 +19,20 @@ func _ready():
     tween.pause_mode = PAUSE_MODE_PROCESS
     add_child(tween)
 
+    Game.connect("debug_mode_changed", self, "on_debug_mode_changed")
+
 func toggle_visible():
     if layer == 5:
         layer = -1
     else:
         layer = 5
 
-func toggle_mode():
-    current_mode = (current_mode + 1) % len(Mode)
-
-    match current_mode:
-        Mode.NORMAL:
+func on_debug_mode_changed(debug_mode: int) -> void:
+    match debug_mode:
+        Game.DebugMode.NORMAL:
             $control.visible = true
             $debug.visible = false
-        Mode.DEBUG:
+        Game.DebugMode.DEBUG:
             $control.visible = true
             $debug.visible = true
 

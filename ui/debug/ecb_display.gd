@@ -1,6 +1,15 @@
 extends Line2D
 tool
 
+func _ready():
+    Game.connect("debug_mode_changed", self, "on_debug_mode_changed")
+
+func on_debug_mode_changed(debug_mode: int) -> void:
+    if debug_mode == Game.DebugMode.HITBOXES:
+        visible = true
+    else:
+        visible = false
+
 func _physics_process(delta):
     pass
     # if Game.get_player():
