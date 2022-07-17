@@ -11,7 +11,7 @@ static func gridsnap(vec: Vector2, grid_size, subpixel_center = true):
 static func await(object):
     return yield(object, "completed")
 
-static func new_tween(parent) -> Tween:
+static func create_tween(parent) -> Tween:
     var tween = Tween.new()
     parent.add_child(tween)
     return tween

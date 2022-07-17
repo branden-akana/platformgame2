@@ -1,11 +1,13 @@
 class_name SelectPalette
 extends MenuSelection
 
-func get_label():
+func get_label(): return "color palette"
+
+func get_extra():
     var current_palette = Game.get_display_manager().current_palette + 1
     var num_palettes = len(Game.get_display_manager().palettes)
 
-    return "palette: %s/%s" % [current_palette, num_palettes]
+    return "%s/%s" % [current_palette, num_palettes]
 
 func on_right(menu):
     menu.b_rotate_palettes = false

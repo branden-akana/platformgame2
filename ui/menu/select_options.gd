@@ -6,10 +6,12 @@ var label = "options"
 
 class SelectVsync extends MenuSelection:
 
-    var label_on  = "vsync:    [on] off "
-    var label_off = "vsync:     on [off]"
+    var label_on  = "[on] off "
+    var label_off = " on [off]"
 
-    func get_label():
+    func get_label(): return "vsync"
+
+    func get_extra():
         var fps = "   %s FPS" % Engine.get_frames_per_second()
         if OS.is_vsync_enabled():
             return label_on + fps
@@ -23,9 +25,11 @@ class SelectVsync extends MenuSelection:
 
 
 class SelectWalljumpType extends MenuSelection:
-    var label_a = "walljump: [A] B" 
-    var label_b = "walljump:  A [B]"
-    func get_label():
+    var label_a = "[A] B" 
+    var label_b = " A [B]"
+
+    func get_label(): return "walljump style"
+    func get_extra():
         if Game.get_player().WALLJUMP_TYPE == 0:
             return label_a
         else:

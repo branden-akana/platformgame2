@@ -1,12 +1,14 @@
 class_name SelectLights
 extends MenuSelection
 
-var label_on  = "lights:   [on] off"
-var label_off = "lights:    on [off]"
+var label_on  = "[on] off"
+var label_off = "on [off]"
 
 var lights_enabled = true
 
-func get_label():
+func get_label(): return "lights"
+
+func get_extra():
     if lights_enabled:
         return label_on
     return label_off

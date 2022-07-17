@@ -232,7 +232,7 @@ func on_room_entered(room, player):
 
 func on_level_clear():
     print("[game] level cleared!")
-    var tween = Util.new_tween(self)
+    var tween = Util.create_tween(self)
 
     #var pitch_effect = AudioServer.get_bus_effect(0, 0)
     #tween.interpolate_property(Engine, "time_scale", 0.2, 1, 1)

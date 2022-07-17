@@ -8,6 +8,11 @@ class_name MenuSelection
 func get_label():
     return "unnamed"
 
+# text that is displayed on the right side of the menu
+func get_extra():
+    return ""
+
+# text that is displayed on the bottom of the menu
 func get_hint():
     return ""
 

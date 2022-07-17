@@ -13,11 +13,18 @@ var current: MenuSelection = null
 # if true, slowly rotate between the different color palettes
 var b_rotate_palettes = true
 
+# the tick sound when scrolling text
+var asp: AudioStreamPlayer = AudioStreamPlayer.new()
+
 onready var title_origin = $title.position
 
 func _ready():
-    yield(Game, "post_ready")
+    asp.stream = load("res://assets/tick.wav")
+    asp.pitch_scale = 2
+    asp.volume_db = -10
+    add_child(asp)
 
+    yield(Game, "post_ready")
     show()
 
     while b_rotate_palettes:
@@ -63,35 +70,47 @@ func _physics_process(delta):
 
     if Input.is_action_just_pressed("key_down"):
         selected = (selected + 1) % len(items)
+        asp.play()
     
     if Input.is_action_just_pressed("key_up"):
         selected = (selected + len(items) - 1) % len(items)
+        asp.play()
 
     if Input.is_action_just_pressed("key_left"):
         items[selected].on_left(self)
+        asp.play()
 
     if Input.is_action_just_pressed("key_right"):
         items[selected].on_right(self)
+        asp.play()
 
     if Input.is_action_just_pressed("grapple"):
         var item = items[selected]
         item.on_select(self)
         current = item
+        asp.play()
 
     # move title
     $title.position = Util.gridsnap(Vector2(title_origin.x, title_origin.y + ((sin(OS.get_ticks_msec() * 0.001) + 1) * 8)), 4)
 
     # update menu text
     var text = ""
+    var extra = ""
     for i in len(items):
         var item = items[i]
-        if i == selected:
-            text += "# " + item.get_label() + "\n"
-        else:
-            text += "  " + item.get_label() + "\n"
+        text += "  " + item.get_label() + "\n"
+        extra += item.get_extra() + "\n"
             
     $selections.text = text
-
+    $extras.text = extra
     $hint.text = items[selected].get_hint()
+
+    var tween = Util.create_tween(self)
+    tween.interpolate_property($highlight, "position",
+        $highlight.position,
+        selected * Vector2(0, 46), 0.05
+    )
+    tween.start()
+    Util.await_tween(tween)
 
 

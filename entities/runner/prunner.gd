@@ -9,7 +9,7 @@ var signal_frames = {}
 
 var ghost = null
 
-onready var flash_tween = Util.new_tween(self)
+onready var flash_tween = Util.create_tween(self)
 
 func _ready():
 

@@ -399,7 +399,8 @@ func stun(frames):
 # Set the color (modulate) of the runner.
 func set_color(color: Color) -> void:
     #$sprite.modulate = color
-    model.set_color(color)
+    # model.set_color(color)
+    $"3d_proj".set_color(color)
 
 func on_state_change(state_to: String, state_from: String) -> void:
     # print("state change: %s" % state_to)
