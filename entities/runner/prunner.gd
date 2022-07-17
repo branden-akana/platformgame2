@@ -24,7 +24,6 @@ func _ready():
     # connect("jump", Effects, "play", [Effects.Jump, self, {"direction": -velocity}]) 
     connect("jump", Effects, "play", [Effects.Jump, self]) 
     connect("dragging", Effects, "play", [Effects.Dust, self])
-    connect("land", Effects, "play", [Effects.Land, self]) 
 
     connect("airdash", self, "on_airdash")
     connect("airdash_restored", self, "on_airdash_restored")
@@ -45,6 +44,9 @@ func on_action(action: String) -> void:
             Sound.play("land", -20, 0.8)
         "walljump_right":
             Effects.play(Effects.WallJumpLeft, self)
+            Sound.play("land", -20, 0.8)
+        "land":
+            Effects.play(Effects.Land, self)
             Sound.play("land", -20, 0.8)
 
 # Start an effect where the player flashes

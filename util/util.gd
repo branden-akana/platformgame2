@@ -60,6 +60,11 @@ static func intersect_point(node: Node2D, position: Vector2, exclude: Array = []
 
     return collisions
 
+static func cprint(text):
+    var escape = PoolByteArray([0x1b]).get_string_from_ascii()
+    var code = "[1;32m"
+    print(escape + code + str(text))
+
 static func format_time(time):
     var mins = floor(time / 60.0)
     var secs = floor(fmod(time, 60.0))

@@ -218,7 +218,8 @@ func set_grounded(is_grounded, emit = true):
     if not b_is_grounded and is_grounded and emit:
         var fall_height = position.y - airborne_height
         # print("fall height: %s" % fall_height)
-        if fall_height > 24: emit_signal("land")
+        if fall_height > 24:
+            emit_signal("action", "land")
 
     b_is_grounded = is_grounded
 
@@ -361,16 +362,17 @@ func pressed_airdash():
 # Respawn the player at the start point of the level.
 func restart():
     respawn(Game.get_start_point())
-    tick = 0
-
 
 # Respawn the player at a set position.
 func respawn(pos):
+    if pos == Game.get_start_point():
+        Util.cprint("[player] restarted")
+        tick = 0
+        input.reset()
     # print("[runner] setting pos to %s" % pos)
     position = pos
     velocity = Vector2(0, 0)
     fsm.goto_idle()
-    input.reset()
     emit_signal("respawned")
 
 
