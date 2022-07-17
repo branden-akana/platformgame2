@@ -1,11 +1,10 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://ui/menu/main_menu.tscn" type="PackedScene" id=1]
 [ext_resource path="res://ui/ui_timer.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ui/sprite_label.tscn" type="PackedScene" id=3]
 [ext_resource path="res://ui/debug/input_display.gd" type="Script" id=4]
 [ext_resource path="res://ui/hud.gd" type="Script" id=5]
-[ext_resource path="res://ui/debug/debug_hud.gd" type="Script" id=6]
 [ext_resource path="res://ui/debug/pause_display.gd" type="Script" id=7]
 [ext_resource path="res://ui/debug/speed_display.gd" type="Script" id=8]
 [ext_resource path="res://font_small.tres" type="DynamicFont" id=9]
@@ -95,23 +94,23 @@ color = Color( 0, 0, 0, 0 )
 polygon = PoolVector2Array( 0, 3.30607e-05, 1920, 0, 1920, 128, 0, 128 )
 
 [node name="main_menu" parent="." instance=ExtResource( 1 )]
-visible = false
 
 [node name="control" type="Node2D" parent="."]
 
 [node name="death_display" parent="control" instance=ExtResource( 3 )]
 
 [node name="enemy_indicator" type="Node2D" parent="control"]
-position = Vector2( 544, 40 )
+position = Vector2( 544, 48 )
 z_index = 10
 script = ExtResource( 10 )
 
 [node name="enemy_indicator_bg" type="Polygon2D" parent="control"]
-position = Vector2( 0, -16 )
+visible = false
+position = Vector2( 0, 984 )
 z_index = -1
 color = Color( 0, 0, 0, 1 )
 texture_rotation_degrees = -90.0
-polygon = PoolVector2Array( 0, 3.30607e-05, 1920, 0, 1920, 96, 0, 96 )
+polygon = PoolVector2Array( 944, 16, 1920, 16, 1920, 96, 896, 96 )
 
 [node name="enemy_display" type="Label" parent="control"]
 visible = false
@@ -165,10 +164,10 @@ anchor_left = 0.395
 anchor_top = 0.07
 anchor_right = 0.455
 anchor_bottom = 0.07
-margin_left = 308.4
-margin_top = 107.6
-margin_right = 374.4
-margin_bottom = 144.6
+margin_left = 120.0
+margin_top = 200.0
+margin_right = 186.0
+margin_bottom = 237.0
 rect_scale = Vector2( 3, 3 )
 size_flags_horizontal = 3
 size_flags_vertical = 6
@@ -177,16 +176,12 @@ custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
 text = "000"
 align = 2
 uppercase = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ui_timer" parent="control" instance=ExtResource( 2 )]
 
 [node name="debug" type="Node2D" parent="."]
 pause_mode = 2
 visible = false
-script = ExtResource( 6 )
 
 [node name="Coin1" type="ColorRect" parent="debug"]
 visible = false
@@ -306,6 +301,18 @@ script = ExtResource( 4 )
 [node name="stick" type="Node2D" parent="debug/input_display"]
 __meta__ = {
 "_edit_lock_": true
+}
+
+[node name="dot_2" type="ColorRect" parent="debug/input_display/stick"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 8.0
+margin_bottom = 8.0
+theme = SubResource( 3 )
+color = Color( 1, 0.560784, 0, 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
 }
 
 [node name="dot" type="ColorRect" parent="debug/input_display/stick"]

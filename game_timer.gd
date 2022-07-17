@@ -56,7 +56,6 @@ func complete_run():
     if is_best_time():
         print("[timer] new best time recorded")
         time_best = time
-        HUD.set_best_time(time_best)
         if b_recording_enabled:
             # create a new ghost replay
             replay_manager.save_recording()

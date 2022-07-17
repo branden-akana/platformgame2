@@ -18,7 +18,6 @@ tile_data = PoolIntArray( 262250, 12, 0, 262251, 12, 0, 262252, 12, 0, 262253, 1
 [node name="room_1" parent="rooms" index="0"]
 position = Vector2( -1216, -448 )
 size = Vector2( 7680, 2480 )
-palette_idx = 0
 
 [node name="hazard_zone" parent="rooms/room_1" index="1"]
 position = Vector2( 0, 2480 )

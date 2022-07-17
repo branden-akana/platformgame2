@@ -318,12 +318,14 @@ func get_axis():
 
 # Read for a left input, but only if up or down are not pressed.
 func pressed_left_thru_neutral():
+    # return input._is_axis_just_pressed(Vector2.LEFT, Vector2.ZERO)
     return input.is_axis_just_pressed(
         "key_right", "key_left", ["key_up", "key_down"], 0, 0.0
     )
 
 # Read for a right input, but only if up or down are not pressed.
 func pressed_right_thru_neutral():
+    # return input._is_axis_just_pressed(Vector2.RIGHT, Vector2.ZERO)
     return input.is_axis_just_pressed(
         "key_left", "key_right", ["key_up", "key_down"], 0, 0.0
     )
@@ -341,7 +343,7 @@ func get_axis_x():
     return input.get_axis().x
 
 func pressed_jump():
-    return input.is_action_just_pressed("key_jump", BUFFER_JUMP)
+    return input.is_action_just_pressed("key_jump", BUFFER_JUMP, 0.0, false)
 
 func pressed_jump_raw():
     return input.is_action_just_pressed("key_jump")
@@ -469,8 +471,8 @@ func _physics_process(delta):  # update input and physics
     # apply final movement
     move(delta, velocity)
 
-    tick += 1
     input.update(delta)
+    tick += 1
 
 
 #--------------------------------------------------------------------------------
@@ -836,7 +838,7 @@ func action_airdash():
         fsm.goto_airdash()
 
 
-func action_walljump():
+func action_walljump() -> bool:
     var success = false
     if WALLJUMP_TYPE == WalljumpType.JOYSTICK:
         if pressed_right():
@@ -851,6 +853,8 @@ func action_walljump():
     if success:
         fsm.goto_airborne()
 
+    return success
+
 func _walljump_left() -> bool:
     return _walljump(Direction.LEFT)
 
@@ -863,6 +867,8 @@ func _walljump_any() -> bool:
 
 # Perform a walljump in the specified direction if possible.
 func _walljump(dir = null) -> bool:
+
+    print("attempting walljump")
     
     if dir == null:
         if $ecb.right_collide_out():
@@ -944,7 +950,8 @@ func _jump(factor = 1.0, force = false, vel_x = null):
             velocity.x = 0
 
     # deplete total jumps
-    jumps_left -= 1
+    if not force:
+        jumps_left -= 1
         
     # determine jump height
     if fsm.is_in_state(RunnerStateType.AIRDASH):

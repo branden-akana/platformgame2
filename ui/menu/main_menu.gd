@@ -58,9 +58,11 @@ func hide():
     HUD.get_node("control").visible = true
 
 func show():
-    visible = true
+    selected = 0
+    menus = menus.slice(0, 0)
     Game.is_in_menu = true
     Game.pause(Game.PauseRequester.MENU)
+    visible = true
     HUD.get_node("control").visible = false
 
 func _physics_process(delta):

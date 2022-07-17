@@ -190,25 +190,18 @@ func process(delta):
     if state.b_can_dropdown and runner.pressed_down():
         runner.action_dropdown()
 
-    # Check if the player wants to do a jump (air or grounded).
-    try_jump_cancel(state)
-
     # Check if the player wants to do a walljump.
-    try_walljump_cancel(state)
+    if not try_walljump_cancel(state):
+        # Check if the player wants to do a jump (air or grounded).
+        try_jump_cancel(state)
 
     # Check if the player wants to fastfall.
     try_fastfall(state)
 
     # Check if the player wants to dash.
-    # sensitivity: sets how hard you need to press the direction
-    #              for it to register (lower = more sensitive)
-    # require_neutral: if true, ignore dash inputs that don't go
-    #                  through the center of the movement axis
-    # if (
-    #     runner.pressed_left_thru_neutral()
-    #     or runner.pressed_right_thru_neutral()
-    # ):
-    if state.b_can_dash_cancel and (runner.pressed_left() or runner.pressed_right()):
+    if (state.b_can_dash_cancel
+        # and (runner.pressed_left() or runner.pressed_right())):
+        and (runner.pressed_left_thru_neutral() or runner.pressed_right_thru_neutral())):
         runner.action_dash()
 
     # Check if player is trying to not move (no movement input)
@@ -253,10 +246,9 @@ func try_jump_cancel(state):
         return true
     return false
 
-func try_walljump_cancel(state):
+func try_walljump_cancel(state) -> bool:
     if state.b_can_walljump_cancel:
-        runner.action_walljump()
-        return true
+        return runner.action_walljump()
     return false
 
 func goto_idle():      queue_state(RunnerStateType.IDLE)

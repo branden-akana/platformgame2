@@ -71,7 +71,7 @@ func set_best_time(time: float) -> void:
     $control/ui_timer.set_best_time(time)
 
 func set_diff_time(time: float, prev_best: float = INF) -> void:
-    $control/ui_timer.set_diff_time(time)
+    $control/ui_timer.set_diff_time(time, prev_best)
 
 func reset_best_time() -> void:
     $control/ui_timer.reset_best_time()

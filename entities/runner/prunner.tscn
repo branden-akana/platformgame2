@@ -98,20 +98,21 @@ move_hitboxes = [ {
 [node name="3d_proj" type="Polygon2D" parent="."]
 offset = Vector2( 0, 32 )
 texture = SubResource( 95 )
+texture_scale = Vector2( 0.25, 0.25 )
 polygon = PoolVector2Array( -128, -256, -128, 0, 128, 0, 128, -256 )
 uv = PoolVector2Array( 0, 0, 0, 512, 512, 512, 512, 0 )
 
 [node name="3d_proj_2" type="Polygon2D" parent="."]
 material = SubResource( 96 )
-z_index = -10
-z_as_relative = false
+z_index = -1
 offset = Vector2( 0, 32 )
 texture = SubResource( 95 )
+texture_scale = Vector2( 0.25, 0.25 )
 polygon = PoolVector2Array( -152, -272, -152, 16, 152, 16, 152, -272 )
 uv = PoolVector2Array( 0, 0, 0, 512, 512, 512, 512, 0 )
 
 [node name="3d" type="Viewport" parent="."]
-size = Vector2( 512, 512 )
+size = Vector2( 128, 128 )
 own_world = true
 transparent_bg = true
 render_target_v_flip = true

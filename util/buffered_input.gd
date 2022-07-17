@@ -19,6 +19,13 @@ var action_unpress_times = {}
 # unpressing will remove them from this map
 var action_holds = {}
 
+# the user's current joystick direction
+var axis: Vector2 = Vector2.ZERO
+
+# the user's joystick direction on the last frame
+var last_axis: Vector2 = axis
+
+
 var tick: int = 0
 
 # Clear the buffer
@@ -41,6 +48,10 @@ func duplicate() -> BufferedInput:
 # Called once per ingame tick.
 func update(delta):
     tick += 1
+
+    last_axis = axis
+    axis = get_axis()
+    # print(axis)
 
 # Return the current time.
 func get_current_time() -> int:
@@ -109,6 +120,8 @@ func get_time_held(input: String) -> int:
 func is_action_just_pressed(input, tolerance: int = 0, delta: float = 0.0, clear = true):
     if tolerance == 0:
         var last_pressed = get_time_since_last_pressed(input)
+        # if input == "key_jump":
+            # print("last pressed = %s" % last_pressed)
         if last_pressed == 0 and get_action_delta(input) >= delta:
             return true
         else:
@@ -125,6 +138,17 @@ func is_action_just_pressed(input, tolerance: int = 0, delta: float = 0.0, clear
         else:
             return false
 
+func _is_axis_just_pressed(dir: Vector2, from: Vector2):
+
+    var axis = self.axis.round()
+    var last_axis = self.last_axis.round()
+
+    if dir == axis and from == last_axis:
+        return true
+    else:
+        return false
+
+
 # Reads the difference between two inputs with a buffer (in seconds).
 # Movements occuring within this buffer will still count as a press.
 # input: the input representing primary direction
@@ -140,7 +164,7 @@ func is_axis_just_pressed(input: String, opposite_input: String, other_inputs = 
 
     var press_detected = false
 
-    print("press time: %s, opp unpress time: %s" % [a_last_pressed, b_last_unpressed])
+    # print("press time: %s, opp unpress time: %s" % [a_last_pressed, b_last_unpressed])
 
     # detect a press if:
     # (1) the primary input has just been pressed and the opposite input is not held or
