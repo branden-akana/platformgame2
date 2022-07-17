@@ -65,10 +65,6 @@ func set_deaths(num):
     # HUD.get_node("control/enemy_display").text = "enemies: %d" % len(get_alive_enemies())
     $"control/death_display".text = "deaths %d" % num
 
-func _physics_process(delta):
-    set_timer(Game.time)
-    set_deaths(Game.num_deaths)
-
 # Briefly flash the screen white.
 func blink(time):
     tween.interpolate_property($white_fade, "color:a", 0.1, 0.0, time)

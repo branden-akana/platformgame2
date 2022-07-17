@@ -24,18 +24,7 @@ enum DebugMode {NORMAL, DEBUG, HITBOXES}
 # total ticks for the currently loaded level
 var tick: int = 0
 
-# TODO: move these into a record/timer class
-
-# the total amount of time elapsed for the current level until completion
-var time: float = 0.0
-
-# the best completion time
-var time_best: float = INF
-
-var time_paused: bool = false
-
-# total amount of times the player died in the current level
-var num_deaths = 0
+onready var run_timer: GameTimer = GameTimer.new()
 
 # game pausing variables
 var game_pause_requests = []  # contains refs to nodes that want to pause the game
@@ -85,10 +74,10 @@ func _ready():
         player = PlayerRunner.instance()
         $"/root/main".add_child(player)
 
-    player.connect("died", self, "on_player_death")
+    player.connect("died", run_timer, "on_player_death")
     yield(player, "ready")
 
-    connect("level_cleared", self, "on_level_clear")
+    run_timer.connect("run_complete", self, "on_level_clear")
 
     reinitialize_game()
     
@@ -115,7 +104,7 @@ func reinitialize_game():
     tick = 0
 
     # reset best time / ghost
-    clear_best_times()
+    run_timer.clear_best_times()
     replay_manager.clear_playback()
 
     restart_player()
@@ -127,9 +116,8 @@ func restart_level():
     # stop replay recording
     replay_manager.stop_recording()
 
-    # reset stats / timers
-    num_deaths = 0
-    reset_timer()
+    # reset the run timer
+    run_timer.reset_run()
 
     # reset state of the level
     reset_enemies()
@@ -141,6 +129,9 @@ func restart_level():
     # start replay recording and playback
     replay_manager.start_recording()
     replay_manager.start_playback()
+
+    # start the run timer
+    run_timer.start_run()
     
     emit_signal("level_restarted")
 
@@ -268,10 +259,6 @@ func on_level_clear():
 
     tween.queue_free()
 
-func on_player_death():
-    if not time_paused:
-        num_deaths += 1
-
 func debug_log(s):
     var file = File.new()
     file.open("res://log.txt", file.READ_WRITE)
@@ -321,21 +308,13 @@ func get_debug_hud() -> Node:
 
 func _physics_process(delta):
 
-    if not time_paused and not is_paused():
-        time += delta
-
-    if len(get_enemies()) > 0 and len(get_alive_enemies()) == 0 and not time_paused:
-        stop_timer()
+    run_timer.process(delta)
 
     var velocity = get_player().velocity
     var state_name = get_player().fsm.current_type
     HUD.get_node("debug/info").text = "speed: %3.2f (x=%3.2f, y=%3.2f)\nstate: %s" % [velocity.length(), velocity.x, velocity.y, state_name]
 
 func _process(delta):
-
-    # load hub world
-    if Input.is_action_just_pressed("debug_level1"):
-        load_scene(Level_TestHub)
 
     if Input.is_action_just_pressed("toggle_fullscreen"):
         OS.window_fullscreen = !OS.window_fullscreen
@@ -385,38 +364,6 @@ func toggle_debug_mode() -> void:
 # Speedrun Timer
 # ========================================================================
 
-func is_best_time():
-    return time_paused and time <= time_best
-
-# Pause the ingame timer
-func pause_timer():
-    time_paused = true
-
-func stop_timer():
-    print("[timer] timer stopped")
-    emit_signal("level_cleared")
-    pause_timer()
-
-    # calculate time difference
-    HUD.set_diff_time(time, time_best)
-
-    # check for new best time
-    if is_best_time():
-        print("[timer] new best time recorded")
-        time_best = time
-        HUD.set_best_time(time_best)
-        # create a new ghost replay
-        replay_manager.save_recording()
-
-# Reset the ingame timer
-func reset_timer():
-    time = 0.0
-    time_paused = false
-    HUD.set_best_time(time_best)
-
-func clear_best_times():
-    time_best = INF
-    HUD.reset_best_time()
 
 # Palettes / Post Processing
 # ========================================================================
