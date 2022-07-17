@@ -127,7 +127,7 @@ func pre_process(delta):
         input.update_action(key, value)
 
     # record this tick into the replay
-    if Game.is_recording:
+    if Game.run_timer.is_recording_enabled():
         replay.record_tick(self, tick)
 
 # Do an animated restart

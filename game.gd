@@ -24,7 +24,7 @@ enum DebugMode {NORMAL, DEBUG, HITBOXES}
 # total ticks for the currently loaded level
 var tick: int = 0
 
-onready var run_timer: GameTimer = GameTimer.new()
+onready var run_timer: GameTimer = GameTimer.new(self)
 
 # game pausing variables
 var game_pause_requests = []  # contains refs to nodes that want to pause the game
@@ -43,19 +43,14 @@ var current_room = null setget set_current_room
 # used to draw sprite text
 onready var spritefont = SpriteLabel.new()
 
-onready var replay_manager = ReplayManager.new()
-
 # flags
 var practice_mode = false
-var is_recording = true   # if true, record the player
 var is_in_menu = false    # if true, remove control from the player
 
 var debug_mode: int = DebugMode.NORMAL
 
 func _ready():
     add_child(spritefont)
-
-    replay_manager.init(self)
 
     # Game initialization stuff
 
@@ -100,21 +95,16 @@ func free_editor_nodes():
 
 # Initialize the game. Use after loading a new level.
 func reinitialize_game():
-
     tick = 0
 
     # reset best time / ghost
     run_timer.clear_best_times()
-    replay_manager.clear_playback()
 
     restart_player()
     restart_level()
     
 # Restart the level. Use to reset the state of just the level.
 func restart_level():
-
-    # stop replay recording
-    replay_manager.stop_recording()
 
     # reset the run timer
     run_timer.reset_run()
@@ -125,10 +115,6 @@ func restart_level():
 
     # reset camera
     get_camera().init()
-
-    # start replay recording and playback
-    replay_manager.start_recording()
-    replay_manager.start_playback()
 
     # start the run timer
     run_timer.start_run()

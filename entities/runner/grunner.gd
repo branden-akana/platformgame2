@@ -38,7 +38,7 @@ func load_replay(new_replay):
 # stop playing this ghost
 func stop():
     print("[ghost] stopped replay")
-    $sprite.visible = false
+    visible = false
     playing = false
 
 func restart():

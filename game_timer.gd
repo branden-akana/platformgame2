@@ -3,6 +3,9 @@ class_name GameTimer
 signal run_started
 signal run_complete
 
+var game
+var replay_manager: ReplayManager
+
 # seconds elapsed for the current level until completion
 var time: float = 0.0
 
@@ -10,16 +13,24 @@ var time: float = 0.0
 var time_best: float = INF
 
 var b_run_started: bool = false
-
 var b_run_complete: bool = false
+var b_recording_enabled: bool = true
+var b_playback_enabled: bool = true
 
 # various stats during a run
 
 # number of times the player has died during the run
 var num_deaths = 0
 
+func _init(game):
+    self.game = game
+    self.replay_manager = ReplayManager.new(game)
+
 func is_best_time():
     return b_run_complete and time <= time_best
+
+func is_recording_enabled():
+    return b_recording_enabled
 
 func process(delta):
     if b_run_started and not b_run_complete:
@@ -46,8 +57,9 @@ func complete_run():
         print("[timer] new best time recorded")
         time_best = time
         HUD.set_best_time(time_best)
-        # create a new ghost replay
-        Game.replay_manager.save_recording()
+        if b_recording_enabled:
+            # create a new ghost replay
+            replay_manager.save_recording()
 
     emit_signal("run_complete")
 
@@ -56,16 +68,29 @@ func reset_run():
     print("[timer] run reset")
     time = 0.0
     num_deaths = 0
+    b_run_complete = false
     HUD.set_best_time(time_best)
+    if b_recording_enabled:
+        replay_manager.stop_recording()
+    if b_playback_enabled:
+        replay_manager.stop_playback()
+
 
 func start_run():
     print("[timer] run started")
     b_run_started = true
+    if b_recording_enabled:
+        replay_manager.start_recording()
+    if b_playback_enabled:
+        replay_manager.start_playback()
     emit_signal("run_started")
+
 
 func clear_best_times():
     time_best = INF
     HUD.reset_best_time()
+    replay_manager.clear_playback()
+
 
 func on_player_death():
     if not b_run_complete:

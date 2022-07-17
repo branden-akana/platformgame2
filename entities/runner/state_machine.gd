@@ -225,7 +225,7 @@ func process(delta):
     # update current state
     var next_state = state.on_update(delta, runner, self)
     if next_state != null:
-        print("next state: %s" % next_state)
+        # print("next state: %s" % next_state)
         set_state(next_state)
 
     state.tick += 1

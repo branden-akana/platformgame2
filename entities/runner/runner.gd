@@ -217,7 +217,7 @@ func get_ecb() -> CollisionPolygon2D:
 func set_grounded(is_grounded, emit = true):
     if not b_is_grounded and is_grounded and emit:
         var fall_height = position.y - airborne_height
-        print("fall height: %s" % fall_height)
+        # print("fall height: %s" % fall_height)
         if fall_height > 24: emit_signal("land")
 
     b_is_grounded = is_grounded
@@ -861,8 +861,6 @@ func _walljump_any() -> bool:
 # Perform a walljump in the specified direction if possible.
 func _walljump(dir = null) -> bool:
     
-    print("attempting walljump")
-
     if dir == null:
         if $ecb.right_collide_out():
             dir = Direction.LEFT

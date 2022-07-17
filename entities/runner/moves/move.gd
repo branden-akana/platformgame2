@@ -65,7 +65,7 @@ func _ready():
 
 
 func start():
-    print("[move] %s: started" % name)
+    # print("[move] %s: started" % name)
     # reset flags
     tick = 0
     playing = true
@@ -181,7 +181,7 @@ func on_hitbox_entered(area_id, target: Area2D, target_shape_id, hitbox_shape_id
         # hitbox.monitoring = false
 
     if(hitbox.monitoring and playing and target is Enemy and (target.health > 0 or runner.ignore_enemy_hp)):
-        print("[move] %s: hitbox %s hit enemy" % [name, hitbox.name])
+        # print("[move] %s: hitbox %s hit enemy" % [name, hitbox.name])
 
         # compute contact points
         var target_shape = Util.get_shape(target, target_shape_id)

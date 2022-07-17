@@ -11,10 +11,8 @@ var ghost_runner
 
 var b_is_recording = false
 
-
-func init(game):
+func _init(game):
     self.game = game
-
 
 # create a new replay of a runner to be recorded
 func create_replay(runner):
@@ -23,18 +21,20 @@ func create_replay(runner):
 
 # Start recording a replay.
 func start_recording():
-    replay = create_replay(game.get_player())
-    game.get_player().replay = replay
-    b_is_recording = true
-    print("[demo] recording started")
-    game.debug_ping("recording started")
+    if not b_is_recording:
+        replay = create_replay(game.get_player())
+        game.get_player().replay = replay
+        b_is_recording = true
+        print("[demo] recording started")
+        game.debug_ping("recording started")
 
 
 # Stop recording a replay.
 func stop_recording():
-    b_is_recording = false
-    print("[demo] recording stopped")
-    game.debug_ping("recording stopped")
+    if b_is_recording:
+        b_is_recording = false
+        print("[demo] recording stopped")
+        game.debug_ping("recording stopped")
 
 
 func save_recording():
@@ -81,5 +81,7 @@ func clear_playback():
     if is_instance_valid(ghost_runner):
         print("[ghost] deleting ghost")
         ghost_runner.queue_free()
+        ghost_runner = null
+        saved_replay = null
 
 
