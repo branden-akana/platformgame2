@@ -10,6 +10,9 @@ var menus = [
 var selected = 0
 var current: MenuSelection = null
 
+# if true, skip the next _physics_process() call
+var b_skip_process = false
+
 # if true, slowly rotate between the different color palettes
 var b_rotate_palettes = true
 
@@ -32,23 +35,29 @@ func _ready():
         var next_palette = (pp.current_palette + 1) % len(pp.palettes)
         yield(pp.change_palette(next_palette, 5), "completed")
 
+func _current_menu() -> MenuSelection:
+    return menus[-1] as MenuSelection
+
+func _current_items() -> Array:
+    return _current_menu().get_items()
+
+func _update_current_menu() -> void:
+    if current: current.on_return(self)
+    current = _current_menu()
+    current.on_enter(self)
+    selected = 0
+
 # set the items in the menu, effectively switching menus
 func set_menu(selection):
     menus.append(selection)
-    selected = 0
+    _update_current_menu()
 
 # return to the previous menu if possible
 func menu_return():
     if len(menus) > 1:
         # remove last elm of array
         menus.remove(len(menus) - 1)
-        if current: current.on_return(self)
-        selected = 0
-
-# get the active menu (list of items), which
-# will be the last menu that was added
-func get_active_menu():
-    return menus[-1]
+        _update_current_menu()
 
 func hide():
     visible = false
@@ -65,10 +74,22 @@ func show():
     visible = true
     HUD.get_node("control").visible = false
 
+func _input(event):
+    var items = _current_items()
+    if items[selected].on_input(self, event):
+        b_skip_process = true
+
+
 func _physics_process(delta):
     if not Game.is_in_menu: return
 
-    var items = get_active_menu().get_items()
+    if b_skip_process:
+        b_skip_process = false
+        return
+
+    var items = _current_items()
+
+    if not items[selected].on_update(self, delta): return
 
     if Input.is_action_just_pressed("key_down"):
         selected = (selected + 1) % len(items)
@@ -89,7 +110,10 @@ func _physics_process(delta):
     if Input.is_action_just_pressed("grapple"):
         var item = items[selected]
         item.on_select(self)
-        current = item
+        asp.play()
+
+    if Input.is_action_just_pressed("key_jump"):
+        menu_return()
         asp.play()
 
     # move title

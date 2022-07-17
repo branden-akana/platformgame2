@@ -52,6 +52,7 @@ class SelectWalljumpType extends MenuSelection:
 
 
 var items = [
+    SelectKeybinds.new(),
     SelectVsync.new(),
     SelectLights.new(),
     SelectWalljumpType.new(),
@@ -67,6 +68,8 @@ func get_items():
 
 func on_select(menu):
     menu.set_menu(self)
+
+func on_enter(menu):
     menu.get_node("sample").visible = true
     menu.get_node("sample_2").visible = true
 

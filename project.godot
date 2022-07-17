@@ -175,6 +175,11 @@ _global_script_classes=[ {
 "path": "res://ui/menu/select_exit.gd"
 }, {
 "base": "MenuSelection",
+"class": "SelectKeybinds",
+"language": "GDScript",
+"path": "res://ui/menu/select_keybinds.gd"
+}, {
+"base": "MenuSelection",
 "class": "SelectLevel",
 "language": "GDScript",
 "path": "res://ui/menu/select_level.gd"
@@ -263,6 +268,7 @@ _global_script_class_icons={
 "RunningState": "",
 "SceneLoadTrigger": "",
 "SelectExit": "",
+"SelectKeybinds": "",
 "SelectLevel": "",
 "SelectLights": "",
 "SelectMain": "",

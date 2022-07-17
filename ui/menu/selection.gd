@@ -19,6 +19,9 @@ func get_hint():
 # called when the user selects this item
 func on_select(menu):
     pass
+    
+func on_enter(menu):
+    pass
 
 # called when the user leaves this item
 func on_return(menu):
@@ -37,3 +40,8 @@ func on_right(menu):
 func on_left(menu):
     pass
 
+func on_update(menu, delta) -> bool:
+    return true
+
+func on_input(menu, event: InputEvent) -> bool:
+    return false
