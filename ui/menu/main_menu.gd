@@ -90,6 +90,8 @@ func _physics_process(delta):
         else:
             text += "  " + item.get_label() + "\n"
             
-    $label.text = text
+    $selections.text = text
+
+    $hint.text = items[selected].get_hint()
 
 

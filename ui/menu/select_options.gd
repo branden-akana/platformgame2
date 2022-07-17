@@ -23,13 +23,19 @@ class SelectVsync extends MenuSelection:
 
 
 class SelectWalljumpType extends MenuSelection:
-    var label_a = "walljump: [A] B   walljump by inputting away from wall"
-    var label_b = "walljump:  A [B]  walljump by pressing jump on wall"
+    var label_a = "walljump: [A] B" 
+    var label_b = "walljump:  A [B]"
     func get_label():
         if Game.get_player().WALLJUMP_TYPE == 0:
             return label_a
         else:
             return label_b
+
+    func get_hint():
+        if Game.get_player().WALLJUMP_TYPE == 0:
+                return "while against a wall, walljump by moving away from it"
+        else:
+                return "while against a wall, walljump by pressing jump"
 
     func _toggle():
         if Game.get_player().WALLJUMP_TYPE == 0:

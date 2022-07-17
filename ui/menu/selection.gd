@@ -8,6 +8,9 @@ class_name MenuSelection
 func get_label():
     return "unnamed"
 
+func get_hint():
+    return ""
+
 # called when the user selects this item
 func on_select(menu):
     pass
