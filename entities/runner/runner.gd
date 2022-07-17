@@ -847,8 +847,10 @@ func action_walljump() -> bool:
             success = _walljump_left()
     
     elif WALLJUMP_TYPE == WalljumpType.JUMP:
-        if pressed_jump_raw():
+        if pressed_jump():
             success = _walljump_any()
+        if success:
+            input.eat_input("key_jump")
 
     if success:
         fsm.goto_airborne()

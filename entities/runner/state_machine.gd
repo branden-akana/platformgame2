@@ -191,7 +191,10 @@ func process(delta):
         runner.action_dropdown()
 
     # Check if the player wants to do a walljump.
-    if not try_walljump_cancel(state):
+    var wj_res = try_walljump_cancel(state)
+
+    print("walljump success: %s" % wj_res)
+    if not wj_res:
         # Check if the player wants to do a jump (air or grounded).
         try_jump_cancel(state)
 

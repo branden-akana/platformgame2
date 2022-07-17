@@ -132,8 +132,7 @@ func is_action_just_pressed(input, tolerance: int = 0, delta: float = 0.0, clear
         if last_pressed <= tolerance and input_delta >= delta:
             # print("[%s] last pressed: %.2f, delta: %.2f" % [input, last_pressed, input_delta])
             if clear:
-                # pass
-                action_press_times.erase(input)
+                eat_input(input)
             return true
         else:
             return false
@@ -221,4 +220,5 @@ func get_action_delta(input: String) -> float:
     else:
         return 0.0
     
-
+func eat_input(input: String) -> void:
+    action_press_times.erase(input)
