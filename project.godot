@@ -219,6 +219,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://ui/menu/select_start.gd"
 }, {
+"base": "Resource",
+"class": "Settings",
+"language": "GDScript",
+"path": "res://settings.gd"
+}, {
 "base": "RunnerState",
 "class": "SpecialState",
 "language": "GDScript",
@@ -282,6 +287,7 @@ _global_script_class_icons={
 "SelectPalette": "",
 "SelectReturn": "",
 "SelectStart": "",
+"Settings": "",
 "SpecialState": "",
 "SpriteLabel": "",
 "StateMachine": "",

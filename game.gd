@@ -8,6 +8,7 @@ signal scene_loaded
 signal post_ready
 signal debug_mode_changed
 
+
 const DisplayManager = preload("res://effects/display_manager.tscn")
 const Textbox = preload("res://ui/textbox.tscn")
 const Level_TestHub = preload("res://levels/test_hub.tscn")
@@ -25,6 +26,8 @@ enum DebugMode {NORMAL, DEBUG, HITBOXES}
 var tick: int = 0
 
 onready var run_timer: GameTimer = GameTimer.new(self)
+
+var settings: Settings
 
 # game pausing variables
 var game_pause_requests = []  # contains refs to nodes that want to pause the game
@@ -52,8 +55,8 @@ var debug_mode: int = DebugMode.NORMAL
 func _ready():
     add_child(spritefont)
 
-    # Game initialization stuff
 
+    # Game initialization stuff
     Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
     print("Feel free to minimize this window! It needs to be open for some reason to avoid a crash.")
@@ -82,6 +85,9 @@ func _ready():
     # initialize post process manager
     #var pp = DisplayManager.instance()
     #$"/root/main".add_child(pp)
+
+    # Settings load
+    settings = Settings.load_settings()
     
     emit_signal("post_ready")
     
@@ -442,4 +448,9 @@ func debug_ping(message):
     yield(tween, "tween_completed")
     remove_child(tween)
 
+
+func exit() -> void:
+    print("exiting game")
+    settings.save()
+    get_tree().quit()
 
