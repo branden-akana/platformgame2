@@ -870,7 +870,7 @@ func _walljump_any() -> bool:
 # Perform a walljump in the specified direction if possible.
 func _walljump(dir = null) -> bool:
 
-    print("attempting walljump")
+    # print("attempting walljump")
     
     if dir == null:
         if $ecb.right_collide_out():

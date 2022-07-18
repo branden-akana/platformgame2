@@ -9,6 +9,14 @@ func get_extra():
 
     return "%s/%s" % [current_palette, num_palettes]
 
+func on_hover(menu):
+    menu.get_node("sample").visible = true
+    menu.get_node("sample_2").visible = true
+
+func on_unhover(menu):
+    menu.get_node("sample").visible = false
+    menu.get_node("sample_2").visible = false
+
 func on_right(menu):
     menu.b_rotate_palettes = false
     var pp = Game.get_display_manager()

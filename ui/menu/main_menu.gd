@@ -92,11 +92,15 @@ func _physics_process(delta):
     if not items[selected].on_update(self, delta): return
 
     if Input.is_action_just_pressed("key_down"):
+        items[selected].on_unhover(self)
         selected = (selected + 1) % len(items)
+        items[selected].on_hover(self)
         asp.play()
     
     if Input.is_action_just_pressed("key_up"):
+        items[selected].on_unhover(self)
         selected = (selected + len(items) - 1) % len(items)
+        items[selected].on_hover(self)
         asp.play()
 
     if Input.is_action_just_pressed("key_left"):
@@ -122,13 +126,26 @@ func _physics_process(delta):
     # update menu text
     var text = ""
     var extra = ""
+    var extra_2 = ""
+    var extra_3 = ""
+
     for i in len(items):
         var item = items[i]
         text += "  " + item.get_label() + "\n"
-        extra += item.get_extra() + "\n"
+        if item.get_extra() is Array:
+            extra += item.get_extra()[0] + "\n"
+            extra_2 += item.get_extra()[1] + "\n"
+            extra_3 += item.get_extra()[2] + "\n"
+        else:
+            extra += item.get_extra() + "\n"
+            extra_2 += "\n"
+            extra_3 += "\n"
             
+    $subtitle.text = _current_menu().get_label()
     $selections.text = text
     $extras.text = extra
+    $extras_2.text = extra_2
+    $extras_3.text = extra_3
     $hint.text = items[selected].get_hint()
 
     var tween = Util.create_tween(self)

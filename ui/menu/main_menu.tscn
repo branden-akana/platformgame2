@@ -120,22 +120,46 @@ text = "untitled platform game
 "
 align = 1
 
+[node name="subtitle" type="Label" parent="."]
+margin_left = 312.0
+margin_top = 408.0
+margin_right = 2232.0
+margin_bottom = 455.0
+custom_constants/shadow_offset_x = 0
+custom_constants/shadow_offset_y = 4
+custom_constants/shadow_as_outline = 0
+custom_fonts/font = SubResource( 5 )
+
 [node name="selections" type="Label" parent="."]
 margin_left = 320.0
-margin_top = 440.0
+margin_top = 464.0
 margin_right = 2240.0
-margin_bottom = 1520.0
+margin_bottom = 1544.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 0 )
 custom_constants/line_spacing = 10
 custom_fonts/font = SubResource( 5 )
-text = "> enter
-  options
-  exit"
 
 [node name="extras" type="Label" parent="."]
 margin_left = 864.0
-margin_top = 441.0
-margin_right = 2784.0
-margin_bottom = 1521.0
+margin_top = 464.0
+margin_right = 1114.0
+margin_bottom = 1544.0
+custom_constants/line_spacing = 10
+custom_fonts/font = SubResource( 5 )
+
+[node name="extras_2" type="Label" parent="."]
+margin_left = 1120.0
+margin_top = 464.0
+margin_right = 1370.0
+margin_bottom = 1544.0
+custom_constants/line_spacing = 10
+custom_fonts/font = SubResource( 5 )
+
+[node name="extras_3" type="Label" parent="."]
+margin_left = 1376.0
+margin_top = 464.0
+margin_right = 1626.0
+margin_bottom = 1544.0
 custom_constants/line_spacing = 10
 custom_fonts/font = SubResource( 5 )
 
@@ -150,7 +174,6 @@ custom_constants/shadow_offset_x = 0
 custom_constants/shadow_offset_y = 4
 custom_constants/shadow_as_outline = 0
 custom_fonts/font = SubResource( 5 )
-text = "selection hint here"
 
 [node name="polygon_2d" type="Polygon2D" parent="."]
 position = Vector2( 0, 216 )
@@ -162,6 +185,7 @@ polygon = PoolVector2Array( 0, 0, 640, 0, 640, 176, 0, 176 )
 
 [node name="highlight" type="Polygon2D" parent="."]
 material = SubResource( 10 )
+offset = Vector2( 0, 24 )
 invert_border = 8.0
 polygon = PoolVector2Array( 304, 440, 832, 440, 832, 488, 304, 488 )
 

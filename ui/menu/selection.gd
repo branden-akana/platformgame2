@@ -6,7 +6,7 @@ class_name MenuSelection
 
 # the text that is displayed in the menu
 func get_label():
-    return "unnamed"
+    return ""
 
 # text that is displayed on the right side of the menu
 func get_extra():
@@ -18,12 +18,21 @@ func get_hint():
 
 # called when the user selects this item
 func on_select(menu):
-    pass
+    if len(get_items()): menu.set_menu(self)
     
+# called when the cursor hovers over this item
+func on_hover(menu):
+    pass
+
+# called when the cursor leaves this item
+func on_unhover(menu):
+    pass
+
+# if this item is a menu, is called when this menu is entered
 func on_enter(menu):
     pass
 
-# called when the user leaves this item
+# if this item is a menu, is called when this menu is left
 func on_return(menu):
     pass
 
