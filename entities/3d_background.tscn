@@ -3,42 +3,21 @@
 [ext_resource path="res://entities/background.tscn" type="PackedScene" id=1]
 [ext_resource path="res://entities/3d_background.gd" type="Script" id=2]
 [ext_resource path="res://assets/textures/texture_03.png" type="Texture" id=3]
+[ext_resource path="res://effects/display_manager.tscn" type="PackedScene" id=4]
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("viewport")
 
-[sub_resource type="SpatialMaterial" id=4]
-params_blend_mode = 1
-albedo_color = Color( 0.917647, 0.917647, 0.917647, 1 )
-albedo_texture = ExtResource( 3 )
-metallic_specular = 1.0
-uv1_scale = Vector3( 1, 1, 4 )
-uv1_offset = Vector3( 0, 0, 0.139663 )
-uv1_triplanar = true
-
-[sub_resource type="SpatialMaterial" id=8]
-params_diffuse_mode = 4
-params_specular_mode = 3
-params_blend_mode = 1
-albedo_texture = ExtResource( 3 )
-metallic_specular = 1.0
-uv1_scale = Vector3( 1, 1, 4 )
-uv1_offset = Vector3( 0, 0, 0.139663 )
-uv1_triplanar = true
-
-[sub_resource type="Gradient" id=7]
-colors = PoolColorArray( 0, 0.0191193, 0.174805, 1, 0, 0.821287, 0.936523, 1 )
-
-[sub_resource type="GradientTexture" id=6]
-gradient = SubResource( 7 )
-
 [sub_resource type="ProceduralSky" id=3]
-sky_top_color = Color( 0, 0, 0, 1 )
-sky_horizon_color = Color( 0, 0, 0, 1 )
+sky_top_color = Color( 0.388235, 0, 0.345098, 1 )
+sky_horizon_color = Color( 1, 0.423529, 0, 1 )
+sky_curve = 0.00716939
+sky_energy = 3.37
 ground_bottom_color = Color( 0, 0, 0, 1 )
 ground_horizon_color = Color( 0, 0, 0, 1 )
-sun_latitude = 1.09
-sun_angle_max = 146.96
+sun_color = Color( 1, 0.878431, 0.105882, 1 )
+sun_latitude = -2.33
+sun_angle_min = 33.0
 
 [sub_resource type="Environment" id=5]
 background_mode = 2
@@ -46,7 +25,6 @@ background_sky = SubResource( 3 )
 background_sky_orientation = Basis( 1, 0.078, 0, 0, 1, 0, 0, 0, 1 )
 ambient_light_color = Color( 0.913725, 0.917647, 1, 1 )
 ambient_light_sky_contribution = 0.0
-fog_enabled = true
 fog_color = Color( 0.211765, 0.211765, 0.211765, 0.615686 )
 fog_depth_end = 37.4
 dof_blur_far_distance = 0.16
@@ -57,21 +35,43 @@ dof_blur_near_transition = 0.47
 dof_blur_near_amount = 0.01
 dof_blur_near_quality = 0
 adjustment_enabled = true
-adjustment_brightness = 1.61
-adjustment_contrast = 2.44
-adjustment_saturation = 0.01
-adjustment_color_correction = SubResource( 6 )
+adjustment_brightness = 1.7
+
+[sub_resource type="World" id=9]
+environment = SubResource( 5 )
+
+[sub_resource type="SpatialMaterial" id=4]
+params_blend_mode = 1
+albedo_color = Color( 0.6, 0.670588, 0, 1 )
+metallic_specular = 1.0
+uv1_scale = Vector3( 1, 1, 4 )
+uv1_offset = Vector3( 0, 0, 0.568315 )
+uv1_triplanar = true
+
+[sub_resource type="SpatialMaterial" id=8]
+params_diffuse_mode = 4
+params_specular_mode = 3
+params_blend_mode = 1
+albedo_color = Color( 0.388235, 0.454902, 1, 1 )
+albedo_texture = ExtResource( 3 )
+metallic_specular = 1.0
+uv1_scale = Vector3( 1, 1, 4 )
+uv1_offset = Vector3( 0, 0, 0.568315 )
+uv1_triplanar = true
 
 [node name="background" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 scroll_rate = 0.01
 
-[node name="sprite" parent="." index="0"]
+[node name="post_process" parent="." index="0" instance=ExtResource( 4 )]
+
+[node name="sprite" parent="." index="1"]
 scale = Vector2( 4, 4 )
 texture = SubResource( 1 )
 
-[node name="viewport" type="Viewport" parent="." index="1"]
+[node name="viewport" type="Viewport" parent="." index="2"]
 size = Vector2( 480, 270 )
+world = SubResource( 9 )
 usage = 3
 render_target_v_flip = true
 
@@ -87,6 +87,7 @@ omni_range = 1232.93
 
 [node name="csg_box" type="CSGBox" parent="viewport/spatial" index="1"]
 transform = Transform( -1, 8.70901e-08, -7.6194e-09, -8.74228e-08, -0.996195, 0.0871558, 0, 0.0871558, 0.996195, -1.74846e-07, 2, 0 )
+visible = false
 width = 500.0
 height = 1.0
 depth = 50.0
@@ -99,9 +100,6 @@ height = 0.001
 depth = 50.0
 material = SubResource( 8 )
 
-[node name="world_environment" type="WorldEnvironment" parent="viewport/spatial" index="3"]
-environment = SubResource( 5 )
-
-[node name="camera" type="Camera" parent="viewport/spatial" index="4"]
+[node name="camera" type="Camera" parent="viewport/spatial" index="3"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 4 )
 fov = 133.2

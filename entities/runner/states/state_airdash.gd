@@ -10,7 +10,7 @@ var b_grounded_airdash: bool = false
 
 func can_start(runner) -> bool:
     var axis = runner.get_axis().round().normalized()
-    if runner.is_grounded() and axis.is_equal_approx(Vector2.ZERO):
+    if axis.is_equal_approx(Vector2.ZERO):
         return false
     return true
 

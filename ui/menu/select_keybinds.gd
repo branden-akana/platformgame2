@@ -60,6 +60,7 @@ class Rebinder extends MenuSelection:
                 for e in events:
                     InputMap.action_add_event(action, e)
                 listening = false
+                Game.settings.save()
                 return true
         return false
 

@@ -178,14 +178,6 @@ func process(delta):
     # allow airdash
     try_airdash_cancel(state)
 
-    # allow attack
-    if state.b_can_attack_cancel and runner.pressed_attack():
-        runner.action_attack()
-
-    # allow special attack
-    if state.b_can_special_cancel and runner.pressed_special():
-        runner.action_special()
-
     # Check if the player wants to drop-down a platform.
     if state.b_can_dropdown and runner.pressed_down():
         runner.action_dropdown()
@@ -208,6 +200,14 @@ func process(delta):
     # Check if player is trying to not move (no movement input)
     if state.b_can_idle_cancel and runner.is_axis_neutral():
         runner.action_neutral()
+
+    # allow attack
+    if state.b_can_attack_cancel and runner.pressed_attack():
+        runner.action_attack()
+
+    # allow special attack
+    if state.b_can_special_cancel and runner.pressed_special():
+        runner.action_special()
 
     state = _current_state()
 

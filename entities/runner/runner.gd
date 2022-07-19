@@ -53,7 +53,7 @@ export var WALK_MAX_SPEED = 500
 
 # airdash
 
-export var AIRDASH_SPEED     = 1300  # (mininum) speed at start of airdash
+export var AIRDASH_SPEED     = 1400  # (mininum) speed at start of airdash
 export var AIRDASH_SPEED_END = 600  # speed at end of airdash
 export var AIRDASH_LENGTH    = 12
 export var AIRDASH_WAVELAND_MARGIN = 10
@@ -79,7 +79,7 @@ export var DASH_STOP_SPEED = 400  # dash early stop speed
 export var DASH_INIT_SPEED = 500  # dash initial speed
 
 export var DASH_ACCELERATION = 20000  # dash acceleration
-export var DASH_ACCELERATION_REV = 10000  # dash reverse acceleration
+export var DASH_ACCELERATION_REV = 12000  # dash reverse acceleration
 
 export var DASH_MAX_SPEED = 1200  # dash max speed
 export var DASH_MAX_SPEED_REV = 1400 # dash reverse max speed (moonwalking)
@@ -157,6 +157,9 @@ var jumps_left = 1
 # number of dashes allowed to perform until the runner touches the floor
 var airdashes_left = 1
 
+# number of walljumps performed before landing
+var consecutive_walljumps = 0
+
 
 # state variables
 # ======================================================
@@ -175,6 +178,7 @@ func _ready():
     add_child(air_stall_timer)
 
     # $sprite.set_as_toplevel(true)
+    $"3d_proj".set_as_toplevel(true)
 
     $moveset.visible = true
 
@@ -425,6 +429,8 @@ func on_action(action: String) -> void:
 
 func _process(_delta):
 
+    $"3d_proj".position = Util.gridsnap(position, 4, false)
+
     match facing:
         Direction.RIGHT:
             model.set_flipped(false)
@@ -459,6 +465,7 @@ func _physics_process(delta):  # update input and physics
 
         airdashes_left = 1;
         jumps_left = 1;
+        consecutive_walljumps = 0;
 
     # update state
     fsm.process(delta)
@@ -880,37 +887,27 @@ func _walljump(dir = null) -> bool:
         else:
             return false
             
-    if dir == Direction.LEFT and not $ecb.right_collide_out():
+    if (
+        dir == Direction.LEFT and not $ecb.right_collide_out()
+        or dir == Direction.RIGHT and not $ecb.left_collide_out()
+    ):
         return false
 
-    if dir == Direction.RIGHT and not $ecb.left_collide_out():
-        return false
-
-    #var margin = 40
-    var jump_mult = 0.8
-    #var top_offset = Vector2(0, -48)
-    #var bot_offset = Vector2(0, 0)
-
+    var jump_mult = max(0.9 - (0.1 * consecutive_walljumps), 0.6)
     var x_speed  # horizontal speed of walljump
-    #var cast  # ray cast direction
     var sig  # signal to emit
 
     if dir == Direction.RIGHT:
         x_speed = MAX_SPEED
-        #cast = Vector2.LEFT * margin
         sig = "walljump_right"
     else:
         x_speed = -MAX_SPEED
-        #cast = Vector2.RIGHT * margin
         sig = "walljump_left"
-
-    # detect walls using raycasts
-    #var top_ray = Util.intersect_ray(self, top_offset, cast)
-    #var bot_ray = Util.intersect_ray(self, bot_offset, cast)
 
     # perform walljump if rays collided
     _jump(jump_mult, true, x_speed)
     self.facing = dir
+    consecutive_walljumps += 1
     emit_signal("action", sig)
     
     return true

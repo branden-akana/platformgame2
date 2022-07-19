@@ -25,6 +25,7 @@ class SelectWalljumpType extends MenuSelection:
         else:
             Game.settings.walljump_type = 0
             Game.get_player().WALLJUMP_TYPE = 0
+        Game.settings.save()
 
     func on_left(menu): _toggle()
     func on_right(menu): _toggle()

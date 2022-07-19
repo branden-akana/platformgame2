@@ -35,16 +35,18 @@ func _ready():
 
 func on_action(action: String) -> void:
     match action:
+        "attack":
+            Sound.play("attack", -20, 0.7, false, true)
         "dash":
             Sound.play("dash", -20, 0.8, false, true)
         "jump":
             Sound.play("jump", -10, 1, false)
         "walljump_left":
             Effects.play(Effects.WallJumpRight, self)
-            Sound.play("land", -20, 0.8)
+            Sound.play("land", -20, 0.8 - 0.05 * consecutive_walljumps)
         "walljump_right":
             Effects.play(Effects.WallJumpLeft, self)
-            Sound.play("land", -20, 0.8)
+            Sound.play("land", -20, 0.8 - 0.05 * consecutive_walljumps)
         "land":
             Effects.play(Effects.Land, self)
             Sound.play("land", -20, 0.8)
