@@ -6,7 +6,6 @@ func on_start(state_from, runner, fsm):
     runner.airborne_height = runner.position.y
     runner.b_gravity_enabled = true
 
-
 func on_update(delta, runner, fsm):
 
     process_air_acceleration(runner, delta)

@@ -4,7 +4,7 @@
 
 [sub_resource type="RectangleShape2D" id=1]
 resource_local_to_scene = true
-extents = Vector2( 39, 7.5 )
+extents = Vector2( 39, 10 )
 
 [node name="normal_forward" instance=ExtResource( 1 )]
 move_hitboxes = [ {
@@ -14,13 +14,13 @@ move_hitboxes = [ {
 animation = "attack_f"
 
 [node name="sprite" parent="." index="0"]
+visible = true
 position = Vector2( 40, -7 )
 scale = Vector2( 6, 1.5 )
-frame = 0
 
 [node name="0" parent="." index="1"]
 position = Vector2( 0, -8 )
 
 [node name="collision" parent="0" index="0"]
-position = Vector2( 41, -0.5 )
+position = Vector2( 41, -3 )
 shape = SubResource( 1 )

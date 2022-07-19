@@ -5,6 +5,9 @@ const SETTINGS_FILEPATH = "user://settings.res"
 # Contains all action bindings. Will be updated on save.
 export var action_map: Dictionary
 
+# Contains all level records.
+export var records: Dictionary
+
 # Preferred color palette
 export var palette: int = 0
 

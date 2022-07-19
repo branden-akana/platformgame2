@@ -22,7 +22,7 @@ var asp: AudioStreamPlayer = AudioStreamPlayer.new()
 onready var title_origin = $title.position
 
 func _ready():
-    asp.stream = load("res://assets/tick.wav")
+    asp.stream = load("res://assets/sounds/tick.wav")
     asp.pitch_scale = 2
     asp.volume_db = -10
     add_child(asp)

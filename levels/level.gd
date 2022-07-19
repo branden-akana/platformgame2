@@ -2,6 +2,8 @@ extends Node2D
 class_name Level
 tool
 
+export (String) var level_name = "untitled"
+
 func _draw():
     if Engine.editor_hint:
         draw_start_point()

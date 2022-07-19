@@ -18,23 +18,21 @@ class Rebinder extends MenuSelection:
     func _idx(i, n): return (i + n + len(_bindings())) % len(_bindings())
 
     func _event_name(event):
+        var name  # name of the button
+        var device = event.device
         if event is InputEventJoypadButton:
-            return "(JP) " + Input.get_joy_button_string(event.button_index)
+            name = Input.get_joy_button_string(event.button_index)
+            return "(JP, %d) %s" % [device, name]
         else:
-            return "(KB) " + event.as_text()
+            name = event.as_text()
+            return "(KB) %s" % [name]
 
     func get_label(): return label
     func get_extra(): 
         if listening:
             return "<press new input>"
         else:
-            var j = _idx(i, +1)
-            var k = _idx(i, +2)
-            return [
-                _event_name(_bindings()[i]),
-                _event_name(_bindings()[j]),
-                _event_name(_bindings()[k]),
-            ]
+            return "%d/%d: %s" % [i+1, len(_bindings()), _event_name(_bindings()[i])]
 
     func get_hint():
         return "left/right to choose binding, select to rebind"

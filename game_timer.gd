@@ -56,11 +56,21 @@ func complete_run():
     if is_best_time():
         print("[timer] new best time recorded")
         time_best = time
+        Game.settings.records[Game.get_level().level_name] = time
         if b_recording_enabled:
             # create a new ghost replay
             replay_manager.save_recording()
 
     emit_signal("run_complete")
+
+func has_record(level_name) -> bool:
+    return Game.settings.records.has(level_name)
+
+func get_record(level_name) -> String:
+    if has_record(level_name):
+        return Util.format_time(Game.settings.records[level_name])
+    else:
+        return "--:--.---"
 
 # Reset the ingame timer
 func reset_run():

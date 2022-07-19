@@ -11,7 +11,6 @@ signal debug_mode_changed
 
 const DisplayManager = preload("res://effects/display_manager.tscn")
 const Textbox = preload("res://ui/textbox.tscn")
-const Level_TestHub = preload("res://levels/test_hub.tscn")
 const PlayerRunner = preload("res://entities/runner/prunner.tscn")
 
 # list of pause reasons
@@ -55,9 +54,9 @@ var debug_mode: int = DebugMode.NORMAL
 func _ready():
     add_child(spritefont)
 
-
     # Game initialization stuff
     Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+    get_tree().set_auto_accept_quit(false)
 
     print("Feel free to minimize this window! It needs to be open for some reason to avoid a crash.")
     
@@ -90,7 +89,10 @@ func _ready():
     settings = Settings.load_settings()
     
     emit_signal("post_ready")
-    
+
+func _notification(what):
+    if what == NOTIFICATION_WM_QUIT_REQUEST:
+        exit()
     
 func free_editor_nodes():
     # remove all "editor only" nodes
@@ -106,8 +108,12 @@ func reinitialize_game():
     # reset best time / ghost
     run_timer.clear_best_times()
 
+    if settings and run_timer.has_record(get_level().level_name):
+        run_timer.time_best = settings.records[get_level().level_name]
+
     restart_player()
     restart_level()
+        
     
 # Restart the level. Use to reset the state of just the level.
 func restart_level():

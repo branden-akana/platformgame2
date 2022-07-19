@@ -180,7 +180,7 @@ position = Vector2( 0, 216 )
 scale = Vector2( 3, 3.68182 )
 z_index = -7
 z_as_relative = false
-color = Color( 0.133333, 0.133333, 0.133333, 1 )
+color = Color( 0, 0, 0, 0.698039 )
 polygon = PoolVector2Array( 0, 0, 640, 0, 640, 176, 0, 176 )
 
 [node name="highlight" type="Polygon2D" parent="."]

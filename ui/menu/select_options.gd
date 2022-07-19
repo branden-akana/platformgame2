@@ -23,6 +23,21 @@ class SelectVsync extends MenuSelection:
     func on_right(menu):
         OS.set_use_vsync(not OS.is_vsync_enabled())
 
+class SelectReset extends MenuSelection:
+
+    var cleared = false
+
+    func get_label(): return "clear records"
+
+    func get_hint(): 
+        if cleared:
+            return "all records cleared"
+        else:
+            return "select to erase all level records"
+
+    func on_select(menu):
+        Game.settings.records = {}
+        cleared = true
 
 
 var items = [
@@ -30,6 +45,7 @@ var items = [
     SelectVsync.new(),
     SelectLights.new(),
     SelectPalette.new(),
+    SelectReset.new(),
     SelectReturn.new()
 ]
 

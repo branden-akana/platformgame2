@@ -55,7 +55,7 @@ export var WALK_MAX_SPEED = 500
 
 export var AIRDASH_SPEED     = 1400  # (mininum) speed at start of airdash
 export var AIRDASH_SPEED_END = 600  # speed at end of airdash
-export var AIRDASH_LENGTH    = 12
+export var AIRDASH_LENGTH    = 16
 export var AIRDASH_WAVELAND_MARGIN = 10
 
 # jumping / gravity
@@ -152,13 +152,16 @@ var no_effects = false
 var ignore_enemy_hp = false
 
 # number of jumps allowed to perform until the runner touches the floor
-var jumps_left = 1
+# var jumps_left = 1
 
 # number of dashes allowed to perform until the runner touches the floor
 var airdashes_left = 1
 
 # number of walljumps performed before landing
 var consecutive_walljumps = 0
+
+# the time (in ticks) when the player last left the ground
+var time_left_ground = 0
 
 
 # state variables
@@ -224,6 +227,8 @@ func set_grounded(is_grounded, emit = true):
         # print("fall height: %s" % fall_height)
         if fall_height > 24:
             emit_signal("action", "land")
+    elif not is_grounded and b_is_grounded:
+        time_left_ground = tick
 
     b_is_grounded = is_grounded
 
@@ -464,7 +469,7 @@ func _physics_process(delta):  # update input and physics
             emit_signal("airdash_restored")
 
         airdashes_left = 1;
-        jumps_left = 1;
+        # jumps_left = 1;
         consecutive_walljumps = 0;
 
     # update state
@@ -917,12 +922,16 @@ func _walljump(dir = null) -> bool:
 # If grounded, sends the runner to the "jumpsquat" state.
 # If airborne, instantly perform the jump.
 func action_jump(factor = 1.0):
-    if jumps_left > 0:
+    # if jumps_left > 0:
+    if airdashes_left > 0:
         if (is_grounded() and
             not fsm.is_in_state([RunnerStateType.JUMPSQUAT, RunnerStateType.AIRDASH])):
             fsm.goto_jumpsquat()
             emit_signal("action", "jumpsquat")
         else:
+            print("time after left ground: %s" % (tick - time_left_ground))
+            if not is_grounded() and tick - time_left_ground > 14:
+                airdashes_left -= 1
             _jump(factor)
             fsm.goto_airborne()
             emit_signal("action", "jump")
@@ -948,10 +957,6 @@ func _jump(factor = 1.0, force = false, vel_x = null):
         if axis.y < -input.PRESS_THRESHOLD:
             velocity.x = 0
 
-    # deplete total jumps
-    if not force:
-        jumps_left -= 1
-        
     # determine jump height
     if fsm.is_in_state(RunnerStateType.AIRDASH):
         velocity.y = min(velocity.y, -DASHJUMP_VELOCITY * factor)

@@ -35,6 +35,7 @@ func on_start(state_from, runner, fsm):
 
     if runner.is_grounded() and axis.y < 0:
         runner.position.y -= 4
+        runner.set_grounded(false)
 
     runner.b_can_slide = false
     runner.emit_signal("airdash")
@@ -73,6 +74,9 @@ func on_update(delta, runner, fsm):
     # end of airdashing
     if tick > runner.AIRDASH_LENGTH or runner.is_grounded():
 
+        if is_instance_valid(particles):
+            particles.emitting = false
+
         if runner.is_grounded():
             runner.velocity.y = 0
             # fsm.goto_grounded()
@@ -80,7 +84,5 @@ func on_update(delta, runner, fsm):
         else:
             return RunnerStateType.AIRBORNE
 
-    if not is_current_state(fsm) and is_instance_valid(particles):
-        particles.emitting = false
 
     runner.fix_incoming_collisions(delta, 32)

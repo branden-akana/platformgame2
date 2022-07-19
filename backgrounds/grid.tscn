@@ -1,0 +1,65 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://entities/background.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/textures/texture_08.png" type="Texture" id=2]
+[ext_resource path="res://backgrounds/grid.gd" type="Script" id=3]
+[ext_resource path="res://backgrounds/grid_top.gdshader" type="Shader" id=4]
+[ext_resource path="res://assets/textures/texture_03.png" type="Texture" id=5]
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 4 )
+shader_param/brightness = 12.29
+shader_param/contrast = 5.559
+shader_param/saturation = 0.0
+
+[sub_resource type="Shader" id=3]
+code = "shader_type canvas_item;
+
+uniform float brightness = 1.0;
+uniform float contrast = 1.0;
+uniform float saturation = 1.0;
+
+void fragment() {
+    
+    COLOR = texture(TEXTURE, UV);
+
+    COLOR.rgb = mix(vec3(0.0), COLOR.rgb, brightness);
+    COLOR.rgb = mix(vec3(0.5), COLOR.rgb, contrast);
+    COLOR.rgb = mix(vec3(dot(vec3(1.0), COLOR.rgb) * 0.33333), COLOR.rgb, saturation);
+        
+}"
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = SubResource( 3 )
+shader_param/brightness = 12.097
+shader_param/contrast = 2.511
+shader_param/saturation = 1.0
+
+[node name="background" instance=ExtResource( 1 )]
+z_as_relative = false
+script = ExtResource( 3 )
+parallax = 0.1
+
+[node name="box" type="Polygon2D" parent="." index="0"]
+visible = false
+material = SubResource( 2 )
+scale = Vector2( 2, 2 )
+z_index = -10
+texture = ExtResource( 5 )
+texture_offset = Vector2( 63, 63 )
+texture_scale = Vector2( 8, 8 )
+polygon = PoolVector2Array( 0, 0, 0, 540, 960, 540, 960, 0 )
+
+[node name="box_2" type="Polygon2D" parent="." index="1"]
+modulate = Color( 1, 0, 0.533333, 1 )
+material = SubResource( 4 )
+scale = Vector2( 2, 2 )
+z_index = -11
+texture = ExtResource( 2 )
+texture_scale = Vector2( 8, 8 )
+polygon = PoolVector2Array( 0, 0, 0, 540, 960, 540, 960, 0 )
+
+[node name="sprite" parent="." index="2"]
+visible = false
+modulate = Color( 1, 1, 1, 1 )
+texture = ExtResource( 2 )
