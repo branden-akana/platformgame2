@@ -1,6 +1,17 @@
 extends Polygon2D
 
 
+func _ready():
+    Game.connect("practice_mode_changed", self, "on_practice_mode_changed")
+
+func on_practice_mode_changed(practice_mode: bool) -> void:
+    if practice_mode:
+        $big.modulate = Color(0.3, 0.3, 0.3)
+        $small.modulate = Color(0.3, 0.3, 0.3)
+    else:
+        $big.modulate = Color(1.0, 1.0, 1.0)
+        $small.modulate = Color(1.0, 1.0, 1.0)
+
 func set_time(m, s, ms) -> void:
     $big.set_text("%02d:%02d" % [m, s])
     $small.set_text("%03d" % [ms])

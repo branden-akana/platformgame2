@@ -33,7 +33,7 @@ func is_recording_enabled():
     return b_recording_enabled
 
 func process(delta):
-    if b_run_started and not b_run_complete:
+    if b_run_started and not b_run_complete and not Game.practice_mode:
         if not Game.is_paused():
             time += delta
 

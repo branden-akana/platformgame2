@@ -7,7 +7,7 @@ signal level_cleared
 signal scene_loaded
 signal post_ready
 signal debug_mode_changed
-
+signal practice_mode_changed
 
 const DisplayManager = preload("res://effects/display_manager.tscn")
 const Textbox = preload("res://ui/textbox.tscn")
@@ -334,6 +334,9 @@ func _process(delta):
             for enemy in get_tree().get_nodes_in_group("enemy"):
                 enemy.is_visible_when_dead = false
                 enemy.update_color()
+
+        Game.get_player().player_restart()
+        emit_signal("practice_mode_changed", practice_mode)
                 
     # toggle additional debug HUD info
     if Input.is_action_just_pressed("toggle_debug"):

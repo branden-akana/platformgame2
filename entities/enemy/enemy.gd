@@ -64,8 +64,8 @@ func reset():
 func get_hp_color(hp):
     match(hp):
         0:
-            if is_visible_when_dead:
-                return Color(0.7, 0.1, 0.7, 0.5)
+            if Game.practice_mode:
+                return Color(1.0, 1.0, 1.0, 0.5)
             else:
                 return Color(0.3, 0.1, 0.3, 0.0)
         1:
@@ -76,7 +76,7 @@ func get_hp_color(hp):
             return Color(1.0, 0.0, 1.0)
 
 func update_color():
-    sprite.color = get_hp_color(health)
+    modulate = get_hp_color(health)
     update_size()
 
 func update_size():
@@ -100,10 +100,10 @@ func hurt(from, dmg = 1):
         is_alive = false
 
     # fade enemy color
-    if !is_alive:
+    if !is_alive and not is_visible_when_dead:
         tween.interpolate_property(self, "modulate:a", 1.0, 0.0, 0.2)
 
-    tween.interpolate_property(sprite, "color",
+    tween.interpolate_property(self, "modulate",
         get_hp_color(health + 1), get_hp_color(health), 0.2
     )
     tween.start()
