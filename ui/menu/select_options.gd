@@ -4,24 +4,21 @@ extends MenuSelection
 var label = "options"
 
 
-class SelectVsync extends MenuSelection:
+class SelectPractice extends MenuSelection:
 
-    var label_on  = "[on] off "
-    var label_off = " on [off]"
-
-    func get_label(): return "vsync"
+    func get_label(): return "practice mode"
 
     func get_extra():
-        var fps = "   %s FPS" % Engine.get_frames_per_second()
-        if OS.is_vsync_enabled():
-            return label_on + fps
-        return label_off + fps
+        if Game.practice_mode:
+            return "[on] off "
+        else:
+            return " on [off]"
 
-    func on_left(menu):
-        OS.set_use_vsync(not OS.is_vsync_enabled())
+    func get_hint(): return "if enabled, be able to see and hit dead enemies. disables timer."
 
-    func on_right(menu):
-        OS.set_use_vsync(not OS.is_vsync_enabled())
+    func on_left(menu): Game.toggle_practice_mode()
+    func on_right(menu): Game.toggle_practice_mode()
+
 
 class SelectReset extends MenuSelection:
 
@@ -41,10 +38,9 @@ class SelectReset extends MenuSelection:
 
 
 var items = [
+    SelectVideo.new(),
     SelectControls.new(),
-    SelectVsync.new(),
-    SelectLights.new(),
-    SelectPalette.new(),
+    SelectPractice.new(),
     SelectReset.new(),
     SelectReturn.new()
 ]

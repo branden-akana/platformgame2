@@ -321,22 +321,7 @@ func _process(delta):
     # (1) the player will be able to hit dead enemies
     # (2) dead enemies will now be visible
     if Input.is_action_just_pressed("toggle_practice_mode"):
-        practice_mode = !practice_mode
-        debug_ping("Practice Mode: %s" % [practice_mode])
-
-        if practice_mode:
-            get_player().ignore_enemy_hp = true
-            for enemy in get_tree().get_nodes_in_group("enemy"):
-                enemy.is_visible_when_dead = true
-                enemy.update_color()
-        else:
-            get_player().ignore_enemy_hp = false
-            for enemy in get_tree().get_nodes_in_group("enemy"):
-                enemy.is_visible_when_dead = false
-                enemy.update_color()
-
-        Game.get_player().player_restart()
-        emit_signal("practice_mode_changed", practice_mode)
+        toggle_practice_mode()
                 
     # toggle additional debug HUD info
     if Input.is_action_just_pressed("toggle_debug"):
@@ -348,6 +333,27 @@ func _process(delta):
             menu.hide()
         else:
             menu.show()
+
+# Toggle practice mode.
+# Emits the "practice_mode_changed" signal.
+#
+func toggle_practice_mode() -> void:
+    practice_mode = !practice_mode
+    debug_ping("Practice Mode: %s" % [practice_mode])
+
+    if practice_mode:
+        get_player().ignore_enemy_hp = true
+        for enemy in get_tree().get_nodes_in_group("enemy"):
+            enemy.is_visible_when_dead = true
+            enemy.update_color()
+    else:
+        get_player().ignore_enemy_hp = false
+        for enemy in get_tree().get_nodes_in_group("enemy"):
+            enemy.is_visible_when_dead = false
+            enemy.update_color()
+
+    Game.get_player().player_restart()
+    emit_signal("practice_mode_changed", practice_mode)
 
 # Switch between different debug modes.
 # Emits the "debug_mode_changed" signal.
