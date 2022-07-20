@@ -34,7 +34,7 @@ func set_size(new_size):
     size = new_size
     if ready:
         # offset to account for the size of the player body
-        $collision.shape.extents = (size / 2.0) - Vector2(4, 4)
+        $collision.shape.extents = (size / 2.0) - Vector2(32, 32)
         $collision.position = size / 2.0
         update()
 
@@ -83,5 +83,5 @@ func _draw():
         var color = Color(1.0, 1.0, 1.0)  # white
 
         # outline the collision box
-        Util.draw_zone(self, color, 4.0, 16.0)
+        Util.draw_zone(self, color, 4.0, 32.0)
 

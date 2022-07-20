@@ -45,6 +45,7 @@ func process(delta):
 
 # Called when the level is complete. Stops the timer.
 func complete_run():
+    if Game.practice_mode: return
     print("[timer] run complete")
     b_run_complete = true
     b_run_started = false
