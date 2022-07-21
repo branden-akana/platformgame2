@@ -97,8 +97,9 @@ void fragment() {
     // map to palette key
     float max_dist = 100.0;
     vec2 final_uv = vec2(0, 0);
-    for(float u = 0.0; u < palette_size.x; u++) {
-        for(float v = 0.0; v < palette_size.y; v++) {
+    
+    for(float u = 0.0; u < palette_size.x; u += 1.0) {
+        for(float v = 0.0; v < palette_size.y; v += 1.0) {
             vec2 pal_uv = vec2(u / palette_size.x, v / palette_size.y);
             float dist = distance(COLOR.rgb, texture(palette_key, pal_uv).rgb);
             if( dist < max_dist ) {
@@ -112,4 +113,5 @@ void fragment() {
     vec4 palette_color_b = texture(palette_b, final_uv);
     vec4 palette_color = mix(palette_color_a, palette_color_b, palette_blend);
     COLOR = vec4(palette_color.rgb, COLOR.a);  
+    //COLOR = vec4(final_uv, 0.0, COLOR.a); 
 }

@@ -9,7 +9,6 @@ signal post_ready
 signal debug_mode_changed
 signal practice_mode_changed
 
-const DisplayManager = preload("res://effects/display_manager.tscn")
 const Textbox = preload("res://ui/textbox.tscn")
 const PlayerRunner = preload("res://entities/runner/prunner.tscn")
 

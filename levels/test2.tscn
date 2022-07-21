@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://shaders/retro_fg3.tres" type="Material" id=1]
-[ext_resource path="res://entities/3d_background.tscn" type="PackedScene" id=2]
+[ext_resource path="res://backgrounds/3d_background.tscn" type="PackedScene" id=2]
 [ext_resource path="res://levels/template.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/enemy/enemy.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/hazard_zone.tscn" type="PackedScene" id=6]

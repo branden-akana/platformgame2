@@ -6,16 +6,23 @@
 # - controls for the color palette used by the levels
 #===============================================================================
 
-extends Node2D
+class_name VFXManager extends Node2D
+tool
 
 export (Array, Texture) var palettes
-export var current_palette = 0 setget change_palette
+
+export (int) var current_palette = 0 setget change_palette
+
+export (bool) var b_post_process_enabled = 1 setget set_post_process_enabled
+
+export (float, 0.0, 1.0) var palette_blend = 0.0 setget _set_palette_blend
 
 onready var palette_tween = $tween
 onready var shader = $canvas_layer/color_indexer
 
 func _process(delta) -> void:
-    position = Game.get_camera().focus
+    if Game.has_method("get_camera"):
+        position = Game.get_camera().focus
 
 func _set_palette(idx):
     idx = idx % len(palettes)
@@ -27,6 +34,7 @@ func _set_palette_back(idx):
         
 # 0.0 => palette A, 1.0 => palette B
 func _set_palette_blend(n):
+    palette_blend = n
     shader.get_material().set_shader_param("palette_blend", n)
 
 func _get_palette_blend():
@@ -50,3 +58,9 @@ func change_palette(idx, time = 0.5):
         time, Tween.TRANS_LINEAR, Tween.EASE_OUT)
     palette_tween.start()
     yield(palette_tween, "tween_all_completed")
+
+func set_post_process_enabled(enabled: bool) -> void:
+    b_post_process_enabled = enabled
+    $canvas_layer/color_indexer.visible = enabled
+    $canvas_layer/vignette.visible = enabled
+    $pixelator.visible = enabled

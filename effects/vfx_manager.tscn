@@ -1,25 +1,12 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://shaders/pixelate.gdshader" type="Shader" id=1]
 [ext_resource path="res://shaders/retrorize.gdshader" type="Shader" id=2]
 [ext_resource path="res://effects/environment.tres" type="Environment" id=3]
 [ext_resource path="res://assets/palettes/base.png" type="Texture" id=4]
-[ext_resource path="res://assets/palettes/na16_aamatniekss.png" type="Texture" id=5]
-[ext_resource path="res://effects/display_manager.gd" type="Script" id=6]
-
-[sub_resource type="ShaderMaterial" id=7]
-shader = ExtResource( 2 )
-shader_param/screen = true
-shader_param/subpixel_fix = true
-shader_param/pixel_size = 1.0
-shader_param/antialiased = false
-shader_param/palette_size = Vector2( 8, 1 )
-shader_param/palette_blend = 0.0
-shader_param/noise_strength = 0.0
-shader_param/noise_speed = 0.0
-shader_param/palette_key = ExtResource( 4 )
-shader_param/palette_a = ExtResource( 4 )
-shader_param/palette_b = ExtResource( 5 )
+[ext_resource path="res://assets/palettes/sample.png" type="Texture" id=5]
+[ext_resource path="res://effects/vfx_manager.gd" type="Script" id=6]
+[ext_resource path="res://assets/palettes/fractals_cutting_through_the_sky.png" type="Texture" id=7]
 
 [sub_resource type="Shader" id=95]
 code = "shader_type canvas_item;
@@ -47,6 +34,20 @@ void fragment() {
 shader = SubResource( 95 )
 shader_param/focus = Vector2( 0.5, 0.5 )
 
+[sub_resource type="ShaderMaterial" id=7]
+shader = ExtResource( 2 )
+shader_param/screen = true
+shader_param/subpixel_fix = true
+shader_param/pixel_size = 1.0
+shader_param/antialiased = true
+shader_param/palette_size = Vector2( 8, 1 )
+shader_param/palette_blend = 0.0
+shader_param/noise_strength = 0.0
+shader_param/noise_speed = 0.0
+shader_param/palette_key = ExtResource( 4 )
+shader_param/palette_a = ExtResource( 4 )
+shader_param/palette_b = ExtResource( 7 )
+
 [sub_resource type="ShaderMaterial" id=97]
 shader = ExtResource( 1 )
 shader_param/screen = true
@@ -59,42 +60,31 @@ shader_param/noise_strength = 0.005
 z_index = 100
 z_as_relative = false
 script = ExtResource( 6 )
-palettes = [ ExtResource( 4 ) ]
+palettes = [ ExtResource( 4 ), ExtResource( 7 ) ]
 
 [node name="world_environment" type="WorldEnvironment" parent="."]
 environment = ExtResource( 3 )
 
 [node name="tween" type="Tween" parent="."]
 
-[node name="rect" type="ColorRect" parent="."]
-visible = false
-material = SubResource( 7 )
-margin_left = -4096.0
-margin_top = -4096.0
-margin_right = 4096.0
-margin_bottom = 4096.0
-
 [node name="canvas_layer" type="CanvasLayer" parent="."]
 layer = 5
 
-[node name="color_indexer" type="BackBufferCopy" parent="canvas_layer"]
-material = SubResource( 7 )
-z_index = 2
+[node name="vignette" type="BackBufferCopy" parent="canvas_layer"]
+material = SubResource( 98 )
+z_index = 1
 rect = Rect2( 0, 0, 1920, 1080 )
 
-[node name="color_rect" type="ColorRect" parent="canvas_layer/color_indexer"]
+[node name="color_rect" type="ColorRect" parent="canvas_layer/vignette"]
 use_parent_material = true
 margin_right = 1920.0
 margin_bottom = 1080.0
 
-[node name="canvas_layer_2" type="CanvasLayer" parent="."]
-layer = 5
-
-[node name="vignette" type="BackBufferCopy" parent="canvas_layer_2"]
-material = SubResource( 98 )
+[node name="color_indexer" type="BackBufferCopy" parent="canvas_layer"]
+material = SubResource( 7 )
 rect = Rect2( 0, 0, 1920, 1080 )
 
-[node name="color_rect" type="ColorRect" parent="canvas_layer_2/vignette"]
+[node name="color_rect" type="ColorRect" parent="canvas_layer/color_indexer"]
 use_parent_material = true
 margin_right = 1920.0
 margin_bottom = 1080.0
@@ -108,3 +98,9 @@ rect = Rect2( 0, 0, 1920, 1080 )
 use_parent_material = true
 margin_right = 1920.0
 margin_bottom = 1080.0
+
+[node name="sample" type="Sprite" parent="."]
+visible = false
+position = Vector2( 960, 531 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 5 )
