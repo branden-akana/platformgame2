@@ -1,6 +1,19 @@
 extends Node2D
 class_name GameCamera
 
+## if true, draw the camera's pos, tracking pos, and boundries
+@export var debug_draw: bool = false :
+	get:
+		return debug_draw
+	set(b):
+		debug_draw = b
+		queue_redraw()
+
+# the path to the target node to follow
+@export var target_path: NodePath
+
+@export_group("Camera Behavior")
+
 # length of transition when moving between screens
 @export var screen_transition_time = 0.5
 
@@ -17,9 +30,6 @@ class_name GameCamera
 # the amount of offset to apply to the camera
 @export var offset : Vector2
 
-# the path to the target node to follow
-@export var target_path: NodePath
-
 # camera bounds
 # -------------
 # these two vectors define an area in which
@@ -27,9 +37,9 @@ class_name GameCamera
 # outside the area will not be visible to the player
 
 # top-left corner of area
-var min_position = Vector2(0, 0)
+var min_position: Vector2 = Vector2.ZERO
 # bottom-right corner of area
-var max_position = Vector2(1920, 1080)
+var max_position: Vector2 = Vector2.ZERO
 
 # tween for focus change transitions
 @onready var transition_tween
@@ -39,21 +49,19 @@ var max_position = Vector2(1920, 1080)
 var shake_size = 0.0
 
 # the point the camera will be looking at (center of screen)
-var focus = Vector2.ZERO :
+var focus: Vector2 :
 	get:
-		return focus # TODOConverter40 Copy here content of get_camera_focus
+		return _get_camera_pos()
 	set(new_focus):
-		focus = new_focus  # TODOConverter40 Copy here content of set_camera_focus
+		focus = new_focus
+		_set_camera_pos(new_focus)
 
-func _ready():
-	set_camera_focus(clamp_origin())
-	# real_origin = get_camera_focus()
 
 func init():
 	# print("[camera] init")
 
 	# follow the player by default
-	set_target(GameState.get_player().get_path())
+	track_node(GameState.get_player().get_path())
 	await GameState.get_player().respawned
 
 	# try to get the screen the player is checked
@@ -63,7 +71,8 @@ func init():
 
 # get the size of the window as a vector
 func get_window_size() -> Vector2:
-	return Vector2(DisplayServer.window_get_size())
+	return Vector2(1920, 1080)
+	# return Vector2(DisplayServer.window_get_size())
 	# return get_viewport().size
 	# return OS.window_size
 
@@ -72,41 +81,53 @@ func get_window_size() -> Vector2:
 func get_target():
 	return get_node_or_null(target_path)
 
-
-# get the position of the node that this camera is following
-# (adjusting to center the node checked screen)
-func get_target_camera_pos() -> Vector2:
+##
+## Get the position of the node that this camera is following.
+## (adjusting to center the node checked screen)
+##
+func get_tracking_position() -> Vector2:
 	# the camera origin is relative to the top-left corner of the screen,
 	# so shift the position by half the screen size to center it
-	return get_target().position - (get_window_size() / 2)
+	var pos: Vector2 = get_target().position
+	# var pos: Vector2 = get_target().position - (get_window_size() / 2)
 
+	# target position of camera + player offset
+	pos = pos + (get_target().get_facing_dir() * 200) + Vector2(0, -100)
 
-# set the node for the camera to follow
-func set_target(nodepath):
+	return pos
+
+##
+## Set the node for the camera to follow
+##
+func track_node(nodepath: NodePath) -> void:
 	print("[camera] tracking node: %s" % nodepath)
 	target_path = nodepath
 
+##
+## Set an arbitrary position for the camera to follow
+##
+func track_pos(_pos: Vector2) -> void:
+	pass
 
-# Clamp the camera focus to fit within the current bounds.
-# Returns the adjusted focus.
-func clamp_focus(vec):
+##
+## Clamp an arbitrary vector to fit within the current bounds.
+## Returns the adjusted vector.
+##
+func clamp_to_bounds(vec: Vector2) -> Vector2:
+	if min_position == max_position:
+		return vec
+
 	var mn = min_position
 	var mx = max_position - get_window_size()
 	return Vector2(clamp(vec.x, mn.x, mx.x), clamp(vec.y, mn.y, mx.y))
 
-
-# Return true if the camera focus is inside the current bounds.
+##
+## Return true if the camera focus is inside the current bounds.
+##
 func is_in_bounds(vec, mn, mx):
 	return (mn.x >= vec.x and vec.x >= mx.x) and (mn.y >= vec.y and vec.y >= mx.y)
 
-
-func track_node(node: Node2D):
-	pass
-
-func track_pos(pos: Vector2):
-	pass
-
-
+##
 # Set the rectangle (world space) that the camera
 # will be bound to.
 #
@@ -115,22 +136,23 @@ func track_pos(pos: Vector2):
 #
 # If `color_palette` is given, the game's color palette
 # will also change to the new palette.
+##
 func set_bounds(tl_pos, br_pos, do_transition = true, color_palette = 0):
 
 	min_position = tl_pos
 	max_position = br_pos
 
 	# print("new bounds: %s, %s" % bounds)
-	var to = clamp_focus(get_target_camera_pos())
+	var to = clamp_to_bounds(get_tracking_position())
 
 	if do_transition:
 		# print("[camera] moving camera with transition")
-		await GameState.get_display().change_palette(color_palette)
-		await move_focus(to, screen_transition_time)
+		GameState.get_display().change_palette(color_palette)
+		await slide_camera_pos(to, screen_transition_time)
 	else:
 		# print("[camera] moving camera without transition")
-		await GameState.get_display().change_palette(color_palette, 0.2)
-		await move_focus(to)
+		GameState.get_display().change_palette(color_palette, 0.2)
+		slide_camera_pos(to)
 
 
 # Smoothly transition the origin of the camera to a specified location.
@@ -138,86 +160,91 @@ func set_bounds(tl_pos, br_pos, do_transition = true, color_palette = 0):
 # While this transition is occuring, the game will pause.
 # `time` sets how long the transition is (in seconds). If `time` is
 # 0, the camera is moved to the new location instantly.
-func move_focus(to, time = 0.0):
-	var from = get_camera_focus()
+func slide_camera_pos(to, time = 0.0):
+	var from = _get_camera_pos()
 
 	if time == 0:
-		set_camera_focus(to)
+		_set_camera_pos(to)
 	else:
-		# GameState.pause(self)
+		GameState.pause(self)
 		if transition_tween:
 			transition_tween.kill()
 		transition_tween = create_tween()
-		transition_tween.tween_method(self.set_camera_focus,
+		transition_tween.tween_method(self._set_camera_pos,
 			from, to, time).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+		transition_tween.play()
 
 		await transition_tween.finished
-		# GameState.unpause(self)
+		GameState.unpause(self)
 
-func get_camera_focus() -> Vector2:
+func _get_camera_pos() -> Vector2:
 	var target = get_node_or_null(target_path)
 	if target:
 		return -target.get_viewport().canvas_transform.origin
 	else:
 		return Vector2.ZERO
 
-func set_camera_focus(new_focus: Vector2):
+func _set_camera_pos(new_focus: Vector2):
 
-	var target = get_node_or_null(target_path)
-	if target:
+	var origin
 
-		focus = new_focus
-
-		var origin
-
-		if pixel_snap:
-			# pixel snap camera
-			if subpixel_fix:
-				origin = (new_focus / pixel_snap).floor() * pixel_snap + Vector2(pixel_snap/2, pixel_snap/2);
-			else:
-				origin = (new_focus / pixel_snap).floor() * pixel_snap;
+	if pixel_snap:
+		# pixel snap camera
+		if subpixel_fix:
+			origin = (new_focus / pixel_snap).floor() * pixel_snap + Vector2(pixel_snap/2, pixel_snap/2);
 		else:
-			origin = new_focus
+			origin = (new_focus / pixel_snap).floor() * pixel_snap;
+	else:
+		origin = new_focus
 
-		target.get_viewport().canvas_transform.origin = -origin
+	get_viewport().canvas_transform.origin = -origin
+	# target.get_viewport().canvas_transform.origin = -origin
 
 
 func _process(delta):
-	
+
 	var target = get_node_or_null(target_path)
 	
 	if not transition_tween and target:
 		# current position of camera
-		var origin = focus
+		var cam_pos = focus
 
-		# target position of camera + player offset
-		var pos = get_target_camera_pos() + (get_target().get_facing_dir() * 200) + Vector2(0, -100)
+		# determine final tracking position
+		var track_pos = get_tracking_position() - (get_window_size() / 2.0)
 
 		# smooth movement
 		# var new_origin = origin + (pos - origin) * delta * smoothing
-		var diff = pos - origin
-		origin += diff.normalized() * pow(diff.length(), smoothing) * delta
+		var diff = track_pos - cam_pos
+		cam_pos += diff.normalized() * pow(diff.length(), smoothing) * delta
 
 		# clamp camera (not sure why these double negatives are needed)
-		origin = clamp_focus(origin)
+		cam_pos = clamp_to_bounds(cam_pos)
 
 		# offset camera (to allow manual panning)
-		origin += offset
+		cam_pos += offset
 
 		# shake camera
 		if shake_tween:
 			var shake_dir = Vector2(1, 0).rotated(randf_range(0, 2 * PI))
-			origin += shake_dir * shake_size
+			cam_pos += shake_dir * shake_size
 
-		set_camera_focus(origin)
+		focus = cam_pos
 
-# Get the room at the current target (if any).
-func get_room_at_target():
-	pass
-	# return GameState.get_room_at_point(get_target().global_position)
+	if debug_draw: queue_redraw()
 
-func clamp_origin():
-	return clamp_focus(get_camera_focus())
+func _draw():
+
+	if debug_draw:
+
+		# draw bounds
+		if min_position != max_position:
+			draw_rect(Rect2(min_position, max_position - min_position), Color.AQUA, false, 4.0)
+
+		# draw tracking position
+		draw_circle(get_tracking_position(), 16, Color.BLUE)
+
+		# draw camera position
+		draw_circle(focus + (get_window_size() / 2), 8, Color.WHITE)
 
 func screen_shake(amount, length):
 	if shake_tween:

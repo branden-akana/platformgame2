@@ -1,15 +1,16 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://d02ebemt4v5qs"]
 
-[ext_resource path="res://ui/sprite_label.gd" type="Script" id=1]
-[ext_resource path="res://assets/sprites/spritefont.png" type="Texture2D" id=2]
+[ext_resource type="Script" path="res://ui/sprite_label.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://chjsxi4e365cs" path="res://assets/sprites/spritefont.png" id="2"]
 
-[sub_resource type="CanvasItemMaterial" id=1]
+[sub_resource type="CanvasItemMaterial" id="1"]
 blend_mode = 1
 
 [node name="label" type="Node2D"]
-material = SubResource( 1 )
-script = ExtResource( 1 )
-sprite_sheet = ExtResource( 2 )
+texture_filter = 1
+material = SubResource("1")
+script = ExtResource("1")
+sprite_sheet = ExtResource("2")
 characters = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
-char_size = Vector2( 7, 9 )
+char_size = Vector2(7, 9)
 text = "placeholder"

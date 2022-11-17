@@ -36,7 +36,7 @@ func _process(_delta):
 		queue_redraw()
 
 func on_body_entered(body):
-	if body is PlayerCharacter:
+	if body is Player:
 		GameState.load_scene(to_level)
 
 func _draw():

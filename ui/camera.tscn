@@ -3,5 +3,5 @@
 [ext_resource type="Script" path="res://ui/camera.gd" id="1"]
 
 [node name="camera" type="Node2D"]
-process_mode = 2
 script = ExtResource("1")
+debug_draw = true

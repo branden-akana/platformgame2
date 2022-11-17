@@ -89,11 +89,11 @@ func _ready():
 	menu = get_hud().get_node("main_menu")
 
 	# initialize player
-	var player: PlayerCharacter = get_player()
+	var player: Player = get_player()
 	# if $"/root/main".has_node("player"):  # try to find a player
 	# 	player = get_player()  
 	# else:  # or manually spawn the player
-	# 	player = PlayerCharacter.instantiate()
+	# 	player = Player.instantiate()
 	# 	$"/root/main".add_child(player)
 
 	player.connect("died", run_timer.on_player_death)
@@ -124,8 +124,8 @@ func free_editor_nodes():
 
 
 func get_player() -> Character:
-	# var player = %player as PlayerCharacter
-	var player = get_node(self.player) as PlayerCharacter
+	# var player = %player as Player
+	var player = get_node(self.player) as Player
 	assert(player != null, "Unable to get player")
 	return player
 	# return get_node(player)
@@ -142,18 +142,6 @@ func get_current_level() -> Level:
 # Gets n start point of the current level.
 func get_start_point(n: int = 0) -> Vector2:
 	return get_current_level().get_start_point(n)
-
-##
-## Get the room in focus in the current level.
-##
-func get_current_room() -> Node:
-	return get_node(current_room)
-
-##
-## Get all rooms in the current level.
-##
-func get_all_rooms() -> Array:
-	return get_tree().get_nodes_in_group("room")
 
 
 func get_display() -> VFXManager:
@@ -198,12 +186,6 @@ func restart_level():
 	run_timer.start_run()
 	
 	emit_signal("level_restarted")
-
-# Restart the current room.
-func restart_room():
-	var room = get_node_or_null(current_room)
-	if room:
-		room.reset_room()
 
 func restart_player():
 	print("RESTARTING PLAYER!")
@@ -250,61 +232,6 @@ func _load_scene(level_path):
 # Level/Node3D Functions
 # ========================================================================
 
-# Sets the current room to focus checked.
-#
-# The camera will now be bound within this room.
-# If smooth_transition is true, briefly pause the game and transition
-# the camera to the new room. Otherwise, move the camera to the
-# new room instantly.
-func set_current_room(room: RoomZone, do_transition: bool = true):
-	# print("entered new room")
-	# NOOP if screen is invalid or is already current screen
-	if room == null or current_room == room.get_path(): return
-	current_room = room.get_path()
-
-	# lock camera to this screen area
-	var bounds = room.get_bounds()
-	get_camera().set_bounds(bounds[0], bounds[1], do_transition, room.palette_idx)
-
-
-# Attempt to find a room at this position. If none is found, return null.
-func get_room_at_point(pos):
-	# print("finding %s in %s" % [pos, get_rooms()])
-	for room in get_all_rooms():
-		# get this room's collision box
-		var collision = room.get_node("collision")
-		var shape = collision.shape
-
-		# create a rect with the same dimensions as the collision shape
-		# then check if a point is inside the rect
-		var rect = Rect2(collision.global_position - shape.extents, shape.extents * 2)
-		if rect.has_point(pos):
-			return room
-
-	return null
-
-# Attempt to find a room at a body's position.
-# (overlaps_body() doesn't react very well to sudden position changes?)
-func get_room_at_node(node):
-	# use point check function
-	return get_room_at_point(node.global_position)
-
-	# if node is PhysicsBody2D:
-	#     # use the builtin overlap function
-	#     for room in get_rooms():
-	#         if room.overlaps_body(node):
-	#             return room
-	#     return null
-	# else:
-	#     # use point check function
-	#     return get_room_at_point(node.global_position)
-
-
-func on_room_entered(room, player):
-	print("[game] new room entered %s" % room)
-	set_current_room(room)
-
-
 func on_level_clear():
 	print("[game] level cleared!")
 	# var tween = create_tween()
@@ -325,8 +252,8 @@ func debug_log(s):
 	file.seek_end()
 	file.store_line(s)
 
-func set_camera_focus(node):
-	get_camera().set_target(node.get_path())
+func _set_camera_pos(node):
+	get_camera().track_node(node.get_path())
 
 func get_enemies(parent = null):
 	var enemies
@@ -376,10 +303,10 @@ func _process(delta):
 	# print("game_process")
 
 	if Input.is_action_just_pressed("toggle_fullscreen"):
-		if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN:
+		if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 		else:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 
 	# toggle "practice mode" which:
 	# (1) the player will be able to hit dead enemies

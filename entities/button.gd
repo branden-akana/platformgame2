@@ -43,18 +43,16 @@ func _physics_process(delta):
 
 
 func on_body_entered(body):
-    if not body is PlayerCharacter:
+    if not body is Player:
         return
 
-    if tween.is_active():
+    if tween.is_running():
         await tween.finished
-    else:
-        await get_tree().process_frame
 
-    tween.tween_property(self, "global_position",
-        unpressed_pos, pressed_pos, 0.1)
-    tween.tween_property($spritetext, "modulate:a", $spritetext.modulate.a, 0.5, 0.2)
-    
+    global_position = unpressed_pos
+    tween = create_tween().set_parallel(true)
+    tween.tween_property(self, "global_position", pressed_pos, 0.1)
+    tween.tween_property($spritetext, "modulate:a", 0.5, 0.2)
 
     is_pressed = true
     is_player_on = true
@@ -62,13 +60,11 @@ func on_body_entered(body):
 
 
 func on_body_exited(body):
-    if not body is PlayerCharacter:
+    if not body is Player:
         return
 
-    if tween.is_active():
+    if tween.is_running():
         await tween.finished
-    else:
-        await get_tree().process_frame
 
     is_player_on = false
     emit_signal("button_exited")
@@ -76,9 +72,13 @@ func on_body_exited(body):
     await get_tree().create_timer(unpress_time).timeout
 
     if is_player_on == false:
-        tween.tween_property(self, "global_position",
-            pressed_pos, unpressed_pos, 0.1)
-        tween.tween_property($spritetext, "modulate:a", 0.5, 0, 0.2)
+
+        global_position = pressed_pos
+        $spritetext.modulate.a = 0.5
+
+        tween = create_tween().set_parallel(true)
+        tween.tween_property(self, "global_position", unpressed_pos, 0.1)
+        tween.tween_property($spritetext, "modulate:a", 0, 0.2)
         
 
         is_pressed = false

@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://b4ro05a0jkpw"]
+[gd_scene load_steps=6 format=3 uid="uid://c3lojl2c8iosn"]
 
 [ext_resource type="PackedScene" uid="uid://csldvbmh03ui3" path="res://levels/test2.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://boydswxpul802" path="res://entities/runner/prunner.tscn" id="1_su0qv"]
+[ext_resource type="PackedScene" path="res://entities/character/player.tscn" id="1_su0qv"]
 [ext_resource type="PackedScene" uid="uid://qmf6bb0fmdoh" path="res://ui/hud.tscn" id="1_wvs1w"]
 [ext_resource type="PackedScene" uid="uid://bkpyxw0b5trhf" path="res://effects/vfx_manager.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://bc0342clcc37m" path="res://ui/camera.tscn" id="4"]
@@ -17,8 +17,7 @@ position = Vector2(960, 960)
 
 [node name="camera" parent="." instance=ExtResource("4")]
 process_mode = 3
-subpixel_fix = true
-offset = Vector2(0, 0)
+z_index = 100
 
 [node name="post_process" parent="." instance=ExtResource("2")]
 

@@ -36,14 +36,14 @@ shader_parameter/focus = Vector2(0.5, 0.5)
 [sub_resource type="ShaderMaterial" id="7"]
 shader = ExtResource("2")
 shader_parameter/antialiased = false
-shader_parameter/noise_speed = 0.0
-shader_parameter/noise_strength = 0.0
+shader_parameter/noise_speed = 10.0
+shader_parameter/noise_strength = 0.015
 shader_parameter/palette_a = ExtResource("4")
 shader_parameter/palette_b = ExtResource("4")
 shader_parameter/palette_blend = 0.0
 shader_parameter/palette_key = ExtResource("4")
 shader_parameter/palette_size = Vector2(8, 1)
-shader_parameter/pixel_size = 0.0
+shader_parameter/pixel_size = 1.0
 shader_parameter/screen = true
 shader_parameter/subpixel_fix = false
 
@@ -55,33 +55,28 @@ shader_parameter/pixel_smoothing = null
 shader_parameter/screen = true
 shader_parameter/subpixel_fix = true
 
-[node name="post_process" type="Node2D"]
-z_index = 100
-z_as_relative = false
+[node name="post_process" type="CanvasLayer"]
 script = ExtResource("6")
 palettes = [ExtResource("4")]
 
 [node name="world_environment" type="WorldEnvironment" parent="."]
 environment = ExtResource("3")
 
-[node name="canvas_layer" type="CanvasLayer" parent="."]
-layer = 5
-
-[node name="vignette" type="BackBufferCopy" parent="canvas_layer"]
+[node name="vignette" type="BackBufferCopy" parent="."]
 material = SubResource("98")
 z_index = 1
 rect = Rect2(0, 0, 1920, 1080)
 
-[node name="color_rect" type="ColorRect" parent="canvas_layer/vignette"]
+[node name="color_rect" type="ColorRect" parent="vignette"]
 use_parent_material = true
 offset_right = 1920.0
 offset_bottom = 1080.0
 
-[node name="color_indexer" type="BackBufferCopy" parent="canvas_layer"]
+[node name="color_indexer" type="BackBufferCopy" parent="."]
 material = SubResource("7")
 rect = Rect2(0, 0, 1920, 1080)
 
-[node name="color_rect" type="ColorRect" parent="canvas_layer/color_indexer"]
+[node name="color_rect" type="ColorRect" parent="color_indexer"]
 use_parent_material = true
 offset_right = 1920.0
 offset_bottom = 1080.0

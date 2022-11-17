@@ -117,7 +117,7 @@ func close_door(transition = false, focus = true):
 			if focus:
 				# focus camera checked door
 				door_focused = true
-				# GameState.set_camera_focus(self)
+				# GameState._set_camera_pos(self)
 				# await GameState.pause_and_lbox_in(0.5).completed
 
 			await tween_close.tween_all_completed
@@ -132,7 +132,7 @@ func close_door(transition = false, focus = true):
 		if transition and focus:
 			pass
 			# focus camera back to player
-			# GameState.set_camera_focus(GameState.get_player())
+			# GameState._set_camera_pos(GameState.get_player())
 			# await GameState.unpause_and_lbox_out(2.0).completed
 
 func open_door(transition = false, focus = true):
@@ -157,7 +157,7 @@ func open_door(transition = false, focus = true):
 			if focus:
 				door_focused = true
 				# focus camera checked door
-				# GameState.set_camera_focus(self)
+				# GameState._set_camera_pos(self)
 				# await GameState.pause_and_lbox_in(0.5).completed
 
 			await tween_open.tween_all_completed
@@ -172,6 +172,6 @@ func open_door(transition = false, focus = true):
 		if transition and focus:
 			pass
 			# focus camera back to player
-			# GameState.set_camera_focus(GameState.get_player())
+			# GameState._set_camera_pos(GameState.get_player())
 			# await GameState.unpause_and_lbox_out(2.0).completed
 	

@@ -6,7 +6,7 @@
 # - controls for the color palette used by the levels
 #===============================================================================
 
-class_name VFXManager extends Node2D
+class_name VFXManager extends CanvasLayer
 
 
 @export var palettes: Array[Texture2D]
@@ -36,11 +36,11 @@ class_name VFXManager extends Node2D
 
 
 @onready var palette_tween: Tween
-@onready var shader = $canvas_layer/color_indexer
+@onready var shader = $color_indexer
 
-func _process(_delta) -> void:
-	if has_node("%camera"):
-		position = $%camera.focus
+# func _process(_delta) -> void:
+# 	if has_node("%camera"):
+# 		position = $%camera.focus
 
 func _set_palette(idx):
 	idx = idx % len(palettes)

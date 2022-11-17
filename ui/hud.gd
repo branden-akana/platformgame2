@@ -31,11 +31,8 @@ func _ready():
 	
 	fps_timer.connect("timeout",Callable(self,"update_fps"))
 
-	await GameState.ready
-
-	GameState.get_player().fsm.connect("state_changed",Callable(self,"on_state_changed"))
-
-	GameState.connect("debug_mode_changed",Callable(self,"on_debug_mode_changed"))
+	GameState.get_player().fsm.state_changed.connect(on_state_changed)
+	GameState.debug_mode_changed.connect(on_debug_mode_changed)
 
 func toggle_visible():
 	if layer == 5:
@@ -170,7 +167,7 @@ func area_title_out(time):
 
 
 func update_fps():
-	$debug/fps.text = "%d fps" % Engine.get_frames_per_second()
+	$debug/BL/fps.text = str(Engine.get_frames_per_second())
 
 
 func on_state_changed(state_to, state_from):
@@ -181,12 +178,23 @@ func on_state_changed(state_to, state_from):
 
 
 func _physics_process(delta):
-	$debug/tick.text = str(GameState.get_player().tick)
+
 	$debug/pos_x.text = str(round(GameState.get_player().global_position.x))
 	$debug/pos_y.text = str(round(GameState.get_player().global_position.y))
 	$debug/vel_x.text = str(round(GameState.get_player().velocity.x))
 	$debug/vel_y.text = str(round(GameState.get_player().velocity.y))
 	$debug/grounded.text = "grounded: %s" % GameState.get_player().is_grounded()
+
+	var cam: GameCamera = GameState.get_camera()
+	var room: RoomZone = GameState.get_current_level().get_current_room()
+
+	$debug/BL/cam.text = str(cam.focus.round())
+	$debug/BL/cam_bounds.text = "%s -> %s" % [cam.min_position, cam.max_position]
+	if room:
+		$debug/BL/room.text = "%s" % [room.get_name()]
+	else:
+		$debug/BL/room.text = "----"
+	$debug/BL/tick.text = str(GameState.get_player().tick)
 
 	var ecb = GameState.get_player().get_ecb()
 	var checked = Color(1, 1, 1, 1.0)
