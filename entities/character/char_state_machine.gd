@@ -150,7 +150,8 @@ func set_state(new_state_name):
 
 			# Call on_start() of new state
 
-			emit_signal("state_changed", new_state_name, old_state_name)
+			print("state changed: %s -> %s" % [old_state_name, new_state_name])
+			state_changed.emit(new_state_name, old_state_name)
 			current_state.on_start(old_state_name, character, character.fsm)
 
 func process(delta):

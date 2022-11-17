@@ -1,6 +1,6 @@
-[gd_scene load_steps=23 format=3 uid="uid://gugyciy6ib00"]
+[gd_scene load_steps=23 format=3]
 
-[ext_resource type="Script" path="res://entities/runner/runner_model.gd" id="2"]
+[ext_resource type="Script" path="res://entities/character/char_model.gd" id="2"]
 
 [sub_resource type="Sky" id="1"]
 

@@ -183,7 +183,7 @@ func _ready():
 	# state machine setup
 	fsm.init(self)
 	connect("action", on_action)
-	fsm.connect("change_state", on_state_change)
+	fsm.connect("state_changed", on_state_change)
 
 	# event setup
 	$hurtbox.connect("body_entered",Callable(self,"on_hurtbox_entered"))
@@ -458,6 +458,8 @@ func pre_process(delta):
 	pass
 
 func _physics_process(delta):  # update input and physics
+
+	# print("char process: %s, %s" % [tick, 1.0 / delta])
 
 	# pause check
 	if GameState.is_paused(): return

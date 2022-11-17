@@ -1,5 +1,4 @@
-extends Character
-class_name PlayerCharacter
+class_name Player extends Character
 
 # the currently recording replay
 var replay = null
@@ -15,22 +14,20 @@ func _ready():
 
 	super._ready()
 
-	connect("action", self.on_action)
-
 	# connect signal to sound effects
-	# connect("walking",Callable(Sound,"play").bind("walk", -20, 0.8, true, false))
-	# connect("stop_walking",Callable(Sound,"stop").bind("walk"))
-	# connect("attack",Callable(Sound,"play").bind("attack", -20, 0.7, false, true))
+	connect("walking",Callable(Sound,"play").bind("walk", -20, 0.8, true, false))
+	connect("stop_walking",Callable(Sound,"stop").bind("walk"))
+	connect("attack",Callable(Sound,"play").bind("attack", -20, 0.7, false, true))
 
 	# connect signals to particle effects
-	# connect("jump",Callable(Effects,"play").bind(Effects.Jump, self, {"direction": -velocity})) 
-	# connect("jump",Callable(Effects,"play").bind(Effects.Jump, self)) 
-	# connect("dragging",Callable(Effects,"play").bind(Effects.Dust, self))
+	connect("jump",Callable(Effects,"play").bind(Effects.Jump, self, {"direction": -velocity})) 
+	connect("jump",Callable(Effects,"play").bind(Effects.Jump, self)) 
+	connect("dragging",Callable(Effects,"play").bind(Effects.Dust, self))
 
 	# connect("airdash",Callable(self,"on_airdash"))
 	connect("airdash_restored", self.on_airdash_restored)
-	# connect("walljump_left",Callable(self,"play_flash_effect"))
-	# connect("walljump_right",Callable(self,"play_flash_effect"))
+	connect("walljump_left",Callable(self,"play_flash_effect"))
+	connect("walljump_right",Callable(self,"play_flash_effect"))
 
 	connect("enemy_hit", self.on_enemy_hit)
 	connect("enemy_killed", self.on_enemy_killed)
@@ -152,4 +149,4 @@ func respawn(pos):
 	if pos == GameState.get_start_point():
 		GameState.restart_level()
 	else:
-		GameState.restart_room()
+		GameState.get_current_level().reset_current_room()
