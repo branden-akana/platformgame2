@@ -5,6 +5,7 @@
 # All objects in this room should be its children.
 #===============================================================================
 
+@tool
 class_name RoomZone extends Area2D
 
 signal room_entered
@@ -20,6 +21,8 @@ signal room_entered
 
 var is_ready = false
 
+var level: Level = null
+
 func _ready():
 	# create a new rectangle shape for the collision
 	# this is to ensure individual zones can have different sized shapes
@@ -27,10 +30,9 @@ func _ready():
 
 	is_ready = true
 
-	# set_size(size)
+	set_size(size)
 
 	connect("body_entered", self.on_body_entered)
-	connect("room_entered", GameState.on_room_entered)
 
 
 func set_size(size):
@@ -77,7 +79,7 @@ func get_alive_enemies():
 	return enemies
 
 func on_body_entered(body):
-	if body is PlayerCharacter:
+	if body is Player:
 		emit_signal("room_entered", self, body)
 
 # debug visuals
