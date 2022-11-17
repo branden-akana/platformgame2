@@ -1,5 +1,10 @@
 # Import cache
 .import/
+.godot/
+.mono/
+
+# Workspace files
+.vscode/
 
 # Binaries
 bin/
