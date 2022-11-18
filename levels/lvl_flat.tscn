@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://bfg2m2ully6oi"]
+[gd_scene load_steps=7 format=3 uid="uid://bfg2m2ully6oi"]
 
 [ext_resource type="Script" path="res://levels/level.gd" id="1_pffpa"]
 [ext_resource type="PackedScene" uid="uid://ca54bg25ewl7p" path="res://levels/level_tilemaps.tscn" id="2_87wh6"]
 [ext_resource type="PackedScene" uid="uid://bp6s3ennh11ys" path="res://entities/room.tscn" id="3_nlhee"]
-[ext_resource type="PackedScene" uid="uid://bro0wubw0fc35" path="res://entities/enemy/enemy_ball.tscn" id="4_pd2n0"]
+[ext_resource type="PackedScene" uid="uid://c63uqn86hlj1n" path="res://entities/enemy/enemy_ball.tscn" id="4_pd2n0"]
+[ext_resource type="PackedScene" uid="uid://bsvnvrccidyw2" path="res://backgrounds/3d_background.tscn" id="5_dgmkf"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_2m0v5"]
+viewport_path = NodePath("viewport")
 
 [node name="level" type="Node2D"]
 texture_filter = 1
@@ -31,5 +35,9 @@ size = Vector2(2, 4)
 
 [node name="enemy_ball" parent="rooms/room_1" groups=["enemy"] instance=ExtResource("4_pd2n0")]
 position = Vector2(2168, 4008)
+
+[node name="background" parent="." instance=ExtResource("5_dgmkf")]
+z_index = -10
+texture = SubResource("ViewportTexture_2m0v5")
 
 [editable path="tilemaps"]

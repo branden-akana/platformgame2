@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3 uid="uid://b2x3k1le1la3c"]
 
 [ext_resource type="PackedScene" uid="uid://duuai1k3do5bw" path="res://levels/template.tscn" id="1_gmvkh"]
 [ext_resource type="PackedScene" uid="uid://bkpyxw0b5trhf" path="res://effects/vfx_manager.tscn" id="2_dowyd"]
-[ext_resource type="PackedScene" path="res://entities/enemy/enemy_test.tscn" id="3_2ufgq"]
-[ext_resource type="Texture2D" uid="uid://c1g0db1loxowc" path="res://assets/bgs/clouds_indexed.png" id="4_usm4k"]
-[ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="5_i2mbq"]
+[ext_resource type="PackedScene" uid="uid://blssy5erb4gi1" path="res://entities/enemy/enemy_test.tscn" id="3_2ufgq"]
+[ext_resource type="Texture2D" uid="uid://7oce2tyw261g" path="res://assets/bgs/IMG_20190927_173812.jpg" id="4_dmseh"]
+[ext_resource type="Texture2D" uid="uid://cwj77fl7ajkcr" path="res://assets/beam.png" id="5_ylay6"]
+[ext_resource type="Material" uid="uid://du5ouudnrc0r" path="res://shaders/palette_dither.tres" id="6_vmbic"]
 
 [sub_resource type="GDScript" id="1"]
 script/source = "extends Sprite2D
@@ -16,13 +17,13 @@ func _process(delta):
 "
 
 [sub_resource type="Gradient" id="Gradient_78tdo"]
-offsets = PackedFloat32Array(0, 0.570397)
-colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.172549)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.52)
 
 [node name="level" instance=ExtResource("1_gmvkh")]
 level_name = "level 1"
 
 [node name="post_process" parent="." index="0" instance=ExtResource("2_dowyd")]
+visible = false
 
 [node name="tilemaps" parent="." index="1"]
 modulate = Color(1, 1, 1, 0.8)
@@ -90,11 +91,11 @@ position = Vector2(1600, 1472)
 position = Vector2(1664, 544)
 
 [node name="panel" type="Sprite2D" parent="." index="4"]
-modulate = Color(0, 0.537255, 0.698039, 1)
+modulate = Color(0.447059, 0.447059, 0.447059, 1)
 position = Vector2(0, -896)
 scale = Vector2(4, 3)
 z_index = -10
-texture = ExtResource("4_usm4k")
+texture = ExtResource("4_dmseh")
 centered = false
 script = SubResource("1")
 metadata/_edit_lock_ = true
@@ -102,16 +103,30 @@ metadata/_edit_lock_ = true
 [node name="particles_2d" type="CPUParticles2D" parent="." index="5"]
 position = Vector2(2368, -1088)
 amount = 1000
-texture = ExtResource("5_i2mbq")
+texture = ExtResource("5_ylay6")
 emission_shape = 3
 emission_rect_extents = Vector2(5000, 1)
+particle_flag_align_y = true
 direction = Vector2(-1, 2)
 spread = 0.0
 initial_velocity_min = 1000.0
 initial_velocity_max = 2000.0
-scale_amount_min = 0.1
-scale_amount_max = 0.4
+scale_amount_min = 0.2
+scale_amount_max = 0.3
 color_initial_ramp = SubResource("Gradient_78tdo")
+
+[node name="canvas_layer" type="CanvasLayer" parent="." index="6"]
+visible = false
+
+[node name="color_indexer" type="BackBufferCopy" parent="canvas_layer" index="0"]
+material = ExtResource("6_vmbic")
+z_index = 10
+rect = Rect2(0, 0, 1920, 1080)
+
+[node name="color_rect" type="ColorRect" parent="canvas_layer/color_indexer" index="0"]
+use_parent_material = true
+offset_right = 1920.0
+offset_bottom = 1080.0
 
 [editable path="post_process"]
 [editable path="tilemaps"]

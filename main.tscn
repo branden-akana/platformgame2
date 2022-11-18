@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://c3lojl2c8iosn"]
+[gd_scene load_steps=8 format=3 uid="uid://dnofqkgvxm7wt"]
 
 [ext_resource type="PackedScene" uid="uid://j4ysxttaocaa" path="res://entities/character/player.tscn" id="1_su0qv"]
 [ext_resource type="PackedScene" uid="uid://qmf6bb0fmdoh" path="res://ui/hud.tscn" id="1_wvs1w"]
 [ext_resource type="PackedScene" uid="uid://bkpyxw0b5trhf" path="res://effects/vfx_manager.tscn" id="2"]
+[ext_resource type="Material" uid="uid://du5ouudnrc0r" path="res://shaders/palette_dither.tres" id="3_6xkkg"]
 [ext_resource type="PackedScene" uid="uid://bc0342clcc37m" path="res://ui/camera.tscn" id="4"]
 [ext_resource type="PackedScene" uid="uid://bfg2m2ully6oi" path="res://levels/lvl_flat.tscn" id="5_dcujs"]
 
@@ -18,6 +19,7 @@ layer = 2
 [node name="hud" parent="." instance=ExtResource("1_wvs1w")]
 
 [node name="screen" type="Sprite2D" parent="."]
+texture_filter = 1
 position = Vector2(960, 540)
 scale = Vector2(3, 3)
 texture = SubResource("ViewportTexture_mupbn")
@@ -26,11 +28,22 @@ texture = SubResource("ViewportTexture_mupbn")
 disable_3d = true
 snap_2d_transforms_to_pixel = true
 snap_2d_vertices_to_pixel = true
-canvas_item_default_texture_filter = 0
 size = Vector2i(640, 360)
 size_2d_override = Vector2i(1920, 1080)
 size_2d_override_stretch = true
 render_target_update_mode = 4
+
+[node name="canvas_layer" type="CanvasLayer" parent="viewport"]
+
+[node name="color_indexer" type="BackBufferCopy" parent="viewport/canvas_layer"]
+material = ExtResource("3_6xkkg")
+z_index = 10
+rect = Rect2(0, 0, 1920, 1080)
+
+[node name="color_rect" type="ColorRect" parent="viewport/canvas_layer/color_indexer"]
+use_parent_material = true
+offset_right = 1920.0
+offset_bottom = 1080.0
 
 [node name="camera" parent="viewport" instance=ExtResource("4")]
 process_mode = 3

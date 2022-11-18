@@ -30,6 +30,7 @@ blend_mode = 1
 
 [node name="debug" type="CanvasLayer"]
 layer = 2
+visible = false
 
 [node name="Coin1" type="ColorRect" parent="."]
 visible = false

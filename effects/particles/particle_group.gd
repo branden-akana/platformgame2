@@ -1,4 +1,4 @@
-class_name ParticleGroup extends Node2D
+class_name ParticleGroup extends CanvasGroup
 
 signal finished
 

@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://bro0wubw0fc35"]
+[gd_scene load_steps=11 format=3 uid="uid://c63uqn86hlj1n"]
 
 [ext_resource type="Script" path="res://entities/enemy/enemy_ball.gd" id="1_2q1ex"]
 [ext_resource type="Script" path="res://system/shape_polygon_2d.gd" id="2_gq3px"]
+[ext_resource type="Material" uid="uid://bcu4jmokjyqa2" path="res://shaders/dither_alpha_screen.tres" id="2_kpj8m"]
 [ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="2_mbtpk"]
 [ext_resource type="FontFile" uid="uid://dkesessbumeke" path="res://assets/fonts/Metropolis-Light.otf" id="3_1wp66"]
 
@@ -27,7 +28,10 @@ outline_size = 4
 collision_layer = 16
 script = ExtResource("1_2q1ex")
 
-[node name="cpu_particles_2d" type="CPUParticles2D" parent="."]
+[node name="canvas_group" type="CanvasGroup" parent="."]
+material = ExtResource("2_kpj8m")
+
+[node name="cpu_particles_2d" type="CPUParticles2D" parent="canvas_group"]
 position = Vector2(0, -64)
 amount = 20
 lifetime = 2.0
@@ -38,7 +42,11 @@ initial_velocity_max = 200.0
 scale_amount_min = 4.0
 scale_amount_max = 6.0
 scale_amount_curve = SubResource("Curve_ms6xu")
-color = Color(1, 1, 1, 0.5)
+
+[node name="sprite_2d" type="Sprite2D" parent="canvas_group"]
+position = Vector2(0, -64)
+scale = Vector2(6, 6)
+texture = ExtResource("2_mbtpk")
 
 [node name="collision_shape_2d" type="CollisionShape2D" parent="."]
 position = Vector2(0, -64)

@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cixr442mjb6i6"]
+
+[ext_resource type="Shader" path="res://shaders/palette.gdshader" id="1_l4jlj"]
+
+[resource]
+shader = ExtResource("1_l4jlj")
+shader_parameter/dither = false
+shader_parameter/dither_amt = null
+shader_parameter/dither_lab = true
+shader_parameter/dither_shf = null
+shader_parameter/palette_size = 8
+shader_parameter/screen = true

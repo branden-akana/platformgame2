@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dkiv7hm7xkdum"]
+
+[ext_resource type="Shader" path="res://shaders/dither_alpha.gdshader" id="1_0vvaa"]
+
+[resource]
+shader = ExtResource("1_0vvaa")
+shader_parameter/dither_shift = 0.001
+shader_parameter/screen = false

@@ -1,14 +1,28 @@
-[gd_scene load_steps=17 format=3 uid="uid://erkjphjocd6f"]
+[gd_scene load_steps=14 format=3 uid="uid://bvhxn5p7j4g3q"]
 
 [ext_resource type="Script" path="res://effects/particles/fx_airdash.gd" id="1_km62a"]
-[ext_resource type="Shader" uid="uid://dmklax21rtb63" path="res://effects/particles/fx_airdash_splash.tres" id="2_lonu0"]
 [ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="2_o2npe"]
-[ext_resource type="Shader" uid="uid://dywhefnp6ues8" path="res://effects/particles/fx_airdash.tres" id="2_y2rga"]
 [ext_resource type="Script" path="res://effects/particles/timed_particles.gd" id="3_5rs7y"]
 [ext_resource type="Texture2D" uid="uid://cwj77fl7ajkcr" path="res://assets/beam.png" id="3_16qmx"]
+[ext_resource type="Shader" path="res://shaders/dither_alpha.gdshader" id="4_ku8s4"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_c0pyv"]
-shader = ExtResource("2_lonu0")
+[sub_resource type="Curve" id="15"]
+_data = [Vector2(0, 1), 0.0, -3.23232, 0, 0, Vector2(1, 0), -0.060606, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_w4twn"]
+offsets = PackedFloat32Array(0, 0.119134, 0.487365, 0.99639)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.2, 1, 1, 1, 0, 1, 1, 1, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_47hu5"]
+shader = ExtResource("4_ku8s4")
+shader_parameter/dither_shift = 0.001
+shader_parameter/screen = false
+
+[sub_resource type="Gradient" id="16"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.00823045, 0.674897, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.0290456, 1, 1, 1, 0)
 
 [sub_resource type="Curve" id="Curve_2nsmh"]
 _data = [Vector2(0, 1), 0.0, -4.5, 0, 0, Vector2(0.503333, 0.136364), -0.515971, -0.515971, 0, 0, Vector2(1, 0), -0.274558, 0.0, 1, 0]
@@ -21,39 +35,85 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 offsets = PackedFloat32Array(0, 0.541516)
 colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.7)
 
-[sub_resource type="Curve" id="15"]
-_data = [Vector2(0, 1), 0.0, -3.23232, 0, 0, Vector2(1, 0), -0.060606, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Gradient" id="Gradient_w4twn"]
-offsets = PackedFloat32Array(0, 0.119134, 0.487365, 0.99639)
-colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.2, 1, 1, 1, 0, 1, 1, 1, 0)
-
-[sub_resource type="Gradient" id="16"]
-offsets = PackedFloat32Array(0.0452675, 0.487365, 0.99639)
-colors = PackedColorArray(1, 1, 1, 0.8, 1, 1, 1, 0, 1, 1, 1, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_w5r43"]
-shader = ExtResource("2_y2rga")
-
-[sub_resource type="Curve" id="Curve_qk4bt"]
-_data = [Vector2(0, 1), 0.0, -1.94805, 0, 0, Vector2(1, 0.254545), -0.121212, 0.0, 0, 0]
-point_count = 2
-
 [sub_resource type="Gradient" id="Gradient_cmksi"]
-offsets = PackedFloat32Array(0, 0.33935, 1)
-colors = PackedColorArray(1, 1, 1, 0.01, 1, 1, 1, 0.1, 1, 1, 1, 0)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
-[node name="airdash_particles" type="Node2D"]
+[node name="airdash_particles" type="CanvasGroup"]
 texture_filter = 1
 position = Vector2(0, -24)
 z_index = -1
 script = ExtResource("1_km62a")
 emitting = true
 
+[node name="wave" type="CPUParticles2D" parent="."]
+visible = false
+position = Vector2(0, -56)
+z_index = -2
+amount = 500
+lifetime = 2.0
+explosiveness = 0.43
+texture = ExtResource("2_o2npe")
+emission_shape = 3
+emission_rect_extents = Vector2(1, 1)
+direction = Vector2(0, 1)
+spread = 0.0
+gravity = Vector2(0, 0)
+scale_amount_min = 4.0
+scale_amount_max = 4.0
+scale_amount_curve = SubResource("15")
+color_ramp = SubResource("Gradient_w4twn")
+script = ExtResource("3_5rs7y")
+
+[node name="wave_2" type="CPUParticles2D" parent="."]
+material = SubResource("ShaderMaterial_47hu5")
+use_parent_material = true
+position = Vector2(0, -8)
+z_index = -2
+amount = 25
+lifetime = 3.0
+one_shot = true
+explosiveness = 0.95
+texture = ExtResource("2_o2npe")
+particle_flag_align_y = true
+direction = Vector2(0, 1)
+spread = 180.0
+gravity = Vector2(0, 100)
+initial_velocity_min = 50.0
+initial_velocity_max = 80.0
+linear_accel_min = -500.0
+linear_accel_max = -500.0
+scale_amount_min = 2.0
+scale_amount_max = 2.0
+scale_amount_curve = SubResource("15")
+color_ramp = SubResource("16")
+script = ExtResource("3_5rs7y")
+
+[node name="wave_3" type="CPUParticles2D" parent="."]
+material = SubResource("ShaderMaterial_47hu5")
+position = Vector2(0, -8)
+z_index = -2
+emitting = false
+amount = 25
+lifetime = 2.0
+one_shot = true
+explosiveness = 0.7
+texture = ExtResource("2_o2npe")
+direction = Vector2(0, 1)
+spread = 180.0
+gravity = Vector2(0, 250)
+initial_velocity_min = 100.0
+initial_velocity_max = 250.0
+linear_accel_min = -400.0
+linear_accel_max = -400.0
+scale_amount_min = 0.0
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("15")
+color_ramp = SubResource("16")
+script = ExtResource("3_5rs7y")
+
 [node name="splash" type="CPUParticles2D" parent="."]
 texture_filter = 2
-material = SubResource("ShaderMaterial_c0pyv")
+material = SubResource("ShaderMaterial_47hu5")
 position = Vector2(0, 24)
 emitting = false
 amount = 25
@@ -77,80 +137,16 @@ color_ramp = SubResource("Gradient_ln8vg")
 color_initial_ramp = SubResource("Gradient_ab4de")
 script = ExtResource("3_5rs7y")
 
-[node name="wave" type="CPUParticles2D" parent="."]
-visible = false
-position = Vector2(0, -56)
-z_index = -2
-amount = 500
-lifetime = 2.0
-explosiveness = 0.43
-texture = ExtResource("2_o2npe")
-emission_shape = 3
-emission_rect_extents = Vector2(1, 1)
-direction = Vector2(0, 1)
-spread = 0.0
-gravity = Vector2(0, 0)
-scale_amount_min = 4.0
-scale_amount_max = 4.0
-scale_amount_curve = SubResource("15")
-color_ramp = SubResource("Gradient_w4twn")
-script = ExtResource("3_5rs7y")
-
-[node name="wave_2" type="CPUParticles2D" parent="."]
-position = Vector2(0, -8)
-z_index = -2
-emitting = false
-amount = 50
-lifetime = 3.0
-one_shot = true
-explosiveness = 0.95
-texture = ExtResource("2_o2npe")
-direction = Vector2(0, 1)
-spread = 180.0
-gravity = Vector2(0, 250)
-initial_velocity_max = 80.0
-linear_accel_min = -600.0
-linear_accel_max = -400.0
-scale_amount_min = 2.0
-scale_amount_max = 2.0
-scale_amount_curve = SubResource("15")
-color = Color(1, 1, 1, 0.05)
-color_ramp = SubResource("16")
-script = ExtResource("3_5rs7y")
-
-[node name="wave_3" type="CPUParticles2D" parent="."]
-position = Vector2(0, -8)
-z_index = -2
-emitting = false
-amount = 50
-lifetime = 2.0
-one_shot = true
-explosiveness = 0.7
-texture = ExtResource("2_o2npe")
-direction = Vector2(0, 1)
-spread = 180.0
-gravity = Vector2(0, 250)
-initial_velocity_min = 100.0
-initial_velocity_max = 250.0
-linear_accel_min = -400.0
-linear_accel_max = -400.0
-scale_amount_min = 0.0
-scale_amount_max = 0.5
-scale_amount_curve = SubResource("15")
-color_ramp = SubResource("16")
-script = ExtResource("3_5rs7y")
-
 [node name="trail" type="CPUParticles2D" parent="."]
-visible = false
-material = SubResource("ShaderMaterial_w5r43")
+material = SubResource("ShaderMaterial_47hu5")
 position = Vector2(0, -60)
 emitting = false
-amount = 25
+amount = 1
 lifetime = 2.0
 one_shot = true
 speed_scale = 2.0
 explosiveness = 0.8
 gravity = Vector2(0, 0)
-scale_amount_curve = SubResource("Curve_qk4bt")
+color = Color(1, 1, 1, 0.3)
 color_ramp = SubResource("Gradient_cmksi")
 script = ExtResource("3_5rs7y")

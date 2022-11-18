@@ -1,13 +1,131 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=11 format=3 uid="uid://d4c7y88cmhkve"]
 
-[ext_resource type="Material" path="res://shaders/retro_fg3.tres" id="1"]
 [ext_resource type="PackedScene" uid="uid://bsvnvrccidyw2" path="res://backgrounds/3d_background.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://duuai1k3do5bw" path="res://levels/template.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://entities/enemy/enemy_test.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://blssy5erb4gi1" path="res://entities/enemy/enemy_test.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://dm121ccygtfu8" path="res://entities/hazard_zone.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://bp6s3ennh11ys" path="res://entities/room.tscn" id="7"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_pab3e"]
+[sub_resource type="Shader" id="Shader_b2h43"]
+code = "/*
+    Retro Shader
+    
+    This shader implements the following effects:
+    - Pixelization (with a specified pixel size)
+    - Noise
+    - Color palette (depends on the green channel of a pixel)
+    
+    This version samples SCREEN_TEXTURE which will process the entire screen.
+*/
+
+shader_type canvas_item;
+render_mode skip_vertex_transform;
+
+// texture params
+
+uniform bool screen = true;
+
+// pixelation params
+
+uniform float pixel_size = 4.0;
+uniform bool antialiased = false;
+
+// palette params
+
+uniform sampler2D palette_a;
+uniform sampler2D palette_b;
+
+uniform float palette_layer = 0;
+uniform float palette_blend = 0.0;
+
+// noise params
+
+uniform float noise_strength = 0.015;
+
+// \"random\" number generator
+float rand(vec2 co) {
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+vec2 get_pixel_ratio(float pixsize, sampler2D tex) {
+    // pixel size / texture size
+    return pixsize / vec2(textureSize(tex, 0));
+}
+
+vec2 get_pixel_ratio2(float pixsize, sampler2D tex) {
+    // pixel size / texture size
+    return pixsize / vec2(textureSize(tex, 0));
+}
+
+void vertex() {
+    vec4 world_vertex = MODEL_MATRIX * vec4(VERTEX, 0.0, 1.0);
+    world_vertex = floor(world_vertex / pixel_size) * pixel_size;
+    VERTEX = world_vertex.xy;
+}
+
+void fragment() {
+    vec2 uv;
+    if (screen) { uv = SCREEN_UV; } else { uv = UV; }
+
+    // pixelize screen
+    // =========================================================================
+      
+    vec2 pixel_uv;
+      
+    if (antialiased) {
+        
+        vec2 screen_ratio;
+        if (screen) { screen_ratio = get_pixel_ratio(pixel_size, SCREEN_TEXTURE); }
+        else { screen_ratio = get_pixel_ratio2(pixel_size, TEXTURE); }
+        
+        pixel_uv = (floor(uv / screen_ratio) * screen_ratio) + (screen_ratio / 2.0);
+        //pixel_uv = (floor(uv / screen_ratio) * screen_ratio);
+        
+        if (screen) { COLOR = textureLod(SCREEN_TEXTURE, pixel_uv, 0.0); }
+        else { COLOR = textureLod(TEXTURE, pixel_uv, 0.0); }
+        
+    } else {
+        
+        pixel_uv = floor((FRAGCOORD.xy) / pixel_size) * pixel_size;
+        
+        if (screen) { COLOR = texelFetch(SCREEN_TEXTURE, ivec2(pixel_uv), 0); }
+        else { COLOR = texelFetch(TEXTURE, ivec2(pixel_uv), 0); }
+    }
+    
+    // noise
+    // =========================================================================
+    
+    //COLOR = mix(COLOR, vec4(vec3(rand(pixel_uv + rand(vec2(TIME)))), 1.0), 0.03);
+    float n = abs(rand(pixel_uv + rand(vec2(floor(TIME * 10.0)))));
+    //n = clamp(n, 0.0, 1.0);
+    COLOR = mix(COLOR, COLOR + vec4(vec3(n), 1.0), noise_strength);
+    
+    // color palette
+    // =========================================================================
+    
+    float u = (floor(COLOR.g * 4.0) / 4.0) + (1.0 / 8.0);
+    float v = palette_layer; // selects which row of the palette to use
+    vec4 palette_color_a = texture(palette_a, vec2(u, v));
+    vec4 palette_color_b = texture(palette_b, vec2(u, v));
+    vec4 palette_color = mix(palette_color_a, palette_color_b, palette_blend);
+    COLOR = vec4(palette_color.rgb, COLOR.a);  
+}"
+
+[sub_resource type="CompressedTexture2D" id="1"]
+
+[sub_resource type="CompressedTexture2D" id="2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yk8qx"]
+shader = SubResource("Shader_b2h43")
+shader_parameter/antialiased = false
+shader_parameter/noise_strength = 0.015
+shader_parameter/palette_a = SubResource("1")
+shader_parameter/palette_b = SubResource("2")
+shader_parameter/palette_blend = 0.0
+shader_parameter/palette_layer = 0.25
+shader_parameter/pixel_size = null
+shader_parameter/screen = false
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_vanda"]
 viewport_path = NodePath("viewport")
 
 [node name="level" instance=ExtResource("4")]
@@ -35,7 +153,7 @@ shadow_filter_smooth = 9.4
 texture_scale = 2.0
 
 [node name="enemy" parent="rooms/room_1" index="3" instance=ExtResource("5")]
-material = ExtResource("1")
+material = SubResource("ShaderMaterial_yk8qx")
 position = Vector2(992, 256)
 max_health = 2
 
@@ -123,7 +241,7 @@ max_health = 3
 
 [node name="background" parent="." index="3" instance=ExtResource("2")]
 z_index = -10
-texture = SubResource("ViewportTexture_pab3e")
+texture = SubResource("ViewportTexture_vanda")
 metadata/_edit_lock_ = true
 
 [editable path="tilemaps"]
