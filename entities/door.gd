@@ -109,9 +109,9 @@ func close_door(transition = false, focus = true):
 				return
 
 			# letterbox, screen shake, and open door
+			position = open_position
 			tween_close.tween_property(
-				self, "position", open_position, close_position, door_close_time,
-				Tween.TRANS_CUBIC, Tween.EASE_IN)
+				self, "position", close_position, door_close_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 			tween_close.start()
 
 			if focus:
@@ -149,9 +149,9 @@ func open_door(transition = false, focus = true):
 				return
 
 			# letterbox, screen shake, and open door
+			position = close_position
 			tween_open.tween_property(
-				self, "position", close_position, open_position, door_open_time,
-				Tween.TRANS_CUBIC, Tween.EASE_IN)
+				self, "position", open_position, door_open_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 			tween_open.start()
 
 			if focus:

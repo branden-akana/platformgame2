@@ -21,11 +21,11 @@ func _ready():
 func on_body_entered(body):
 	if body is Player:
 		print("showing title")
-		HUD.lbox_in(0.5)
-		HUD.area_title_in(title, 0.5)
+		GameState.get_hud().lbox_in(0.5)
+		GameState.get_hud().area_title_in(title, 0.5)
 
 func on_body_exited(body):
 	if body is Player:
 		print("unshowing title")
-		HUD.lbox_out(0.5)
-		HUD.area_title_out(0.5)
+		GameState.get_hud().lbox_out(0.5)
+		GameState.get_hud().area_title_out(0.5)
