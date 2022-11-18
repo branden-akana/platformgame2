@@ -6,22 +6,31 @@
 #===============================================================================
 
 @tool
-class_name RoomZone extends Area2D
+class_name LevelScreen extends Area2D
 
-signal room_entered
+## Fired when the player enters this screen.
+signal screen_entered
 
-@export var size: Vector2 = Vector2(1920, 1080) :
+## Fired when all enemies on this screen have died.
+signal screen_cleared
+
+## The size of this screen (measured in number of screens).
+@export var size: Vector2 = Vector2(1, 1) :
 	set(new_size):
 		size = new_size
-		set_size(new_size)
+		update_size()
 
 @export var palette_idx = 0
 
 @onready var collision: CollisionShape2D = $collision
 
+var enemies: Array[Enemy] = []
+
+var _cleared := false
+
 var is_ready = false
 
-var level: Level = null
+var level = null
 
 func _ready():
 	# create a new rectangle shape for the collision
@@ -30,59 +39,71 @@ func _ready():
 
 	is_ready = true
 
-	set_size(size)
+	update_size()
 
 	connect("body_entered", self.on_body_entered)
 
+	for node in get_tree().get_nodes_in_group("enemy"):
+		if is_ancestor_of(node):
+			var enemy := node as Enemy
+			enemies.append(enemy)
+			enemy.enemy_died.connect(on_enemy_death)
 
-func set_size(size):
+
+func on_enemy_death(_enemy: Enemy) -> void:
+	print("room: enemy has died")
+	if len(get_alive_enemies()) == 0:
+		_cleared = true
+		print("ROOM CLEARED!")
+		screen_cleared.emit()
+
+func is_cleared() -> bool:
+	return _cleared
+
+##
+# The size of this screen in pixels.
+##
+func _real_size() -> Vector2:
+	return size * Vector2(Constants.SCREEN_SIZE)
+
+func update_size():
 	if ready:
 		# offset to account for the size of the player body
-		$collision.shape.extents = (size / 2.0) - Vector2(32, 32)
-		$collision.position = size / 2.0
+		$collision.shape.extents = (_real_size() / 2.0) - Vector2(32, 32)
+		$collision.position = _real_size() / 2.0
 		queue_redraw()
 
 
 func get_bounds():
-	if ready:
-		return [position, position + size]
+	if is_ready:
+		return [position, position + _real_size()]
 	else:
 		return [position, position + get_viewport().size]
 
+##
 # Reset this room.
+##
 func reset_room():
-	for enemy in get_enemies():
+	for enemy in enemies:
 		enemy.reset()
 
-# Get a list of enemies in this room.
-func get_enemies():
-	var enemies = []
-	for child in get_children():
-		if "enemy" in child.get_groups():
-			enemies.append(child)
-		
-		# also get enemies in doors
-		if "door" in child.get_groups():
-			for c in child.get_children():
-				if "enemy" in c.get_groups():
-					enemies.append(c)
-
-	return enemies
-
+##
 # Get a list of enemies in this room that are alive.
+##
 func get_alive_enemies():
 	var enemies = []
-	for enemy in get_enemies():
-		if enemy.health > 0:
-			enemies.append(enemy)
+	for enemy in self.enemies:
+		if enemy.is_alive: enemies.append(enemy)
 	
 	return enemies
 
+
 func on_body_entered(body):
 	if body is Player:
-		emit_signal("room_entered", self, body)
+		emit_signal("screen_entered", self, body)
 
-# debug visuals
+
+## debug visuals
 func _draw():
 	if Engine.is_editor_hint():
 		var color = Color(1.0, 1.0, 1.0)  # white

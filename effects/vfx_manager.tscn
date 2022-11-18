@@ -58,6 +58,8 @@ shader_parameter/subpixel_fix = true
 [node name="post_process" type="CanvasLayer"]
 script = ExtResource("6")
 palettes = [ExtResource("4")]
+b_post_process_enabled = false
+palette_blend = 0.0
 
 [node name="world_environment" type="WorldEnvironment" parent="."]
 environment = ExtResource("3")
@@ -82,6 +84,7 @@ offset_right = 1920.0
 offset_bottom = 1080.0
 
 [node name="pixelator" type="BackBufferCopy" parent="."]
+visible = false
 material = SubResource("97")
 z_index = 1
 rect = Rect2(0, 0, 1920, 1080)

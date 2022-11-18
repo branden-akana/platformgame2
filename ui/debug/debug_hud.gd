@@ -33,7 +33,7 @@ func _physics_process(delta):
     $pos_y.text = round(GameState.get_player().global_position.y)
     $vel_x.text = round(GameState.get_player().velocity.x)
     $vel_y.text = round(GameState.get_player().velocity.y)
-    $grounded.text = "grounded: %s" % GameState.get_player().is_grounded()
+    $grounded.text = "grounded: %s" % GameState.get_player().is_grounded
 
     var ecb = GameState.get_player().get_ecb()
     var checked = Color(1, 1, 1, 1.0)

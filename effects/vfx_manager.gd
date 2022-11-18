@@ -23,9 +23,10 @@ class_name VFXManager extends CanvasLayer
 		return b_post_process_enabled # TODOConverter40 Non existent get function 
 	set(enabled):
 		b_post_process_enabled = enabled
-		$canvas_layer/color_indexer.visible = enabled
-		$canvas_layer/vignette.visible = enabled
-		$pixelator.visible = enabled
+		if $color_indexer:
+			$color_indexer.visible = enabled
+			$vignette.visible = enabled
+			$pixelator.visible = enabled
 
 @export_range(0.0, 1.0) var palette_blend : float :
 	get:

@@ -1,0 +1,431 @@
+[gd_scene load_steps=10 format=3 uid="uid://bemub6rwc7a10"]
+
+[ext_resource type="FontFile" uid="uid://g5vpaou6j0x8" path="res://assets/fonts/Sk-Modernist-Mono.otf" id="1_hwj1b"]
+[ext_resource type="PackedScene" uid="uid://d02ebemt4v5qs" path="res://ui/sprite_label.tscn" id="2_rswk5"]
+[ext_resource type="Script" path="res://ui/debug/input_display.gd" id="3_1j0fi"]
+[ext_resource type="Script" path="res://ui/debug/pause_display.gd" id="4_saeah"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j1moq"]
+bg_color = Color(0, 0, 0, 0.5)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="LabelSettings" id="LabelSettings_fdqft"]
+line_spacing = 2.0
+font = ExtResource("1_hwj1b")
+font_size = 24
+outline_size = 2
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="CanvasItemMaterial" id="4"]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id="5"]
+blend_mode = 1
+
+[sub_resource type="Theme" id="3"]
+
+[node name="debug" type="CanvasLayer"]
+layer = 2
+
+[node name="Coin1" type="ColorRect" parent="."]
+visible = false
+offset_left = 13.0
+offset_top = 160.0
+offset_right = 21.0
+offset_bottom = 168.0
+color = Color(0.141176, 0.921569, 0.666667, 1)
+
+[node name="Coin2" type="ColorRect" parent="."]
+visible = false
+offset_left = 23.0
+offset_top = 160.0
+offset_right = 31.0
+offset_bottom = 168.0
+color = Color(0.854902, 0.439216, 0.913725, 1)
+
+[node name="Coin3" type="ColorRect" parent="."]
+visible = false
+offset_left = 33.0
+offset_top = 160.0
+offset_right = 41.0
+offset_bottom = 168.0
+color = Color(0.890196, 0.878431, 0.172549, 1)
+
+[node name="info" type="Label" parent="."]
+visible = false
+offset_left = 4.15908
+offset_top = 5.42046
+offset_right = 170.159
+offset_bottom = 19.4205
+
+[node name="controls" type="Label" parent="."]
+visible = false
+offset_left = 9.19875
+offset_top = 181.809
+offset_right = 175.199
+offset_bottom = 246.809
+text = "X: jump
+square: attack
+R1: dash
+"
+
+[node name="ray_u" type="Polygon2D" parent="."]
+position = Vector2(808, 784)
+scale = Vector2(0.5, 0.5)
+polygon = PackedVector2Array(-1392, -416, -1424, -384, -1392, -352, -1360, -384)
+
+[node name="ray_l" type="Polygon2D" parent="."]
+position = Vector2(776, 832)
+scale = Vector2(0.5, 0.5)
+polygon = PackedVector2Array(-1392, -416, -1424, -384, -1392, -352, -1360, -384)
+
+[node name="ray_d" type="Polygon2D" parent="."]
+position = Vector2(808, 880)
+scale = Vector2(0.5, 0.5)
+polygon = PackedVector2Array(-1392, -416, -1424, -384, -1392, -352, -1360, -384)
+
+[node name="ray_r" type="Polygon2D" parent="."]
+position = Vector2(840, 832)
+scale = Vector2(0.5, 0.5)
+polygon = PackedVector2Array(-1392, -416, -1424, -384, -1392, -352, -1360, -384)
+
+[node name="TL" type="Panel" parent="."]
+offset_left = 24.0
+offset_top = 200.0
+offset_right = 512.0
+offset_bottom = 320.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_j1moq")
+
+[node name="headers" type="Label" parent="TL"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_top = -48.0
+offset_right = 451.0
+offset_bottom = 48.0
+grow_vertical = 2
+text = "POS:
+VEL:
+GND:"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="pos_x" type="Label" parent="TL"]
+modulate = Color(1, 0.72549, 0.509804, 1)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 88.0
+offset_top = -48.0
+offset_right = 148.0
+offset_bottom = -15.0
+grow_vertical = 2
+text = "----"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="pos_y" type="Label" parent="TL"]
+modulate = Color(1, 0.72549, 0.509804, 1)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 232.0
+offset_top = -48.0
+offset_right = 292.0
+offset_bottom = -15.0
+grow_vertical = 2
+text = "----"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="vel_x" type="Label" parent="TL"]
+modulate = Color(1, 0.945098, 0.529412, 1)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 88.0
+offset_top = -16.0
+offset_right = 148.0
+offset_bottom = 17.0
+grow_vertical = 2
+text = "----"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="vel_y" type="Label" parent="TL"]
+modulate = Color(1, 0.945098, 0.529412, 1)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 232.0
+offset_top = -16.0
+offset_right = 292.0
+offset_bottom = 17.0
+grow_vertical = 2
+text = "----"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="speed" type="Label" parent="TL"]
+modulate = Color(1, 0.945098, 0.529412, 1)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 376.0
+offset_top = -16.0
+offset_right = 436.0
+offset_bottom = 17.0
+grow_vertical = 2
+text = "----"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="grounded" type="Label" parent="TL"]
+modulate = Color(0.462745, 0.807843, 0.419608, 1)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 88.0
+offset_top = 16.0
+offset_right = 148.0
+offset_bottom = 49.0
+grow_vertical = 2
+text = "----"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="BL" type="Panel" parent="."]
+offset_left = 24.0
+offset_top = 824.0
+offset_right = 896.0
+offset_bottom = 1064.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_j1moq")
+
+[node name="headers" type="Label" parent="BL"]
+offset_left = 16.0
+offset_top = 8.0
+offset_right = 451.0
+offset_bottom = 232.0
+text = " CAM:             
+    BOUNDS:
+    TRACKING:
+ROOM:
+REPL:
+TICK:
+ FPS:"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="cam" type="Label" parent="BL"]
+modulate = Color(0.541176, 0.92549, 1, 1)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 96.0
+offset_top = -112.0
+offset_right = 261.0
+offset_bottom = -79.0
+grow_vertical = 2
+text = "(----,----)"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="cam_pre" type="Label" parent="BL"]
+modulate = Color(0.972549, 0.811765, 0.823529, 1)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 288.0
+offset_top = -112.0
+offset_right = 453.0
+offset_bottom = -79.0
+grow_vertical = 2
+text = "(----,----)"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="cam_bounds" type="Label" parent="BL"]
+modulate = Color(0.541176, 0.92549, 1, 1)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 232.0
+offset_top = -80.0
+offset_right = 292.0
+offset_bottom = -47.0
+grow_vertical = 2
+text = "----"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="cam_tracking" type="Label" parent="BL"]
+modulate = Color(0.541176, 0.92549, 1, 1)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 232.0
+offset_top = -48.0
+offset_right = 292.0
+offset_bottom = -15.0
+grow_vertical = 2
+text = "----"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="room" type="Label" parent="BL"]
+modulate = Color(0.541176, 0.92549, 1, 1)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 96.0
+offset_top = -16.0
+offset_right = 156.0
+offset_bottom = 17.0
+grow_vertical = 2
+text = "----"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="replay_tick" type="Label" parent="BL"]
+modulate = Color(1, 0.356863, 0.505882, 1)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 96.0
+offset_top = 16.0
+offset_right = 156.0
+offset_bottom = 49.0
+grow_vertical = 2
+text = "----"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="tick" type="Label" parent="BL"]
+modulate = Color(1, 0.788235, 0.588235, 1)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 96.0
+offset_top = 48.0
+offset_right = 156.0
+offset_bottom = 81.0
+grow_vertical = 2
+text = "----"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="fps" type="Label" parent="BL"]
+modulate = Color(0.462745, 0.807843, 0.419608, 1)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 96.0
+offset_top = 80.0
+offset_right = 156.0
+offset_bottom = 113.0
+grow_vertical = 2
+text = "----"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="version" parent="." instance=ExtResource("2_rswk5")]
+modulate = Color(1, 1, 1, 0.0784314)
+material = SubResource("4")
+position = Vector2(1520, 992)
+text = "v0.4.0 alpha"
+
+[node name="pingtext" parent="." instance=ExtResource("2_rswk5")]
+modulate = Color(1, 1, 1, 0)
+material = SubResource("5")
+position = Vector2(40, 192)
+
+[node name="input_display" type="Node2D" parent="."]
+position = Vector2(504, 144)
+script = ExtResource("3_1j0fi")
+
+[node name="stick" type="Node2D" parent="input_display"]
+
+[node name="dot_2" type="ColorRect" parent="input_display/stick"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("3")
+color = Color(1, 0.560784, 0, 1)
+
+[node name="dot" type="ColorRect" parent="input_display/stick"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("3")
+
+[node name="panel" type="ColorRect" parent="input_display/stick"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 28.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.0784314)
+
+[node name="jump" type="ColorRect" parent="input_display"]
+offset_left = 36.0
+offset_top = -4.0
+offset_right = 68.0
+offset_bottom = 28.0
+color = Color(0.905882, 0.905882, 0.905882, 1)
+
+[node name="attack" type="ColorRect" parent="input_display"]
+offset_left = 76.0
+offset_top = -20.0
+offset_right = 108.0
+offset_bottom = 12.0
+color = Color(0.309804, 0.694118, 0.286275, 1)
+
+[node name="dash" type="ColorRect" parent="input_display"]
+offset_left = 76.0
+offset_top = -44.0
+offset_right = 108.0
+offset_bottom = -28.0
+color = Color(0.701961, 0.388235, 0.917647, 1)
+
+[node name="reset" type="ColorRect" parent="input_display"]
+offset_left = 36.0
+offset_top = -44.0
+offset_right = 68.0
+offset_bottom = -28.0
+color = Color(0.917647, 0.388235, 0.486275, 1)
+
+[node name="pause_display" type="Node2D" parent="."]
+position = Vector2(640, 112)
+script = ExtResource("4_saeah")
+
+[node name="spritetext" parent="pause_display" instance=ExtResource("2_rswk5")]
+modulate = Color(0.490196, 0.0784314, 0.317647, 1)
+material = SubResource("4")
+text = "*PAUSED*"
+
+[node name="state_display" type="Node2D" parent="."]
+position = Vector2(1728, 40)
+
+[node name="current_state" type="Label" parent="state_display"]
+offset_right = 40.0
+offset_bottom = 14.0
+text = "current state"
+label_settings = SubResource("LabelSettings_fdqft")
+
+[node name="past_states" type="Label" parent="state_display"]
+modulate = Color(1, 1, 1, 0.501961)
+offset_left = 16.0
+offset_top = 32.0
+offset_right = 154.0
+offset_bottom = 499.0
+text = "state1
+state2
+state3
+state4
+state5
+state6
+state7
+state8
+state9"
+label_settings = SubResource("LabelSettings_fdqft")

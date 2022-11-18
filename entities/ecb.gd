@@ -13,14 +13,14 @@ enum Type {DIAMOND, BOX}
 
 @onready @export var type: Type = Type.DIAMOND
 
-@onready @export_range(1, 1000) var top: int = 64 :
+@onready @export_range(1, 1000) var top: int = 48 :
 	get:
 		return top
 	set(top_):
 		top = top_
 		update_ecb()
 
-@onready @export_range(1, 1000) var bottom: int = 92 :
+@onready @export_range(1, 1000) var bottom: int = 88 :
 	get:
 		return bottom
 	set(bottom_):

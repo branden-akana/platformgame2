@@ -56,6 +56,9 @@ var focus: Vector2 :
 		focus = new_focus
 		_set_camera_pos(new_focus)
 
+# the requested camera position (pre-clamp)
+var pre_cam_pos: Vector2
+
 
 func init():
 	# print("[camera] init")
@@ -66,7 +69,7 @@ func init():
 
 	# try to get the screen the player is checked
 	# GameState.set_current_room(get_room_at_target(), false)
-	transition_tween.reset_all()
+	transition_tween.stop()
 
 
 # get the size of the window as a vector
@@ -92,7 +95,11 @@ func get_tracking_position() -> Vector2:
 	# var pos: Vector2 = get_target().position - (get_window_size() / 2)
 
 	# target position of camera + player offset
-	pos = pos + (get_target().get_facing_dir() * 200) + Vector2(0, -100)
+	pos = (pos + 
+		(get_target().get_facing_dir() * 200) + 
+		Vector2(0, -100) +
+		(get_target().velocity * 0.25)
+	)
 
 	return pos
 
@@ -110,8 +117,8 @@ func track_pos(_pos: Vector2) -> void:
 	pass
 
 ##
-## Clamp an arbitrary vector to fit within the current bounds.
-## Returns the adjusted vector.
+# Clamp an arbitrary vector to fit within the current bounds.
+# Returns the adjusted vector.
 ##
 func clamp_to_bounds(vec: Vector2) -> Vector2:
 	if min_position == max_position:
@@ -119,13 +126,15 @@ func clamp_to_bounds(vec: Vector2) -> Vector2:
 
 	var mn = min_position
 	var mx = max_position - get_window_size()
-	return Vector2(clamp(vec.x, mn.x, mx.x), clamp(vec.y, mn.y, mx.y))
-
-##
-## Return true if the camera focus is inside the current bounds.
-##
-func is_in_bounds(vec, mn, mx):
-	return (mn.x >= vec.x and vec.x >= mx.x) and (mn.y >= vec.y and vec.y >= mx.y)
+	# var x = vec.x
+	# var y = vec.y
+	# if x > mx.x: x = mx.x
+	# if x < mn.x: x = mn.x
+	# if y > mx.y: y = mx.y
+	# if y < mn.y: y = mn.y
+	var x = clampf(vec.x, mn.x, mx.x)
+	var y = clampf(vec.y, mn.y, mx.y)
+	return Vector2(x, y)
 
 ##
 # Set the rectangle (world space) that the camera
@@ -167,22 +176,19 @@ func slide_camera_pos(to, time = 0.0):
 		_set_camera_pos(to)
 	else:
 		GameState.pause(self)
+
 		if transition_tween:
 			transition_tween.kill()
+
 		transition_tween = create_tween()
 		transition_tween.tween_method(self._set_camera_pos,
 			from, to, time).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
-		transition_tween.play()
 
 		await transition_tween.finished
 		GameState.unpause(self)
 
 func _get_camera_pos() -> Vector2:
-	var target = get_node_or_null(target_path)
-	if target:
-		return -target.get_viewport().canvas_transform.origin
-	else:
-		return Vector2.ZERO
+	return -get_viewport().canvas_transform.origin
 
 func _set_camera_pos(new_focus: Vector2):
 
@@ -205,7 +211,8 @@ func _process(delta):
 
 	var target = get_node_or_null(target_path)
 	
-	if not transition_tween and target:
+	if not transition_tween.is_running() and target:
+
 		# current position of camera
 		var cam_pos = focus
 
@@ -214,10 +221,12 @@ func _process(delta):
 
 		# smooth movement
 		# var new_origin = origin + (pos - origin) * delta * smoothing
-		var diff = track_pos - cam_pos
-		cam_pos += diff.normalized() * pow(diff.length(), smoothing) * delta
+		cam_pos = lerp(cam_pos, cam_pos + ((track_pos - cam_pos) * delta), smoothing)
+		# var diff = track_pos - cam_pos
+		# cam_pos += diff.normalized() * pow(diff.length(), smoothing) * delta
 
 		# clamp camera (not sure why these double negatives are needed)
+		pre_cam_pos = cam_pos
 		cam_pos = clamp_to_bounds(cam_pos)
 
 		# offset camera (to allow manual panning)

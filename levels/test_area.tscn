@@ -1,11 +1,11 @@
 [gd_scene load_steps=8 format=3]
 
 [ext_resource type="PackedScene" path="res://backgrounds/background.tscn" id="1"]
-[ext_resource type="PackedScene" path="res://entities/enemy/enemy.tscn" id="2"]
-[ext_resource type="PackedScene" path="res://levels/level_tilemaps.tscn" id="3"]
-[ext_resource type="PackedScene" path="res://entities/room.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://entities/enemy/enemy_test.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://ca54bg25ewl7p" path="res://levels/level_tilemaps.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://bp6s3ennh11ys" path="res://entities/room.tscn" id="4"]
 [ext_resource type="Script" path="res://levels/level.gd" id="6"]
-[ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/textures/circle.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="7"]
 [ext_resource type="PackedScene" path="res://entities/sign.tscn" id="10"]
 
 [node name="level" type="Node2D"]

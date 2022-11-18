@@ -1,9 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://csldvbmh03ui3"]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Material" path="res://shaders/retro_fg3.tres" id="1"]
 [ext_resource type="PackedScene" uid="uid://bsvnvrccidyw2" path="res://backgrounds/3d_background.tscn" id="2"]
-[ext_resource type="PackedScene" uid="uid://dvq0oq86a6yg7" path="res://levels/template.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://entities/enemy/enemy.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://duuai1k3do5bw" path="res://levels/template.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://entities/enemy/enemy_test.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://dm121ccygtfu8" path="res://entities/hazard_zone.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://bp6s3ennh11ys" path="res://entities/room.tscn" id="7"]
 

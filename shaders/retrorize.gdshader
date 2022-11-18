@@ -105,7 +105,7 @@ void fragment() {
     
     for(float u = 0.0; u < palette_size.x; u += 1.0) {
         for(float v = 0.0; v < palette_size.y; v += 1.0) {
-            vec2 pal_uv = vec2(u / palette_size.x, v / palette_size.y);
+            vec2 pal_uv = vec2(u / palette_size.x, v / palette_size.y) + (1.0 / palette_size / 2.0);
             float dist = distance(COLOR.rgb, texture(palette_key, pal_uv).rgb);
             if( dist < max_dist ) {
                 max_dist = dist;

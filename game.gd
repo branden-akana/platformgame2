@@ -23,23 +23,8 @@ enum PauseRequester {
 enum DebugMode {NORMAL, DEBUG, HITBOXES}
 
 
-# path to the active player
-@export_node_path(Character) var player: NodePath = NodePath("/root/main/player")
-
-# path to the HUD
-@export_node_path(HUD) var hud: NodePath = NodePath("/root/main/hud")
-
-# path to the currently loaded level
-@export_node_path(Level) var current_level: NodePath = NodePath("/root/main/level")
-
 # path to the active room
 @export_node_path(Node) var current_room: NodePath
-
-# path to the vfx manager
-@export_node_path(VFXManager) var vfx_manager = NodePath("/root/main/post_process")
-
-# path to the active camera
-@export_node_path(GameCamera) var camera = NodePath("/root/main/camera")
 
 # currently loaded settings
 @export var settings: UserSettings
@@ -93,8 +78,10 @@ func _ready():
 	# if $"/root/main".has_node("player"):  # try to find a player
 	# 	player = get_player()  
 	# else:  # or manually spawn the player
-	# 	player = Player.instantiate()
-	# 	$"/root/main".add_child(player)
+
+	# var player = Player.instantiate()
+	# $"/root/main".add_child(player)
+	player._gamestate = self
 
 	player.connect("died", run_timer.on_player_death)
 	await player.ready
@@ -125,18 +112,18 @@ func free_editor_nodes():
 
 func get_player() -> Character:
 	# var player = %player as Player
-	var player = get_node(self.player) as Player
+	var player = get_node(Constants.PATH_PLAYER) as Player
 	assert(player != null, "Unable to get player")
 	return player
 	# return get_node(player)
 
 
 func get_hud() -> HUD:
-	return get_node(self.hud) as HUD
+	return get_node(Constants.PATH_HUD) as HUD
 
 
 func get_current_level() -> Level:
-	return get_node(current_level)
+	return get_node(Constants.PATH_LEVEL) as Level
 
 
 # Gets n start point of the current level.
@@ -145,11 +132,11 @@ func get_start_point(n: int = 0) -> Vector2:
 
 
 func get_display() -> VFXManager:
-	return get_node(vfx_manager)
+	return get_node(Constants.PATH_DISPLAYER) as VFXManager
 
 
 func get_camera() -> GameCamera:
-	return get_node(camera)
+	return get_node(Constants.PATH_CAMERA) as GameCamera
 
 
 # Initialize the game. Use after loading a new level.
@@ -160,7 +147,7 @@ func reinitialize_game():
 	# reset best time / ghost
 	run_timer.clear_best_times()
 
-	var level = get_node(current_level)
+	var level = get_current_level()
 	if settings and run_timer.has_record(level.level_name):
 		run_timer.time_best = settings.records[level.level_name]
 
@@ -213,12 +200,12 @@ func _load_scene(level_path):
 	# remove_at current scene and add new one
 	# debug_log("removing old scene")
 
-	get_node(current_level).free()
+	get_current_level().free()
 
 	# debug_log("adding new scene as child")
 
 	$"/root/main".add_child(level)
-	current_level = level.get_path()
+	# current_level = level.get_path()
 
 	# debug_log("restarting level...")
 
@@ -252,8 +239,6 @@ func debug_log(s):
 	file.seek_end()
 	file.store_line(s)
 
-func _set_camera_pos(node):
-	get_camera().track_node(node.get_path())
 
 func get_enemies(parent = null):
 	var enemies
@@ -294,7 +279,7 @@ func _physics_process(delta):
 	run_timer.process(delta)
 
 	var velocity = get_player().velocity
-	var state_name = get_player().fsm.current_type
+	var state_name = get_player().fsm.current_state_name
 	get_hud().get_node("debug/info").text = "speed: %3.2f (x=%3.2f, y=%3.2f)\nstate: %s" % [velocity.length(), velocity.x, velocity.y, state_name]
 
 

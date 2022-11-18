@@ -1,24 +1,45 @@
-[gd_scene load_steps=6 format=3 uid="uid://c3lojl2c8iosn"]
+[gd_scene load_steps=7 format=3 uid="uid://c3lojl2c8iosn"]
 
-[ext_resource type="PackedScene" uid="uid://csldvbmh03ui3" path="res://levels/test2.tscn" id="1"]
-[ext_resource type="PackedScene" path="res://entities/character/player.tscn" id="1_su0qv"]
+[ext_resource type="PackedScene" uid="uid://j4ysxttaocaa" path="res://entities/character/player.tscn" id="1_su0qv"]
 [ext_resource type="PackedScene" uid="uid://qmf6bb0fmdoh" path="res://ui/hud.tscn" id="1_wvs1w"]
 [ext_resource type="PackedScene" uid="uid://bkpyxw0b5trhf" path="res://effects/vfx_manager.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://bc0342clcc37m" path="res://ui/camera.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://bfg2m2ully6oi" path="res://levels/lvl_flat.tscn" id="5_dcujs"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_mupbn"]
+viewport_path = NodePath("viewport")
 
 [node name="main" type="Node2D"]
 process_mode = 3
 
+[node name="post_process" parent="." instance=ExtResource("2")]
+layer = 2
+
 [node name="hud" parent="." instance=ExtResource("1_wvs1w")]
 
-[node name="player" parent="." instance=ExtResource("1_su0qv")]
-process_mode = 3
-position = Vector2(960, 960)
+[node name="screen" type="Sprite2D" parent="."]
+position = Vector2(960, 540)
+scale = Vector2(3, 3)
+texture = SubResource("ViewportTexture_mupbn")
 
-[node name="camera" parent="." instance=ExtResource("4")]
+[node name="viewport" type="SubViewport" parent="."]
+disable_3d = true
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(640, 360)
+size_2d_override = Vector2i(1920, 1080)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="camera" parent="viewport" instance=ExtResource("4")]
 process_mode = 3
 z_index = 100
+smoothing = 1.7
 
-[node name="post_process" parent="." instance=ExtResource("2")]
+[node name="player" parent="viewport" instance=ExtResource("1_su0qv")]
+process_mode = 3
+position = Vector2(960, 960)
+WALLJUMP_TYPE = 0
 
-[node name="level" parent="." instance=ExtResource("1")]
+[node name="level" parent="viewport" instance=ExtResource("5_dcujs")]

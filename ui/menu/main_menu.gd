@@ -66,7 +66,7 @@ func menu_hide():
 	b_rotate_palettes = false
 	GameState.is_in_menu = false
 	GameState.unpause(GameState.PauseRequester.MENU)
-	GameState.get_hud().get_node("control").visible = true
+	GameState.get_hud().get_node("ui_timer").visible = true
 	print("hiding menu")
 
 func menu_show():
@@ -75,7 +75,7 @@ func menu_show():
 	GameState.is_in_menu = true
 	GameState.pause(GameState.PauseRequester.MENU)
 	visible = true
-	GameState.get_hud().get_node("control").visible = false
+	GameState.get_hud().get_node("ui_timer").visible = false
 	print("showing menu")
 
 func _input(event):

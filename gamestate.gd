@@ -50,8 +50,8 @@ func get_current_room() -> Node:
 
 
 # Get all rooms in the current level.
-func get_all_rooms() -> Array[RoomZone]:
-	return get_tree().get_nodes_in_group("room")
+func get_all_rooms() -> Array[LevelScreen]:
+	return get_tree().get_nodes_in_group("level_screen")
 
 
 func get_display() -> VFXManager:

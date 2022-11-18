@@ -20,6 +20,7 @@ const MAX_STATES = 20
 var tween: Tween
 
 func _ready():
+
 	tween = create_tween()
 	tween.stop()
 	# tween.process_mode = PROCESS_MODE_ALWAYS
@@ -30,6 +31,8 @@ func _ready():
 	fps_timer.start(1.0)
 	
 	fps_timer.connect("timeout",Callable(self,"update_fps"))
+
+	await GameState.get_player().ready
 
 	GameState.get_player().fsm.state_changed.connect(on_state_changed)
 	GameState.debug_mode_changed.connect(on_debug_mode_changed)
@@ -44,11 +47,11 @@ func on_debug_mode_changed(debug_mode: int) -> void:
 	match debug_mode:
 		# GameState.DebugMode.NORMAL:
 		0:
-			$control.visible = true
+			# $control.visible = true
 			$debug.visible = false
 		# GameState.DebugMode.DEBUG:
 		1:
-			$control.visible = true
+			# $control.visible = true
 			$debug.visible = true
 
 func hide():
@@ -64,21 +67,21 @@ func set_timer(time):
 	var m = floor(time / 60.0)          # minutes
 	var s = floor(fmod(time, 60.0))    # seconds
 	var ms = fmod(time, 1.0) * 1000     # milliseconds
-	$control/ui_timer.set_time(m, s, ms)
+	$ui_timer.set_time(m, s, ms)
 
 func set_best_time(time: float) -> void:
-	$control/ui_timer.set_best_time(time)
+	$ui_timer.set_best_time(time)
 
 func set_diff_time(time: float, prev_best: float = INF) -> void:
-	$control/ui_timer.set_diff_time(time, prev_best)
+	$ui_timer.set_diff_time(time, prev_best)
 
 func reset_best_time() -> void:
-	$control/ui_timer.reset_best_time()
+	$ui_timer.reset_best_time()
 
 # Set the value of the HUD death counter.
 func set_deaths(num):
 	# HUD.get_node("control/enemy_display").text = "enemies: %d" % len(get_alive_enemies())
-	$"control/death_display".text = "deaths %d" % num
+	$ui_timer/death_display.text = "deaths %d" % num
 
 # Briefly flash the screen white.
 func blink(time):
@@ -86,10 +89,11 @@ func blink(time):
 	$white_fade.color.a = 0.1
 	tween.tween_property($white_fade, "color:a", 0.0, time)
 	
-
+##
 # Play the screen fade-in animation.
+##
 func fade_in(time):
-	tween.stop()
+	var tween = create_tween()
 	$fade.color = Color(0.0, 0.0, 0.0, 1.0)
 
 	tween.tween_property($fade, "color",
@@ -98,18 +102,19 @@ func fade_in(time):
 	
 	await tween.finished
 	emit_signal("fade_in_finished")
-	return tween
 
+##
 # Play the screen fade-out animation.
+##
 func fade_out(time):
-	tween.stop()
+	var tween = create_tween()
 	$fade.color.a = 0
+
 	tween.tween_property($fade, "color:a", 1,
 		time).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
 	
 	await tween.finished
 	emit_signal("fade_out_finished")
-	return tween
 
 func lbox_in(time):
 	tween.stop()
@@ -176,27 +181,34 @@ func on_state_changed(state_to, state_from):
 	$debug/state_display/current_state.text = state_history[0]
 	$debug/state_display/past_states.text = "\n".join(state_history.slice(1, len(state_history) - 1))
 
+func _process(delta):
+	
+	offset = lerp(offset, GameState.get_player().velocity * 0.02, 0.05)
 
 func _physics_process(delta):
 
-	$debug/pos_x.text = str(round(GameState.get_player().global_position.x))
-	$debug/pos_y.text = str(round(GameState.get_player().global_position.y))
-	$debug/vel_x.text = str(round(GameState.get_player().velocity.x))
-	$debug/vel_y.text = str(round(GameState.get_player().velocity.y))
-	$debug/grounded.text = "grounded: %s" % GameState.get_player().is_grounded()
+	$debug/TL/pos_x.text = "%+08.2f" % GameState.get_player().global_position.x
+	$debug/TL/pos_y.text = "%+08.2f" % GameState.get_player().global_position.y
+	$debug/TL/vel_x.text = "%+08.2f" % GameState.get_player().velocity.x
+	$debug/TL/vel_y.text = "%+08.2f" % GameState.get_player().velocity.y
+	$debug/TL/speed.text = "%04d" % GameState.get_player().velocity.length()
+	$debug/TL/grounded.text = "%s" % GameState.get_player().is_grounded
 
 	var cam: GameCamera = GameState.get_camera()
-	var room: RoomZone = GameState.get_current_level().get_current_room()
+	var room: LevelScreen = GameState.get_current_level().get_current_room()
 
 	$debug/BL/cam.text = str(cam.focus.round())
+	$debug/BL/cam_pre.text = str(cam.pre_cam_pos.round())
 	$debug/BL/cam_bounds.text = "%s -> %s" % [cam.min_position, cam.max_position]
+	$debug/BL/cam_tracking.text = "%s" % [cam.get_tracking_position()]
+
 	if room:
 		$debug/BL/room.text = "%s" % [room.get_name()]
 	else:
 		$debug/BL/room.text = "----"
 	$debug/BL/tick.text = str(GameState.get_player().tick)
 
-	var ecb = GameState.get_player().get_ecb()
+	var ecb = GameState.get_player()._ecb
 	var checked = Color(1, 1, 1, 1.0)
 	var unchecked = Color(1, 1, 1, 0.5)
 

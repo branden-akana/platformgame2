@@ -40,32 +40,9 @@ func process(delta):
 		if not GameState.is_paused():
 			time += delta
 
-		if len(GameState.get_current_level().get_enemies()) > 0 and len(GameState.get_current_level().get_alive_enemies()) == 0:
-			complete_run()
-
 	hud.set_timer(time)
 	hud.set_deaths(num_deaths)
 
-# Called when the level is complete. Stops the timer.
-func complete_run():
-	if GameState.is_practice_mode_enabled: return
-	print("[timer] run complete")
-	b_run_complete = true
-	b_run_started = false
-
-	# calculate time difference
-	hud.set_diff_time(time, time_best)
-
-	# check for new best time
-	if is_best_time():
-		print("[timer] new best time recorded")
-		time_best = time
-		GameState.settings.records[GameState.get_level().level_name] = time
-		if b_recording_enabled:
-			# create a new ghost replay
-			replay_manager.save_recording()
-
-	emit_signal("run_complete")
 
 func has_record(level_name) -> bool:
 	return GameState.settings.records.has(level_name)
@@ -96,7 +73,30 @@ func start_run():
 		replay_manager.start_recording()
 	if b_playback_enabled:
 		replay_manager.start_playback()
-	emit_signal("run_started")
+
+	run_started.emit()
+
+
+func finish() -> void:
+
+	print("[timer] run finished")
+	b_run_complete = true
+	b_run_started = false
+
+	# calculate time difference
+	hud.set_diff_time(time, time_best)
+
+	# check for new best time
+	if is_best_time():
+		print("[timer] new best time recorded")
+		time_best = time
+		# GameState.settings.records[GameState.get_level().level_name] = time
+		if b_recording_enabled:
+			# create a new ghost replay
+			replay_manager.save_recording()
+
+	run_complete.emit()
+
 
 
 func clear_best_times():

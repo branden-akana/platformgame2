@@ -33,7 +33,7 @@ var sync_frames = {}
 func _init(character):
 	start_position = character.position
 	start_velocity = character.velocity
-	start_state_type = character.fsm.current_type
+	start_state_type = character.fsm.current_state_name
 	start_input = character.input.duplicate()
 
 

@@ -1,12 +1,18 @@
 class_name Level extends Node2D
 
+## Fired when all screens in this level are cleared.
+signal level_cleared
+
 @export var level_name: String = "untitled"
 
-@export_node_path(RoomZone) var current_room: NodePath
+@export_node_path(LevelScreen) var current_room: NodePath
 
 func _ready():
 	for room in get_all_rooms():
-		room.room_entered.connect(on_room_entered)
+		room.screen_entered.connect(on_screen_entered)
+		room.screen_cleared.connect(on_screen_cleared)
+
+	level_cleared.connect(on_level_cleared)
 
 
 func _draw():
@@ -19,8 +25,24 @@ func _process(_delta):
 		queue_redraw()
 
 
+func on_screen_cleared() -> void:
+	# win condition
+	if len(get_enemies()) > 0 and len(get_alive_enemies()) == 0:
+		print("LEVEL CLEARED!")
+		level_cleared.emit(self)
+
 ##
-## Get the start point of this level, or (0, 0) if the start point doesn't exist
+# Called when the level is complete.
+#
+# Stops the timer.
+##
+func on_level_cleared(_level) -> void:
+
+	if GameState.is_practice_mode_enabled: return
+	GameState.run_timer.finish()
+
+##
+# Get the start point of this level, or (0, 0) if the start point doesn't exist
 ##
 func get_start_point(_idx: int = 0) -> Vector2:
 	if $"points/start":
@@ -43,26 +65,36 @@ func draw_start_point():
 ##
 ##
 ##
-func get_enemies() -> Array:
-	return []
+func get_enemies() -> Array[Enemy]:
+	var enemies: Array[Enemy] = []
+	for node in get_tree().get_nodes_in_group("enemy"):
+		if node is Enemy:
+			enemies.append(node as Enemy)
+
+	return enemies
 
 ##
 ##
 ##
-func get_alive_enemies() -> Array:
-	return []
+func get_alive_enemies() -> Array[Enemy]:
+	var enemies: Array[Enemy] = []
+	for enemy in get_enemies():
+		if enemy.is_alive:
+			enemies.append(enemy)
+
+	return enemies
 
 ##
 ## Get the room in focus in the current level.
 ##
-func get_current_room() -> RoomZone:
-	return get_node_or_null(current_room) as RoomZone
+func get_current_room() -> LevelScreen:
+	return get_node_or_null(current_room) as LevelScreen
 
 ##
 ## Get all rooms in the current level.
 ##
 func get_all_rooms() -> Array:
-	return get_tree().get_nodes_in_group("room")
+	return get_tree().get_nodes_in_group("level_screen")
 
 ##
 ## Resets all entities in the current room to their initial state.
@@ -79,7 +111,7 @@ func reset_current_room() -> void:
 ## the camera to the new room. Otherwise, move the camera to the
 ## new room instantly.
 ##
-func set_current_room(room: RoomZone, do_transition: bool = true):
+func set_current_room(room: LevelScreen, do_transition: bool = true):
 	# print("entered new room")
 	# NOOP if screen is invalid or is already current screen
 	if room == null or current_room == room.get_path(): return
@@ -128,7 +160,7 @@ func get_room_at_node(node):
 ##
 ## Called when a character enters a room.
 ##
-func on_room_entered(room: RoomZone, _player: Character):
+func on_screen_entered(room: LevelScreen, _player: Character):
 	print("entered room: %s" % room.get_name())
 	print("    bounds = %s -> %s" % [room.position, room.position + room.size])
 	set_current_room(room)
