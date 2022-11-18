@@ -379,7 +379,7 @@ Constants="*res://constants.gd"
 CharacterActions="*res://entities/character/character_actions.gd"
 GameState="*res://game.gd"
 Sound="*res://effects/sound.gd"
-Effects="*res://effects/particles/particles.gd"
+FXEmitter="*res://effects/particles/particles.gd"
 
 [debug]
 
@@ -392,8 +392,6 @@ gdscript/warnings/unused_argument=false
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/resizable=false
-window/size/always_on_top=true
-window/size/extend_to_title=true
 window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="viewport"
