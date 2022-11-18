@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://dyow2efjw5jd0"]
+
+[ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="1"]
+[ext_resource type="Script" path="res://effects/particles/timed_particles.gd" id="2_hoqcm"]
+
+[sub_resource type="Curve" id="1"]
+_data = [Vector2(0, 0), 0.0, 14.3333, 0, 1, Vector2(0.0697674, 1), 0.0, -3.90909, 0, 0, Vector2(1, 0), -0.0446753, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="2"]
+offsets = PackedFloat32Array(0, 0.973154, 1)
+colors = PackedColorArray(1, 1, 1, 0.2, 1, 1, 1, 0, 1, 1, 1, 0)
+
+[node name="wave" type="CPUParticles2D"]
+z_index = -2
+emitting = false
+amount = 10
+explosiveness = 1.0
+lifetime_randomness = 0.5
+texture = ExtResource("1")
+emission_shape = 3
+emission_rect_extents = Vector2(1, 1)
+direction = Vector2(0, -1)
+spread = 100.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 200.0
+scale_amount_curve = SubResource("1")
+color_ramp = SubResource("2")
+script = ExtResource("2_hoqcm")
