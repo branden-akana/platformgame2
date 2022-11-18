@@ -8,7 +8,7 @@ var current_move
 var is_grounded: bool = false
 
 
-func on_start(state_from, character, fsm):
+func on_start(state_from, fsm):
 	is_grounded = false
 
 	# check move facing direction
@@ -23,13 +23,13 @@ func on_start(state_from, character, fsm):
 	character.emit_signal("attack")
 
 
-func on_update(delta, character, fsm):
+func on_update(delta, fsm):
 
 	if current_move.hit_detected:
 		fsm.try_walljump_cancel()  # allow walljump cancelling
 		# jump_if_able()  # allow jump canceling
 
-	if not is_current_state(fsm):
+	if not is_current(fsm):
 		return
 
 	character._friction(delta)
@@ -43,5 +43,5 @@ func on_update(delta, character, fsm):
 	if !current_move.playing or (is_grounded and not character.is_on_floor()):
 		fsm.goto_idle_or_dash()
 
-func on_end(state_to, character, fsm):
+func on_end(state_to, fsm):
 	current_move.stop()

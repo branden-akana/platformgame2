@@ -83,7 +83,7 @@ func start():
 	$sprite.visible = true
 	$sprite.frame = 0  # restart animation
 
-	character.play_animation(animation)
+	character._model.anim_play(animation)
 
 	# flip if directed to the left
 	if character:
@@ -182,7 +182,9 @@ func on_hitbox_entered(area_id, target: Area2D, target_shape_id, hitbox_shape_id
 		# print("[warning] attack hitbox triggered outside of attack state!!")
 		# hitbox.monitoring = false
 
-	if(hitbox.monitoring and playing and target is Enemy and (target.health > 0 or character.ignore_enemy_hp)):
+	var enemy = target.get_parent()
+
+	if(hitbox.monitoring and playing and enemy is Enemy and (enemy.health > 0 or character.ignore_enemy_hp)):
 		# print("[move] %s: hitbox %s hit enemy" % [name, hitbox.name])
 
 		# compute contact points
@@ -194,5 +196,5 @@ func on_hitbox_entered(area_id, target: Area2D, target_shape_id, hitbox_shape_id
 		)
 
 		emit_signal("move_hit")
-		character.hit(target, move_damage, contacts, hitlag_on_hit, disable_gravity_on_hit)
+		character.hit(enemy, move_damage, contacts, hitlag_on_hit, disable_gravity_on_hit)
 		hit_detected = true

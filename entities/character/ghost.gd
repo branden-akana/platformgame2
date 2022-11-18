@@ -3,7 +3,8 @@
 #
 # A character controlled by recorded inputs.
 #================================================================================
-class_name GhostCharacter extends Character 
+
+class_name Ghost extends Character 
 
 signal replay_finish
 
@@ -21,6 +22,9 @@ var playing = false
 
 var replay_finished = false
 
+func _init(gamestate):
+    _gamestate = gamestate
+
 func _ready():
     # print("buffer: %s " % buffer)
     no_damage = true
@@ -28,7 +32,7 @@ func _ready():
     ignore_enemy_hp = true
     visible = false
 
-    connect("replay_finish", GameState.replay_playback_stop)
+    connect("replay_finish", _gamestate.replay_playback_stop)
 
 func load_replay(new_replay):
     replay = new_replay
@@ -47,7 +51,7 @@ func restart():
     replay_finished = false
     position = replay.start_position
     velocity = replay.start_velocity
-    fsm.current_type = replay.start_state_type
+    fsm.current_state_name = replay.start_state_type
     set_input_handler(replay.start_input)
     playing = true
 

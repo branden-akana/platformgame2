@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://dgojo2dhpieqe"]
 
-[ext_resource type="PackedScene" path="res://entities/character/player.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://j4ysxttaocaa" path="res://entities/character/player.tscn" id="1"]
 [ext_resource type="Script" path="res://entities/character/ghost.gd" id="2"]
 
-[node name="player" instance=ExtResource("1")]
+[node name="ghost" instance=ExtResource("1")]
 script = ExtResource("2")
+WALLJUMP_TYPE = 0

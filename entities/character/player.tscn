@@ -1,7 +1,7 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=14 format=3 uid="uid://j4ysxttaocaa"]
 
 [ext_resource type="PackedScene" uid="uid://cj7yubvx8xgqs" path="res://entities/ecb.tscn" id="2"]
-[ext_resource type="PackedScene" path="res://entities/character/char_model.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://hsfmyy02pfcx" path="res://entities/character/char_model.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://entities/character/moves/normal_down.tscn" id="6_ancke"]
 [ext_resource type="Script" path="res://entities/character/player.gd" id="7"]
 [ext_resource type="PackedScene" path="res://entities/character/moves/normal_forward.tscn" id="7_4ih8d"]
@@ -26,6 +26,7 @@ texture_filter = 1
 collision_layer = 2
 collision_mask = 769
 script = ExtResource("7")
+WALLJUMP_TYPE = null
 
 [node name="interact_sprite" type="Sprite2D" parent="."]
 visible = false
@@ -44,7 +45,7 @@ points = PackedVector2Array(0, -64, -32, 0, 0, 96, 32, 0, 32, 0, 0, -64)
 width = 8.0
 
 [node name="ecb" parent="." instance=ExtResource("2")]
-position = Vector2(0, -96)
+position = Vector2(0, -88)
 
 [node name="hurtbox" type="Area2D" parent="."]
 collision_layer = 128

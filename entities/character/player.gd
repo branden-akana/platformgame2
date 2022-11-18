@@ -33,12 +33,16 @@ func _ready():
 	connect("enemy_killed", self.on_enemy_killed)
 
 func on_action(action: String) -> void:
+
+	super.on_action(action)
+
 	match action:
 		"attack":
 			Sound.play("attack", -20, 0.7, false, true)
 		"dash":
 			Sound.play("dash", -20, 0.8, false, true)
 		"jump":
+			Effects.play(Effects.Jump, self)
 			Sound.play("jump", -10, 1, false)
 		"walljump_left":
 			Effects.play(Effects.WallJumpRight, self)
@@ -55,9 +59,10 @@ func play_flash_effect():
 	if flash_tween:
 		flash_tween.kill()
 	
+	self._model.color = Color(10.0, 10.0, 10.0)
+
 	flash_tween = create_tween()
-	flash_tween.tween_method(self.set_color,
-		Color(10.0, 10.0, 10.0),
+	flash_tween.tween_property(self._model, "color",
 		Color(1.0, 1.0, 1.0), 0.2)
 
 func on_airdash_restored():
@@ -71,7 +76,7 @@ func on_enemy_hit(enemy, contacts):
 	signal_frames[tick] = "hit"
 
 	Sound.play("hit", -10)
-	GameState.get_camera().screen_shake(1.0, 0.2)
+	_gamestate.get_camera().screen_shake(1.0, 0.2)
 
 	if not no_effects and len(contacts):
 		var effect = Effects.play_anim(Effects.HitEffect)
@@ -88,18 +93,18 @@ func pre_process(delta):
 	# update player color
 	match airdashes_left:
 		2:
-			set_color(Color(1.0, 1.0, 1.0))
+			_model.color = Color(1.0, 1.0, 1.0)
 		1:
-			set_color(Color(1.0, 1.0, 1.0))
+			_model.color = Color(1.0, 1.0, 1.0)
 			# sprite.modulate = Color(0.5, 0.5, 0.5)
 		0:
-			set_color(Color(0.5, 0.5, 0.5))
+			_model.color = Color(0.5, 0.5, 0.5)
 
 	# needed as sometimes the walking sound does not stop
-	if fsm.is_in_state(CharStateName.RUNNING):
+	if fsm.is_current(CharStateName.RUNNING):
 		Sound.stop("walk")
 
-	if GameState.is_paused() or GameState.is_in_menu:
+	if _gamestate.is_paused() or _gamestate.is_in_menu:
 		return
 
 	if Input.is_action_just_pressed("reset"):
@@ -125,7 +130,7 @@ func pre_process(delta):
 	#             ease(clamp((up_held_time - 1.0) / 0.5, 0.0, 1.0), -2.8)
 	#         )
 
-	#     GameState.get_camera().set_offset(camera_offset)
+	#     _gamestate.get_camera().set_offset(camera_offset)
 
 	# process player input
 	for key in ["key_up", "key_down", "key_left", "key_right", "jump", "dodge", "attack", "special"]:
@@ -133,20 +138,20 @@ func pre_process(delta):
 		input.update_action(key, value)
 
 	# record this tick into the replay
-	if replay and GameState.run_timer.is_recording_enabled():
+	if replay and _gamestate.run_timer.is_recording_enabled():
 		replay.record_tick(self, tick)
 
 # Do an animated restart
 func player_restart():
-	GameState.call_with_fade_transition(self, "restart")
+	_gamestate.call_with_fade_transition(self, "restart")
 
 func hurt(damage = 100, respawn_point = null):
-	GameState.call_with_fade_transition(self, "_hurt", [damage, respawn_point])
+	_gamestate.call_with_fade_transition(self, "_hurt", [damage, respawn_point])
 	# super.hurt(damage, respawn_point)
 
 func respawn(pos):
 	super.respawn(pos)
-	if pos == GameState.get_start_point():
-		GameState.restart_level()
+	if pos == _gamestate.get_start_point():
+		_gamestate.restart_level()
 	else:
-		GameState.get_current_level().reset_current_room()
+		_gamestate.get_current_level().reset_current_room()
