@@ -91,9 +91,9 @@ func hurt(from, _dmg = 1):
 	if hit_tween: hit_tween.kill()
 
 	hit_tween = create_tween().set_parallel(true)
-	$sprite.scale.y = 0.7
+	$sprite.scale.y = 0.35
 	$sprite.modulate.a = 0.1
-	hit_tween.tween_property($sprite, "scale:y", 1, 0.25).set_ease(Tween.EASE_OUT)
+	hit_tween.tween_property($sprite, "scale:y", 0.5, 0.25).set_ease(Tween.EASE_OUT)
 	hit_tween.tween_property($sprite, "modulate:a", 1, 0.1)
 
 	from.restore_jumps()

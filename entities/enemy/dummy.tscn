@@ -1,10 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://c63uqn86hlj1n"]
+[gd_scene load_steps=13 format=3 uid="uid://bc6bdfdsypeel"]
 
-[ext_resource type="Script" path="res://entities/enemy/enemy_ball.gd" id="1_2q1ex"]
-[ext_resource type="Script" path="res://system/shape_polygon_2d.gd" id="2_gq3px"]
-[ext_resource type="Material" uid="uid://bcu4jmokjyqa2" path="res://shaders/dither_alpha_screen.tres" id="2_kpj8m"]
+[ext_resource type="Script" path="res://entities/enemy/dummy.gd" id="1_wr72d"]
+[ext_resource type="Material" uid="uid://uefn1rgn15nq" path="res://shaders/dither_alpha_screen.tres" id="2_kpj8m"]
 [ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="2_mbtpk"]
 [ext_resource type="FontFile" uid="uid://dkesessbumeke" path="res://assets/fonts/Metropolis-Light.otf" id="3_1wp66"]
+[ext_resource type="Texture2D" uid="uid://bbrgwugkw7xkl" path="res://assets/sprites/circle_64px.png" id="4_xepkw"]
 [ext_resource type="Material" uid="uid://dkiv7hm7xkdum" path="res://shaders/dither_alpha.tres" id="6_hkrjp"]
 
 [sub_resource type="Curve" id="Curve_mut4k"]
@@ -22,9 +22,6 @@ point_count = 2
 [sub_resource type="CircleShape2D" id="CircleShape2D_od5t7"]
 radius = 16.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_y2vs0"]
-radius = 16.0
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_1b03s"]
 radius = 16.0
 
@@ -37,7 +34,7 @@ shadow_offset = Vector2(0, 1)
 
 [node name="enemy_ball" type="CharacterBody2D"]
 collision_layer = 16
-script = ExtResource("1_2q1ex")
+script = ExtResource("1_wr72d")
 
 [node name="canvas_group" type="CanvasGroup" parent="."]
 material = ExtResource("2_kpj8m")
@@ -84,14 +81,14 @@ position = Vector2(0, -16)
 shape = SubResource("CircleShape2D_od5t7")
 metadata/_edit_lock_ = true
 
-[node name="sprite" type="Polygon2D" parent="."]
+[node name="sprite" type="Sprite2D" parent="."]
 position = Vector2(0, -16)
-polygon = PackedVector2Array(16, 0, 14.7821, 6.12293, 11.3137, 11.3137, 6.12293, 14.7821, 9.79685e-16, 16, -6.12293, 14.7821, -11.3137, 11.3137, -14.7821, 6.12293, -16, 1.95937e-15, -14.7821, -6.12293, -11.3137, -11.3137, -6.12293, -14.7821, -2.93906e-15, -16, 6.12293, -14.7821, 11.3137, -11.3137, 14.7821, -6.12293, 16, 0)
-script = ExtResource("2_gq3px")
-shape = SubResource("CircleShape2D_y2vs0")
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_xepkw")
 
 [node name="eyes_1" type="Node2D" parent="sprite"]
 visible = false
+scale = Vector2(2, 2)
 
 [node name="line_2d" type="Line2D" parent="sprite/eyes_1"]
 position = Vector2(3, 12)
@@ -113,6 +110,7 @@ begin_cap_mode = 2
 end_cap_mode = 2
 
 [node name="eyes_2" type="Node2D" parent="sprite"]
+scale = Vector2(2, 2)
 
 [node name="line_2d" type="Line2D" parent="sprite/eyes_2"]
 position = Vector2(3, 12)
