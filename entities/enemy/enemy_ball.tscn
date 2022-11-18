@@ -1,0 +1,78 @@
+[gd_scene load_steps=10 format=3 uid="uid://bro0wubw0fc35"]
+
+[ext_resource type="Script" path="res://entities/enemy/enemy_ball.gd" id="1_2q1ex"]
+[ext_resource type="Script" path="res://system/shape_polygon_2d.gd" id="2_gq3px"]
+[ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="2_mbtpk"]
+[ext_resource type="FontFile" uid="uid://dkesessbumeke" path="res://assets/fonts/Metropolis-Light.otf" id="3_1wp66"]
+
+[sub_resource type="Curve" id="Curve_ms6xu"]
+_data = [Vector2(0.018797, 1), 0.0, -3.19545, 0, 0, Vector2(1, 0.0090909), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_od5t7"]
+radius = 64.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y2vs0"]
+radius = 64.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1b03s"]
+radius = 64.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_u7141"]
+font = ExtResource("3_1wp66")
+font_size = 32
+outline_size = 4
+
+[node name="enemy_ball" type="CharacterBody2D"]
+collision_layer = 16
+script = ExtResource("1_2q1ex")
+
+[node name="cpu_particles_2d" type="CPUParticles2D" parent="."]
+position = Vector2(0, -64)
+amount = 20
+lifetime = 2.0
+texture = ExtResource("2_mbtpk")
+spread = 180.0
+gravity = Vector2(0, -350)
+initial_velocity_max = 200.0
+scale_amount_min = 4.0
+scale_amount_max = 6.0
+scale_amount_curve = SubResource("Curve_ms6xu")
+color = Color(1, 1, 1, 0.5)
+
+[node name="collision_shape_2d" type="CollisionShape2D" parent="."]
+position = Vector2(0, -64)
+shape = SubResource("CircleShape2D_od5t7")
+
+[node name="sprite" type="Polygon2D" parent="."]
+position = Vector2(0, -64)
+polygon = PackedVector2Array(64, 0, 61.8193, 16.5644, 55.4256, 32, 45.2548, 45.2548, 32, 55.4256, 16.5644, 61.8193, 3.91887e-15, 64, -16.5644, 61.8193, -32, 55.4256, -45.2548, 45.2548, -55.4256, 32, -61.8193, 16.5644, -64, 7.83774e-15, -61.8193, -16.5644, -55.4256, -32, -45.2548, -45.2548, -32, -55.4256, -16.5644, -61.8193, -1.17566e-14, -64, 16.5644, -61.8193, 32, -55.4256, 45.2548, -45.2548, 55.4256, -32, 61.8193, -16.5644, 64, 0)
+script = ExtResource("2_gq3px")
+shape = SubResource("CircleShape2D_y2vs0")
+
+[node name="hitbox" type="Area2D" parent="."]
+position = Vector2(0, -64)
+collision_layer = 16
+collision_mask = 8
+
+[node name="collision_shape_2d" type="CollisionShape2D" parent="hitbox"]
+shape = SubResource("CircleShape2D_1b03s")
+
+[node name="pivot" type="Node2D" parent="."]
+position = Vector2(0, -64)
+
+[node name="label" type="Label" parent="pivot"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -63.0
+offset_top = -125.0
+offset_right = 62.0
+offset_bottom = -89.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "0.00 m"
+label_settings = SubResource("LabelSettings_u7141")
+horizontal_alignment = 1

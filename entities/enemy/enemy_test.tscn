@@ -1,0 +1,60 @@
+[gd_scene load_steps=6 format=3 uid="uid://pgajypg7f7b4"]
+
+[ext_resource type="Script" path="res://entities/enemy/enemy.gd" id="1_3pnpb"]
+[ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="2_f2kyv"]
+
+[sub_resource type="Curve" id="2"]
+_data = [Vector2(0, 0.0090909), 0.0, 0.257253, 0, 0, Vector2(0.492481, 1), 7.25454, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="3"]
+offsets = PackedFloat32Array(0.0153846, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1)
+
+[sub_resource type="CircleShape2D" id="1"]
+radius = 25.0546
+
+[node name="enemy" type="Area2D" groups=["enemy"]]
+light_mask = 0
+z_index = 5
+collision_layer = 16
+collision_mask = 8
+script = ExtResource("1_3pnpb")
+
+[node name="sprite" type="Polygon2D" parent="."]
+scale = Vector2(1.5, 1.5)
+z_index = 10
+polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
+[node name="border" type="Polygon2D" parent="sprite"]
+use_parent_material = true
+color = Color(0, 0, 0, 1)
+invert_enabled = true
+invert_border = 6.0
+polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
+[node name="cpu_particles_2d" type="CPUParticles2D" parent="."]
+scale = Vector2(2, 2)
+z_index = -1
+amount = 20
+lifetime = 4.0
+texture = ExtResource("2_f2kyv")
+emission_shape = 2
+emission_sphere_radius = 128.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+linear_accel_min = -800.0
+linear_accel_max = -800.0
+radial_accel_min = -1000.0
+radial_accel_max = -1000.0
+scale_amount_min = 2.0
+scale_amount_max = 4.0
+scale_amount_curve = SubResource("2")
+color = Color(1, 1, 1, 0.34902)
+color_ramp = SubResource("3")
+
+[node name="collision" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("1")
