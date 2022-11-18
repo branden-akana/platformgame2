@@ -5,8 +5,8 @@
 [resource]
 shader = ExtResource("1_l4jlj")
 shader_parameter/dither = false
-shader_parameter/dither_amt = null
-shader_parameter/dither_lab = true
-shader_parameter/dither_shf = null
+shader_parameter/dither_amt = 1.0
+shader_parameter/dither_lab = false
+shader_parameter/dither_shf = 0.01
 shader_parameter/palette_size = 8
 shader_parameter/screen = true
