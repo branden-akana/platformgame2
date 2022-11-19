@@ -28,9 +28,9 @@ class_name VFXManager extends CanvasLayer
 			$vignette.visible = enabled
 			$pixelator.visible = enabled
 
-@export_range(0.0, 1.0) var palette_blend : float :
+@export_range(0.0, 1.0) var palette_blend : float = 0.0 :
 	get:
-		return _get_palette_blend()
+		return palette_blend
 	set(blend):
 		palette_blend = blend
 		_set_palette_blend(blend)
@@ -43,26 +43,17 @@ class_name VFXManager extends CanvasLayer
 # 	if has_node("%camera"):
 # 		position = $%camera.focus
 
-func _set_palette(idx):
+func _set_palette(idx: int) -> void:
 	idx = idx % len(palettes)
-	if shader:
-		shader.get_material().set_shader_parameter("palette_a", palettes[idx])
+	RenderingServer.global_shader_parameter_set("palette_a", palettes[idx])
 		
-func _set_palette_back(idx):
+func _set_palette_back(idx: int) -> void:
 	idx = idx % len(palettes)
-	if shader:
-		shader.get_material().set_shader_parameter("palette_b", palettes[idx])
+	RenderingServer.global_shader_parameter_set("palette_b", palettes[idx])
 		
 # 0.0 => palette A, 1.0 => palette B
-func _set_palette_blend(n):
-	if shader:
-		shader.get_material().set_shader_parameter("palette_blend", n)
-
-func _get_palette_blend():
-	if shader:
-		return shader.get_material().get_shader_parameter("palette_blend")
-	else:
-		return 0.0
+func _set_palette_blend(n: float) -> void:
+	RenderingServer.global_shader_parameter_set("palette_blend", n)
 	
 # Change the game's color palette over a set amount of time.
 #

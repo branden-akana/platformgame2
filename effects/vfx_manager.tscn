@@ -54,7 +54,6 @@ fill_to = Vector2(0, 1)
 script = ExtResource("6")
 palettes = [ExtResource("4")]
 b_post_process_enabled = false
-palette_blend = 0.0
 
 [node name="world_environment" type="WorldEnvironment" parent="."]
 environment = ExtResource("3")
@@ -90,12 +89,14 @@ offset_right = 1920.0
 offset_bottom = 1080.0
 
 [node name="sprite_2d" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(96, 544)
 scale = Vector2(1, 2.125)
 z_index = -1
 texture = SubResource("GradientTexture2D_lu2xh")
 
 [node name="sprite_2d_2" type="Sprite2D" parent="."]
+visible = false
 texture_filter = 1
 position = Vector2(64, 0)
 rotation = 1.5708
