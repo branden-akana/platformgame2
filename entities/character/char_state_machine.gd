@@ -21,13 +21,6 @@ func _init(character):
 	print("init char state machine")
 	self.character = character
 
-	_reg_state(CharStateName.ATT_FORWARD,
-		AttackState.new(character, character.get_node("moveset/normal_forward")))
-	_reg_state(CharStateName.ATT_UAIR,
-		AttackState.new(character, character.get_node("moveset/normal_up")))
-	_reg_state(CharStateName.ATT_DAIR,
-		AttackState.new(character, character.get_node("moveset/normal_down")))
-
 	current_state_name = CharStateName.IDLE
 
 	_reg_state(CharStateName.IDLE, IdleState.new(character, [
@@ -45,20 +38,7 @@ func _init(character):
 		# CharacterActions.WALLJUMP,
 	]))
 
-	_reg_state(CharStateName.DASH, DashState.new(character, [
-		CharacterActions.AIRDASH,
-		CharacterActions.ATTACK,
-		CharacterActions.SPECIAL,
-		CharacterActions.JUMP,
-		CharacterActions.DASH,
-		CharacterActions.EDGE_CANCEL,
-		CharacterActions.AIR_CANCEL,
-		CharacterActions.IDLE_CANCEL,
-		CharacterActions.DROPDOWN,
-		# CharacterActions.FASTFALL,
-		# CharacterActions.LAND,
-		# CharacterActions.WALLJUMP,
-	]))
+	_reg_state(CharStateName.DASH, DashState.new(character))
 
 	_reg_state(CharStateName.RUNNING, RunningState.new(character, [
 		CharacterActions.AIRDASH,
@@ -101,7 +81,7 @@ func _init(character):
 		# CharacterActions.IDLE_CANCEL,
 		# CharacterActions.DROPDOWN,
 		CharacterActions.FASTFALL,
-		CharacterActions.LAND,
+		# CharacterActions.LAND,
 		CharacterActions.WALLJUMP,
 	]))
 
@@ -118,6 +98,15 @@ func _init(character):
 		# CharacterActions.LAND,
 		# CharacterActions.WALLJUMP,
 	]))
+
+	_reg_state(CharStateName.ATT_FORWARD,
+		AttackState.new(character, character.get_node("moveset/normal_forward"), []
+	))
+	_reg_state(CharStateName.ATT_UAIR,
+		AttackState.new(character, character.get_node("moveset/normal_up"), []))
+	_reg_state(CharStateName.ATT_DAIR,
+		AttackState.new(character, character.get_node("moveset/normal_down"), []))
+
 
 	_reg_state(CharStateName.SPECIAL, SpecialState.new(character, [
 		# CharacterActions.AIRDASH,
@@ -144,6 +133,8 @@ func _init(character):
 
 func on_process(_delta, state: CharacterState):
 
+	if state.tick == 0: return
+
 	# print("state_process: %s" % character.tick)
 	# print("%s: %s" % [current_state_name, state.allowed_actions])
 
@@ -151,17 +142,17 @@ func on_process(_delta, state: CharacterState):
 	#------------------------------------------
 
 	# goto airborne if not grounded and was previously grounded.
-	if character.is_grounded:
-		b_was_grounded = true
+	# if character.is_grounded:
+	# 	b_was_grounded = true
 
 	# allow airdash
 	if state._is_allowed(CharacterActions.AIRDASH):
 		if character.input.pressed_airdash():
 			character.action_airdash()
 
-	if state._is_allowed(CharacterActions.EDGE_CANCEL):
-		if b_was_grounded and not character.is_grounded:
-			character.action_airborne()
+	# if state._is_allowed(CharacterActions.EDGE_CANCEL):
+	# 	if b_was_grounded and not character.is_grounded:
+	# 		character.action_airborne()
 
 	if state._is_allowed(CharacterActions.AIR_CANCEL):
 		if not character.is_grounded:
@@ -192,13 +183,6 @@ func on_process(_delta, state: CharacterState):
 		if character.input.pressed_down():
 			character.action_fastfall()
 
-	# Check if the player wants to dash.
-	if state._is_allowed(CharacterActions.DASH):
-		# and (character.pressed_left() or character.pressed_right())):
-		if (character.input.pressed_left_thru_neutral() or 
-		character.input.pressed_right_thru_neutral()):
-			character.action_dash()
-
 	# Check if player is trying to not move (no movement input)
 	if state._is_allowed(CharacterActions.IDLE_CANCEL):
 		if (
@@ -208,6 +192,14 @@ func on_process(_delta, state: CharacterState):
 			# and not character.input.holding_right()
 		):
 			character.action_neutral()
+
+	# Check if the player wants to dash.
+	if state._is_allowed(CharacterActions.DASH):
+		# and (character.pressed_left() or character.pressed_right())):
+		# if (character.input.pressed_left_thru_neutral() or 
+		# character.input.pressed_right_thru_neutral()):
+		if character.input.pressed_left() or character.input.pressed_right():
+			character.action_dash()
 
 	# allow attack
 	if state._is_allowed(CharacterActions.ATTACK):

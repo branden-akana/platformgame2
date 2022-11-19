@@ -12,10 +12,3 @@ func on_update(delta, fsm):
 
         if not character.is_facing_forward():
             character.action_neutral()
-
-
-func on_end(state_to, fsm):
-    # if state_to == CharStateName.IDLE:
-        # character.velocity.x = clamp(character.velocity.x, -character._phys.RUNNING_STOP_SPEED, character._phys.RUNNING_STOP_SPEED)
-    # print("stopped running")
-    character.emit_signal("stop_walking")

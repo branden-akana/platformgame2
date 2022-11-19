@@ -7,12 +7,15 @@ var move: Node2D
 var b_grounded_attack: bool
 
 
-func _init(character, move: Node2D):
-	super._init(character, [])
+func _init(character, move: Node2D, allowed_actions: Array[int]):
+	super._init(character, allowed_actions)
 	self.move = move
-
+                   
 func on_start(state_from, fsm):
-	b_grounded_attack = false
+	if not character.is_grounded:
+		_allow(CharacterActions.LAND)
+	else:
+		_disallow(CharacterActions.LAND)
 
 func on_update(delta, fsm):
 
@@ -35,11 +38,12 @@ func on_update(delta, fsm):
 		character._acceleration(delta)
 
 	# end of move or edge cancelled
-	if !move.playing or (b_grounded_attack and not character.is_grounded):
+	if !move.playing:
 		fsm.goto_any()
 
 func on_end(state_to, fsm):
 	_disallow(CharacterActions.AIRDASH)
 	_disallow(CharacterActions.JUMP)
 	_disallow(CharacterActions.WALLJUMP)
+	_disallow(CharacterActions.LAND)
 	move.stop()

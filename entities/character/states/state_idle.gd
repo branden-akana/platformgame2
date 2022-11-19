@@ -4,6 +4,6 @@ func on_update(delta, fsm):
 
 	character._friction(delta)
 
-	var x = character.input.get_axis_x()
-	if abs(character.velocity.x) < character._phys.WALK_MAX_SPEED and abs(round(x)) == 1:
+	if (character.input.holding_left() or 
+	character.input.holding_right()):
 		character.action_dash()

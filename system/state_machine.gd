@@ -81,23 +81,8 @@ func change(new_state_name: StringName, force: bool = false) -> bool:
 
 func process(delta):
 
-
-	# transition to queued state if any
-	# if queued_state_name:
-	# 	change(queued_state_name)
-	# 	queued_state_name = null
-
-	var state := current_state
-
-	# update current state
-	state.update(delta, self)
-
-	on_process(delta, state)
-
-	# if next_state_name != null:
-		# print("next state: %s" % next_state)
-		# change(next_state_name)
-
+	current_state.update(delta, self)
+	on_process(delta, current_state)
 
 func on_process(_delta, _state):
 	pass

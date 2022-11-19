@@ -33,11 +33,22 @@ func on_start(state_from, fsm):
 	# else:
 	#     b_can_land_cancel = true
 
-	if character.is_grounded and axis.y < 0:
-		character.position.y -= 4
-		character.is_grounded = false
+	print("start airdash from %s" % state_from)
+	if state_from == CharStateName.AIRBORNE and axis.y < 0:
+		_allow(CharacterActions.LAND)
 
 	character.b_can_slide = false
+	
+
+func on_end(state_to, fsm):
+
+	character.b_can_slide = true
+	_disallow(CharacterActions.LAND)
+
+	# if state_to in [CharStateName.ATT_FORWARD, CharStateName.ATT_DAIR, CharStateName.ATT_UAIR]:
+	character.velocity = (character.velocity.normalized() * clamp(character.velocity.length(), 0.0, character._phys.AIRDASH_SPEED_CANCEL))
+	# if is_instance_valid(particles):
+	# 	particles.emitting = false
 
 
 func on_update(delta, fsm):
@@ -48,6 +59,7 @@ func on_update(delta, fsm):
 	if tick == 1:
 		# delayed start of particles
 		particles = Effects.play(Effects.Airdash, character)
+		particles.top_level = true
 		particles.get_node("wave").direction = airdash_dir
 		if character.facing == Direction.LEFT:
 			particles.get_node("trail").material.set_shader_parameter("flip", true)
@@ -65,7 +77,7 @@ func on_update(delta, fsm):
 		))
 
 	# end of airdashing
-	if tick > character._phys.AIRDASH_LENGTH or character.is_grounded:
+	if tick > character._phys.AIRDASH_LENGTH:
 
 		# if is_instance_valid(particles):
 		# 	particles.emitting = false
@@ -78,11 +90,5 @@ func on_update(delta, fsm):
 			character.action_airborne()
 
 
-	character.fix_incoming_collisions(delta, 32)
+	# character.fix_incoming_collisions(delta, 32)
 
-
-func on_end(state_to, fsm):
-
-	character.b_can_slide = true
-	# if is_instance_valid(particles):
-	# 	particles.emitting = false

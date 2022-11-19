@@ -19,8 +19,6 @@ func on_start(state_from, fsm):
 
 	character.sprite.animation = "attack"
 	character.sprite.frame = 0
-	
-	character.emit_signal("attack")
 
 
 func on_update(delta, fsm):
