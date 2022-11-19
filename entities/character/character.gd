@@ -135,7 +135,7 @@ func _process(_delta):
 	# _model.position = position.snapped(Vector2(4, 4))
 	var delt = 1.0 / Engine.get_physics_frames()
 	var frac = Engine.get_physics_interpolation_fraction()
-	interpolated_position = global_position + lerp(global_position, global_position + (velocity * delt), frac)
+	interpolated_position = lerp(global_position, global_position + (velocity * delt), frac)
 
 	match facing:
 		Direction.RIGHT:
@@ -593,12 +593,12 @@ func _acceleration(delta: float, accel = null, max_speed = null) -> void:
 	var axis_x: float = input.get_axis_x()
 
 	if accel == null or max_speed == null:
-	if is_grounded:
-		accel = _phys.GROUND_ACCELERATION
-		max_speed = _phys.GROUND_MAX_SPEED
-	else:
-		accel = _phys.AIR_ACCELERATION
-		max_speed = _phys.AIR_MAX_SPEED
+		if is_grounded:
+			accel = _phys.GROUND_ACCELERATION
+			max_speed = _phys.GROUND_MAX_SPEED
+		else:
+			accel = _phys.AIR_ACCELERATION
+			max_speed = _phys.AIR_MAX_SPEED
 
 	if axis_x > 0.0 and velocity.x < max_speed:
 		velocity.x = min(max_speed, velocity.x + (axis_x * accel * delta))
