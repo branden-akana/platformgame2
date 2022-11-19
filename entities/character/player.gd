@@ -20,9 +20,8 @@ func _ready():
 	connect("attack",Callable(Sound,"play").bind("attack", -20, 0.7, false, true))
 
 	# connect signals to particle effects
-	connect("jump",Callable(Effects,"play").bind(Effects.Jump, self, {"direction": -velocity})) 
-	connect("jump",Callable(Effects,"play").bind(Effects.Jump, self)) 
-	connect("dragging",Callable(Effects,"play").bind(Effects.Dust, self))
+	connect("jump",Callable(FXEmitter,"play").bind(FXEmitter.Jump, self, {"direction": -velocity})) 
+	connect("dragging",Callable(FXEmitter,"play").bind(FXEmitter.Dust, self))
 
 	# connect("airdash",Callable(self,"on_airdash"))
 	connect("airdash_restored", self.on_airdash_restored)
@@ -42,16 +41,16 @@ func on_action(action: String) -> void:
 		"dash":
 			Sound.play("dash", -20, 0.8, false, true)
 		"jump":
-			Effects.play(Effects.Jump, self)
+			FXEmitter.play(FXEmitter.Jump, self)
 			Sound.play("jump", -10, 1, false)
 		"walljump_left":
-			Effects.play(Effects.WallJumpRight, self)
+			FXEmitter.play(FXEmitter.WallJumpRight, self)
 			Sound.play("land", -20, 0.8 - 0.05 * consecutive_walljumps)
 		"walljump_right":
-			Effects.play(Effects.WallJumpLeft, self)
+			FXEmitter.play(FXEmitter.WallJumpLeft, self)
 			Sound.play("land", -20, 0.8 - 0.05 * consecutive_walljumps)
 		"land":
-			Effects.play(Effects.Land, self)
+			FXEmitter.play(FXEmitter.Land, self)
 			Sound.play("land", -20, 0.8)
 
 # Start an effect where the player flashes
@@ -76,17 +75,19 @@ func on_enemy_hit(enemy, contacts):
 	signal_frames[tick] = "hit"
 
 	Sound.play("hit", -10)
-	_gamestate.get_camera().screen_shake(1.0, 0.2)
+	# _gamestate.get_camera().screen_shake(1.0, 0.2)
 
 	if not no_effects and len(contacts):
-		var effect = Effects.play_anim(Effects.HitEffect)
-		effect.position = (contacts[0] / 4).floor() * 4
-		effect.frame = 0
+		# var effect = FXEmitter.play_anim(FXEmitter.HitEffect)
+		var effect = FXEmitter.play(FXEmitter.HitEffect, self)
+		effect.top_level = true
+		effect.position = contacts[0]
 
 func on_enemy_killed(enemy, contacts):
-	var effect = Effects.play(Effects.HitParticles)
-	effect.position = enemy.position
-	effect.direction = position.direction_to(enemy.position)
+	pass
+	# var effect = FXEmitter.play(FXEmitter.HitParticles)
+	# effect.position = enemy.position
+	# effect.direction = position.direction_to(enemy.position)
 
 func pre_process(delta):
 

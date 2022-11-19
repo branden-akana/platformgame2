@@ -228,7 +228,7 @@ func on_level_clear():
 	#tween.interpolate_method(pitch_effect, "set_pitch_scale", 0.8, 1.0, 0.5)
 	#tween.start()
 	# HUD.blink(0.5)
-	Effects.play(Effects.Clear, get_player())
+	FXEmitter.play(FXEmitter.Clear, get_player())
 
 	# await tween.tween_all_completed
 

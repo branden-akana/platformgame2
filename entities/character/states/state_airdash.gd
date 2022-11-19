@@ -58,7 +58,7 @@ func on_update(delta, fsm):
 
 	if tick == 1:
 		# delayed start of particles
-		particles = Effects.play(Effects.Airdash, character)
+		particles = FXEmitter.play(FXEmitter.Airdash, character)
 		particles.top_level = true
 		particles.get_node("wave").direction = airdash_dir
 		if character.facing == Direction.LEFT:

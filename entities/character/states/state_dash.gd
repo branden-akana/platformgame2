@@ -28,10 +28,10 @@ func on_start(state_from, fsm):
 
 	# set velocity
 	if axis_x > 0:
-		Effects.play(Effects.Dash, character, {"direction": Vector2(-3, -1)})
+		FXEmitter.play(FXEmitter.Dash, character, {"direction": Vector2(-3, -1)})
 		character.velocity.x = character._phys.DASH_INIT_SPEED
 	elif axis_x < 0:
-		Effects.play(Effects.Dash, character, {"direction": Vector2(3, -1)})
+		FXEmitter.play(FXEmitter.Dash, character, {"direction": Vector2(3, -1)})
 		character.velocity.x = -character._phys.DASH_INIT_SPEED
 
 func on_end(state_to, fsm):
