@@ -1,7 +1,10 @@
 class_name Character extends CharacterBody2D
 
-# fired when any action (jumping, attacking, etc.) is performed
+# fired for actions performed directly caused by player input (jumping, attacking, etc.)
 signal action_performed
+
+# fired for actions performed outside of player input (landing, dragging, etc.)
+signal action_occured
 
 signal enemy_hit     # called when player hit an enemy
 signal enemy_killed  # called when player killed an enemy
@@ -606,7 +609,7 @@ func _friction(delta: float):
 	var friction = _phys.GROUND_FRICTION if is_grounded else _phys.AIR_FRICTION
 
 	if is_grounded and abs(velocity.x) > 0:
-		emit_signal("dragging")
+		action_occured.emit("drag")
 
 	velocity.x = move_toward(velocity.x, 0, friction * delta)
 
