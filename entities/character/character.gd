@@ -588,12 +588,11 @@ func apply_gravity(delta):
 			velocity.y = min(_phys.TERMINAL_VELOCITY, velocity.y + (_phys.GRAVITY * delta))
 
 
-func _acceleration(delta: float) -> void:
-	var accel
-	var max_speed
+func _acceleration(delta: float, accel = null, max_speed = null) -> void:
 
 	var axis_x: float = input.get_axis_x()
 
+	if accel == null or max_speed == null:
 	if is_grounded:
 		accel = _phys.GROUND_ACCELERATION
 		max_speed = _phys.GROUND_MAX_SPEED
