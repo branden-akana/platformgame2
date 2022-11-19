@@ -1,14 +1,33 @@
-[gd_scene load_steps=8 format=3 uid="uid://dnofqkgvxm7wt"]
+[gd_scene load_steps=13 format=3 uid="uid://dnofqkgvxm7wt"]
 
 [ext_resource type="PackedScene" uid="uid://j4ysxttaocaa" path="res://entities/character/player.tscn" id="1_su0qv"]
 [ext_resource type="PackedScene" uid="uid://qmf6bb0fmdoh" path="res://ui/hud.tscn" id="1_wvs1w"]
 [ext_resource type="PackedScene" uid="uid://bkpyxw0b5trhf" path="res://effects/vfx_manager.tscn" id="2"]
 [ext_resource type="Material" uid="uid://du5ouudnrc0r" path="res://shaders/palette_dither.tres" id="3_6xkkg"]
 [ext_resource type="PackedScene" uid="uid://bc0342clcc37m" path="res://ui/camera.tscn" id="4"]
-[ext_resource type="PackedScene" uid="uid://bfg2m2ully6oi" path="res://levels/lvl_flat.tscn" id="5_dcujs"]
+[ext_resource type="Texture2D" uid="uid://d1a6ymdq18lvy" path="res://assets/palettes/base.png" id="4_0ox1w"]
+[ext_resource type="PackedScene" uid="uid://bfg2m2ully6oi" path="res://levels/lvl_flat.tscn" id="7_82rjx"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_mupbn"]
 viewport_path = NodePath("viewport")
+
+[sub_resource type="Gradient" id="Gradient_qi4eh"]
+offsets = PackedFloat32Array(0, 0.17, 0.33, 0.5, 0.67, 0.83, 1)
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 0.345098, 1, 0, 1, 0.478431, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lu2xh"]
+gradient = SubResource("Gradient_qi4eh")
+width = 640
+height = 16
+fill_from = Vector2(1, 0)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="Gradient" id="Gradient_7c4td"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_5xcl2"]
+gradient = SubResource("Gradient_7c4td")
+width = 640
+height = 16
 
 [node name="main" type="Node2D"]
 process_mode = 3
@@ -19,7 +38,6 @@ layer = 2
 [node name="hud" parent="." instance=ExtResource("1_wvs1w")]
 
 [node name="screen" type="Sprite2D" parent="."]
-texture_filter = 1
 position = Vector2(960, 540)
 scale = Vector2(3, 3)
 texture = SubResource("ViewportTexture_mupbn")
@@ -29,8 +47,6 @@ disable_3d = true
 snap_2d_transforms_to_pixel = true
 snap_2d_vertices_to_pixel = true
 size = Vector2i(640, 360)
-size_2d_override = Vector2i(1920, 1080)
-size_2d_override_stretch = true
 render_target_update_mode = 4
 
 [node name="canvas_layer" type="CanvasLayer" parent="viewport"]
@@ -45,6 +61,28 @@ use_parent_material = true
 offset_right = 1920.0
 offset_bottom = 1080.0
 
+[node name="band_rainbow" type="Sprite2D" parent="viewport/canvas_layer"]
+position = Vector2(0, 328)
+z_index = -1
+texture = SubResource("GradientTexture2D_lu2xh")
+centered = false
+
+[node name="band_rainbow_2" type="Sprite2D" parent="viewport/canvas_layer"]
+position = Vector2(0, 344)
+z_index = -1
+texture = SubResource("GradientTexture2D_5xcl2")
+centered = false
+
+[node name="sprite_2d_2" type="Sprite2D" parent="viewport/canvas_layer"]
+visible = false
+texture_filter = 1
+position = Vector2(64, 0)
+rotation = 1.5708
+scale = Vector2(8.5, 7.995)
+z_index = -1
+texture = ExtResource("4_0ox1w")
+centered = false
+
 [node name="camera" parent="viewport" instance=ExtResource("4")]
 process_mode = 3
 z_index = 100
@@ -53,6 +91,7 @@ smoothing = 1.7
 [node name="player" parent="viewport" instance=ExtResource("1_su0qv")]
 process_mode = 3
 position = Vector2(960, 960)
-WALLJUMP_TYPE = 0
 
-[node name="level" parent="viewport" instance=ExtResource("5_dcujs")]
+[node name="level" parent="viewport" instance=ExtResource("7_82rjx")]
+
+[editable path="post_process"]
