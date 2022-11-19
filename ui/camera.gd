@@ -59,6 +59,12 @@ var focus: Vector2 :
 # the requested camera position (pre-clamp)
 var pre_cam_pos: Vector2
 
+var last_cam_pos: Vector2
+
+var velocity: Vector2 :
+	get:
+		return focus - last_cam_pos
+
 
 func init():
 	# print("[camera] init")
@@ -70,14 +76,6 @@ func init():
 	# try to get the screen the player is checked
 	# GameState.set_current_room(get_room_at_target(), false)
 	transition_tween.stop()
-
-
-# get the size of the window as a vector
-func get_window_size() -> Vector2:
-	return Vector2(1920, 1080)
-	# return Vector2(DisplayServer.window_get_size())
-	# return get_viewport().size
-	# return OS.window_size
 
 
 # get the node that this camera is following
@@ -163,6 +161,21 @@ func set_bounds(tl_pos, br_pos, do_transition = true, color_palette = 0):
 		GameState.get_display().change_palette(color_palette, 0.2)
 		slide_camera_pos(to)
 
+##
+# Return true if the given point is inside the camera viewport.
+##
+func is_in_view(pos: Vector2) -> bool:
+	var cam_pos = focus
+	var screen_size = Constants.SCREEN_SIZE
+	return (
+		cam_pos.x <= pos.x and pos.x <= cam_pos.x + screen_size.x and
+		cam_pos.y <= pos.y and pos.y <= cam_pos.y + screen_size.y
+	)
+
+
+func world_to_view(pos: Vector2) -> Vector2:
+	return pos - focus
+
 
 # Smoothly transition the origin of the camera to a specified location.
 #
@@ -211,7 +224,7 @@ func _process(delta):
 
 	var target = get_node_or_null(target_path)
 	
-	if not transition_tween.is_running() and target:
+	if (!transition_tween or not transition_tween.is_running()) and target:
 
 		# current position of camera
 		var cam_pos = focus
@@ -237,6 +250,7 @@ func _process(delta):
 			var shake_dir = Vector2(1, 0).rotated(randf_range(0, 2 * PI))
 			cam_pos += shake_dir * shake_size
 
+		last_cam_pos = focus
 		focus = cam_pos
 
 	if debug_draw: queue_redraw()
