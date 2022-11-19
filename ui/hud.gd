@@ -34,7 +34,7 @@ func _ready():
 
 	await GameState.get_player().ready
 
-	GameState.get_player().fsm.state_changed.connect(on_state_changed)
+	GameState.get_player().action_performed.connect(on_state_changed)
 	GameState.debug_mode_changed.connect(on_debug_mode_changed)
 
 func toggle_visible():
@@ -175,15 +175,16 @@ func update_fps():
 	$debug/BL/fps.text = str(Engine.get_frames_per_second())
 
 
-func on_state_changed(state_to, state_from):
-	state_history.insert(0, state_to)
+func on_state_changed(action):
+	state_history.insert(0, action)
 	if len(state_history) > MAX_STATES: state_history.pop_back()
 	$debug/state_display/current_state.text = state_history[0]
 	$debug/state_display/past_states.text = "\n".join(state_history.slice(1, len(state_history) - 1))
 
 func _process(delta):
 	
-	offset = lerp(offset, GameState.get_player().velocity * 0.02, 0.05)
+	# offset = lerp(offset, -GameState.get_player().velocity * 0.1, 0.05)
+	offset = lerp(offset, -GameState.get_camera().velocity * 10, 0.05)
 
 func _physics_process(delta):
 

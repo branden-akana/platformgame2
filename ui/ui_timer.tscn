@@ -22,7 +22,7 @@ shadow_color = Color(0, 0, 0, 0.5)
 shadow_offset = Vector2(0, 1)
 
 [node name="ui_timer" type="Polygon2D"]
-color = Color(0, 0, 0, 1)
+color = Color(0, 0, 0, 0)
 polygon = PackedVector2Array(-64, -64, -64, 128, 448, 128, 544, -64)
 script = ExtResource("2")
 
