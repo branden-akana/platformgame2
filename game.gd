@@ -23,30 +23,38 @@ enum DebugMode {NORMAL, DEBUG, HITBOXES}
 # total ticks for the currently loaded level
 var tick: int = 0
 
-onready var run_timer: GameTimer = GameTimer.new(self)
+@onready var run_timer: GameTimer = GameTimer.new(self)
 
 var settings: Settings
 
 # game pausing variables
 var game_pause_requests = []  # contains refs to nodes that want to pause the game
-var game_paused: bool setget , is_paused
+var game_paused: bool :
+	get:
+		return game_paused # TODOConverter40 Copy here content of is_paused 
+	set(mod_value):
+		mod_value  # TODOConverter40  Non existent set function
 var menu
 
 # amount of time user has held pause
 var pause_hold_time = 0.0
 
 # the current level that is loaded
-onready var current_level = get_level()
+@onready var current_level = get_level()
 
 # the current room that the player is in
-var current_room = null setget set_current_room
+var current_room = null :
+	get:
+		return current_room # TODOConverter40 Non existent get function 
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_current_room
 
 # used to draw sprite text
-onready var spritefont = SpriteLabel.new()
+@onready var spritefont = SpriteLabel.new()
 
 # flags
 var practice_mode = false
-var is_in_menu = false    # if true, remove control from the player
+var is_in_menu = false    # if true, remove_at control from the player
 
 var debug_mode: int = DebugMode.NORMAL
 
@@ -67,21 +75,21 @@ func _ready():
     if $"/root/main".has_node("player"):  # try to find a player
         player = get_player()  
     else:  # or manually spawn the player
-        player = PlayerRunner.instance()
+        player = PlayerRunner.instantiate()
         $"/root/main".add_child(player)
 
-    player.connect("died", run_timer, "on_player_death")
-    yield(player, "ready")
+    player.connect("died",Callable(run_timer,"on_player_death"))
+    await player.ready
 
-    run_timer.connect("run_complete", self, "on_level_clear")
+    run_timer.connect("run_complete",Callable(self,"on_level_clear"))
 
     reinitialize_game()
     
     # wait for editor nodes to free
-    yield(free_editor_nodes(), "completed")
+    await free_editor_nodes().completed
     
     # initialize post process manager
-    #var pp = DisplayManager.instance()
+    #var pp = DisplayManager.instantiate()
     #$"/root/main".add_child(pp)
 
     # Settings load
@@ -94,10 +102,10 @@ func _notification(what):
         exit()
     
 func free_editor_nodes():
-    # remove all "editor only" nodes
+    # remove_at all "editor only" nodes
     for node in get_tree().get_nodes_in_group("editor_only"):
-        yield(node, "tree_exiting")
-    yield(get_tree(), "idle_frame")
+        await node.tree_exiting
+    await get_tree().idle_frame
 
 
 # Initialize the game. Use after loading a new level.
@@ -125,7 +133,7 @@ func restart_level():
     reset_entities()
 
     # reset camera
-    get_camera().init()
+    get_camera_3d().init()
 
     # start the run timer
     run_timer.start_run()
@@ -144,11 +152,11 @@ func restart_player():
 func load_scene(level):
     # debug_log("loading new scene...")
     # debug_log("fading out...")
-    yield(pause_and_fade_out(0.5), "completed")
+    await pause_and_fade_out(0.5).completed
     call_deferred("_load_scene", level)
-    # yield(self, "scene_loaded")
+    # await self.scene_loaded
     # debug_log("fading in...")
-    yield(fade_in_and_unpause(0.5), "completed")
+    await fade_in_and_unpause(0.5).completed
     # debug_log("finished!")
 
 func _load_scene(level_path):
@@ -156,10 +164,10 @@ func _load_scene(level_path):
     # debug_log("loading new scene")
 
     # load the new scene
-    var level = level_path.instance()
+    var level = level_path.instantiate()
     level.name = "level"
 
-    # remove current scene and add new one
+    # remove_at current scene and add new one
     # debug_log("removing old scene")
 
     get_level().free()
@@ -178,7 +186,7 @@ func _load_scene(level_path):
 
     emit_signal("scene_loaded")
 
-# Level/Room Functions
+# Level/Node3D Functions
 # ========================================================================
 
 func get_level() -> Level:
@@ -188,7 +196,7 @@ func get_level() -> Level:
 func get_rooms() -> Array:
     return get_tree().get_nodes_in_group("room")
 
-# Sets the current room to focus on.
+# Sets the current room to focus checked.
 #
 # The camera will now be bound within this room.
 # If smooth_transition is true, briefly pause the game and transition
@@ -202,7 +210,7 @@ func set_current_room(room, do_transition = true):
 
     # lock camera to this screen area
     var bounds = room.get_bounds()
-    get_camera().set_bounds(bounds[0], bounds[1], do_transition, room.palette_idx)
+    get_camera_3d().set_bounds(bounds[0], bounds[1], do_transition, room.palette_idx)
 
 
 # Attempt to find a room at this position. If none is found, return null.
@@ -252,7 +260,7 @@ func on_level_clear():
     # HUD.blink(0.5)
     Effects.play(Effects.Clear, get_player())
 
-    yield(tween, "tween_all_completed")
+    await tween.tween_all_completed
 
     tween.queue_free()
 
@@ -262,11 +270,11 @@ func debug_log(s):
     file.seek_end()
     file.store_line(s)
 
-func get_camera() -> Node:
+func get_camera_3d() -> Node:
     return $"/root/main/camera"
 
 func set_camera_focus(node):
-    get_camera().set_target(node.get_path())
+    get_camera_3d().set_target(node.get_path())
 
 func get_enemies(parent = null):
     var enemies
@@ -314,7 +322,10 @@ func _physics_process(delta):
 func _process(delta):
 
     if Input.is_action_just_pressed("toggle_fullscreen"):
-        OS.window_fullscreen = !OS.window_fullscreen
+        if !OS.window_fullscreen:
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+else:
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 
     # toggle "practice mode" which:
     # (1) the player will be able to hit dead enemies
@@ -388,7 +399,7 @@ func get_start_point(idx = 0) -> Vector2:
 # Text Box
 # ========================================================================
 func show_textbox(text):
-    var textbox = Textbox.instance()
+    var textbox = Textbox.instantiate()
     textbox.set_text(text)
     HUD.add_child(textbox)
     HUD.move_child(textbox, 0)
@@ -407,26 +418,26 @@ func set_time_scale(scale):
 
 func pause_and_fade_out(time):
     pause(self)
-    yield(HUD.fade_out(time), "completed")
+    await HUD.fade_out(time).completed
 
 func fade_in_and_unpause(time):
-    yield(HUD.fade_in(time), "completed")
+    await HUD.fade_in(time).completed
     unpause(self)
 
 func pause_and_lbox_in(time):
     pause(self)
-    yield(HUD.lbox_in(time), "completed")
+    await HUD.lbox_in(time).completed
 
 func unpause_and_lbox_out(time):
     unpause(self)
-    yield(HUD.lbox_out(time), "completed")
+    await HUD.lbox_out(time).completed
 
-# Call the given method on an object in the middle of a paused
+# Call the given method checked an object in the middle of a paused
 # fade in/out transition.
 func call_with_fade_transition(object, method, args = [], fade_out = 0.2, fade_in = 0.2):
-    yield(pause_and_fade_out(fade_out), "completed")
+    await pause_and_fade_out(fade_out).completed
     object.callv(method, args)
-    yield(fade_in_and_unpause(fade_in), "completed")
+    await fade_in_and_unpause(fade_in).completed
 
 func pause(node):
     # print("[game] %s wants to pause" % node.name)
@@ -459,7 +470,7 @@ func debug_ping(message):
     tween.interpolate_property(pingtext, "modulate:a",
         1.0, 0.0, 1.0)
     tween.start()
-    yield(tween, "tween_completed")
+    await tween.finished
     remove_child(tween)
 
 

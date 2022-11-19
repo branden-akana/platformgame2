@@ -1,17 +1,21 @@
 #================================================================================
-# Area Title Trigger
+# Area3D Title Trigger
 #
 # When a player enters this area, show a level title effect.
 #================================================================================
 extends Area2D
-tool
+@tool
 
-export var title = "unnamed area"
-export (Vector2) var extents = Vector2(8, 2) setget set_extents, get_extents
+@export var title = "unnamed area"
+@export (Vector2) var extents = Vector2(8, 2) :
+	get:
+		return extents # TODOConverter40 Copy here content of get_extents
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_extents
 
 func _ready():
-    connect("body_entered", self, "on_body_entered")
-    connect("body_exited", self, "on_body_exited")
+    connect("body_entered",Callable(self,"on_body_entered"))
+    connect("body_exited",Callable(self,"on_body_exited"))
     
 func set_extents(new_extents):
     extents = new_extents

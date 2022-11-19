@@ -1,27 +1,31 @@
 #================================================================================
-# Sprite Label
+# Sprite2D Label
 #
 # The spritesheet equivalent of a Label.
 # This Node uses a spritesheet image instead of a font file.
 #================================================================================
 extends Node2D
 class_name SpriteLabel
-tool
+@tool
 
 # a pre-loaded default spritesheet
-export (Texture) var sprite_sheet
+@export (Texture2D) var sprite_sheet
 
-# a mapping of characters to their location on the spritesheet
-export (String, MULTILINE) var characters
+# a mapping of characters to their location checked the spritesheet
+@export (String, MULTILINE) var characters
 
 # size of each character (in pixels)
-export (Vector2) var char_size
+@export (Vector2) var char_size
 
-export (int) var line_length = 30
+@export (int) var line_length = 30
 
-export (String, MULTILINE) var text = "" setget set_text, get_text
+@export (String, MULTILINE) var text = "" :
+	get:
+		return text # TODOConverter40 Copy here content of get_text
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_text
 
-export (bool) var bold = false
+@export (bool) var bold = false
 
 var char_map = {}
 

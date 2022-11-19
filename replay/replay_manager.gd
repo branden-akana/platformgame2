@@ -58,7 +58,7 @@ func start_playback():
 
         if not is_instance_valid(ghost_runner):
             print("[ghost] creating new ghost")
-            ghost_runner = GhostPlayer.instance()
+            ghost_runner = GhostPlayer.instantiate()
             game.get_node("/root/main").add_child(ghost_runner)
 
         ghost_runner.load_replay(saved_replay)

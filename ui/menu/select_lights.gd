@@ -1,8 +1,8 @@
 class_name SelectLights
 extends MenuSelection
 
-var label_on  = "[on] off"
-var label_off = "on [off]"
+var label_on  = "[checked] unchecked"
+var label_off = "checked [unchecked]"
 
 var lights_enabled = true
 

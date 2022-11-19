@@ -4,10 +4,14 @@
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
-tool
+@tool
 
 
-export var emitting = false setget set_emitting
+@export var emitting = false :
+	get:
+		return emitting # TODOConverter40 Non existent get function 
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_emitting
 
 func set_emitting(e):
     emitting = e

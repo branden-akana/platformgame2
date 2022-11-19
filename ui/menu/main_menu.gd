@@ -19,7 +19,7 @@ var b_rotate_palettes = true
 # the tick sound when scrolling text
 var asp: AudioStreamPlayer = AudioStreamPlayer.new()
 
-onready var title_origin = $title.position
+@onready var title_origin = $title.position
 
 func _ready():
     asp.stream = load("res://assets/sounds/tick.wav")
@@ -27,13 +27,13 @@ func _ready():
     asp.volume_db = -10
     add_child(asp)
 
-    yield(Game, "post_ready")
+    await Game.post_ready
     show()
 
     while b_rotate_palettes:
         var pp = Game.get_display_manager()
         var next_palette = (pp.current_palette + 1) % len(pp.palettes)
-        yield(pp.change_palette(next_palette, 5), "completed")
+        await pp.change_palette(next_palette, 5).completed
 
 func _current_menu() -> MenuSelection:
     return menus[-1] as MenuSelection
@@ -55,8 +55,8 @@ func set_menu(selection):
 # return to the previous menu if possible
 func menu_return():
     if len(menus) > 1:
-        # remove last elm of array
-        menus.remove(len(menus) - 1)
+        # remove_at last elm of array
+        menus.remove_at(len(menus) - 1)
         _update_current_menu()
 
 func hide():
@@ -121,7 +121,7 @@ func _physics_process(delta):
         asp.play()
 
     # move title
-    $title.position = Util.gridsnap(Vector2(title_origin.x, title_origin.y + ((sin(OS.get_ticks_msec() * 0.001) + 1) * 8)), 4)
+    $title.position = Util.gridsnap(Vector2(title_origin.x, title_origin.y + ((sin(Time.get_ticks_msec() * 0.001) + 1) * 8)), 4)
 
     # update menu text
     var text = ""

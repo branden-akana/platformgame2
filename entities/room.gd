@@ -1,5 +1,5 @@
 #===============================================================================
-# Room
+# Node3D
 #
 # When the player enters this zone, the camera will lock into its dimensions.
 # All objects in this room should be its children.
@@ -7,14 +7,18 @@
 
 extends Area2D
 class_name RoomZone
-tool
+@tool
 
 signal room_entered
 
-export (Vector2) var size = Vector2(1920, 1080) setget set_size
-export var palette_idx = 0
+@export (Vector2) var size = Vector2(1920, 1080) :
+	get:
+		return size # TODOConverter40 Non existent get function 
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_size
+@export var palette_idx = 0
 
-onready var collision: CollisionShape2D = $collision
+@onready var collision: CollisionShape2D = $collision
 
 var ready = false
 
@@ -27,8 +31,8 @@ func _ready():
 
     set_size(size)
 
-    connect("body_entered", self, "on_body_entered")
-    connect("room_entered", Game, "on_room_entered")
+    connect("body_entered",Callable(self,"on_body_entered"))
+    connect("room_entered",Callable(Game,"on_room_entered"))
 
 func set_size(new_size):
     size = new_size

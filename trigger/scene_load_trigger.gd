@@ -6,10 +6,14 @@
 
 class_name SceneLoadTrigger
 extends Area2D
-tool
+@tool
 
-export (PackedScene) var to_level
-export (Vector2) var size = Vector2(2, 2) setget set_size
+@export (PackedScene) var to_level
+@export (Vector2) var size = Vector2(2, 2) :
+	get:
+		return size # TODOConverter40 Non existent get function 
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_size
 
 # flag needed for setget
 var ready = false
@@ -19,7 +23,7 @@ func _ready():
     # this is to ensure individual zones can have different sized shapes
     $collision.shape = RectangleShape2D.new()
 
-    connect("body_entered", self, "on_body_entered")
+    connect("body_entered",Callable(self,"on_body_entered"))
 
     ready = true
 

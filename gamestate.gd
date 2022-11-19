@@ -58,7 +58,7 @@ func get_display() -> VFXManager:
 	return get_node(vfx_manager)
 
 
-func get_camera() -> GameCamera:
+func get_camera_3d() -> GameCamera:
 	return get_node(camera)
 
 

@@ -1,14 +1,14 @@
 extends Node2D
 
-export var ROTATION_SPEED = 10
-export var ROTATION_RADIUS = 50
-export (PackedScene) var PARTICLES
+@export var ROTATION_SPEED = 10
+@export var ROTATION_RADIUS = 50
+@export (PackedScene) var PARTICLES
 
 var particles
 var time: float = 0.0
 
 func _ready():
-    particles = PARTICLES.instance()
+    particles = PARTICLES.instantiate()
     particles.one_shot = false
     particles.emitting = true
     add_child(particles)

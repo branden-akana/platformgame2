@@ -9,7 +9,7 @@
 [ext_resource path="res://entities/runner/prunner.gd" type="Script" id=7]
 [ext_resource path="res://ui/debug/ecb_display.tscn" type="PackedScene" id=8]
 [ext_resource path="res://shaders/grayscale.gdshader" type="Shader" id=9]
-[ext_resource path="res://assets/sprites/PS4.png" type="Texture" id=19]
+[ext_resource path="res://assets/sprites/PS4.png" type="Texture2D" id=19]
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 9 )
@@ -27,7 +27,7 @@ viewport_path = NodePath("3d")
 [sub_resource type="CanvasItemMaterial" id=96]
 blend_mode = 2
 
-[node name="player" type="KinematicBody2D"]
+[node name="player" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 769
 collision/safe_margin = 0.001
@@ -37,7 +37,7 @@ __meta__ = {
 "_edit_vertical_guides_": [ -64.0, 64.0 ]
 }
 
-[node name="interact_sprite" type="Sprite" parent="."]
+[node name="interact_sprite" type="Sprite2D" parent="."]
 visible = false
 modulate = Color( 0.694118, 0.694118, 0.694118, 1 )
 material = SubResource( 2 )
@@ -50,7 +50,7 @@ region_rect = Rect2( 0, 0, 56, 56 )
 visible = false
 position = Vector2( 0, -96 )
 z_index = 8
-points = PoolVector2Array( 0, -64, -32, 0, 0, 96, 32, 0, 32, 0, 0, -64 )
+points = PackedVector2Array( 0, -64, -32, 0, 0, 96, 32, 0, 32, 0, 0, -64 )
 width = 8.0
 
 [node name="ecb" parent="." instance=ExtResource( 2 )]
@@ -99,8 +99,8 @@ z_index = 2
 offset = Vector2( 0, 32 )
 texture = SubResource( 95 )
 texture_scale = Vector2( 0.25, 0.25 )
-polygon = PoolVector2Array( -128, -256, -128, 0, 128, 0, 128, -256 )
-uv = PoolVector2Array( 0, 0, 0, 512, 512, 512, 512, 0 )
+polygon = PackedVector2Array( -128, -256, -128, 0, 128, 0, 128, -256 )
+uv = PackedVector2Array( 0, 0, 0, 512, 512, 512, 512, 0 )
 
 [node name="3d_proj_2" type="Polygon2D" parent="."]
 material = SubResource( 96 )
@@ -108,10 +108,10 @@ z_index = -1
 offset = Vector2( 0, 32 )
 texture = SubResource( 95 )
 texture_scale = Vector2( 0.25, 0.25 )
-polygon = PoolVector2Array( -152, -272, -152, 16, 152, 16, 152, -272 )
-uv = PoolVector2Array( 0, 0, 0, 512, 512, 512, 512, 0 )
+polygon = PackedVector2Array( -152, -272, -152, 16, 152, 16, 152, -272 )
+uv = PackedVector2Array( 0, 0, 0, 512, 512, 512, 512, 0 )
 
-[node name="3d" type="Viewport" parent="."]
+[node name="3d" type="SubViewport" parent="."]
 size = Vector2( 128, 128 )
 own_world = true
 transparent_bg = true

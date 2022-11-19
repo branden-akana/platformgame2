@@ -152,7 +152,7 @@ func set_state(state_type):
             var old_state_name = RunnerStateType.get_name(old_state_type)
             var new_state_name = RunnerStateType.get_name(state_type)
             emit_signal("state_changed", new_state_name, old_state_name)
-            current_state.on_start(old_state_type, runner, runner.fsm)
+            current_state.on_start(Callable(old_state_type,runner).bind(runner.fsm))
 
 func process(delta):
     if runner == null: return
@@ -265,7 +265,7 @@ func goto_attack():    queue_state(RunnerStateType.ATTACK)
 func goto_special():   queue_state(RunnerStateType.SPECIAL)
         
 # Set the runner state to either idle, running or dash
-# depending on the current state of the runner.
+# depending checked the current state of the runner.
 func goto_grounded() -> void:
     # melee-like behavior
     #goto_idle()
@@ -277,7 +277,7 @@ func goto_grounded() -> void:
         goto_idle()
 
 # Set the runner state to either idle, running, dash, or airborne
-# depending on the current state of the runner.
+# depending checked the current state of the runner.
 func goto_any():
     if runner.is_grounded():
         goto_grounded()

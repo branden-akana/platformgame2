@@ -2,24 +2,24 @@ class_name Settings extends Resource
 
 const SETTINGS_FILEPATH = "user://settings.res"
 
-# Contains all action bindings. Will be updated on save.
-export var action_map: Dictionary
+# Contains all action bindings. Will be updated checked save.
+@export var action_map: Dictionary
 
 # Contains all level records.
-export var records: Dictionary
+@export var records: Dictionary
 
 # Preferred color palette
-export var palette: int = 0
+@export var palette: int = 0
 
 # Preferred walljump type
-export var walljump_type: int = Runner.WalljumpType.JOYSTICK
+@export var walljump_type: int = Runner.WalljumpType.JOYSTICK
 
 func _action_map() -> Dictionary:
     var action_map = {}
     var actions = InputMap.get_actions()
 
     for action in actions:
-        action_map[action] = InputMap.get_action_list(action)
+        action_map[action] = InputMap.action_get_events(action)
 
     return action_map
 

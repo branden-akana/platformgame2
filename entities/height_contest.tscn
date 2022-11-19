@@ -13,4 +13,4 @@ text = "0123"
 [node name="polygon_2d" type="Polygon2D" parent="."]
 position = Vector2( 256, 8 )
 scale = Vector2( 8, 1 )
-polygon = PoolVector2Array( -32, 0, -32, -4, 32, -4, 32, 0 )
+polygon = PackedVector2Array( -32, 0, -32, -4, 32, -4, 32, 0 )

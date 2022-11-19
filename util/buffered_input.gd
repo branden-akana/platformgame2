@@ -16,13 +16,13 @@ var action_press_times = {}
 var action_unpress_times = {}
 
 # map of when inputs were pressed, but
-# unpressing will remove them from this map
+# unpressing will remove_at them from this map
 var action_holds = {}
 
 # the user's current joystick direction
 var axis: Vector2 = Vector2.ZERO
 
-# the user's joystick direction on the last frame
+# the user's joystick direction checked the last frame
 var last_axis: Vector2 = axis
 
 
@@ -55,7 +55,7 @@ func update(delta):
 
 # Return the current time.
 func get_current_time() -> int:
-    # return OS.get_ticks_msec()
+    # return Time.get_ticks_msec()
     return tick
 
 # Return the difference between the current time and the given time.

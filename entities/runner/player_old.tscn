@@ -8,8 +8,8 @@
 [ext_resource path="res://entities/ecb.tscn" type="PackedScene" id=6]
 [ext_resource path="res://shaders/grayscale.gdshader" type="Shader" id=7]
 [ext_resource path="res://entities/runner/animated_sprite.gd" type="Script" id=8]
-[ext_resource path="res://assets/sprites/falcon.png" type="Texture" id=9]
-[ext_resource path="res://assets/sprites/PS4.png" type="Texture" id=10]
+[ext_resource path="res://assets/sprites/falcon.png" type="Texture2D" id=9]
+[ext_resource path="res://assets/sprites/PS4.png" type="Texture2D" id=10]
 [ext_resource path="res://entities/runner/player_old.gd" type="Script" id=11]
 
 [sub_resource type="ShaderMaterial" id=2]
@@ -350,7 +350,7 @@ script/source = "#==============================================================
 #===============================================================================
 
 extends Node2D
-tool
+@tool
 
 signal move_started
 signal move_hit
@@ -358,14 +358,18 @@ signal move_finished
 signal move_stopped  # called when the move ended manually
 
 # reference to the runner containing this move
-onready var runner = $\"../..\"
+@onready var runner = $\"../..\"
 
 # if true, this move is currently playing
-export var playing: bool = false
-export var tick = 0
+@export var playing: bool = false
+@export var tick = 0
 
 # if true, flip this move horizontally
-var flipped = false setget set_flipped
+var flipped = false :
+	get:
+		return flipped # TODOConverter40 Non existent get function 
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_flipped
 
 # if true, this move hit something
 var hit_detected = false
@@ -373,37 +377,37 @@ var hit_detected = false
 # move properties
 # =================================
 
-export (int) var move_length = 30
-export (int) var move_damage = 1
+@export (int) var move_length = 30
+@export (int) var move_damage = 1
 
-export (Array, Dictionary) var move_hitboxes = [
+@export (Array, Dictionary) var move_hitboxes = [
     {
         \"start\": 0,
         \"end\": 4,
     }
 ]
 
-# how long to put the player in hitstun on hit (in frames, from time of hit)
-export (int) var hitlag_on_hit = 6
+# how long to put the player in hitstun checked hit (in frames, from time of hit)
+@export (int) var hitlag_on_hit = 6
 
 # the animation to play when performing this move
-export (String) var animation = \"attack\"
+@export (String) var animation = \"attack\"
 
 # if true, stops the player's vertical velocity at the start
-export var disable_gravity_on_start = false
+@export var disable_gravity_on_start = false
 
-# if greater than 0, the amount of ticks gravity will be disabled on hit
-export var disable_gravity_on_hit = 18
+# if greater than 0, the amount of ticks gravity will be disabled checked hit
+@export var disable_gravity_on_hit = 18
 
 
 func _ready():
     runner = $\"../..\"
-    runner.connect(\"stun_start\", self, \"pause\")
-    runner.connect(\"stun_end\", self, \"resume\")
+    runner.connect(\"stun_start\",Callable(self,\"pause\"))
+    runner.connect(\"stun_end\",Callable(self,\"resume\"))
 
     for hitbox in get_children(): if hitbox is Area2D:
         # emit \"move_hit\" if anything enters a hitbox
-        hitbox.connect(\"area_shape_entered\", self, \"on_hitbox_entered\", [hitbox])
+        hitbox.connect(\"area_shape_entered\",Callable(self,\"on_hitbox_entered\").bind(hitbox))
 
 
 func start():
@@ -448,7 +452,7 @@ func stop(forced = true):
         else:
             # print(\"[move] %s: stopped\" % name)
             emit_signal(\"move_stopped\")
-        property_list_changed_notify()
+        notify_property_list_changed()
 
 
 func move_update(delta):
@@ -486,7 +490,7 @@ func move_update(delta):
             $sprite.modulate.a = 1 - ((tick - 12) / float(move_length))
 
         tick += 1
-        property_list_changed_notify()
+        notify_property_list_changed()
 
 func _physics_process(delta):
     if Engine.editor_hint:
@@ -532,7 +536,7 @@ script/source = "#==============================================================
 #===============================================================================
 
 extends Node2D
-tool
+@tool
 
 signal move_started
 signal move_hit
@@ -540,14 +544,18 @@ signal move_finished
 signal move_stopped  # called when the move ended manually
 
 # reference to the runner containing this move
-onready var runner = $\"../..\"
+@onready var runner = $\"../..\"
 
 # if true, this move is currently playing
-export var playing: bool = false
-export var tick = 0
+@export var playing: bool = false
+@export var tick = 0
 
 # if true, flip this move horizontally
-var flipped = false setget set_flipped
+var flipped = false :
+	get:
+		return flipped # TODOConverter40 Non existent get function 
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_flipped
 
 # if true, this move hit something
 var hit_detected = false
@@ -555,37 +563,37 @@ var hit_detected = false
 # move properties
 # =================================
 
-export (int) var move_length = 30
-export (int) var move_damage = 1
+@export (int) var move_length = 30
+@export (int) var move_damage = 1
 
-export (Array, Dictionary) var move_hitboxes = [
+@export (Array, Dictionary) var move_hitboxes = [
     {
         \"start\": 0,
         \"end\": 4,
     }
 ]
 
-# how long to put the player in hitstun on hit (in frames, from time of hit)
-export (int) var hitlag_on_hit = 6
+# how long to put the player in hitstun checked hit (in frames, from time of hit)
+@export (int) var hitlag_on_hit = 6
 
 # the animation to play when performing this move
-export (String) var animation = \"attack\"
+@export (String) var animation = \"attack\"
 
 # if true, stops the player's vertical velocity at the start
-export var disable_gravity_on_start = false
+@export var disable_gravity_on_start = false
 
-# if greater than 0, the amount of ticks gravity will be disabled on hit
-export var disable_gravity_on_hit = 18
+# if greater than 0, the amount of ticks gravity will be disabled checked hit
+@export var disable_gravity_on_hit = 18
 
 
 func _ready():
     runner = $\"../..\"
-    runner.connect(\"stun_start\", self, \"pause\")
-    runner.connect(\"stun_end\", self, \"resume\")
+    runner.connect(\"stun_start\",Callable(self,\"pause\"))
+    runner.connect(\"stun_end\",Callable(self,\"resume\"))
 
     for hitbox in get_children(): if hitbox is Area2D:
         # emit \"move_hit\" if anything enters a hitbox
-        hitbox.connect(\"area_shape_entered\", self, \"on_hitbox_entered\", [hitbox])
+        hitbox.connect(\"area_shape_entered\",Callable(self,\"on_hitbox_entered\").bind(hitbox))
 
 
 func start():
@@ -630,7 +638,7 @@ func stop(forced = true):
         else:
             # print(\"[move] %s: stopped\" % name)
             emit_signal(\"move_stopped\")
-        property_list_changed_notify()
+        notify_property_list_changed()
 
 
 func move_update(delta):
@@ -668,7 +676,7 @@ func move_update(delta):
             $sprite.modulate.a = 1 - ((tick - 12) / float(move_length))
 
         tick += 1
-        property_list_changed_notify()
+        notify_property_list_changed()
 
 func _physics_process(delta):
     if Engine.editor_hint:
@@ -714,7 +722,7 @@ script/source = "#==============================================================
 #===============================================================================
 
 extends Node2D
-tool
+@tool
 
 signal move_started
 signal move_hit
@@ -722,14 +730,18 @@ signal move_finished
 signal move_stopped  # called when the move ended manually
 
 # reference to the runner containing this move
-onready var runner = $\"../..\"
+@onready var runner = $\"../..\"
 
 # if true, this move is currently playing
-export var playing: bool = false
-export var tick = 0
+@export var playing: bool = false
+@export var tick = 0
 
 # if true, flip this move horizontally
-var flipped = false setget set_flipped
+var flipped = false :
+	get:
+		return flipped # TODOConverter40 Non existent get function 
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_flipped
 
 # if true, this move hit something
 var hit_detected = false
@@ -737,37 +749,37 @@ var hit_detected = false
 # move properties
 # =================================
 
-export (int) var move_length = 30
-export (int) var move_damage = 1
+@export (int) var move_length = 30
+@export (int) var move_damage = 1
 
-export (Array, Dictionary) var move_hitboxes = [
+@export (Array, Dictionary) var move_hitboxes = [
     {
         \"start\": 0,
         \"end\": 4,
     }
 ]
 
-# how long to put the player in hitstun on hit (in frames, from time of hit)
-export (int) var hitlag_on_hit = 6
+# how long to put the player in hitstun checked hit (in frames, from time of hit)
+@export (int) var hitlag_on_hit = 6
 
 # the animation to play when performing this move
-export (String) var animation = \"attack\"
+@export (String) var animation = \"attack\"
 
 # if true, stops the player's vertical velocity at the start
-export var disable_gravity_on_start = false
+@export var disable_gravity_on_start = false
 
-# if greater than 0, the amount of ticks gravity will be disabled on hit
-export var disable_gravity_on_hit = 18
+# if greater than 0, the amount of ticks gravity will be disabled checked hit
+@export var disable_gravity_on_hit = 18
 
 
 func _ready():
     runner = $\"../..\"
-    runner.connect(\"stun_start\", self, \"pause\")
-    runner.connect(\"stun_end\", self, \"resume\")
+    runner.connect(\"stun_start\",Callable(self,\"pause\"))
+    runner.connect(\"stun_end\",Callable(self,\"resume\"))
 
     for hitbox in get_children(): if hitbox is Area2D:
         # emit \"move_hit\" if anything enters a hitbox
-        hitbox.connect(\"area_shape_entered\", self, \"on_hitbox_entered\", [hitbox])
+        hitbox.connect(\"area_shape_entered\",Callable(self,\"on_hitbox_entered\").bind(hitbox))
 
 
 func start():
@@ -812,7 +824,7 @@ func stop(forced = true):
         else:
             # print(\"[move] %s: stopped\" % name)
             emit_signal(\"move_stopped\")
-        property_list_changed_notify()
+        notify_property_list_changed()
 
 
 func move_update(delta):
@@ -850,7 +862,7 @@ func move_update(delta):
             $sprite.modulate.a = 1 - ((tick - 12) / float(move_length))
 
         tick += 1
-        property_list_changed_notify()
+        notify_property_list_changed()
 
 func _physics_process(delta):
     if Engine.editor_hint:
@@ -896,7 +908,7 @@ script/source = "#==============================================================
 #===============================================================================
 
 extends Node2D
-tool
+@tool
 
 signal move_started
 signal move_hit
@@ -904,14 +916,18 @@ signal move_finished
 signal move_stopped  # called when the move ended manually
 
 # reference to the runner containing this move
-onready var runner = $\"../..\"
+@onready var runner = $\"../..\"
 
 # if true, this move is currently playing
-export var playing: bool = false
-export var tick = 0
+@export var playing: bool = false
+@export var tick = 0
 
 # if true, flip this move horizontally
-var flipped = false setget set_flipped
+var flipped = false :
+	get:
+		return flipped # TODOConverter40 Non existent get function 
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_flipped
 
 # if true, this move hit something
 var hit_detected = false
@@ -929,7 +945,7 @@ var move_hitboxes = [
     }
 ]
 
-# how long to put the player in hitstun on hit (in frames, from time of hit)
+# how long to put the player in hitstun checked hit (in frames, from time of hit)
 var hitlag_on_hit = 6
 
 # the animation to play when performing this move
@@ -938,18 +954,18 @@ var animation = \"attack\"
 # if true, stops the player's vertical velocity at the start
 var disable_gravity_on_start = false
 
-# if greater than 0, the amount of ticks gravity will be disabled on hit
+# if greater than 0, the amount of ticks gravity will be disabled checked hit
 var disable_gravity_on_hit = 18
 
 
 func _ready():
     runner = $\"../..\"
-    runner.connect(\"stun_start\", self, \"pause\")
-    runner.connect(\"stun_end\", self, \"resume\")
+    runner.connect(\"stun_start\",Callable(self,\"pause\"))
+    runner.connect(\"stun_end\",Callable(self,\"resume\"))
 
     for hitbox in get_children(): if hitbox is Area2D:
         # emit \"move_hit\" if anything enters a hitbox
-        hitbox.connect(\"area_shape_entered\", self, \"on_hitbox_entered\", [hitbox])
+        hitbox.connect(\"area_shape_entered\",Callable(self,\"on_hitbox_entered\").bind(hitbox))
 
 
 func start():
@@ -994,7 +1010,7 @@ func stop(forced = true):
         else:
             # print(\"[move] %s: stopped\" % name)
             emit_signal(\"move_stopped\")
-        property_list_changed_notify()
+        notify_property_list_changed()
 
 
 func move_update(delta):
@@ -1032,7 +1048,7 @@ func move_update(delta):
             $sprite.modulate.a = 1 - ((tick - 12) / float(move_length))
 
         tick += 1
-        property_list_changed_notify()
+        notify_property_list_changed()
 
 func _physics_process(delta):
     if Engine.editor_hint:
@@ -1067,7 +1083,7 @@ func on_hitbox_entered(area_id, target: Area2D, target_shape_id, hitbox_shape_id
         hit_detected = true
 "
 
-[node name="player" type="KinematicBody2D"]
+[node name="player" type="CharacterBody2D"]
 z_index = 1
 collision_layer = 2
 collision_mask = 257
@@ -1077,7 +1093,7 @@ __meta__ = {
 "_edit_vertical_guides_": [ -64.0, 64.0, -16.0, 16.0 ]
 }
 
-[node name="interact_sprite" type="Sprite" parent="."]
+[node name="interact_sprite" type="Sprite2D" parent="."]
 visible = false
 modulate = Color( 0.694118, 0.694118, 0.694118, 1 )
 material = SubResource( 2 )
@@ -1086,7 +1102,7 @@ scale = Vector2( 4, 4 )
 texture = SubResource( 3 )
 region_rect = Rect2( 0, 0, 56, 56 )
 
-[node name="sprite" type="AnimatedSprite" parent="."]
+[node name="sprite" type="AnimatedSprite2D" parent="."]
 visible = false
 position = Vector2( 0, -64 )
 scale = Vector2( 4, 4 )
@@ -1107,7 +1123,7 @@ collision_mask = 4
 position = Vector2( 0, -24 )
 shape = SubResource( 5 )
 
-[node name="test_body_bot" type="KinematicBody2D" parent="."]
+[node name="test_body_bot" type="CharacterBody2D" parent="."]
 position = Vector2( 0, -16 )
 collision_layer = 0
 
@@ -1115,7 +1131,7 @@ collision_layer = 0
 position = Vector2( 0, 8 )
 shape = SubResource( 89 )
 
-[node name="test_body_top" type="KinematicBody2D" parent="."]
+[node name="test_body_top" type="CharacterBody2D" parent="."]
 position = Vector2( 0, -80 )
 collision_layer = 0
 
@@ -1153,18 +1169,18 @@ move_hitboxes = [ {
 position = Vector2( 8, -10 )
 script = SubResource( 92 )
 
-[node name="viewport_container" type="ViewportContainer" parent="."]
-margin_left = -72.0
-margin_top = -96.0
-margin_right = 78.0
-margin_bottom = 54.0
-rect_clip_content = true
+[node name="viewport_container" type="SubViewportContainer" parent="."]
+offset_left = -72.0
+offset_top = -96.0
+offset_right = 78.0
+offset_bottom = 54.0
+clip_contents = true
 stretch = true
 __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="viewport" type="Viewport" parent="viewport_container"]
+[node name="viewport" type="SubViewport" parent="viewport_container"]
 size = Vector2( 150, 150 )
 transparent_bg = true
 handle_input_locally = false

@@ -5,7 +5,7 @@
 [node name="ecb" type="CollisionPolygon2D"]
 position = Vector2( 0, -24 )
 z_index = 1
-polygon = PoolVector2Array( 32, 0, 0, 96, -32, 0, 0, -64 )
+polygon = PackedVector2Array( 32, 0, 0, 96, -32, 0, 0, -64 )
 script = ExtResource( 1 )
 top = 64
 bottom = 96

@@ -1,5 +1,5 @@
 extends SpriteLabel
-tool
+@tool
 
 signal textbox_closed
 
@@ -45,7 +45,7 @@ func roll_text():
     # while max_chars < len(lines[current_line]):
     while max_chars < len(text):
         audio.play()
-        yield(get_tree().create_timer(0.02), "timeout")
+        await get_tree().create_timer(0.02).timeout
         max_chars += 1
 
 # Advance text to the next line

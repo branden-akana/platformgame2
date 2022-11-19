@@ -2,8 +2,8 @@ extends "res://entities/interactable.gd"
 
 const Textbox = preload("res://ui/textbox.tscn")
 
-export (Array, String) var lines = ["line 1", "line 2", "line 3"]
-export (bool) var preview = false
+@export (Array, String) var lines = ["line 1", "line 2", "line 3"]
+@export (bool) var preview = false
 
 var _spritefont  # used in editor preview
 var textbox
@@ -17,9 +17,9 @@ func on_interact():
 
     for line in lines:
         textbox = Game.show_textbox(line)
-        yield(textbox, "textbox_closed")
+        await textbox.textbox_closed
 
-    yield(get_tree(), "idle_frame")
+    await get_tree().idle_frame
 
 func on_dismiss():
     if is_instance_valid(textbox):

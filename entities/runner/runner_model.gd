@@ -1,11 +1,11 @@
 class_name RunnerModel
-extends Spatial
+extends Node3D
 
 func get_animation_player() -> AnimationPlayer:
     return $animation_player as AnimationPlayer
 
 func set_color(color: Color) -> void:
-    # $falcon/Skeleton/body.material_override.albedo_color = color
+    # $falcon/Skeleton3D/body.material_override.albedo_color = color
     $light.light_color = color
 
 func set_flipped(flipped: bool) -> void:

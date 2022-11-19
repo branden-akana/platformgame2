@@ -9,7 +9,7 @@ radius = 2.0
 [sub_resource type="Curve" id=2]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), -2.73066, 0.0, 0, 0 ]
 
-[node name="Coin" type="KinematicBody2D"]
+[node name="Coin" type="CharacterBody2D"]
 collision_layer = 4
 script = ExtResource( 1 )
 
@@ -31,4 +31,4 @@ color = Color( 1, 1, 1, 0.0784314 )
 [node name="Polygon2D" type="Polygon2D" parent="."]
 color = Color( 0.886275, 0.223529, 0.752941, 1 )
 antialiased = true
-polygon = PoolVector2Array( -8, 0, 0, -8, 8, 0, 0, 8 )
+polygon = PackedVector2Array( -8, 0, 0, -8, 8, 0, 0, 8 )

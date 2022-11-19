@@ -1,15 +1,19 @@
 extends Area2D
 class_name Enemy
-tool
+@tool
 
 const HIT_SHIFT_AMT = 1000
 const HIT_ELASTICITY = 0.5
 
 const HIT_COLOR_LENGTH = 0.2
 
-export (int) var max_health = 1 setget set_max_health
+@export (int) var max_health = 1 :
+	get:
+		return max_health # TODOConverter40 Non existent get function 
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_max_health
 
-onready var health = max_health
+@onready var health = max_health
 
 var origin: Vector2
 
@@ -26,8 +30,8 @@ var is_visible_when_dead = false
 
 # children
 
-onready var sprite: Polygon2D = $sprite
-onready var tween = Tween.new()
+@onready var sprite: Polygon2D = $sprite
+@onready var tween = Tween.new()
 
 func _ready():
     add_child(tween)

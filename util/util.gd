@@ -9,7 +9,7 @@ static func gridsnap(vec: Vector2, grid_size, subpixel_center = true):
 
 # Yield using the given object and wait for the "completed" signal
 static func await(object):
-    return yield(object, "completed")
+    return await object.completed
 
 static func create_tween(parent) -> Tween:
     var tween = Tween.new()
@@ -18,7 +18,7 @@ static func create_tween(parent) -> Tween:
 
 # Wait for a tween to complete, then delete it
 static func await_tween(tween):
-    yield(tween, "tween_all_completed")
+    await tween.tween_all_completed
     tween.queue_free()
 
 # Get the shape of an area's collision, given the Area2D and a shape ID.
@@ -48,7 +48,7 @@ static func intersect_ray(node, offset, vector, layers = 0b0001):
 # Test collisions at a point. Returns an array of dictionaries containing
 # information about any shapes that were collided with.
 #
-# See Physics2DDirectSpaceState.intersect_point()
+# See PhysicsDirectSpaceState2D.intersect_point()
 #
 static func intersect_point(node: Node2D, position: Vector2, exclude: Array = [], layers = 0b0001) -> Array:
 
@@ -61,7 +61,7 @@ static func intersect_point(node: Node2D, position: Vector2, exclude: Array = []
     return collisions
 
 static func cprint(text):
-    var escape = PoolByteArray([0x1b]).get_string_from_ascii()
+    var escape = PackedByteArray([0x1b]).get_string_from_ascii()
     var code = "[1;32m"
     print(escape + code + str(text))
 

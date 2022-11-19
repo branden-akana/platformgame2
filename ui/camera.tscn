@@ -4,5 +4,5 @@
 
 
 [node name="camera" type="Node2D"]
-pause_mode = 2
+process_mode = 2
 script = ExtResource( 1 )

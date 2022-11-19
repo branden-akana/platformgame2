@@ -7,7 +7,7 @@
 [ext_resource path="res://ui/hud.gd" type="Script" id=5]
 [ext_resource path="res://ui/debug/pause_display.gd" type="Script" id=7]
 [ext_resource path="res://ui/debug/speed_display.gd" type="Script" id=8]
-[ext_resource path="res://font_small.tres" type="DynamicFont" id=9]
+[ext_resource path="res://font_small.tres" type="FontFile" id=9]
 [ext_resource path="res://ui/enemy_indicator.gd" type="Script" id=10]
 
 [sub_resource type="StyleBoxFlat" id=1]
@@ -37,16 +37,16 @@ blend_mode = 1
 [sub_resource type="Theme" id=3]
 
 [node name="hud" type="CanvasLayer"]
-pause_mode = 2
+process_mode = 2
 script = ExtResource( 5 )
 __meta__ = {
 "_edit_vertical_guides_": [ 640.0 ]
 }
 
 [node name="fade" type="ColorRect" parent="."]
-margin_left = -2.0
-margin_right = 1918.0
-margin_bottom = 1080.0
+offset_left = -2.0
+offset_right = 1918.0
+offset_bottom = 1080.0
 color = Color( 0, 0, 0, 0 )
 __meta__ = {
 "_edit_lock_": true,
@@ -54,8 +54,8 @@ __meta__ = {
 }
 
 [node name="white_fade" type="ColorRect" parent="."]
-margin_right = 1920.0
-margin_bottom = 1080.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 color = Color( 1, 1, 1, 0 )
 __meta__ = {
 "_edit_lock_": true,
@@ -64,18 +64,18 @@ __meta__ = {
 
 [node name="area_title" type="CenterContainer" parent="."]
 modulate = Color( 1, 1, 1, 0 )
-margin_left = 240.0
-margin_top = 620.0
-margin_right = 506.0
-margin_bottom = 642.0
+offset_left = 240.0
+offset_top = 620.0
+offset_right = 506.0
+offset_bottom = 642.0
 grow_horizontal = 2
 grow_vertical = 2
-rect_scale = Vector2( 3, 3 )
+scale = Vector2( 3, 3 )
 
 [node name="label" type="Label" parent="area_title"]
-margin_left = 82.0
-margin_right = 183.0
-margin_bottom = 22.0
+offset_left = 82.0
+offset_right = 183.0
+offset_bottom = 22.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 custom_styles/normal = SubResource( 1 )
@@ -85,13 +85,13 @@ text = "unnamed area"
 position = Vector2( -2, 0 )
 z_index = -1
 color = Color( 0, 0, 0, 0 )
-polygon = PoolVector2Array( 0, 3.30607e-05, 1920, 0, 1920, 128, 1177.52, 128, 0, 128 )
+polygon = PackedVector2Array( 0, 3.30607e-05, 1920, 0, 1920, 128, 1177.52, 128, 0, 128 )
 
 [node name="letterbox2" type="Polygon2D" parent="."]
 position = Vector2( -2, 952 )
 z_index = -1
 color = Color( 0, 0, 0, 0 )
-polygon = PoolVector2Array( 0, 3.30607e-05, 1920, 0, 1920, 128, 0, 128 )
+polygon = PackedVector2Array( 0, 3.30607e-05, 1920, 0, 1920, 128, 0, 128 )
 
 [node name="main_menu" parent="." instance=ExtResource( 1 )]
 
@@ -110,7 +110,7 @@ position = Vector2( 0, 984 )
 z_index = -1
 color = Color( 0, 0, 0, 1 )
 texture_rotation_degrees = -90.0
-polygon = PoolVector2Array( 944, 16, 1920, 16, 1920, 96, 896, 96 )
+polygon = PackedVector2Array( 944, 16, 1920, 16, 1920, 96, 896, 96 )
 
 [node name="enemy_display" type="Label" parent="control"]
 visible = false
@@ -119,11 +119,11 @@ anchor_left = 0.7
 anchor_top = 0.03
 anchor_right = 0.803
 anchor_bottom = 0.15
-margin_left = 98.0002
-margin_top = 552.4
-margin_right = 66.1603
-margin_bottom = 480.0
-rect_scale = Vector2( 2.5, 2.5 )
+offset_left = 98.0002
+offset_top = 552.4
+offset_right = 66.1603
+offset_bottom = 480.0
+scale = Vector2( 2.5, 2.5 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
 custom_constants/shadow_as_outline = 0
@@ -141,11 +141,11 @@ anchor_left = 0.395
 anchor_top = 0.07
 anchor_right = 0.455
 anchor_bottom = 0.07
-margin_left = 308.4
-margin_top = 59.6
-margin_right = 374.4
-margin_bottom = 96.6
-rect_scale = Vector2( 3, 3 )
+offset_left = 308.4
+offset_top = 59.6
+offset_right = 374.4
+offset_bottom = 96.6
+scale = Vector2( 3, 3 )
 size_flags_horizontal = 3
 size_flags_vertical = 6
 custom_colors/font_color = Color( 1, 1, 1, 1 )
@@ -164,11 +164,11 @@ anchor_left = 0.395
 anchor_top = 0.07
 anchor_right = 0.455
 anchor_bottom = 0.07
-margin_left = 120.0
-margin_top = 200.0
-margin_right = 186.0
-margin_bottom = 237.0
-rect_scale = Vector2( 3, 3 )
+offset_left = 120.0
+offset_top = 200.0
+offset_right = 186.0
+offset_bottom = 237.0
+scale = Vector2( 3, 3 )
 size_flags_horizontal = 3
 size_flags_vertical = 6
 custom_colors/font_color = Color( 1, 1, 1, 1 )
@@ -180,15 +180,15 @@ uppercase = true
 [node name="ui_timer" parent="control" instance=ExtResource( 2 )]
 
 [node name="debug" type="Node2D" parent="."]
-pause_mode = 2
+process_mode = 2
 visible = false
 
 [node name="Coin1" type="ColorRect" parent="debug"]
 visible = false
-margin_left = 13.0
-margin_top = 160.0
-margin_right = 21.0
-margin_bottom = 168.0
+offset_left = 13.0
+offset_top = 160.0
+offset_right = 21.0
+offset_bottom = 168.0
 color = Color( 0.141176, 0.921569, 0.666667, 1 )
 __meta__ = {
 "_edit_lock_": true,
@@ -197,10 +197,10 @@ __meta__ = {
 
 [node name="Coin2" type="ColorRect" parent="debug"]
 visible = false
-margin_left = 23.0
-margin_top = 160.0
-margin_right = 31.0
-margin_bottom = 168.0
+offset_left = 23.0
+offset_top = 160.0
+offset_right = 31.0
+offset_bottom = 168.0
 color = Color( 0.854902, 0.439216, 0.913725, 1 )
 __meta__ = {
 "_edit_lock_": true,
@@ -209,10 +209,10 @@ __meta__ = {
 
 [node name="Coin3" type="ColorRect" parent="debug"]
 visible = false
-margin_left = 33.0
-margin_top = 160.0
-margin_right = 41.0
-margin_bottom = 168.0
+offset_left = 33.0
+offset_top = 160.0
+offset_right = 41.0
+offset_bottom = 168.0
 color = Color( 0.890196, 0.878431, 0.172549, 1 )
 __meta__ = {
 "_edit_lock_": true,
@@ -221,10 +221,10 @@ __meta__ = {
 
 [node name="info" type="Label" parent="debug"]
 visible = false
-margin_left = 4.15908
-margin_top = 5.42046
-margin_right = 170.159
-margin_bottom = 19.4205
+offset_left = 4.15908
+offset_top = 5.42046
+offset_right = 170.159
+offset_bottom = 19.4205
 __meta__ = {
 "_edit_lock_": true,
 "_edit_use_anchors_": false
@@ -232,10 +232,10 @@ __meta__ = {
 
 [node name="controls" type="Label" parent="debug"]
 visible = false
-margin_left = 9.19875
-margin_top = 181.809
-margin_right = 175.199
-margin_bottom = 246.809
+offset_left = 9.19875
+offset_top = 181.809
+offset_right = 175.199
+offset_bottom = 246.809
 text = "X: jump
 square: attack
 R1: dash
@@ -248,22 +248,22 @@ __meta__ = {
 [node name="ray_u" type="Polygon2D" parent="debug"]
 position = Vector2( 808, 784 )
 scale = Vector2( 0.5, 0.5 )
-polygon = PoolVector2Array( -1392, -416, -1424, -384, -1392, -352, -1360, -384 )
+polygon = PackedVector2Array( -1392, -416, -1424, -384, -1392, -352, -1360, -384 )
 
 [node name="ray_l" type="Polygon2D" parent="debug"]
 position = Vector2( 776, 832 )
 scale = Vector2( 0.5, 0.5 )
-polygon = PoolVector2Array( -1392, -416, -1424, -384, -1392, -352, -1360, -384 )
+polygon = PackedVector2Array( -1392, -416, -1424, -384, -1392, -352, -1360, -384 )
 
 [node name="ray_d" type="Polygon2D" parent="debug"]
 position = Vector2( 808, 880 )
 scale = Vector2( 0.5, 0.5 )
-polygon = PoolVector2Array( -1392, -416, -1424, -384, -1392, -352, -1360, -384 )
+polygon = PackedVector2Array( -1392, -416, -1424, -384, -1392, -352, -1360, -384 )
 
 [node name="ray_r" type="Polygon2D" parent="debug"]
 position = Vector2( 840, 832 )
 scale = Vector2( 0.5, 0.5 )
-polygon = PoolVector2Array( -1392, -416, -1424, -384, -1392, -352, -1360, -384 )
+polygon = PackedVector2Array( -1392, -416, -1424, -384, -1392, -352, -1360, -384 )
 
 [node name="version" parent="debug" instance=ExtResource( 3 )]
 modulate = Color( 1, 1, 1, 0.0784314 )
@@ -306,8 +306,8 @@ __meta__ = {
 [node name="dot_2" type="ColorRect" parent="debug/input_display/stick"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 8.0
-margin_bottom = 8.0
+offset_right = 8.0
+offset_bottom = 8.0
 theme = SubResource( 3 )
 color = Color( 1, 0.560784, 0, 1 )
 __meta__ = {
@@ -318,21 +318,21 @@ __meta__ = {
 [node name="dot" type="ColorRect" parent="debug/input_display/stick"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 8.0
-margin_bottom = 8.0
+offset_right = 8.0
+offset_bottom = 8.0
 theme = SubResource( 3 )
 __meta__ = {
 "_edit_lock_": true,
 "_edit_use_anchors_": false
 }
 
-[node name="bg" type="ColorRect" parent="debug/input_display/stick"]
+[node name="panel" type="ColorRect" parent="debug/input_display/stick"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -20.0
-margin_top = -20.0
-margin_right = 28.0
-margin_bottom = 28.0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 28.0
+offset_bottom = 28.0
 color = Color( 1, 1, 1, 0.0784314 )
 __meta__ = {
 "_edit_lock_": true,
@@ -340,10 +340,10 @@ __meta__ = {
 }
 
 [node name="jump" type="ColorRect" parent="debug/input_display"]
-margin_left = 36.0
-margin_top = -4.0
-margin_right = 68.0
-margin_bottom = 28.0
+offset_left = 36.0
+offset_top = -4.0
+offset_right = 68.0
+offset_bottom = 28.0
 color = Color( 0.905882, 0.905882, 0.905882, 1 )
 __meta__ = {
 "_edit_lock_": true,
@@ -351,10 +351,10 @@ __meta__ = {
 }
 
 [node name="attack" type="ColorRect" parent="debug/input_display"]
-margin_left = 76.0
-margin_top = -20.0
-margin_right = 108.0
-margin_bottom = 12.0
+offset_left = 76.0
+offset_top = -20.0
+offset_right = 108.0
+offset_bottom = 12.0
 color = Color( 0.309804, 0.694118, 0.286275, 1 )
 __meta__ = {
 "_edit_lock_": true,
@@ -362,10 +362,10 @@ __meta__ = {
 }
 
 [node name="dash" type="ColorRect" parent="debug/input_display"]
-margin_left = 76.0
-margin_top = -44.0
-margin_right = 108.0
-margin_bottom = -28.0
+offset_left = 76.0
+offset_top = -44.0
+offset_right = 108.0
+offset_bottom = -28.0
 color = Color( 0.701961, 0.388235, 0.917647, 1 )
 __meta__ = {
 "_edit_lock_": true,
@@ -373,10 +373,10 @@ __meta__ = {
 }
 
 [node name="reset" type="ColorRect" parent="debug/input_display"]
-margin_left = 36.0
-margin_top = -44.0
-margin_right = 68.0
-margin_bottom = -28.0
+offset_left = 36.0
+offset_top = -44.0
+offset_right = 68.0
+offset_bottom = -28.0
 color = Color( 0.917647, 0.388235, 0.486275, 1 )
 __meta__ = {
 "_edit_lock_": true,
@@ -435,16 +435,16 @@ text = "is grounded:"
 position = Vector2( 1560, 152 )
 
 [node name="current_state" type="Label" parent="debug/state_display"]
-margin_right = 40.0
-margin_bottom = 14.0
+offset_right = 40.0
+offset_bottom = 14.0
 custom_fonts/font = ExtResource( 9 )
 text = "current state"
 
 [node name="past_states" type="Label" parent="debug/state_display"]
-margin_left = 16.0
-margin_top = 72.0
-margin_right = 154.0
-margin_bottom = 539.0
+offset_left = 16.0
+offset_top = 72.0
+offset_right = 154.0
+offset_bottom = 539.0
 custom_colors/font_color = Color( 0.576471, 0.576471, 0.576471, 1 )
 custom_colors/font_outline_modulate = Color( 0.576471, 0.576471, 0.576471, 1 )
 custom_fonts/font = ExtResource( 9 )

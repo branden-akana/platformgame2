@@ -93,10 +93,10 @@ func allow_walljump_cancel() -> void: b_can_walljump_cancel = true
 # touching the ground at any point.
 func allow_edge_cancel() -> void: b_can_edge_cancel = true
 
-# Allow leaving this state by being off the ground.
+# Allow leaving this state by being unchecked the ground.
 func allow_air_cancel() -> void: b_can_air_cancel = true
 
-# Allow leaving this state by landing on the ground.
+# Allow leaving this state by landing checked the ground.
 func allow_land_cancel() -> void: b_can_land_cancel = true
 
 # Allow leaving this state by not moving.

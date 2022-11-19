@@ -17,11 +17,11 @@ var fps_timer: Timer
 var state_history = []
 const MAX_STATES = 20
 
-onready var tween: Tween
+@onready var tween: Tween
 
 func _ready():
     tween = Tween.new()
-    tween.pause_mode = PAUSE_MODE_PROCESS
+    tween.process_mode = PROCESS_MODE_ALWAYS
     add_child(tween)
 
     fps_timer = Timer.new()
@@ -29,13 +29,13 @@ func _ready():
     add_child(fps_timer)
     fps_timer.start(1.0)
     
-    fps_timer.connect("timeout", self, "update_fps")
+    fps_timer.connect("timeout",Callable(self,"update_fps"))
 
-    yield(Game, "ready")
+    await Game.ready
 
-    Game.get_player().fsm.connect("state_changed", self, "on_state_changed")
+    Game.get_player().fsm.connect("state_changed",Callable(self,"on_state_changed"))
 
-    Game.connect("debug_mode_changed", self, "on_debug_mode_changed")
+    Game.connect("debug_mode_changed",Callable(self,"on_debug_mode_changed"))
 
 func toggle_visible():
     if layer == 5:
@@ -93,7 +93,7 @@ func fade_in(time):
         Color(0.0, 0.0, 0.0, 0.0),
         time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
     tween.start()
-    yield(tween, "tween_all_completed")
+    await tween.tween_all_completed
     emit_signal("fade_in_finished")
     return tween
 
@@ -102,7 +102,7 @@ func fade_out(time):
     tween.interpolate_property($fade, "color:a", 0, 1,
         time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
     tween.start()
-    yield(tween, "tween_all_completed")
+    await tween.tween_all_completed
     emit_signal("fade_out_finished")
     return tween
 
@@ -121,7 +121,7 @@ func lbox_in(time):
         590,
         time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
     tween.start()
-    yield(tween, "tween_completed")
+    await tween.finished
 
 func lbox_out(time):
     tween.reset_all()
@@ -134,20 +134,20 @@ func lbox_out(time):
         590 + 128,
         time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
     tween.start()
-    yield(tween, "tween_completed")
+    await tween.finished
 
 func area_title_in(title, time):
     var tween = Util.create_tween(self)
     $"area_title/label".text = title
     tween.interpolate_property($"area_title", "modulate:a", 0, 1, time)
-    tween.interpolate_property($"area_title", "rect_position:y", 620 + 128, 620, time)
+    tween.interpolate_property($"area_title", "position:y", 620 + 128, 620, time)
     tween.start()
     Util.await_tween(tween)
 
 func area_title_out(time):
     var tween = Util.create_tween(self)
     tween.interpolate_property($"area_title", "modulate:a", 1, 0, time)
-    tween.interpolate_property($"area_title", "rect_position:y", 620, 620 + 128, time)
+    tween.interpolate_property($"area_title", "position:y", 620, 620 + 128, time)
     tween.start()
     Util.await_tween(tween)
 
@@ -159,7 +159,7 @@ func on_state_changed(state_to, state_from):
     state_history.insert(0, state_to)
     if len(state_history) > MAX_STATES: state_history.pop_back()
     $debug/state_display/current_state.text = state_history[0]
-    $debug/state_display/past_states.text = PoolStringArray(state_history.slice(1, len(state_history) - 1)).join("\n")
+    $debug/state_display/past_states.text = PackedStringArray(state_history.slice(1, len(state_history) - "\n".join(1)))
 
 func _physics_process(delta):
     $debug/tick.text = Game.get_player().tick
@@ -170,12 +170,12 @@ func _physics_process(delta):
     $debug/grounded.text = "grounded: %s" % Game.get_player().is_grounded()
 
     var ecb = Game.get_player().get_ecb()
-    var on = Color(1, 1, 1, 1.0)
-    var off = Color(1, 1, 1, 0.5)
+    var checked = Color(1, 1, 1, 1.0)
+    var unchecked = Color(1, 1, 1, 0.5)
 
-    $debug/ray_l.color = on if ecb.left_collide_out() else off
-    $debug/ray_r.color = on if ecb.right_collide_out() else off
-    $debug/ray_u.color = on if ecb.top_collide_out() else off
-    $debug/ray_d.color = on if ecb.bottom_collide_out() else off
+    $debug/ray_l.color = checked if ecb.left_collide_out() else unchecked
+    $debug/ray_r.color = checked if ecb.right_collide_out() else unchecked
+    $debug/ray_u.color = checked if ecb.top_collide_out() else unchecked
+    $debug/ray_d.color = checked if ecb.bottom_collide_out() else unchecked
     
     

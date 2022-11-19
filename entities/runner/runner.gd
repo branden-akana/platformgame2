@@ -1,4 +1,4 @@
-extends KinematicBody2D
+extends CharacterBody2D
 class_name Runner
 
 signal action
@@ -35,68 +35,68 @@ signal stun_end
 
 # general ground movement
 
-export var ACCELERATION = 8000
-export var FRICTION = 2000
-export var MAX_SPEED = 1000
-export var FLOOR_SNAP_TOP_MARGIN = 4
+@export var ACCELERATION = 8000
+@export var FRICTION = 2000
+@export var MAX_SPEED = 1000
+@export var FLOOR_SNAP_TOP_MARGIN = 4
 
 # airborne drifting
 
-export var AIR_ACCELERATION = 5000
-export var AIR_FRICTION = 1000
-export var AIR_MAX_SPEED = 1000
+@export var AIR_ACCELERATION = 5000
+@export var AIR_FRICTION = 1000
+@export var AIR_MAX_SPEED = 1000
 
 # idling / walking
 
-export var WALK_THRESHOLD = 0.2
-export var WALK_MAX_SPEED = 500
+@export var WALK_THRESHOLD = 0.2
+@export var WALK_MAX_SPEED = 500
 
 # airdash
 
-export var AIRDASH_SPEED     = 1400  # (mininum) speed at start of airdash
-export var AIRDASH_SPEED_END = 600  # speed at end of airdash
-export var AIRDASH_LENGTH    = 16
-export var AIRDASH_WAVELAND_MARGIN = 10
+@export var AIRDASH_SPEED     = 1400  # (mininum) speed at start of airdash
+@export var AIRDASH_SPEED_END = 600  # speed at end of airdash
+@export var AIRDASH_LENGTH    = 16
+@export var AIRDASH_WAVELAND_MARGIN = 10
 
 # jumping / gravity
 
-export var JUMPSQUAT_LENGTH = 4  # amount of frames to stay grounded before jumping
+@export var JUMPSQUAT_LENGTH = 4  # amount of frames to stay grounded before jumping
 
-export var JUMP_VELOCITY = 1300
-export var DASHJUMP_VELOCITY = 1000
-export var GRAVITY = 3500
-export var TERMINAL_VELOCITY = 1200  # maximum downwards velocity
-export var FAST_FALL_SPEED = 1200
+@export var JUMP_VELOCITY = 1300
+@export var DASHJUMP_VELOCITY = 1000
+@export var GRAVITY = 3500
+@export var TERMINAL_VELOCITY = 1200  # maximum downwards velocity
+@export var FAST_FALL_SPEED = 1200
 
 # dash
 
 # captain falcon: 16 @ 60FPS
-export var DASH_LENGTH = 16  # in frames
-export var DASH_SENSITIVITY = 0.3  # how fast you need to tilt the stick to start a dash (0 = more sensitive)
+@export var DASH_LENGTH = 16  # in frames
+@export var DASH_SENSITIVITY = 0.3  # how fast you need to tilt the stick to start a dash (0 = more sensitive)
 
-export var DASH_STOP_SPEED = 400  # dash early stop speed
+@export var DASH_STOP_SPEED = 400  # dash early stop speed
 
-export var DASH_INIT_SPEED = 500  # dash initial speed
+@export var DASH_INIT_SPEED = 500  # dash initial speed
 
-export var DASH_ACCELERATION = 20000  # dash acceleration
-export var DASH_ACCELERATION_REV = 12000  # dash reverse acceleration
+@export var DASH_ACCELERATION = 20000  # dash acceleration
+@export var DASH_ACCELERATION_REV = 12000  # dash reverse acceleration
 
-export var DASH_MAX_SPEED = 1200  # dash max speed
-export var DASH_MAX_SPEED_REV = 1400 # dash reverse max speed (moonwalking)
+@export var DASH_MAX_SPEED = 1200  # dash max speed
+@export var DASH_MAX_SPEED_REV = 1400 # dash reverse max speed (moonwalking)
 
-export (int) var RUNNING_STOP_SPEED = 1000
+@export (int) var RUNNING_STOP_SPEED = 1000
 
 # buffers (frame window to accept these actions before they are actionable)
 
-export var BUFFER_JUMP = 4
-export var BUFFER_AIRDASH = 1
+@export var BUFFER_JUMP = 4
+@export var BUFFER_AIRDASH = 1
 
 enum WalljumpType {
     JOYSTICK,  # input walljumps by inputting a direction away from the wall
     JUMP       # input walljumps by pressing the jump button
 }
 
-export (WalljumpType) var WALLJUMP_TYPE = WalljumpType.JOYSTICK
+@export (WalljumpType) var WALLJUMP_TYPE = WalljumpType.JOYSTICK
 
 
 # states
@@ -109,10 +109,10 @@ var fsm = StateMachine.new()
 # child nodes
 # ===========================================
 
-onready var input: BufferedInput = BufferedInput.new()
+@onready var input: BufferedInput = BufferedInput.new()
 
-onready var model: RunnerModel  = $"3d/model"
-onready var ap: AnimationPlayer = model.get_animation_player()
+@onready var model: RunnerModel  = $"3d/model"
+@onready var ap: AnimationPlayer = model.get_animation_player()
 
 # when active, "stun" the player (skip all physics processing)
 var stun_timer = Timer.new()
@@ -180,21 +180,21 @@ func _ready():
     air_stall_timer.one_shot = true
     add_child(air_stall_timer)
 
-    # $sprite.set_as_toplevel(true)
-    $"3d_proj".set_as_toplevel(true)
+    # $sprite.set_as_top_level(true)
+    $"3d_proj".set_as_top_level(true)
 
     $moveset.visible = true
 
     # state machine setup
     fsm.init(self)
-    connect("action", self, "on_action")
-    fsm.connect("change_state", self, "on_action")
+    connect("action",Callable(self,"on_action"))
+    fsm.connect("change_state",Callable(self,"on_action"))
 
     # event setup
-    $hurtbox.connect("body_entered", self, "on_hurtbox_entered")
+    $hurtbox.connect("body_entered",Callable(self,"on_hurtbox_entered"))
 
-    connect("action", self, "on_action")
-    fsm.connect("state_changed", self, "on_state_change")
+    connect("action",Callable(self,"on_action"))
+    fsm.connect("state_changed",Callable(self,"on_state_change"))
 
     # animation player setup
     ap.set_blend_time("running", "idle", 0.1)
@@ -215,11 +215,11 @@ func get_ecb() -> CollisionPolygon2D:
 # func set_ignore_platforms(ignore_platforms: bool) -> void:
 #     b_ignore_platforms = ignore_platforms
 
-#     set_collision_mask_bit(9, !ignore_platforms)
-#     $ecb.get_left().set_collision_mask_bit(9, !ignore_platforms)
-#     $ecb.get_right().set_collision_mask_bit(9, !ignore_platforms)
-#     $ecb.get_top().set_collision_mask_bit(9, !ignore_platforms)
-#     $ecb.get_bottom().set_collision_mask_bit(9, !ignore_platforms)
+#     set_collision_mask_value(9, !ignore_platforms)
+#     $ecb.get_left().set_collision_mask_value(9, !ignore_platforms)
+#     $ecb.get_right().set_collision_mask_value(9, !ignore_platforms)
+#     $ecb.get_top().set_collision_mask_value(9, !ignore_platforms)
+#     $ecb.get_bottom().set_collision_mask_value(9, !ignore_platforms)
 
 func set_grounded(is_grounded, emit = true):
     if not b_is_grounded and is_grounded and emit:
@@ -251,7 +251,7 @@ func check_grounded():
 
 # Check for ground collision by doing a test move_and_collide.
 func _test_collide_down() -> bool:
-    # set_collision_mask_bit(9, !_check_invalid_platform_collisions(false))
+    # set_collision_mask_value(9, !_check_invalid_platform_collisions(false))
     var collision = move_and_collide(Vector2.DOWN, true, true, true)
     # if collision != null: print("angle: %s" % collision.get_angle())
     return collision != null and collision.get_angle() <= PI / 4.0
@@ -262,7 +262,7 @@ func get_current_state():
     return fsm.current_state
 
 
-# Update the runner's facing direction based on
+# Update the runner's facing direction based checked
 # current input direction.
 func set_facing_to_input():
     var x = input.get_axis().x
@@ -391,14 +391,14 @@ func respawn(pos):
 func stun(frames):
 
     # convert frames to seconds
-    var time = frames / float(Engine.iterations_per_second)
+    var time = frames / float(Engine.physics_ticks_per_second)
     stun_timer.start(time)
 
     emit_signal("stun_start")
     # $sprite.stop()
     ap.stop(false)
 
-    yield(stun_timer, "timeout")
+    await stun_timer.timeout
 
     emit_signal("stun_end")
     # $sprite.play()
@@ -518,7 +518,7 @@ func set_animation(anim):
 # detect hitting a platform from a non-one-way angle
 func _check_invalid_platform_collisions(use_slides: bool = true) -> bool:
     if use_slides:
-        for i in range(get_slide_count()):
+        for i in range(get_slide_collision_count()):
 
             var collision = get_slide_collision(i)
             if (collision and collision.collider
@@ -542,11 +542,11 @@ func move(delta, velocity):
     var invalid_platform_collisions = _check_invalid_platform_collisions()
 
     # temporarily disable collision with platforms
-    set_collision_mask_bit(9, !invalid_platform_collisions)
+    set_collision_mask_value(9, !invalid_platform_collisions)
 
     # fix_incoming_collisions(delta, 32)
 
-    # if b_ignore_platforms: set_collision_mask_bit(9, false)
+    # if b_ignore_platforms: set_collision_mask_value(9, false)
 
     # cancel x-velocity if moving into wall
     # if ($ecb.left_collide_out() and velocity.x < 0
@@ -554,20 +554,27 @@ func move(delta, velocity):
     #     velocity.x = 0
 
     #if result: print("%s: %s" % [result.collider, result.position])
-    # move_and_slide(velocity)
+    set_velocity(velocity)
+    move_and_slide()
+    # velocity
 
     # move and slide implementation
     var max_slides = 2
     if not is_grounded():
         max_slides = 4
 
-    velocity = move_and_slide(velocity, Vector2.UP, false, max_slides)
+    set_velocity(velocity)
+    set_up_direction(Vector2.UP)
+    set_floor_stop_on_slope_enabled(false)
+    set_max_slides(max_slides)
+    move_and_slide()
+    velocity = velocity
 
     # check and update grounded state
     if not invalid_platform_collisions:
         check_grounded()
 
-    # if b_ignore_platforms: set_collision_mask_bit(9, true)
+    # if b_ignore_platforms: set_collision_mask_value(9, true)
 
     # for i in range(max_slides):
 
@@ -600,7 +607,7 @@ func move(delta, velocity):
 #         #var shape = collider.shape_owner_get_shape(owner_idx, shape_idx)
         
 #         var tilepos = tilemap.map_to_world(
-#             tilemap.world_to_map(tilemap.to_local(collision.position))
+#             tilemap.local_to_map(tilemap.to_local(collision.position))
 #         )
         
 #         # align y-axis to ledge if within margin
@@ -689,12 +696,12 @@ func _fix_tilemap_collision(tilemap: TileMap, collision_point: Vector2, margin: 
 # if the collider is a TileMap.
 #
 # If a shape cannot be found an empty array is returned.
-func _get_tilemap_shape(tilemap, position: Vector2, shape_id: int = 0) -> PoolVector2Array:
+func _get_tilemap_shape(tilemap, position: Vector2, shape_id: int = 0) -> PackedVector2Array:
 
     # get the map coordinates, world coordinates, and id of the tile that was collided with
-    var tile_coords = tilemap.world_to_map(tilemap.to_local(position))
+    var tile_coords = tilemap.local_to_map(tilemap.to_local(position))
     # print("tile_coords: %s" % tile_coords)
-    var tile_pos = tilemap.map_to_world(tile_coords)
+    var tile_pos = tilemap.map_to_local(tile_coords)
     var tile_id = tilemap.get_cellv(tile_coords)
 
     var points = []
@@ -713,7 +720,7 @@ func _get_tilemap_shape(tilemap, position: Vector2, shape_id: int = 0) -> PoolVe
     return points
 
 
-func _min_y(points: PoolVector2Array) -> float:
+func _min_y(points: PackedVector2Array) -> float:
     var mn = INF
     for pt in points: if pt.y < mn: mn = pt.y
     return mn
@@ -760,7 +767,7 @@ func do_air_stall(frames = 18):
     b_gravity_enabled = false
     air_stall_timer.start(frames * get_physics_process_delta_time())
 
-    yield(air_stall_timer, "timeout")
+    await air_stall_timer.timeout
     b_gravity_enabled = true
     
 
@@ -816,7 +823,7 @@ func action_dropdown():
         position.y += 4
         fsm.goto_airborne()
         emit_signal("action", "dropdown")
-        # yield(get_tree().create_timer(0.5), "timeout")
+        # await get_tree().create_timer(0.5).timeout
         # set_ignore_platforms(false)
 
 
@@ -832,7 +839,7 @@ func action_neutral():
     emit_signal("action", "idle")
 
 
-# Initiate a dash. Direction depends on the current input direction.
+# Initiate a dash. Direction depends checked the current input direction.
 func action_dash():
     fsm.goto_dash() 
     emit_signal("action", "dash")
@@ -965,7 +972,7 @@ func _jump(factor = 1.0, force = false, vel_x = null):
 
 # Perform an attack.
 #
-# The attack that will be used will be different depending on the
+# The attack that will be used will be different depending checked the
 # runner's current joystick direction.
 func action_attack():
 

@@ -1,8 +1,16 @@
-extends Viewport
+extends SubViewport
 #tool
 
-#export (String, MULTILINE) onready var text setget set_text, get_text
-#export (int, 0, 3) onready var align setget set_align, get_align
+#export (String, MULTILINE) onready var text :
+	get:
+		return text # TODOConverter40 Copy here content of get_text
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_text
+#export (int, 0, 3) onready var align :
+	get:
+		return align # TODOConverter40 Copy here content of get_align
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_align
 
 func set_text(text: String) -> void:
     $panel/label.text = text

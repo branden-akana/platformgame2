@@ -1,17 +1,33 @@
 extends CollisionPolygon2D
-tool
+@tool
 
 enum Type {DIAMOND, BOX}
 
-export (Type) var type = Type.DIAMOND
+@export (Type) var type = Type.DIAMOND
 
-export (int, 1, 1000) var top = 16  setget set_t, get_t
-export (int, 1, 1000) var bottom = 24 setget set_b, get_b
-export (int, 1, 1000) var left = 8 setget set_l, get_l
-export (int, 1, 1000) var right = 8 setget set_r, get_r
+@export (int, 1, 1000) var top = 16  :
+	get:
+		return top # TODOConverter40 Copy here content of get_t
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_t
+@export (int, 1, 1000) var bottom = 24 :
+	get:
+		return bottom # TODOConverter40 Copy here content of get_b
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_b
+@export (int, 1, 1000) var left = 8 :
+	get:
+		return left # TODOConverter40 Copy here content of get_l
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_l
+@export (int, 1, 1000) var right = 8 :
+	get:
+		return right # TODOConverter40 Copy here content of get_r
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_r
 
-export (float) var ray_inset = 1    # length of ray inside the collision shape
-export (float) var ray_outset = 1   # length of ray outside the collision shape
+@export (float) var ray_inset = 1    # length of ray inside the collision shape
+@export (float) var ray_outset = 1   # length of ray outside the collision shape
 
 
 func set_t(top_: int) -> void:
@@ -81,7 +97,7 @@ func update_ecb():
             Vector2(-left, -top)
         ]
 
-    set_polygon(PoolVector2Array(polygon))
+    set_polygon(PackedVector2Array(polygon))
 
 
 # Set the dimensions of the ECB (in pixels).

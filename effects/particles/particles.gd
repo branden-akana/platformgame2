@@ -12,7 +12,7 @@ const WallJumpRight = preload("res://effects/particles/walljump_right.tscn")
 const Clear = preload("res://effects/particles/clear_effect.tscn")
 
 func play(scene, parent = get_node("/root/main"), params = {}):
-    var effect = scene.instance()
+    var effect = scene.instantiate()
     parent.add_child(effect)
 
     # don't play any effects from a ghost
@@ -27,19 +27,19 @@ func play(scene, parent = get_node("/root/main"), params = {}):
 
     # call on_particles_finished() at the end of this effect's lifetime
     var timer = get_tree().create_timer(lifetime)
-    timer.connect("timeout", self, "on_effect_finished", [effect])
+    timer.connect("timeout",Callable(self,"on_effect_finished").bind(effect))
 
     effect.emitting = true
     return effect
 
 func play_anim(scene, parent = get_node("/root/main")):
-    var effect = scene.instance()
+    var effect = scene.instantiate()
 
     parent.add_child(effect)
 
     # call on_particles_finished() at the end of this effect's lifetime
     var timer = get_tree().create_timer(5.0)
-    timer.connect("timeout", self, "on_effect_finished", [effect])
+    timer.connect("timeout",Callable(self,"on_effect_finished").bind(effect))
 
     effect.play()
     return effect

@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=2]
 
 [sub_resource type="Gradient" id=1]
-offsets = PoolRealArray( 0, 0.102439, 0.2 )
-colors = PoolColorArray( 1, 1, 1, 0, 1, 1, 1, 0.564706, 1, 1, 1, 0 )
+offsets = PackedFloat32Array( 0, 0.102439, 0.2 )
+colors = PackedColorArray( 1, 1, 1, 0, 1, 1, 1, 0.564706, 1, 1, 1, 0 )
 
 [node name="hit_particles" type="CPUParticles2D"]
 scale = Vector2( 4, 4 )

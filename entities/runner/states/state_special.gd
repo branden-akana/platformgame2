@@ -4,7 +4,7 @@ class_name SpecialState
 # the move that is currently being used
 var current_move
 
-# if true, this attack was done on the ground
+# if true, this attack was done checked the ground
 var is_grounded: bool = false
 
 

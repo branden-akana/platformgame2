@@ -1,15 +1,19 @@
 [remap]
 
-importer="ogg_vorbis"
-type="AudioStreamOGGVorbis"
-path="res://.import/land.ogg-4dcd37888f26e73955c8a634e068d440.oggstr"
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cbag6wom42ms"
+path="res://.godot/imported/land.ogg-4dcd37888f26e73955c8a634e068d440.oggvorbisstr"
 
 [deps]
 
 source_file="res://assets/sounds/land.ogg"
-dest_files=[ "res://.import/land.ogg-4dcd37888f26e73955c8a634e068d440.oggstr" ]
+dest_files=["res://.godot/imported/land.ogg-4dcd37888f26e73955c8a634e068d440.oggvorbisstr"]
 
 [params]
 
 loop=false
 loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

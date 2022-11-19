@@ -8,12 +8,12 @@ class Rebinder extends MenuSelection:
     var i = 0
     var listening = false
 
-    func _init(label, action):
+    func _init(label,action):
         self.label = label
         self.action = action
 
     func _bindings() -> Array:
-        return InputMap.get_action_list(action)
+        return InputMap.action_get_events(action)
 
     func _idx(i, n): return (i + n + len(_bindings())) % len(_bindings())
 
@@ -52,7 +52,7 @@ class Rebinder extends MenuSelection:
                 # joypad keys
                 or event is InputEventJoypadButton and event.pressed
             ):
-                var events = InputMap.get_action_list(action)
+                var events = InputMap.action_get_events(action)
                 events[i] = event
                 InputMap.action_erase_events(action)
                 for e in events:

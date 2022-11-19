@@ -4,7 +4,7 @@ class_name AttackState
 # the move that is currently being used
 var move: Node2D
 
-# if true, this runner has landed on the ground at any point during the attack
+# if true, this runner has landed checked the ground at any point during the attack
 var b_grounded_attack: bool
 
 

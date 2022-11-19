@@ -4,7 +4,7 @@
 _data = [ Vector2( 0, 1 ), 0.0, -1.0, 0, 1, Vector2( 1, 0 ), -1.0, 0.0, 1, 0 ]
 
 [sub_resource type="Gradient" id=2]
-colors = PoolColorArray( 1, 1, 1, 0.2, 1, 1, 1, 0 )
+colors = PackedColorArray( 1, 1, 1, 0.2, 1, 1, 1, 0 )
 
 [node name="clear_effect" type="CPUParticles2D"]
 scale = Vector2( 4, 4 )

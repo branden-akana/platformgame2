@@ -9,10 +9,14 @@
 
 class_name HazardTrigger
 extends StaticBody2D
-tool
+@tool
 
-export (int) var damage = 100
-export (Vector2) var size = Vector2(480, 32) setget set_size
+@export (int) var damage = 100
+@export (Vector2) var size = Vector2(480, 32) :
+	get:
+		return size # TODOConverter40 Non existent get function 
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_size
 
 # flag needed for setget
 var ready = false

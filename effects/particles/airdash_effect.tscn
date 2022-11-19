@@ -1,13 +1,17 @@
 [gd_scene load_steps=19 format=2]
 
-[ext_resource path="res://assets/sprites/falcon.png" type="Texture" id=1]
+[ext_resource path="res://assets/sprites/falcon.png" type="Texture2D" id=1]
 [ext_resource path="res://effects/particles/JumpParticles.tscn" type="PackedScene" id=2]
 
 [sub_resource type="GDScript" id=14]
 script/source = "extends Node2D
-tool
+@tool
 
-export var emitting = false setget set_emitting
+@export var emitting = false :
+	get:
+		return emitting # TODOConverter40 Non existent get function 
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_emitting
 
 func get_material():
     return $trail.material
@@ -36,19 +40,19 @@ source = 2
 [sub_resource type="VisualShaderNodeInput" id=3]
 input_name = "alpha"
 
-[sub_resource type="VisualShaderNodeScalarOp" id=4]
+[sub_resource type="VisualShaderNodeFloatOp" id=4]
 operator = 1
 
-[sub_resource type="VisualShaderNodeScalarClamp" id=5]
+[sub_resource type="VisualShaderNodeClamp" id=5]
 
-[sub_resource type="VisualShaderNodeScalarOp" id=6]
+[sub_resource type="VisualShaderNodeFloatOp" id=6]
 default_input_values = [ 0, 0.0, 1, -1.0 ]
 operator = 2
 
-[sub_resource type="VisualShaderNodeScalarOp" id=7]
+[sub_resource type="VisualShaderNodeFloatOp" id=7]
 default_input_values = [ 0, 0.0, 1, 1.0 ]
 
-[sub_resource type="VisualShaderNodeBooleanUniform" id=8]
+[sub_resource type="VisualShaderNodeBooleanParameter" id=8]
 uniform_name = "flip"
 
 [sub_resource type="VisualShaderNodeExpression" id=9]
@@ -91,7 +95,7 @@ void fragment() {
 		} 
 	}
 
-// Texture:2
+// Texture2D:2
 	vec3 n_out2p0;
 	float n_out2p1;
 	{
@@ -155,7 +159,7 @@ nodes/fragment/9/expression = "if(flip) {
 } "
 nodes/fragment/10/node = SubResource( 1 )
 nodes/fragment/10/position = Vector2( -900, 400 )
-nodes/fragment/connections = PoolIntArray( 3, 0, 4, 0, 4, 0, 5, 0, 5, 0, 0, 1, 2, 1, 6, 0, 6, 0, 7, 0, 7, 0, 4, 1, 8, 0, 9, 1, 10, 0, 9, 0, 9, 0, 2, 0 )
+nodes/fragment/connections = PackedInt32Array( 3, 0, 4, 0, 4, 0, 5, 0, 5, 0, 0, 1, 2, 1, 6, 0, 6, 0, 7, 0, 7, 0, 4, 1, 8, 0, 9, 1, 10, 0, 9, 0, 9, 0, 2, 0 )
 
 [sub_resource type="ShaderMaterial" id=11]
 shader = SubResource( 10 )
@@ -166,15 +170,15 @@ atlas = ExtResource( 1 )
 region = Rect2( 0, 128, 32, 64 )
 
 [sub_resource type="Gradient" id=13]
-offsets = PoolRealArray( 0.00275482, 0.561983, 1 )
-colors = PoolColorArray( 0.544922, 0.544922, 0.544922, 0.231373, 0.72549, 0.72549, 0.72549, 0.0117647, 0.5, 0.5, 0.5, 0 )
+offsets = PackedFloat32Array( 0.00275482, 0.561983, 1 )
+colors = PackedColorArray( 0.544922, 0.544922, 0.544922, 0.231373, 0.72549, 0.72549, 0.72549, 0.0117647, 0.5, 0.5, 0.5, 0 )
 
 [sub_resource type="Curve" id=15]
 _data = [ Vector2( 0, 1 ), 0.0, -3.90909, 0, 0, Vector2( 1, 0 ), -0.0446753, 0.0, 0, 0 ]
 
 [sub_resource type="Gradient" id=16]
-offsets = PoolRealArray( 0.00671141, 0.577181, 1 )
-colors = PoolColorArray( 1, 1, 1, 0.3, 1, 1, 1, 0, 1, 1, 1, 0 )
+offsets = PackedFloat32Array( 0.00671141, 0.577181, 1 )
+colors = PackedColorArray( 1, 1, 1, 0.3, 1, 1, 1, 0, 1, 1, 1, 0 )
 
 [node name="airdash_particles" type="Node2D"]
 position = Vector2( 0, -64 )

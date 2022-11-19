@@ -29,7 +29,7 @@ func _ready():
     ignore_enemy_hp = true
     visible = false
 
-    connect("replay_finish", Game, "replay_playback_stop")
+    connect("replay_finish",Callable(Game,"replay_playback_stop"))
 
 func load_replay(new_replay):
     replay = new_replay
@@ -43,7 +43,7 @@ func stop():
 
 func restart():
     print("[ghost] restarting replay")
-    .restart()
+    super.restart()
     visible = true
     replay_finished = false
     position = replay.start_position

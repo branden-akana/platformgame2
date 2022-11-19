@@ -24,7 +24,7 @@ func on_start(state_from, runner, fsm):
     # determine airdash direction
     runner.airdashes_left -= 1
     airdash_dir = Vector2(axis.x, axis.y).normalized();
-    #Game.get_camera().screen_shake(1.0, 0.3)
+    #Game.get_camera_3d().screen_shake(1.0, 0.3)
 
     # grounded airdashes
 
@@ -57,9 +57,9 @@ func on_update(delta, runner, fsm):
         particles = Effects.play(Effects.Airdash, runner)
         particles.get_node("wave").direction = -airdash_dir
         if runner.facing == Direction.LEFT:
-            particles.get_node("trail").material.set_shader_param("flip", true)
+            particles.get_node("trail").material.set_shader_parameter("flip", true)
         else:
-            particles.get_node("trail").material.set_shader_param("flip", false)
+            particles.get_node("trail").material.set_shader_parameter("flip", false)
 
     # middle of airdashing
     if tick >= 0 and tick <= runner.AIRDASH_LENGTH:

@@ -1,5 +1,5 @@
 extends Node2D
-tool
+@tool
 
 var total = 0
 var alive = 0

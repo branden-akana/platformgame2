@@ -1,6 +1,6 @@
 extends TileMap
 
-export (int) var damage = 100
+@export (int) var damage = 100
 
 # Gets the respawn point to send players after they die to this hazard.
 #

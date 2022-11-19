@@ -2,23 +2,23 @@ extends Node2D
 class_name GameCamera
 
 # length of transition when moving between screens
-export var screen_transition_time = 0.5
+@export var screen_transition_time = 0.5
 
 # how much to smooth the camera's movements
 # (higher = less smooth)
-export var smoothing: float = 1.2;
+@export var smoothing: float = 1.2;
 
 # the amount of units to snap the camera to.
 # this avoids any rendering issues with the pixel shader
-export (int) var pixel_snap: float = 4.0;
+@export (int) var pixel_snap: float = 4.0;
 
-export (bool) var subpixel_fix = false;
+@export (bool) var subpixel_fix = false;
 
 # the amount of offset to apply to the camera
-export (Vector2) var offset = Vector2(0.0, 0.0);
+@export (Vector2) var offset = Vector2(0.0, 0.0);
 
 # the path to the target node to follow
-export (NodePath) var target_path;
+@export (NodePath) var target_path;
 
 # camera bounds
 # -------------
@@ -39,7 +39,11 @@ var shake_tween = Tween.new()
 var shake_size = 0.0
 
 # the point the camera will be looking at (center of screen)
-var focus = Vector2.ZERO setget set_camera_focus, get_camera_focus
+var focus = Vector2.ZERO :
+	get:
+		return focus # TODOConverter40 Copy here content of get_camera_focus
+	set(mod_value):
+		mod_value  # TODOConverter40 Copy here content of set_camera_focus
 
 func _ready():
     add_child(transition_tween)
@@ -53,9 +57,9 @@ func init():
 
     # follow the player by default
     set_target(Game.get_player().get_path())
-    yield(Game.get_player(), "respawned")
+    await Game.get_player().respawned
 
-    # try to get the screen the player is on
+    # try to get the screen the player is checked
     Game.set_current_room(get_room_at_target(), false)
     transition_tween.reset_all()
 
@@ -72,7 +76,7 @@ func get_target():
 
 
 # get the position of the node that this camera is following
-# (adjusting to center the node on screen)
+# (adjusting to center the node checked screen)
 func get_target_camera_pos() -> Vector2:
     # the camera origin is relative to the top-left corner of the screen,
     # so shift the position by half the screen size to center it
@@ -118,13 +122,13 @@ func set_bounds(tl_pos, br_pos, do_transition = true, color_palette = 0):
         # print("[camera] moving camera with transition")
         var tween_2 = Game.get_display_manager().change_palette(color_palette)
         var tween_1 = move_focus(to, screen_transition_time)
-        yield(tween_1, "completed")
-        yield(tween_2, "completed")
+        await tween_1.completed
+        await tween_2.completed
     else:
         # print("[camera] moving camera without transition")
         Game.get_display_manager().change_palette(color_palette, 0.2)
         move_focus(to)
-        yield(get_tree(), "idle_frame")
+        await get_tree().idle_frame
 
 
 # Smoothly transition the origin of the camera to a specified location.
@@ -143,7 +147,7 @@ func move_focus(to, time = 0.0):
             self, "set_camera_focus", from, to, time,
             Tween.TRANS_QUART, Tween.EASE_OUT)
         transition_tween.start()
-        yield(transition_tween, "tween_completed")
+        await transition_tween.finished
         Game.unpause(self)
 
 func get_camera_focus():
@@ -194,7 +198,7 @@ func _process(delta):
 
         # shake camera
         if shake_tween.is_active():
-            var shake_dir = Vector2(1, 0).rotated(rand_range(0, 2 * PI))
+            var shake_dir = Vector2(1, 0).rotated(randf_range(0, 2 * PI))
             origin += shake_dir * shake_size
 
         set_camera_focus(origin)

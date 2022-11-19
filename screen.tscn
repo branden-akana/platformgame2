@@ -1,11 +1,11 @@
 [gd_scene format=2]
 
-[node name="screen" type="ViewportContainer"]
-margin_right = 1920.0
-margin_bottom = 1080.0
+[node name="screen" type="SubViewportContainer"]
+offset_right = 1920.0
+offset_bottom = 1080.0
 stretch = true
 
-[node name="viewport" type="Viewport" parent="."]
+[node name="viewport" type="SubViewport" parent="."]
 size = Vector2( 480, 270 )
 handle_input_locally = false
 usage = 0

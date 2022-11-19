@@ -18,8 +18,8 @@ var is_player_near = false
 var is_interacting = false  # true if in the middle of an interaction
 
 func _ready():
-    connect("body_entered", self, "on_body_enter")
-    connect("body_exited", self, "on_body_exit")
+    connect("body_entered",Callable(self,"on_body_enter"))
+    connect("body_exited",Callable(self,"on_body_exit"))
 
 func on_body_enter(body):
     Game.get_player().get_node("interact_sprite").visible = true
@@ -41,7 +41,7 @@ func interact():
     if not is_interacting:
         is_interacting = true
         # print("now interacting")
-        yield(on_interact(), "completed")
+        await on_interact().completed
         # print("no longer interacting")
         is_interacting = false
 

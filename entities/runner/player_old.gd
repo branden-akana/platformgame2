@@ -8,34 +8,34 @@ var signal_frames = {}
 
 var ghost = null
 
-onready var flash_tween = Util.create_tween(self)
+@onready var flash_tween = Util.create_tween(self)
 
 func _ready():
     # connect signal to sound effects
-    connect("walking", Sound, "play", ["walk", -20, 0.8, true, false])
-    connect("stop_walking", Sound, "stop", ["walk"])
-    connect("jump", Sound, "play", ["jump", -10, 1, false])
-    connect("land", Sound, "play", ["land", -20, 0.9])
-    connect("dash", Sound, "play", ["dash", -20, 0.8, false, true])
-    connect("attack", Sound, "play", ["attack", -20, 0.7, false, true])
+    connect("walking",Callable(Sound,"play").bind("walk", -20, 0.8, true, false))
+    connect("stop_walking",Callable(Sound,"stop").bind("walk"))
+    connect("jump",Callable(Sound,"play").bind("jump", -10, 1, false))
+    connect("land",Callable(Sound,"play").bind("land", -20, 0.9))
+    connect("dash",Callable(Sound,"play").bind("dash", -20, 0.8, false, true))
+    connect("attack",Callable(Sound,"play").bind("attack", -20, 0.7, false, true))
 
     # connect signals to particle effects
-    # connect("jump", Effects, "play", [Effects.Jump, self, {"direction": -velocity}]) 
-    connect("jump", Effects, "play", [Effects.Jump, self]) 
-    connect("dragging", Effects, "play", [Effects.Dust, self])
-    connect("land", Effects, "play", [Effects.Land, self]) 
-    connect("walljump_left", Effects, "play", [Effects.WallJumpRight, self]) 
-    connect("walljump_right", Effects, "play", [Effects.WallJumpLeft, self]) 
+    # connect("jump",Callable(Effects,"play").bind(Effects.Jump, self, {"direction": -velocity})) 
+    connect("jump",Callable(Effects,"play").bind(Effects.Jump, self)) 
+    connect("dragging",Callable(Effects,"play").bind(Effects.Dust, self))
+    connect("land",Callable(Effects,"play").bind(Effects.Land, self)) 
+    connect("walljump_left",Callable(Effects,"play").bind(Effects.WallJumpRight, self)) 
+    connect("walljump_right",Callable(Effects,"play").bind(Effects.WallJumpLeft, self)) 
 
-    connect("airdash", self, "on_airdash")
-    connect("airdash_restored", self, "on_airdash_restored")
-    connect("walljump_left", Sound, "play", ["land", -20, 0.8])
-    connect("walljump_right", Sound, "play", ["land", -20, 0.8])
-    # connect("walljump_left", self, "play_flash_effect")
-    # connect("walljump_right", self, "play_flash_effect")
+    connect("airdash",Callable(self,"on_airdash"))
+    connect("airdash_restored",Callable(self,"on_airdash_restored"))
+    connect("walljump_left",Callable(Sound,"play").bind("land", -20, 0.8))
+    connect("walljump_right",Callable(Sound,"play").bind("land", -20, 0.8))
+    # connect("walljump_left",Callable(self,"play_flash_effect"))
+    # connect("walljump_right",Callable(self,"play_flash_effect"))
 
-    connect("enemy_hit", self, "on_enemy_hit")
-    connect("enemy_killed", self, "on_enemy_killed")
+    connect("enemy_hit",Callable(self,"on_enemy_hit"))
+    connect("enemy_killed",Callable(self,"on_enemy_killed"))
 
 # Start an effect where the player flashes
 func play_flash_effect():
@@ -53,7 +53,7 @@ func on_enemy_hit(enemy, contacts):
     signal_frames[tick] = "hit"
 
     Sound.play("hit", -10)
-    Game.get_camera().screen_shake(1.0, 0.2)
+    Game.get_camera_3d().screen_shake(1.0, 0.2)
 
     if not no_effects and len(contacts):
         var effect = Effects.play_anim(Effects.HitEffect)
@@ -107,7 +107,7 @@ func pre_process(delta):
     #             ease(clamp((up_held_time - 1.0) / 0.5, 0.0, 1.0), -2.8)
     #         )
 
-    #     Game.get_camera().set_offset(camera_offset)
+    #     Game.get_camera_3d().set_offset(camera_offset)
 
     # process player input
     for key in ["key_up", "key_down", "key_left", "key_right", "key_jump", "key_dodge", "grapple", "shoot", "special"]:
@@ -124,10 +124,10 @@ func player_restart():
 
 func hurt(damage = 100, respawn_point = null):
     Game.call_with_fade_transition(self, "_hurt", [damage, respawn_point])
-    # .hurt(damage, respawn_point)
+    # super.hurt(damage, respawn_point)
 
 func respawn(pos):
-    .respawn(pos)
+    super.respawn(pos)
     if pos == Game.get_start_point():
         Game.restart_level()
     else:

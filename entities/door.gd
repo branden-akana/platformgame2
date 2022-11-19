@@ -5,12 +5,12 @@ signal door_opened
 
 signal enemies_cleared
 
-export var door_closed = false
-export var door_open_time = 1.0
-export var door_close_time = 1.0
-export (bool) var focus_when_opening = false
-export (bool) var focus_when_closing = false
-export (bool) var focus_once = true
+@export var door_closed = false
+@export var door_open_time = 1.0
+@export var door_close_time = 1.0
+@export (bool) var focus_when_opening = false
+@export (bool) var focus_when_closing = false
+@export (bool) var focus_once = true
 
 var close_position: Vector2
 var open_position: Vector2
@@ -36,13 +36,13 @@ func _ready():
     else:
         position = open_position
 
-    Game.connect("level_restarted", self, "on_level_restart")
+    Game.connect("level_restarted",Callable(self,"on_level_restart"))
 
     if get_node_or_null("button"):
-        $button.connect("button_unpressed", self, "on_button_unpressed")
-        $button.connect("button_pressed", self, "on_button_pressed")
+        $button.connect("button_unpressed",Callable(self,"on_button_unpressed"))
+        $button.connect("button_pressed",Callable(self,"on_button_pressed"))
     
-    connect("enemies_cleared", self, "on_enemies_cleared")
+    connect("enemies_cleared",Callable(self,"on_enemies_cleared"))
 
 func on_level_restart():
     enemies_cleared = false
@@ -104,7 +104,7 @@ func close_door(transition = false, focus = true):
         door_closed = true
 
         if tween_open.is_active():
-            yield(tween_open, "tween_completed")
+            await tween_open.finished
 
         if transition:
             if door_closed_actual:
@@ -117,13 +117,13 @@ func close_door(transition = false, focus = true):
             tween_close.start()
 
             if focus:
-                # focus camera on door
+                # focus camera checked door
                 door_focused = true
                 Game.set_camera_focus(self)
-                yield(Game.pause_and_lbox_in(0.5), "completed")
+                await Game.pause_and_lbox_in(0.5).completed
 
-            yield(tween_close, "tween_all_completed")
-            Game.get_camera().screen_shake(2.0, 0.5)
+            await tween_close.tween_all_completed
+            Game.get_camera_3d().screen_shake(2.0, 0.5)
         else:
             position = close_position
 
@@ -134,7 +134,7 @@ func close_door(transition = false, focus = true):
         if transition and focus:
             # focus camera back to player
             Game.set_camera_focus(Game.get_player())
-            yield(Game.unpause_and_lbox_out(2.0), "completed")
+            await Game.unpause_and_lbox_out(2.0).completed
     else:
         yield()
 
@@ -146,7 +146,7 @@ func open_door(transition = false, focus = true):
         door_closed = false
 
         if tween_close.is_active():
-            yield(tween_close, "tween_completed")
+            await tween_close.finished
 
         if transition:
             if not door_closed_actual:
@@ -160,12 +160,12 @@ func open_door(transition = false, focus = true):
 
             if focus:
                 door_focused = true
-                # focus camera on door
+                # focus camera checked door
                 Game.set_camera_focus(self)
-                yield(Game.pause_and_lbox_in(0.5), "completed")
+                await Game.pause_and_lbox_in(0.5).completed
 
-            yield(tween_open, "tween_all_completed")
-            Game.get_camera().screen_shake(2.0, 0.5)
+            await tween_open.tween_all_completed
+            Game.get_camera_3d().screen_shake(2.0, 0.5)
         else:
             position = close_position
 
@@ -176,7 +176,7 @@ func open_door(transition = false, focus = true):
         if transition and focus:
             # focus camera back to player
             Game.set_camera_focus(Game.get_player())
-            yield(Game.unpause_and_lbox_out(2.0), "completed")
+            await Game.unpause_and_lbox_out(2.0).completed
     else:
         yield()
 

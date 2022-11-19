@@ -7,10 +7,10 @@
 class_name DoorTrigger
 extends Area2D
 
-export (NodePath) var door_path
+@export (NodePath) var door_path
 
 func _ready():
-    connect("body_entered", self, "on_trigger")
+    connect("body_entered",Callable(self,"on_trigger"))
 
 func _draw():
     var door = get_node(door_path)
@@ -21,5 +21,5 @@ func on_trigger(_body):
     var door = get_node(door_path)
     if door:
         door.close_door(true)
-        yield(door, "door_closed")
+        await door.door_closed
         #Game.set_start_point(2)

@@ -3,10 +3,10 @@
 [ext_resource path="res://shaders/pixelate.gdshader" type="Shader" id=1]
 [ext_resource path="res://shaders/retrorize.gdshader" type="Shader" id=2]
 [ext_resource path="res://effects/environment.tres" type="Environment" id=3]
-[ext_resource path="res://assets/palettes/base.png" type="Texture" id=4]
-[ext_resource path="res://assets/palettes/sample.png" type="Texture" id=5]
+[ext_resource path="res://assets/palettes/base.png" type="Texture2D" id=4]
+[ext_resource path="res://assets/palettes/sample.png" type="Texture2D" id=5]
 [ext_resource path="res://effects/vfx_manager.gd" type="Script" id=6]
-[ext_resource path="res://assets/palettes/fractals_cutting_through_the_sky.png" type="Texture" id=7]
+[ext_resource path="res://assets/palettes/fractals_cutting_through_the_sky.png" type="Texture2D" id=7]
 
 [sub_resource type="Shader" id=95]
 code = "shader_type canvas_item;
@@ -77,8 +77,8 @@ rect = Rect2( 0, 0, 1920, 1080 )
 
 [node name="color_rect" type="ColorRect" parent="canvas_layer/vignette"]
 use_parent_material = true
-margin_right = 1920.0
-margin_bottom = 1080.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 
 [node name="color_indexer" type="BackBufferCopy" parent="canvas_layer"]
 material = SubResource( 7 )
@@ -86,8 +86,8 @@ rect = Rect2( 0, 0, 1920, 1080 )
 
 [node name="color_rect" type="ColorRect" parent="canvas_layer/color_indexer"]
 use_parent_material = true
-margin_right = 1920.0
-margin_bottom = 1080.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 
 [node name="pixelator" type="BackBufferCopy" parent="."]
 material = SubResource( 97 )
@@ -96,10 +96,10 @@ rect = Rect2( 0, 0, 1920, 1080 )
 
 [node name="color_rect" type="ColorRect" parent="pixelator"]
 use_parent_material = true
-margin_right = 1920.0
-margin_bottom = 1080.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 
-[node name="sample" type="Sprite" parent="."]
+[node name="sample" type="Sprite2D" parent="."]
 visible = false
 position = Vector2( 960, 531 )
 scale = Vector2( 4, 4 )

@@ -1,9 +1,9 @@
 extends StaticBody2D
-tool
+@tool
 
 
 func _process(delta):
-    var points = PoolVector2Array([
+    var points = PackedVector2Array([
         $collision_shape_2d.shape.a,
         $collision_shape_2d.shape.b,
     ])
