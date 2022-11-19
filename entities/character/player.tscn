@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" path="res://entities/character/moves/normal_down.tscn" id="6_ancke"]
 [ext_resource type="Script" path="res://entities/character/player.gd" id="7"]
 [ext_resource type="PackedScene" path="res://entities/character/moves/normal_forward.tscn" id="7_4ih8d"]
-[ext_resource type="PackedScene" path="res://ui/debug/ecb_display.tscn" id="8"]
+[ext_resource type="PackedScene" uid="uid://cfk22xqewi10f" path="res://ui/debug/ecb_display.tscn" id="8"]
 [ext_resource type="PackedScene" path="res://entities/character/moves/normal_up.tscn" id="8_3bvvc"]
 [ext_resource type="Shader" path="res://shaders/grayscale.gdshader" id="9"]
 [ext_resource type="PackedScene" path="res://entities/character/moves/special_heavy.tscn" id="9_av2mn"]
@@ -19,14 +19,13 @@ atlas = ExtResource("19")
 region = Rect2(56, 0, 14, 14)
 
 [sub_resource type="RectangleShape2D" id="5"]
-size = Vector2(10, 32)
+size = Vector2(12, 40)
 
 [node name="player" type="CharacterBody2D"]
 texture_filter = 1
 collision_layer = 2
 collision_mask = 769
 script = ExtResource("7")
-WALLJUMP_TYPE = null
 
 [node name="interact_sprite" type="Sprite2D" parent="."]
 visible = false
@@ -39,26 +38,24 @@ region_rect = Rect2(0, 0, 56, 56)
 
 [node name="ecb_display" parent="." instance=ExtResource("8")]
 visible = false
-position = Vector2(0, -96)
+position = Vector2(0, -32)
 z_index = 8
-points = PackedVector2Array(0, -64, -32, 0, 0, 96, 32, 0, 32, 0, 0, -64)
-width = 8.0
+points = PackedVector2Array(0, -16, -10, 0, 0, 32, 10, 0, 0, -16)
+width = 1.0
 
 [node name="ecb" parent="." instance=ExtResource("2")]
-position = Vector2(0, -88)
+polygon = PackedVector2Array(12, 0, 0, 32, -12, 0, 0, -14)
 
 [node name="hurtbox" type="Area2D" parent="."]
 collision_layer = 128
 collision_mask = 4
 
 [node name="collision_shape_2d" type="CollisionShape2D" parent="hurtbox"]
-position = Vector2(0, -88)
-scale = Vector2(4, 4)
+position = Vector2(0, -24)
 shape = SubResource("5")
 
 [node name="moveset" type="Node2D" parent="."]
-position = Vector2(0, -24)
-scale = Vector2(4, 4)
+position = Vector2(0, -16)
 
 [node name="normal_down" parent="moveset" instance=ExtResource("6_ancke")]
 position = Vector2(0, 6)
@@ -71,3 +68,5 @@ scale = Vector2(0.25, 0.25)
 [node name="special_heavy" parent="moveset" instance=ExtResource("9_av2mn")]
 
 [node name="model" parent="." instance=ExtResource("5")]
+position = Vector2(0, 1)
+scale = Vector2(0.33, 0.33)

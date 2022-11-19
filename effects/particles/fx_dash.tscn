@@ -1,32 +1,41 @@
-[gd_scene load_steps=5 format=3 uid="uid://c0csibcxvyq2o"]
+[gd_scene load_steps=6 format=3 uid="uid://c0csibcxvyq2o"]
 
 [ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="1"]
 [ext_resource type="Script" path="res://effects/particles/timed_particles.gd" id="2_4gu4l"]
 
-[sub_resource type="Curve" id="1"]
-_data = [Vector2(0, 0), 0.0, 1.45406, 0, 0, Vector2(0.245098, 0.352273), 0.0440691, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_0q8dq"]
+min_value = 0.2
+_data = [Vector2(0, 0.2), 0.0, 0.113684, 0, 0, Vector2(1, 1), 3.04616, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_ba6mc"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.0, 0.0, 1, 0]
 point_count = 2
 
 [sub_resource type="Gradient" id="2"]
-offsets = PackedFloat32Array(0, 0.6)
-colors = PackedColorArray(1, 1, 1, 0.25, 1, 1, 1, 0)
+offsets = PackedFloat32Array(0, 0.380282)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [node name="CPUParticles2D" type="CPUParticles2D"]
-scale = Vector2(4, 4)
 z_index = 10
 emitting = false
-amount = 25
 lifetime = 2.0
 one_shot = true
 speed_scale = 2.0
 explosiveness = 1.0
 texture = ExtResource("1")
-direction = Vector2(3, -1)
+particle_flag_align_y = true
+direction = Vector2(5, -1)
 spread = 10.0
-gravity = Vector2(0, 10)
+gravity = Vector2(0, 0)
 initial_velocity_min = 16.0
-initial_velocity_max = 64.0
-scale_amount_max = 3.0
-scale_amount_curve = SubResource("1")
+initial_velocity_max = 70.0
+linear_accel_min = -50.0
+linear_accel_max = -50.0
+scale_amount_min = 0.25
+scale_amount_max = 0.5
+split_scale = true
+scale_curve_x = SubResource("Curve_0q8dq")
+scale_curve_y = SubResource("Curve_ba6mc")
 color_ramp = SubResource("2")
 script = ExtResource("2_4gu4l")

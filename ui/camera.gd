@@ -92,12 +92,12 @@ func get_tracking_position() -> Vector2:
 	# the camera origin is relative to the top-left corner of the screen,
 	# so shift the position by half the screen size to center it
 	var pos: Vector2 = get_target().position
-	# var pos: Vector2 = get_target().position - (get_window_size() / 2)
+	# var pos: Vector2 = get_target().position - (Vector2(Contants.SCREEN_SIZE)() / 2)
 
 	# target position of camera + player offset
 	pos = (pos + 
-		(get_target().get_facing_dir() * 200) + 
-		Vector2(0, -100) +
+		(get_target().get_facing_dir() * 100) + 
+		Vector2(0, -50) +
 		(get_target().velocity * 0.25)
 	)
 
@@ -125,7 +125,7 @@ func clamp_to_bounds(vec: Vector2) -> Vector2:
 		return vec
 
 	var mn = min_position
-	var mx = max_position - get_window_size()
+	var mx = max_position - Vector2(Constants.SCREEN_SIZE);
 	# var x = vec.x
 	# var y = vec.y
 	# if x > mx.x: x = mx.x
@@ -217,7 +217,7 @@ func _process(delta):
 		var cam_pos = focus
 
 		# determine final tracking position
-		var track_pos = get_tracking_position() - (get_window_size() / 2.0)
+		var track_pos = get_tracking_position() - (Vector2(Constants.SCREEN_SIZE) / 2.0)
 
 		# smooth movement
 		# var new_origin = origin + (pos - origin) * delta * smoothing
@@ -253,7 +253,7 @@ func _draw():
 		draw_circle(get_tracking_position(), 16, Color.BLUE)
 
 		# draw camera position
-		draw_circle(focus + (get_window_size() / 2), 8, Color.WHITE)
+		draw_circle(focus + (Vector2(Constants.SCREEN_SIZE) / 2), 8, Color.WHITE)
 
 func screen_shake(amount, length):
 	if shake_tween:

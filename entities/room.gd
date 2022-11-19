@@ -102,6 +102,8 @@ func on_body_entered(body):
 	if body is Player:
 		emit_signal("screen_entered", self, body)
 
+func _process(_delta):
+	if Engine.is_editor_hint(): queue_redraw()
 
 ## debug visuals
 func _draw():
@@ -109,5 +111,7 @@ func _draw():
 		var color = Color(1.0, 1.0, 1.0)  # white
 
 		# outline the collision box
-		Util.draw_zone(self, color, 4.0, 32.0)
+		draw_rect(Rect2(0, 0, _real_size().x, _real_size().y), Color.WHITE, false, 2)
+		draw_rect(Rect2(8, 8, _real_size().x - 16, _real_size().y - 16), Color.WHITE, false, 2)
+		# Util.draw_zone(self, color, 4.0, 32.0)
 

@@ -6,7 +6,7 @@ extends Node
 
 # Target display resolution.
 # (the size of one in-game level screen)
-const SCREEN_SIZE := Vector2i(1920, 1080)
+const SCREEN_SIZE := Vector2i(640, 360)
 
 # path to the player
 const PATH_PLAYER := NodePath("/root/main/viewport/player")

@@ -1,6 +1,5 @@
 [gd_scene load_steps=11 format=3 uid="uid://d4c7y88cmhkve"]
 
-[ext_resource type="PackedScene" uid="uid://bsvnvrccidyw2" path="res://backgrounds/3d_background.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://duuai1k3do5bw" path="res://levels/template.tscn" id="4"]
 [ext_resource type="PackedScene" uid="uid://blssy5erb4gi1" path="res://entities/enemy/enemy_test.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://dm121ccygtfu8" path="res://entities/hazard_zone.tscn" id="6"]
