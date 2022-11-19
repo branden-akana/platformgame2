@@ -1,17 +1,12 @@
-[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://cixr442mjb6i6"]
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cixr442mjb6i6"]
 
 [ext_resource type="Shader" path="res://shaders/palette.gdshader" id="1_l4jlj"]
-[ext_resource type="Texture2D" uid="uid://d1a6ymdq18lvy" path="res://assets/palettes/base.png" id="2_fyt6x"]
-[ext_resource type="Texture2D" uid="uid://cn4meioaqx0ob" path="res://assets/palettes/fractals_cutting_through_the_sky.png" id="3_8t70f"]
 
 [resource]
 shader = ExtResource("1_l4jlj")
 shader_parameter/dither = null
 shader_parameter/dither_amt = null
+shader_parameter/dither_lab = null
 shader_parameter/dither_shf = null
-shader_parameter/palette_a = ExtResource("2_fyt6x")
-shader_parameter/palette_b = ExtResource("3_8t70f")
-shader_parameter/palette_blend = 0.0
-shader_parameter/palette_key = ExtResource("2_fyt6x")
 shader_parameter/palette_size = 8
 shader_parameter/screen = true

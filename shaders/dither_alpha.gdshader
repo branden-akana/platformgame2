@@ -9,7 +9,8 @@ shader_type canvas_item;
 uniform bool screen = false;
 
 uniform float dither_shift : hint_range(-10, 10) = 0.001;
-	
+
+
 float index_value(vec2 pixel_coord){
 	//This can be any matrix with the right modifications to the rest of the function.
 	const int index_matrix_8x8[64] = int[](0,  32, 8,  40, 2,  34, 10, 42,
