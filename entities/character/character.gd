@@ -170,12 +170,8 @@ func _physics_process(delta):  # update input and physics
 
 	# restore dashes/jumps if grounded
 	if is_grounded and not fsm.is_current(CharStateName.AIRDASH):
-		if airdashes_left != 1:
-			emit_signal("airdash_restored")
-
-		airdashes_left = 1;
-		# jumps_left = 1;
-		consecutive_walljumps = 0;
+		restore_jumps()
+		consecutive_walljumps = 0
 
 	# update state
 	fsm.process(delta)
@@ -195,6 +191,12 @@ func _physics_process(delta):  # update input and physics
 #--------------------------------------------------------------------------------
 # Getters / Setters
 #--------------------------------------------------------------------------------
+
+func restore_jumps():
+	if airdashes_left != 1:
+		action_occured.emit("airdash_restored")
+	airdashes_left = 1;
+	# jumps_left = 1;
 
 # func set_ignore_platforms(ignore_platforms: bool) -> void:
 #     b_ignore_platforms = ignore_platforms
