@@ -11,7 +11,7 @@ script/source = "extends Sprite2D
 @onready var origin = position
 
 func _process(delta):
-    position = origin + Game.get_camera_3d().focus * 0.9
+    position = origin + GameState.get_camera().focus * 0.9
 "
 
 [node name="level" instance=ExtResource( 3 )]

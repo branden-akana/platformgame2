@@ -5,20 +5,20 @@ class Vsync extends MenuSelection:
 
     var label_on  = "[checked] unchecked "
     var label_off = " checked [unchecked]"
-
+  
     func get_label(): return "vsync"
 
     func get_extra():
         var fps = "   %s FPS" % Engine.get_frames_per_second()
-        if OS.is_vsync_enabled():
+        if DisplayServer.window_get_vsync_mode() == 1:
             return label_on + fps
         return label_off + fps
 
-    func on_left(menu):
-        OS.set_use_vsync(not OS.is_vsync_enabled())
+    func on_left(_menu):
+        DisplayServer.window_set_vsync_mode(1 if DisplayServer.window_get_vsync_mode() > 0 else 0)
 
-    func on_right(menu):
-        OS.set_use_vsync(not OS.is_vsync_enabled())
+    func on_right(_menu):
+        DisplayServer.window_set_vsync_mode(1 if DisplayServer.window_get_vsync_mode() > 0 else 0)
 
 
 class Lights extends MenuSelection:

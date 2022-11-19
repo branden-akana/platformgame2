@@ -1,8 +1,8 @@
 extends Node2D
-@tool
 
-@export (float) var scroll_rate = 1.0
-@export (float) var parallax = 0.5
+
+@export var scroll_rate: float = 1.0
+@export var parallax: float = 0.5
 
 @onready var origin: Vector2 = position
 
@@ -13,8 +13,8 @@ func _ready():
 
 func _process(delta):
 
-    if Game.is_inside_tree():
-        camera = Game.get_camera_3d()
+    if not Engine.is_editor_hint() and GameState.is_inside_tree():
+        camera = GameState.get_camera()
 
     var box_1 = $viewport/spatial/csg_box
     var box_2 = $viewport/spatial/csg_box_2

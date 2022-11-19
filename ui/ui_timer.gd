@@ -2,7 +2,7 @@ extends Polygon2D
 
 
 func _ready():
-    Game.connect("practice_mode_changed",Callable(self,"on_practice_mode_changed"))
+    GameState.connect("practice_mode_changed",Callable(self,"on_practice_mode_changed"))
 
 func on_practice_mode_changed(practice_mode: bool) -> void:
     if practice_mode:

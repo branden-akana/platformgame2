@@ -1,206 +1,172 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=15 format=3 uid="uid://p4kpmiw0sm7s"]
 
-[ext_resource path="res://ui/menu/main_menu.gd" type="Script" id=1]
-[ext_resource path="res://assets/textures/pixel.png" type="Texture2D" id=3]
-[ext_resource path="res://assets/palettes/sample.png" type="Texture2D" id=4]
-[ext_resource path="res://assets/fonts/Metropolis-Light3D.otf" type="FontFile" id=5]
-[ext_resource path="res://assets/fonts/Sk-Modernist-Mono.otf" type="FontFile" id=6]
+[ext_resource type="Script" path="res://ui/menu/main_menu.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://bt24wg4m1cx3o" path="res://assets/textures/pixel.png" id="3"]
+[ext_resource type="FontFile" uid="uid://g5vpaou6j0x8" path="res://assets/fonts/Sk-Modernist-Mono.otf" id="3_o2gvv"]
+[ext_resource type="Texture2D" uid="uid://cfijnd72x82t" path="res://assets/palettes/sample.png" id="4"]
+[ext_resource type="FontFile" uid="uid://dkesessbumeke" path="res://assets/fonts/Metropolis-Light.otf" id="5"]
 
-[sub_resource type="CanvasItemMaterial" id=2]
+[sub_resource type="CanvasItemMaterial" id="2"]
 light_mode = 1
 
-[sub_resource type="OccluderPolygon2D" id=3]
+[sub_resource type="OccluderPolygon2D" id="3"]
 closed = false
-polygon = PackedVector2Array( -200, 14, 1720, 14, 1720, 1094, -200, 1094 )
+polygon = PackedVector2Array(-200, 14, 1720, 14, 1720, 1094, -200, 1094)
 
-[sub_resource type="FontFile" id=4]
-size = 72
-outline_size = 1
-spacing_bottom = -50
-extra_spacing_char = 27
-font_data = ExtResource( 5 )
+[sub_resource type="LabelSettings" id="LabelSettings_wlqh5"]
+font = ExtResource("5")
+font_size = 82
+outline_size = 4
 
-[sub_resource type="FontFile" id=5]
-size = 36
-outline_size = 1
-use_filter = true
-spacing_bottom = -9
-extra_spacing_char = 2
-font_data = ExtResource( 6 )
+[sub_resource type="LabelSettings" id="LabelSettings_a1sd2"]
+font = ExtResource("3_o2gvv")
+font_size = 35
 
-[sub_resource type="VisualShaderNodeInput" id=6]
+[sub_resource type="VisualShaderNodeInput" id="6"]
 input_name = "screen_uv"
 
-[sub_resource type="VisualShaderNodeTexture" id=7]
+[sub_resource type="VisualShaderNodeTexture" id="7"]
 source = 1
 
-[sub_resource type="VisualShaderNodeVectorOp" id=8]
-default_input_values = [ 0, Vector3( 1, 1, 1 ), 1, Vector3( 0, 0, 0 ) ]
+[sub_resource type="VisualShaderNodeVectorOp" id="8"]
+default_input_values = [0, Vector3(1, 1, 1), 1, Vector3(0, 0, 0)]
 operator = 1
 
-[sub_resource type="VisualShader" id=9]
+[sub_resource type="VisualShader" id="9"]
 code = "shader_type canvas_item;
 
 
 
-void vertex() {
-// Output:0
-
-}
-
 void fragment() {
 // Input:3
-	vec3 n_out3p0 = vec3(SCREEN_UV, 0.0);
+	vec2 n_out3p0 = SCREEN_UV;
 
+
+	vec4 n_out4p0;
 // Texture2D:4
-	vec3 n_out4p0;
-	float n_out4p1;
-	{
-		vec4 _tex_read = textureLod(SCREEN_TEXTURE, n_out3p0.xy, 0.0);
-		n_out4p0 = _tex_read.rgb;
-		n_out4p1 = _tex_read.a;
-	}
+	n_out4p0 = textureLod(SCREEN_TEXTURE, n_out3p0, 0.0);
+
 
 // VectorOp:5
 	vec3 n_in5p0 = vec3(1.00000, 1.00000, 1.00000);
-	vec3 n_out5p0 = n_in5p0 - n_out4p0;
+	vec3 n_out5p0 = n_in5p0 - vec3(n_out4p0.xyz);
+
 
 // Output:0
 	COLOR.rgb = n_out5p0;
 
-}
-
-void light() {
-// Output:0
 
 }
 "
-graph_offset = Vector2( 0, -139.131 )
+graph_offset = Vector2(0, -139.131)
 mode = 1
 flags/light_only = false
-nodes/fragment/0/position = Vector2( 1240, 200 )
-nodes/fragment/3/node = SubResource( 6 )
-nodes/fragment/3/position = Vector2( 0, 120 )
-nodes/fragment/4/node = SubResource( 7 )
-nodes/fragment/4/position = Vector2( 340, 120 )
-nodes/fragment/5/node = SubResource( 8 )
-nodes/fragment/5/position = Vector2( 840, 120 )
-nodes/fragment/connections = PackedInt32Array( 3, 0, 4, 0, 4, 0, 5, 1, 5, 0, 0, 0 )
+nodes/fragment/0/position = Vector2(1240, 200)
+nodes/fragment/3/node = SubResource("6")
+nodes/fragment/3/position = Vector2(0, 120)
+nodes/fragment/4/node = SubResource("7")
+nodes/fragment/4/position = Vector2(340, 120)
+nodes/fragment/5/node = SubResource("8")
+nodes/fragment/5/position = Vector2(840, 120)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 4, 0, 5, 1, 5, 0, 0, 0)
 
-[sub_resource type="ShaderMaterial" id=10]
-shader = SubResource( 9 )
+[sub_resource type="ShaderMaterial" id="10"]
+shader = SubResource("9")
 
 [node name="main_menu" type="Node2D"]
+process_mode = 3
 light_mask = 0
-material = SubResource( 2 )
+material = SubResource("2")
 z_index = 10
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_horizontal_guides_": [ 544.0 ],
-"_edit_vertical_guides_": [ 960.0 ]
-}
+script = ExtResource("1")
 
 [node name="light_occluder_2d" type="LightOccluder2D" parent="."]
-position = Vector2( 200, -14 )
-occluder = SubResource( 3 )
+position = Vector2(200, -14)
+occluder = SubResource("3")
 
 [node name="light_occluder_2d_2" type="LightOccluder2D" parent="."]
-position = Vector2( 200, -14 )
-occluder = SubResource( 3 )
+position = Vector2(200, -14)
+occluder = SubResource("3")
 
 [node name="title" type="Node2D" parent="."]
-position = Vector2( 376, 288 )
+position = Vector2(376, 288)
 
 [node name="title" type="Label" parent="title"]
 offset_left = -128.0
 offset_right = 1296.0
 offset_bottom = 173.0
-custom_fonts/font = SubResource( 4 )
 text = "untitled platform game
 "
-align = 1
+label_settings = SubResource("LabelSettings_wlqh5")
 
 [node name="subtitle" type="Label" parent="."]
 offset_left = 312.0
 offset_top = 408.0
 offset_right = 2232.0
 offset_bottom = 455.0
-custom_constants/shadow_offset_x = 0
-custom_constants/shadow_offset_y = 4
-custom_constants/shadow_as_outline = 0
-custom_fonts/font = SubResource( 5 )
+text = "subtitle"
+label_settings = SubResource("LabelSettings_a1sd2")
 
 [node name="selections" type="Label" parent="."]
 offset_left = 320.0
 offset_top = 464.0
 offset_right = 2240.0
 offset_bottom = 1544.0
-custom_colors/font_outline_modulate = Color( 0, 0, 0, 0 )
-custom_constants/line_spacing = 10
-custom_fonts/font = SubResource( 5 )
+label_settings = SubResource("LabelSettings_a1sd2")
 
 [node name="extras" type="Label" parent="."]
 offset_left = 864.0
 offset_top = 464.0
 offset_right = 1114.0
 offset_bottom = 1544.0
-custom_constants/line_spacing = 10
-custom_fonts/font = SubResource( 5 )
+label_settings = SubResource("LabelSettings_a1sd2")
 
 [node name="extras_2" type="Label" parent="."]
 offset_left = 1120.0
 offset_top = 464.0
 offset_right = 1370.0
 offset_bottom = 1544.0
-custom_constants/line_spacing = 10
-custom_fonts/font = SubResource( 5 )
+label_settings = SubResource("LabelSettings_a1sd2")
 
 [node name="extras_3" type="Label" parent="."]
 offset_left = 1376.0
 offset_top = 464.0
 offset_right = 1626.0
 offset_bottom = 1544.0
-custom_constants/line_spacing = 10
-custom_fonts/font = SubResource( 5 )
+label_settings = SubResource("LabelSettings_a1sd2")
 
 [node name="hint" type="Label" parent="."]
 offset_left = 192.0
 offset_top = 800.0
 offset_right = 2112.0
 offset_bottom = 847.0
-custom_colors/font_outline_modulate = Color( 0, 0, 0, 0 )
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 0
-custom_constants/shadow_offset_y = 4
-custom_constants/shadow_as_outline = 0
-custom_fonts/font = SubResource( 5 )
+label_settings = SubResource("LabelSettings_a1sd2")
 
 [node name="polygon_2d" type="Polygon2D" parent="."]
-position = Vector2( 0, 216 )
-scale = Vector2( 3, 3.68182 )
+position = Vector2(0, 216)
+scale = Vector2(3, 3.68182)
 z_index = -7
 z_as_relative = false
-color = Color( 0, 0, 0, 0.698039 )
-polygon = PackedVector2Array( 0, 0, 640, 0, 640, 176, 0, 176 )
+color = Color(0, 0, 0, 0.698039)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 176, 0, 176)
 
 [node name="highlight" type="Polygon2D" parent="."]
-material = SubResource( 10 )
-offset = Vector2( 0, 24 )
+material = SubResource("10")
+offset = Vector2(0, 24)
 invert_border = 8.0
-polygon = PackedVector2Array( 304, 440, 832, 440, 832, 488, 304, 488 )
+polygon = PackedVector2Array(304, 440, 832, 440, 832, 488, 304, 488)
 
 [node name="light_2d" type="PointLight2D" parent="." groups=["lights"]]
 visible = false
-position = Vector2( 536, 400 )
-scale = Vector2( 656, 192 )
-texture = ExtResource( 3 )
-offset = Vector2( 0.5, 0.5 )
-mode = 2
+position = Vector2(536, 400)
+scale = Vector2(656, 192)
 range_layer_max = 10
+texture = ExtResource("3")
+offset = Vector2(0.5, 0.5)
 
 [node name="control" type="Node2D" parent="."]
 visible = false
-position = Vector2( -46, -55 )
+position = Vector2(-46, -55)
 z_index = -10
 
 [node name="color_rect" type="ColorRect" parent="control"]
@@ -208,20 +174,20 @@ offset_left = 185.0
 offset_top = 79.0
 offset_right = 1185.0
 offset_bottom = 1079.0
-color = Color( 0.192157, 0.192157, 0.192157, 1 )
+color = Color(0.192157, 0.192157, 0.192157, 1)
 
 [node name="sample" type="Sprite2D" parent="."]
 visible = false
-position = Vector2( 1216, 694 )
-scale = Vector2( 4, 4 )
-texture = ExtResource( 4 )
+position = Vector2(1216, 694)
+scale = Vector2(4, 4)
+texture = ExtResource("4")
 region_enabled = true
-region_rect = Rect2( 0, 20, 128, 40 )
+region_rect = Rect2(0, 20, 128, 40)
 
 [node name="sample_2" type="Sprite2D" parent="."]
 visible = false
-position = Vector2( 640, 694 )
-scale = Vector2( 4, 4 )
-texture = ExtResource( 4 )
+position = Vector2(640, 694)
+scale = Vector2(4, 4)
+texture = ExtResource("4")
 region_enabled = true
-region_rect = Rect2( 0, 0, 128, 16 )
+region_rect = Rect2(0, 0, 128, 16)

@@ -1,5 +1,5 @@
 extends Node2D
-@tool
+
 
 var total = 0
 var alive = 0
@@ -7,9 +7,9 @@ var dead = 0
 
 const SPACING = 64
 
-func _physics_process(delta):
-    if not Engine.editor_hint:
-        var room = Game.current_room
+func _physics_process(_delta):
+    if not Engine.is_editor_hint():
+        var room = GameState.current_room
         
         if is_instance_valid(room):
             
@@ -17,11 +17,11 @@ func _physics_process(delta):
             alive = len(room.get_alive_enemies())
             dead = total - alive
             
-            update()
+            queue_redraw()
     else:
         alive = 2
         dead = 2
-        update()
+        queue_redraw()
 
 func _draw():
     
@@ -41,7 +41,7 @@ func _draw():
 func get_width(total):
     return total * SPACING
     
-func get_origin(total):
+func get_origin(_total):
     return 0
     # return (get_width(total) / 2.0) - (SPACING / 2.0)
     

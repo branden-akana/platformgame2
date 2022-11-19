@@ -1,5 +1,5 @@
 #================================================================================
-# A sound manager that contains and plays various runner sounds.
+# A sound manager that contains and plays various character sounds.
 #================================================================================
 
 extends Node2D

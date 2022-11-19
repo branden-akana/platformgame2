@@ -2,7 +2,7 @@ extends Node2D
 
 @export var ROTATION_SPEED = 10
 @export var ROTATION_RADIUS = 50
-@export (PackedScene) var PARTICLES
+@export var PARTICLES: PackedScene
 
 var particles
 var time: float = 0.0

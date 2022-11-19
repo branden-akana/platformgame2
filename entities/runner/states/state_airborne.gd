@@ -1,15 +1,15 @@
-extends RunnerState
+extends CharacterState
 class_name AirborneState
 
-func on_start(state_from, runner, fsm):
-    runner.set_grounded(false)
-    runner.airborne_height = runner.position.y
-    runner.b_gravity_enabled = true
+func on_start(state_from, character, fsm):
+    character.set_grounded(false)
+    character.airborne_height = character.position.y
+    character.b_gravity_enabled = true
 
-func on_update(delta, runner, fsm):
+func on_update(delta, character, fsm):
 
-    process_air_acceleration(runner, delta)
-    process_air_friction(runner, delta)
+    character._acceleration(delta)
+    character._friction(delta)
 
-    if runner.position.y < runner.airborne_height:
-        runner.airborne_height = runner.position.y
+    if character.position.y < character.airborne_height:
+        character.airborne_height = character.position.y

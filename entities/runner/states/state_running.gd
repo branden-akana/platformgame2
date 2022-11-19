@@ -1,21 +1,21 @@
-extends RunnerState
+extends CharacterState
 class_name RunningState
 
 
-func on_update(delta, runner, fsm):
+func on_update(delta, character, fsm):
     if is_current_state(fsm):
 
         #snap_down_to_ground(delta, 16)
         #snap_up_to_ground(delta, 16)
 
-        if runner.is_facing_forward():
-            process_ground_acceleration(runner, delta)
-        else:
-            return RunnerStateType.IDLE
+        character._acceleration(delta)
+
+        if not character.is_facing_forward():
+            return CharStateName.IDLE
 
 
-func on_end(state_to, runner, fsm):
-    # if state_to == RunnerStateType.IDLE:
-        # runner.velocity.x = clamp(runner.velocity.x, -runner.RUNNING_STOP_SPEED, runner.RUNNING_STOP_SPEED)
+func on_end(state_to, character, fsm):
+    # if state_to == CharStateName.IDLE:
+        # character.velocity.x = clamp(character.velocity.x, -character.RUNNING_STOP_SPEED, character.RUNNING_STOP_SPEED)
     # print("stopped running")
-    runner.emit_signal("stop_walking")
+    character.emit_signal("stop_walking")

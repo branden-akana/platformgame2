@@ -21,7 +21,9 @@ class Rebinder extends MenuSelection:
         var name  # name of the button
         var device = event.device
         if event is InputEventJoypadButton:
-            name = Input.get_joy_button_string(event.button_index)
+            # name = JoyButton.keys()[event.button_index]
+            # name = Input.get_joy_button_string(event.button_index)
+            name = "UNKNOWN"
             return "(JP, %d) %s" % [device, name]
         else:
             name = event.as_text()
@@ -58,14 +60,14 @@ class Rebinder extends MenuSelection:
                 for e in events:
                     InputMap.action_add_event(action, e)
                 listening = false
-                Game.settings.save()
+                GameState.settings.save()
                 return true
         return false
 
 var items = [
-    Rebinder.new("Attack/Select", "grapple"),
-    Rebinder.new("Jump/Back", "key_jump"),
-    Rebinder.new("Airdash", "key_dodge"),
+    Rebinder.new("Attack/Select", "attack"),
+    Rebinder.new("Jump/Back", "jump"),
+    Rebinder.new("Airdash", "dodge"),
     Rebinder.new("Reset", "reset"),
     SelectReturn.new()
 ]

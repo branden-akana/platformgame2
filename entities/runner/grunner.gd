@@ -1,10 +1,9 @@
 #================================================================================
-# Ghost Runner
+# Ghost Character
 #
-# A runner controlled by recorded inputs.
+# A character controlled by recorded inputs.
 #================================================================================
-class_name GhostRunner
-extends Runner 
+class_name GhostCharacter extends Character 
 
 signal replay_finish
 
@@ -29,7 +28,7 @@ func _ready():
     ignore_enemy_hp = true
     visible = false
 
-    connect("replay_finish",Callable(Game,"replay_playback_stop"))
+    connect("replay_finish", GameState.replay_playback_stop)
 
 func load_replay(new_replay):
     replay = new_replay

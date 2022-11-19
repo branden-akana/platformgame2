@@ -8,45 +8,45 @@
 class_name Replay
 
 
-# how often (in ticks) to sync the runner
+# how often (in ticks) to sync the character
 # with the replay during playback
 const SYNC_INTERVAL = 20
 
 var b_ready_for_playback = false
 
-# the runner's starting position
+# the character's starting position
 var start_position      
 
-# the runner's starting velocity
+# the character's starting velocity
 var start_velocity      
 
-# the runner's starting state
+# the character's starting state
 var start_state_type    
 
-# the init state of the runner's input
+# the init state of the character's input
 var start_input         
 
 var input_frames = {}
 var sync_frames = {}
 
 
-func _init(runner):
-    start_position = runner.position
-    start_velocity = runner.velocity
-    start_state_type = runner.fsm.current_type
-    start_input = runner.input.duplicate()
+func _init(character):
+	start_position = character.position
+	start_velocity = character.velocity
+	start_state_type = character.fsm.current_type
+	start_input = character.input.duplicate()
 
 
-# record this runner's state checked n tick
-func record_tick(runner, n):
-    # duplicate this runner's input action map
-    # (map of current inputs)
-    input_frames[n] = runner.input.action_map.duplicate()
+# record this character's state checked n tick
+func record_tick(character, n):
+	# duplicate this character's input action map
+	# (map of current inputs)
+	input_frames[n] = character.input.action_map.duplicate()
 
-    if n % SYNC_INTERVAL == 0:
-        sync_frames[n] = [runner.position, runner.velocity]
+	if n % SYNC_INTERVAL == 0:
+		sync_frames[n] = [character.position, character.velocity]
 
 
 # mark this recording as ready for playback
 func stop_recording():
-    b_ready_for_playback = true
+	b_ready_for_playback = true

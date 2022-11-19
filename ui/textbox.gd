@@ -1,5 +1,5 @@
 extends SpriteLabel
-@tool
+
 
 signal textbox_closed
 
@@ -82,15 +82,15 @@ func dismiss():
     queue_free()
 
 func _process(_delta):
-    if not Engine.editor_hint:
-        if Input.is_action_just_pressed("grapple"):
+    if not Engine.is_editor_hint():
+        if Input.is_action_just_pressed("attack"):
             advance_text()
-    update()
+    queue_redraw()
     
 func _draw():
     
     var s
-    if Engine.editor_hint:
+    if Engine.is_editor_hint():
         # s = lines[current_line]
         s = text
     else:

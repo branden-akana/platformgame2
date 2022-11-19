@@ -1,21 +1,21 @@
 #================================================================================
-# Runner State
+# Character State
 #
-# Represents a state a runner can be in.
+# Represents a state a character can be in.
 #
 # on_start(state_from)
-# Called when the runner enters this state, given the runner's previous state.
+# Called when the character enters this state, given the character's previous state.
 #
-# on_update()
-# Called every tick while the runner is in this state.
+# on_queue_redraw()
+# Called every tick while the character is in this state.
 #
 # on_end()
-# Called when the runner leaves this state.
+# Called when the character leaves this state.
 #================================================================================
-class_name RunnerState
+class_name CharacterState
 
-var time: float = 0.0  # the amount of time (in seconds) the runner has been in this state
-var tick: int = 0      # the amount of time (in ticks) the runner has been in this state
+var time: float = 0.0  # the amount of time (in seconds) the character has been in this state
+var tick: int = 0      # the amount of time (in ticks) the character has been in this state
 
 var b_can_airdash_cancel = false
 var b_can_attack_cancel = false
@@ -33,49 +33,49 @@ var b_can_dropdown = false
 var b_can_fastfall = false  # ?
 
 func is_current_state(fsm):
-    return fsm._current_state() == self
+	return fsm._current_state() == self
 
-func process_acceleration(runner, delta, accel, max_speed):
-    runner.apply_acceleration(delta, runner.get_axis_x(), accel, max_speed)
+# func process_acceleration(character, delta, accel, max_speed):
+#     character.apply_acceleration(delta, character.get_axis_x(), accel, max_speed)
 
-# Process airborne acceleration (drifting) for a frame.
-func process_ground_acceleration(runner, delta):
-    process_acceleration(runner, delta, runner.ACCELERATION, runner.MAX_SPEED)
+# # Process airborne acceleration (drifting) for a frame.
+# func process_ground_acceleration(character, delta):
+#     process_acceleration(character, delta, character.ACCELERATION, character.MAX_SPEED)
 
-# Process grounded acceleration (running) for a frame.
-func process_air_acceleration(runner, delta):
-    process_acceleration(runner, delta, runner.AIR_ACCELERATION, runner.AIR_MAX_SPEED)
+# # Process grounded acceleration (running) for a frame.
+# func process_air_acceleration(character, delta):
+#     process_acceleration(character, delta, character.AIR_ACCELERATION, character.AIR_MAX_SPEED)
 
-# Process friction for a frame.
-func process_friction(runner, delta):
-    runner.apply_friction(delta, runner.FRICTION)
+# # Process friction for a frame.
+# func process_friction(character, delta):
+#     character.apply_friction(delta, character.FRICTION)
 
-func process_air_friction(runner, delta):
-    if runner.is_axis_x_neutral():
-        runner.apply_friction(delta, runner.AIR_FRICTION)
+# func process_air_friction(character, delta):
+#     if character.is_axis_x_neutral():
+#         character.apply_friction(delta, character.AIR_FRICTION)
 
 # called when this state is instantiated
-func on_init(runner):
-    pass
+func on_init(character):
+	pass
 
-# checks if the runner can enter this state
-func can_start(runner):
-    return true
+# checks if the character can enter this state
+func can_start(character):
+	return true
 
 # called at the beginning of the state
-func on_start(state_from, runner, fsm):
-    pass
+func on_start(state_from, character, fsm):
+	pass
 
 # Called every physics process.
 #
-# If this function returns a RunnerStateType, this state is considered
+# If this function returns a CharStateName, this state is considered
 # finished and the player should transition to that state.
-func on_update(delta: float, runner, fsm):
-    return null
+func on_update(delta: float, character, fsm):
+	return null
 
 # called at the end of the state
-func on_end(state_to, runner, fsm):
-    pass
+func on_end(state_to, character, fsm):
+	pass
 
 # Allow leaving this state by dashing.
 func allow_dash_cancel() -> void: b_can_dash_cancel = true

@@ -14,17 +14,13 @@ var time_left = 0
 var is_player_on = false
 var is_pressed = false
 
-var tween = Tween.new()
-var timer = Timer.new()
+var tween: Tween
 
 func _ready():
     set_as_top_level(true)
     $spritetext.set_as_top_level(true)
     $spritetext.modulate.a = 0
     # position -= get_parent().position
-
-    add_child(tween)
-    add_child(timer)
 
     connect("body_entered",Callable(self,"on_body_entered"))
     connect("body_exited",Callable(self,"on_body_exited"))
@@ -47,46 +43,43 @@ func _physics_process(delta):
 
 
 func on_body_entered(body):
-    if not body is PlayerRunner:
+    if not body is PlayerCharacter:
         return
 
     if tween.is_active():
         await tween.finished
     else:
-        await get_tree().idle_frame
+        await get_tree().process_frame
 
-    tween.interpolate_property(self, "global_position",
+    tween.tween_property(self, "global_position",
         unpressed_pos, pressed_pos, 0.1)
-    tween.interpolate_property($spritetext, "modulate:a", $spritetext.modulate.a, 0.5, 0.2)
-    tween.start()
+    tween.tween_property($spritetext, "modulate:a", $spritetext.modulate.a, 0.5, 0.2)
+    
 
     is_pressed = true
     is_player_on = true
-    timer.stop()
     emit_signal("button_pressed")
 
 
 func on_body_exited(body):
-    if not body is PlayerRunner:
+    if not body is PlayerCharacter:
         return
 
     if tween.is_active():
         await tween.finished
     else:
-        await get_tree().idle_frame
+        await get_tree().process_frame
 
     is_player_on = false
     emit_signal("button_exited")
 
-    timer.start(unpress_time)
-
-    await timer.timeout
+    await get_tree().create_timer(unpress_time).timeout
 
     if is_player_on == false:
-        tween.interpolate_property(self, "global_position",
+        tween.tween_property(self, "global_position",
             pressed_pos, unpressed_pos, 0.1)
-        tween.interpolate_property($spritetext, "modulate:a", 0.5, 0, 0.2)
-        tween.start()
+        tween.tween_property($spritetext, "modulate:a", 0.5, 0, 0.2)
+        
 
         is_pressed = false
         emit_signal("button_unpressed")

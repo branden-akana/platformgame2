@@ -7,25 +7,25 @@ class SelectWalljumpType extends MenuSelection:
 
     func get_label(): return "walljump style"
     func get_extra():
-        if Game.get_player().WALLJUMP_TYPE == 0:
+        if GameState.get_player().WALLJUMP_TYPE == 0:
             return label_a
         else:
             return label_b
 
     func get_hint():
-        if Game.get_player().WALLJUMP_TYPE == 0:
+        if GameState.get_player().WALLJUMP_TYPE == 0:
                 return "while against a wall, walljump by moving away from it"
         else:
                 return "while against a wall, walljump by pressing jump"
 
     func _toggle():
-        if Game.get_player().WALLJUMP_TYPE == 0:
-            Game.settings.walljump_type = 1
-            Game.get_player().WALLJUMP_TYPE = 1
+        if GameState.get_player().WALLJUMP_TYPE == 0:
+            GameState.settings.walljump_type = 1
+            GameState.get_player().WALLJUMP_TYPE = 1
         else:
-            Game.settings.walljump_type = 0
-            Game.get_player().WALLJUMP_TYPE = 0
-        Game.settings.save()
+            GameState.settings.walljump_type = 0
+            GameState.get_player().WALLJUMP_TYPE = 0
+        GameState.settings.save()
 
     func on_left(menu): _toggle()
     func on_right(menu): _toggle()

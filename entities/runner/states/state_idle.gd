@@ -1,10 +1,10 @@
-extends RunnerState
+extends CharacterState
 class_name IdleState
 
-func on_update(delta, runner, fsm):
+func on_update(delta, character, fsm):
 
-    runner.apply_friction(delta)
+    character._friction(delta)
 
-    var x = runner.get_axis_x()
-    if abs(runner.velocity.x) < runner.WALK_MAX_SPEED and abs(round(x)) == 1:
-        return RunnerStateType.DASH
+    var x = character.get_axis_x()
+    if abs(character.velocity.x) < character.WALK_MAX_SPEED and abs(round(x)) == 1:
+        return CharStateName.DASH

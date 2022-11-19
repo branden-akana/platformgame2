@@ -2,9 +2,9 @@
 
 [ext_resource path="res://shaders/retro.gdshader" type="Shader" id=3]
 
-[sub_resource type="CompressedTexture2D" id=1]
+[sub_resource type="StreamTexture" id=1]
 
-[sub_resource type="CompressedTexture2D" id=2]
+[sub_resource type="StreamTexture" id=2]
 
 [resource]
 shader = ExtResource( 3 )
