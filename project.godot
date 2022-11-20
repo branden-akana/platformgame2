@@ -535,22 +535,3 @@ environment/defaults/default_clear_color=Color(0.2, 0.2, 0.2, 1)
 environment/defaults/default_environment="res://effects/environment.tres"
 textures/canvas_textures/default_texture_filter=0
 threads/thread_model=2
-
-[shader_globals]
-
-palette_key={
-"type": "sampler2D",
-"value": "res://assets/palettes/base.png"
-}
-palette_a={
-"type": "sampler2D",
-"value": "res://assets/palettes/base.png"
-}
-palette_b={
-"type": "sampler2D",
-"value": "res://assets/palettes/fractals_cutting_through_the_sky.png"
-}
-palette_blend={
-"type": "float",
-"value": 0.0
-}

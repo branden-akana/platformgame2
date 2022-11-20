@@ -18,11 +18,11 @@ uniform float dither_shf: hint_range(-10.0, 10.0) = 0.0;
 
 uniform int palette_size = 8;
 
-global uniform sampler2D palette_key: filter_nearest;  // palette to use for determining color mapping
-global uniform sampler2D palette_a: filter_nearest;    // palette to remap to (A side)
-global uniform sampler2D palette_b: filter_nearest;    // palette to remap to (B side)
+uniform sampler2D palette_key: filter_nearest;  // palette to use for determining color mapping
+uniform sampler2D palette_a: filter_nearest;    // palette to remap to (A side)
+uniform sampler2D palette_b: filter_nearest;    // palette to remap to (B side)
 
-global uniform float palette_blend: hint_range(0.0, 1.0) = 0.0;
+uniform float palette_blend: hint_range(0.0, 1.0) = 0.0;
 
 float distance_squared(vec3 a, vec3 b) {
 	
