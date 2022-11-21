@@ -1,18 +1,18 @@
 class_name ReplayManager
 
-#const Ghost = preload("res://entities/character/ghost.tscn")
 
 var game
 
 var replay
 var saved_replay
 
-var ghost_character
+var ghost_character: Ghost
 
 var b_is_recording = false
 
+
 ## if true, enable playback of a loaded replay
-@export var playback_enabled := false
+@export var playback_enabled := true
 
 ## if true, enable recording inputs of a player
 @export var recording_enabled := true
@@ -68,16 +68,18 @@ func start_playback():
 
 		if not is_instance_valid(ghost_character):
 			print("[ghost] creating new ghost")
-			#ghost_character = Ghost.instantiate()
-			# ghost_character = Node.new()
-			#game.get_node("/root/main").add_child(ghost_character)
+			ghost_character = GameState.Ghost.instantiate()
+			ghost_character._gamestate = game
+			game.get_node("/root/main/viewport").add_child(ghost_character)
 
 		ghost_character.load_replay(saved_replay)
 		ghost_character.restart()
 	elif not is_instance_valid(saved_replay):
 		print("[demo] no replay to playback!")
+	elif not saved_replay.b_ready_for_playback:
+		print("[demo] tried to playback, replay not ready!")
 	else:
-		print("[demo] cannot playback replay while still recording!")
+		print("[demo] cannot playback replay!")
 
 
 func stop_playback():
