@@ -2,10 +2,13 @@ class_name UserSettings extends Resource
 
 const SETTINGS_FILEPATH = "user://settings.res"
 
-enum WalljumpType {
-    JOYSTICK,  # input walljumps by inputting a direction away from the wall
-    JUMP       # input walljumps by pressing the jump button
-}
+# the number representing the current version of the settings
+# if the loaded settings has a version less than this constant,
+# reinitialize the settings file.
+const VERSION = 2
+
+
+@export var version = null
 
 # Contains all action bindings. Will be updated checked save.
 @export var action_map: Dictionary
@@ -17,7 +20,7 @@ enum WalljumpType {
 @export var palette: int = 0
 
 # Preferred walljump type
-@export var walljump_type: int = WalljumpType.JOYSTICK
+@export var walljump_type: Constants.WalljumpType = Constants.WalljumpType.JOYSTICK
 
 func _action_map() -> Dictionary:
 	var action_map = {}
@@ -38,10 +41,12 @@ func apply():
 
 	# GameState.get_display().change_palette(palette, 0.0)
 	# GameState.settings().change_palette(palette, 0.0)
-	# GameState.get_player().WALLJUMP_TYPE = walljump_type
 
 func save() -> bool:
 	action_map = _action_map()
+
+	# set version number to latest on save
+	version = VERSION
 
 	var result = ResourceSaver.save(self, SETTINGS_FILEPATH)
 
@@ -72,9 +77,9 @@ static func load_settings() -> Resource:
 	var settings  = ResourceLoader.load(SETTINGS_FILEPATH, "", true)
 	var UserSettings = load("res://settings.gd")
 
-	if settings is UserSettings:
+	if settings is UserSettings and settings.version == VERSION:
 		settings.apply()
-		print("loaded and applied settings")
+		print("loaded and applied settings, version %s" % settings.version)
 	else:
 		settings = UserSettings.new()
 		print("initialized settings")

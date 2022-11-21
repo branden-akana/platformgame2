@@ -16,19 +16,8 @@ signal stun_start
 signal stun_end
 
 
-enum WalljumpType {
-	JOYSTICK,  # input walljumps by inputting a direction away from the wall
-	JUMP       # input walljumps by pressing the jump button
-}
-
-@export var WALLJUMP_TYPE: WalljumpType = WalljumpType.JOYSTICK
-
-
-# child nodes
-# ===========================================
-
-
 @export var _phys: CharacterPhysics = CharacterPhysics.new()
+
 # state machine
 @onready @export var fsm: CharStateMachine = CharStateMachine.new(self)
 
@@ -718,13 +707,13 @@ func action_airdash() -> void:
 
 func action_walljump() -> bool:
 	var success = false
-	if WALLJUMP_TYPE == WalljumpType.JOYSTICK:
+	if GameState.settings.walljump_type == Constants.WalljumpType.JOYSTICK:
 		if input.pressed_right():
 			success = _walljump_right()
 		elif input.pressed_left():
 			success = _walljump_left()
 	
-	elif WALLJUMP_TYPE == WalljumpType.JUMP:
+	elif GameState.settings.walljump_type == Constants.WalljumpType.JUMP:
 		if input.pressed_jump():
 			success = _walljump_any()
 		if success:

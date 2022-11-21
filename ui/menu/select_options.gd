@@ -10,9 +10,9 @@ class SelectPractice extends MenuSelection:
 
     func get_extra():
         if GameState.is_practice_mode_enabled:
-            return "[checked] unchecked "
+            return "[on] off "
         else:
-            return " checked [unchecked]"
+            return " on [off]"
 
     func get_hint(): return "if enabled, be able to see and hit dead enemies. disables timer."
 

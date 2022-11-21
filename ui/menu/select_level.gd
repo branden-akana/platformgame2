@@ -1,24 +1,16 @@
 class_name SelectLevel
 extends MenuSelection
 
-const Level_TestHub = preload("res://levels/test_area.tscn")
+const Level_TestHub = preload("res://levels/lvl_flat.tscn")
 const Level_TestTutorial = preload("res://levels/test_tutorial.tscn")
 const Level_Test1 = preload("res://levels/test.tscn")
 
 class Hub extends MenuSelection:
-	func get_label(): return "test area"
+	func get_label(): return "dev room"
 	func get_extra():
-		return "best: %s" % GameState.run_timer.get_record("test area")
+		return "best: %s" % GameState.run_timer.get_record("dev room")
 	func on_select(menu):
 		GameState.load_scene(Level_TestHub)
-		menu.hide()
-
-class Tutorial extends MenuSelection:
-	func get_label(): return "test tutorial"
-	func get_extra():
-		return "best: %s" % GameState.run_timer.get_record("test tutorial")
-	func on_select(menu):
-		GameState.load_scene(Level_TestTutorial)
 		menu.hide()
 
 class Test1 extends MenuSelection:
@@ -30,9 +22,8 @@ class Test1 extends MenuSelection:
 		menu.hide()
 
 var items = [
-	Tutorial.new(),
-	Test1.new(),
 	Hub.new(),
+	Test1.new(),
 	SelectReturn.new()
 ]
 

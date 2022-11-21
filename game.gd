@@ -60,7 +60,7 @@ func _ready():
 	print("READYING GAME")
 
 	# UserSettings load
-	# settings = UserSettings.load_settings()
+	settings = UserSettings.load_settings()
 	
 	add_child(spritefont)
 
@@ -204,7 +204,7 @@ func _load_scene(level_path):
 
 	# debug_log("adding new scene as child")
 
-	$"/root/main".add_child(level)
+	$"/root/main/viewport".add_child(level)
 	# current_level = level.get_path()
 
 	# debug_log("restarting level...")

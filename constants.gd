@@ -22,3 +22,9 @@ const PATH_DISPLAYER := NodePath("/root/main/post_process")
 
 # path to the active camera
 const PATH_CAMERA := NodePath("/root/main/viewport/camera")
+
+
+enum WalljumpType {
+	JOYSTICK,  # input walljumps by inputting a direction away from the wall
+	JUMP       # input walljumps by pressing the jump button
+}

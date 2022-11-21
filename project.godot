@@ -225,11 +225,6 @@ _global_script_classes=[{
 "path": "res://ui/menu/select_level.gd"
 }, {
 "base": "MenuSelection",
-"class": &"SelectLights",
-"language": &"GDScript",
-"path": "res://ui/menu/select_lights.gd"
-}, {
-"base": "MenuSelection",
 "class": &"SelectMain",
 "language": &"GDScript",
 "path": "res://ui/menu/select_main.gd"
@@ -338,7 +333,6 @@ _global_script_class_icons={
 "SelectExit": "",
 "SelectKeybinds": "",
 "SelectLevel": "",
-"SelectLights": "",
 "SelectMain": "",
 "SelectOptions": "",
 "SelectPalette": "",
