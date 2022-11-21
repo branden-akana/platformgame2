@@ -8,9 +8,11 @@ class_name Ghost extends Character
 
 signal replay_finished
 
-# if any position deviation detected over this value,
-# fix the position
+## if any position deviation detected over this value, sync the ghost
 const MIN_DEVIATION = 0.0
+
+## the number of times the ghost desynced
+var num_desyncs := 0
 
 var replay = null
 var initial_conditions = null
@@ -76,7 +78,7 @@ func pre_process(_delta):
         # var delta_vel = velocity.distance_to(expected_vel)
         # print("Frame %d: delt pos = %0.2f, delt vel = %0.2f" % [tick, delta_pos, delta_vel])
         if delta_pos > MIN_DEVIATION:
-            print("[ghost] deviation detected! fixing position...")
+            num_desyncs += 1
             position = expected_pos
             velocity = expected_vel
 
@@ -85,17 +87,22 @@ func pre_process(_delta):
         var action_map = replay.input_frames[tick]
         for action in action_map:
             input.update_action(action, action_map[action])
+
     elif tick > last_tick and not is_replay_finished:
-        print("[ghost] reached end of replay (tick = %s)" % tick)
+        # accuracy of playback
+        var acc := num_desyncs / float(len(replay.sync_frames)) * 100
+
+        print("[ghost] playback finished")
+        print("    tick:    %s" % tick)
+        print("    desyncs: %d (%.2f%% accuracy)" % [num_desyncs, acc])
+
         is_replay_finished = true
         playing = false
         replay_finished.emit()
+
     else:
         push_warning("[ghost] missing tick: %s" % tick)
 
-    # else:
-    #     restart()
-    #     return
 
 # don't play any sounds
 func play_sound(sound, volume = 0.0, pitch = 1.0, force = false):
