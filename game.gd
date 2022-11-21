@@ -11,9 +11,6 @@ signal debug_mode_changed
 signal practice_mode_changed
 
 
-const Textbox = preload("res://ui/textbox.tscn")
-
-
 # list of pause reasons
 enum PauseRequester {
 	SCREEN_CHANGE,  # used during screen transitions
@@ -21,6 +18,10 @@ enum PauseRequester {
 }
 
 enum DebugMode {NORMAL, DEBUG, HITBOXES}
+
+
+const Textbox = preload("res://ui/textbox.tscn")
+var Ghost
 
 
 # path to the active room
@@ -58,6 +59,9 @@ var menu
 func _ready():
 
 	print("READYING GAME")
+
+	# load() scenes (TODO: preload() if possible)
+	Ghost = load("res://entities/character/ghost.tscn")
 
 	# UserSettings load
 	settings = UserSettings.load_settings()
@@ -137,6 +141,10 @@ func get_display() -> VFXManager:
 
 func get_camera() -> GameCamera:
 	return get_node(Constants.PATH_CAMERA) as GameCamera
+
+
+func get_replay_manager() -> ReplayManager:
+	return run_timer.replay_manager
 
 
 # Initialize the game. Use after loading a new level.

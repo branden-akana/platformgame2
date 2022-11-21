@@ -6,11 +6,13 @@
 
 class_name Ghost extends Character 
 
-signal replay_finish
+signal replay_finished
 
-# if any position deviation detected over this value,
-# fix the position
+## if any position deviation detected over this value, sync the ghost
 const MIN_DEVIATION = 0.0
+
+## the number of times the ghost desynced
+var num_desyncs := 0
 
 var replay = null
 var initial_conditions = null
@@ -20,10 +22,8 @@ var last_tick = 0
 
 var playing = false
 
-var replay_finished = false
+var is_replay_finished = false
 
-func _init(gamestate):
-    _gamestate = gamestate
 
 func _ready():
     # print("buffer: %s " % buffer)
@@ -32,28 +32,39 @@ func _ready():
     ignore_enemy_hp = true
     visible = false
 
-    connect("replay_finish", _gamestate.replay_playback_stop)
+    replay_finished.connect(stop)
 
-func load_replay(new_replay):
+##
+## Sets the replay that this ghost will play back.
+##
+func load_replay(new_replay: Replay) -> void:
     replay = new_replay
     last_tick = replay.input_frames.keys().max()
 
-# stop playing this ghost
-func stop():
+##
+## Stops replay playback and hide this ghost.
+##
+func stop() -> void:
     print("[ghost] stopped replay")
     visible = false
     playing = false
 
-func restart():
+##
+## Starts replay playback (or restarts, if already playing).
+##
+func restart() -> void:
     print("[ghost] restarting replay")
     super.restart()
     visible = true
-    replay_finished = false
+    is_replay_finished = false
+
     position = replay.start_position
     velocity = replay.start_velocity
     fsm.current_state_name = replay.start_state_type
     set_input_handler(replay.start_input)
+
     playing = true
+
 
 func pre_process(_delta):
 
@@ -67,7 +78,7 @@ func pre_process(_delta):
         # var delta_vel = velocity.distance_to(expected_vel)
         # print("Frame %d: delt pos = %0.2f, delt vel = %0.2f" % [tick, delta_pos, delta_vel])
         if delta_pos > MIN_DEVIATION:
-            print("[ghost] deviation detected! fixing position...")
+            num_desyncs += 1
             position = expected_pos
             velocity = expected_vel
 
@@ -76,17 +87,22 @@ func pre_process(_delta):
         var action_map = replay.input_frames[tick]
         for action in action_map:
             input.update_action(action, action_map[action])
-    elif tick > last_tick and not replay_finished:
-        print("[ghost] reached end of replay (tick = %s)" % tick)
-        replay_finished = true
+
+    elif tick > last_tick and not is_replay_finished:
+        # accuracy of playback
+        var acc := num_desyncs / float(len(replay.sync_frames)) * 100
+
+        print("[ghost] playback finished")
+        print("    tick:    %s" % tick)
+        print("    desyncs: %d (%.2f%% accuracy)" % [num_desyncs, acc])
+
+        is_replay_finished = true
         playing = false
-        emit_signal("replay_finish")
+        replay_finished.emit()
+
     else:
         push_warning("[ghost] missing tick: %s" % tick)
 
-    # else:
-    #     restart()
-    #     return
 
 # don't play any sounds
 func play_sound(sound, volume = 0.0, pitch = 1.0, force = false):
