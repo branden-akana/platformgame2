@@ -129,7 +129,7 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://ui/hud.gd"
 }, {
-"base": "StaticBody2D",
+"base": "LevelTrigger",
 "class": &"HazardTrigger",
 "language": &"GDScript",
 "path": "res://trigger/hazard_trigger.gd"
@@ -163,6 +163,16 @@ _global_script_classes=[{
 "class": &"LevelScreen",
 "language": &"GDScript",
 "path": "res://entities/room.gd"
+}, {
+"base": "Node2D",
+"class": &"LevelTilemap",
+"language": &"GDScript",
+"path": "res://levels/tilemap.gd"
+}, {
+"base": "Area2D",
+"class": &"LevelTrigger",
+"language": &"GDScript",
+"path": "res://trigger/trigger.gd"
 }, {
 "base": "Node2D",
 "class": &"MainMenu",
@@ -321,6 +331,8 @@ _global_script_class_icons={
 "JumpsquatState": "",
 "Level": "",
 "LevelScreen": "",
+"LevelTilemap": "",
+"LevelTrigger": "",
 "MainMenu": "",
 "MenuSelection": "",
 "ParticleGroup": "",

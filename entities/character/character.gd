@@ -110,7 +110,8 @@ func _ready():
 	action_performed.connect(on_action)
 
 	# event setup
-	$hurtbox.connect("body_entered",Callable(self,"on_hurtbox_entered"))
+	($hurtbox as Area2D).body_entered.connect(on_hurtbox_entered)
+	($hurtbox as Area2D).area_entered.connect(on_hurtbox_entered)
 
 	# animation player setup
 	var ap: AnimationPlayer = _model._anim
@@ -850,21 +851,21 @@ func action_attack():
 func action_special():
 	fsm.goto_special()
 
-
-# Hurt the player.
-#
-# If the player dies from being hurt, they will respawn at the specified
-# respawn point, or the start point if one isn't provided.
+##
+## Hurt the player.
+##
+## If the player dies from being hurt, they will respawn at the specified
+## respawn point, or the start point if one isn't provided.
 func hurt(damage = 100, respawn_point = null):
-	_hurt(damage, respawn_point)
-
-
-func _hurt(damage, respawn_point):
+	# _hurt(damage, respawn_point)
 	emit_signal("died")
 	if respawn_point:
 		respawn(respawn_point)
 	else:
 		respawn(_gamestate.get_start_point())
+
+
+# func _hurt(damage, respawn_point):
 
 
 # Called when a body intersects this character's hurtbox.

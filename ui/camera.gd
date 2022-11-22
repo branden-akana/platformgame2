@@ -75,7 +75,7 @@ func init():
 
 	# try to get the screen the player is checked
 	# GameState.set_current_room(get_room_at_target(), false)
-	transition_tween.stop()
+	if transition_tween: transition_tween.kill()
 
 
 # get the node that this camera is following

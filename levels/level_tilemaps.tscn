@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://ca54bg25ewl7p"]
+[gd_scene load_steps=4 format=3 uid="uid://ca54bg25ewl7p"]
 
 [ext_resource type="TileSet" uid="uid://elcuejgbpdct" path="res://assets/tilesets/test_blockout.tres" id="1_03mdd"]
+[ext_resource type="Script" path="res://levels/tilemap.gd" id="1_5h0tx"]
 [ext_resource type="TileSet" uid="uid://di6gbd2q4xx2j" path="res://assets/tilesets/test_detail.tres" id="2_0hv2k"]
 
 [node name="tilemaps" type="Node2D"]
+script = ExtResource("1_5h0tx")
 
 [node name="map_16" type="TileMap" parent="."]
 texture_filter = 1
