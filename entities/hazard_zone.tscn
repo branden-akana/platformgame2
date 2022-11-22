@@ -2,15 +2,18 @@
 
 [ext_resource type="Script" path="res://trigger/hazard_trigger.gd" id="1"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_scwul"]
-size = Vector2(480, 32)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ojxnr"]
+resource_local_to_scene = true
+size = Vector2(640, 360)
 
-[node name="hazard_zone" type="StaticBody2D"]
+[node name="hazard_zone" type="Area2D"]
 z_index = 1
 collision_layer = 4
-collision_mask = 0
+collision_mask = 2
 script = ExtResource("1")
+_debug_color = Color(1, 0, 0, 1)
 
 [node name="collision" type="CollisionShape2D" parent="."]
-position = Vector2(240, 16)
-shape = SubResource("RectangleShape2D_scwul")
+visible = false
+position = Vector2(320, 180)
+shape = SubResource("RectangleShape2D_ojxnr")

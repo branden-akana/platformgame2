@@ -146,9 +146,15 @@ func pre_process(delta):
 func player_restart():
 	_gamestate.call_with_fade_transition(self, "restart")
 
+##
+## Player-specific implementation of hurt().
+## Anything that hurts the player will play a fade-out-fade-in animation and respawn the player.
+##
 func hurt(damage = 100, respawn_point = null):
-	_gamestate.call_with_fade_transition(self, "_hurt", [damage, respawn_point])
-	# super.hurt(damage, respawn_point)
+	await _gamestate.pause_and_fade_out(0.2)
+	super.hurt(damage, respawn_point)
+	await _gamestate.fade_in_and_unpause(0.2)
+	# _gamestate.call_with_fade_transition(self, "hurt", [damage, respawn_point])
 
 func respawn(pos):
 	super.respawn(pos)
