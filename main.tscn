@@ -3,10 +3,10 @@
 [ext_resource type="PackedScene" uid="uid://j4ysxttaocaa" path="res://entities/character/player.tscn" id="1_su0qv"]
 [ext_resource type="PackedScene" uid="uid://qmf6bb0fmdoh" path="res://ui/hud.tscn" id="1_wvs1w"]
 [ext_resource type="PackedScene" uid="uid://bkpyxw0b5trhf" path="res://effects/vfx_manager.tscn" id="2"]
-[ext_resource type="Material" uid="uid://du5ouudnrc0r" path="res://shaders/palette_dither.tres" id="3_6xkkg"]
+[ext_resource type="Material" uid="uid://co83ij1g5tpco" path="res://shaders/palette_dither.tres" id="3_6xkkg"]
 [ext_resource type="PackedScene" uid="uid://bc0342clcc37m" path="res://ui/camera.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://d1a6ymdq18lvy" path="res://assets/palettes/base.png" id="4_0ox1w"]
-[ext_resource type="PackedScene" uid="uid://bfg2m2ully6oi" path="res://levels/lvl_flat.tscn" id="7_82rjx"]
+[ext_resource type="PackedScene" uid="uid://cjf245j1umvev" path="res://levels/lvl_flat.tscn" id="7_82rjx"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_mupbn"]
 viewport_path = NodePath("viewport")

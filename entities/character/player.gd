@@ -11,28 +11,13 @@ var ghost = null
 @onready var flash_tween
 
 func _ready():
-
 	super._ready()
-
-	# connect signal to sound effects
-	connect("walking",Callable(Sound,"play").bind("walk", -20, 0.8, true, false))
-	connect("stop_walking",Callable(Sound,"stop").bind("walk"))
-	connect("attack",Callable(Sound,"play").bind("attack", -20, 0.7, false, true))
-
-	# connect signals to particle effects
-	connect("jump",Callable(FXEmitter,"play").bind(FXEmitter.Jump, self, {"direction": -velocity})) 
-	connect("dragging",Callable(FXEmitter,"play").bind(FXEmitter.Dust, self))
-
-	# connect("airdash",Callable(self,"on_airdash"))
-	connect("airdash_restored", self.on_airdash_restored)
-	connect("walljump_left",Callable(self,"play_flash_effect"))
-	connect("walljump_right",Callable(self,"play_flash_effect"))
 
 	connect("enemy_hit", self.on_enemy_hit)
 	connect("enemy_killed", self.on_enemy_killed)
 
-func on_action(action: String) -> void:
 
+func on_action(action: String) -> void:
 	super.on_action(action)
 
 	match action:
@@ -52,6 +37,10 @@ func on_action(action: String) -> void:
 		"land":
 			FXEmitter.play(FXEmitter.Land, self)
 			Sound.play("land", -20, 0.8)
+		"airdash_restored":
+			play_flash_effect()
+		"drag":
+			FXEmitter.play(FXEmitter.Dust, self)
 
 # Start an effect where the player flashes
 func play_flash_effect():
@@ -64,14 +53,11 @@ func play_flash_effect():
 	flash_tween.tween_property(self._model, "color",
 		Color(1.0, 1.0, 1.0), 0.2)
 
-func on_airdash_restored():
-	play_flash_effect()
-
 func on_airdash():
 	if flash_tween:
 		flash_tween.stop()
 
-func on_enemy_hit(enemy, contacts):
+func on_enemy_hit(_enemy, contacts):
 	signal_frames[tick] = "hit"
 
 	Sound.play("hit", -10)
@@ -83,13 +69,13 @@ func on_enemy_hit(enemy, contacts):
 		effect.top_level = true
 		effect.position = contacts[0]
 
-func on_enemy_killed(enemy, contacts):
+func on_enemy_killed(_enemy, _contacts):
 	pass
 	# var effect = FXEmitter.play(FXEmitter.HitParticles)
 	# effect.position = enemy.position
 	# effect.direction = position.direction_to(enemy.position)
 
-func pre_process(delta):
+func pre_process(_delta):
 
 	# update player color
 	match airdashes_left:

@@ -4,5 +4,5 @@ extends MenuSelection
 func get_label():
     return "exit"
 
-func on_select(menu):
+func on_select(_menu):
     GameState.exit()

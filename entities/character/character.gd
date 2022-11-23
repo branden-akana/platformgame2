@@ -1,3 +1,9 @@
+##================================================================================
+## Character
+##
+## The base entity that is used by the player.
+##================================================================================
+
 class_name Character extends CharacterBody2D
 
 # fired for actions performed directly caused by player input (jumping, attacking, etc.)
@@ -48,48 +54,42 @@ var is_grounded: bool = true :
 		_set_grounded(grounded)
 		is_grounded = grounded
 
-# if true, then gravity should be applied
+## if true, then gravity should be applied
 var b_gravity_enabled = false
 
-# if false, player will not slide during movement calculations
+## if false, player will not slide during movement calculations
 var b_can_slide = true
 
-# when the player becomes airborne, contains their y position
+## when the player becomes airborne, contains their y position
 var airborne_height: float = 0.0
 
-# current player facing direction
+## current player facing direction
 var facing: int = Direction.RIGHT
 
-# if true, attacks don't do any damage
+## if true, attacks don't do any damage
 var no_damage = false
 
-# if true, don't play certain effects
+## if true, don't play certain effects
 var no_effects = false
 
-# if true, character can hit dead enemies
+## if true, character can hit dead enemies
 var ignore_enemy_hp = false
 
 # number of jumps allowed to perform until the character touches the floor
 # var jumps_left = 1
 
-# number of dashes allowed to perform until the character touches the floor
+## number of dashes allowed to perform until the character touches the floor
 var airdashes_left = 1
 
-# number of walljumps performed before landing
+## number of walljumps performed before landing
 var consecutive_walljumps = 0
 
-# the time (in ticks) when the player last left the ground
+## the time (in ticks) when the player last left the ground
 var time_left_ground = 0
 
-# INFO: The current GameState instance (set by GameState)
+## INFO: The current GameState instance (set by GameState)
 var _gamestate
 
-
-# state variables
-# ======================================================
- 
-# move character by this vector every tick
-#var velocity = Vector2.ZERO
 
 func _ready():
 
@@ -108,6 +108,7 @@ func _ready():
 
 	# state machine setup
 	action_performed.connect(on_action)
+	action_occured.connect(on_action)
 
 	# event setup
 	($hurtbox as Area2D).body_entered.connect(on_hurtbox_entered)
@@ -172,7 +173,7 @@ func _physics_process(delta):  # update input and physics
 	# fix_incoming_collisions(delta, 40)
 
 	# apply final movement
-	move(delta, velocity)
+	move(delta)
 
 	input.update()
 
@@ -182,6 +183,15 @@ func _physics_process(delta):  # update input and physics
 # Getters / Setters
 #--------------------------------------------------------------------------------
 
+##
+## Consume one of the player's airdash/jump charges. Cannot be lower than 0.
+##
+func consume_jump():
+	airdashes_left = max(0, airdashes_left - 1)
+
+##
+## Restore all of the player's airdash/jump charges.
+##
 func restore_jumps():
 	if airdashes_left != 1:
 		action_occured.emit("airdash_restored")
@@ -192,10 +202,10 @@ func restore_jumps():
 #     b_ignore_platforms = ignore_platforms
 
 #     set_collision_mask_value(9, !ignore_platforms)
-#     $ecb.get_left().set_collision_mask_value(9, !ignore_platforms)
-#     $ecb.get_right().set_collision_mask_value(9, !ignore_platforms)
-#     $ecb.get_top().set_collision_mask_value(9, !ignore_platforms)
-#     $ecb.get_bottom().set_collision_mask_value(9, !ignore_platforms)
+#     _ecb.get_left().set_collision_mask_value(9, !ignore_platforms)
+#     _ecb.get_right().set_collision_mask_value(9, !ignore_platforms)
+#     _ecb.get_top().set_collision_mask_value(9, !ignore_platforms)
+#     _ecb.get_bottom().set_collision_mask_value(9, !ignore_platforms)
 
 func _set_grounded(grounded: bool, emit = true) -> void:
 	if not is_grounded and grounded and emit:
@@ -209,7 +219,7 @@ func _set_grounded(grounded: bool, emit = true) -> void:
 
 
 func check_grounded():
-	var floor_check = $ecb.bottom_collide_out()
+	var floor_check = _ecb.bottom_collide_out()
 	# var floor_check = _test_collide_down()
 	# var floor_check = is_on_floor()
 
@@ -343,7 +353,7 @@ func _check_invalid_platform_collisions(use_slides: bool = true) -> bool:
 
 	return false
 
-func move(delta, velocity):
+func move(_delta):
 
 	# detect hitting a platform from a non-one-way angle
 	var invalid_platform_collisions = _check_invalid_platform_collisions()
@@ -356,17 +366,17 @@ func move(delta, velocity):
 	# if b_ignore_platforms: set_collision_mask_value(9, false)
 
 	# cancel x-velocity if moving into wall
-	# if ($ecb.left_collide_out() and velocity.x < 0
-	#     or $ecb.right_collide_out() and velocity.x > 0):
+	# if (_ecb.left_collide_out() and velocity.x < 0
+	#     or _ecb.right_collide_out() and velocity.x > 0):
 	#     velocity.x = 0
 
 	#if result: print("%s: %s" % [result.collider, result.position])
-	set_velocity(velocity)
+	# set_velocity(velocity)
 	move_and_slide()
 	# velocity
 
 	# move and slide implementation
-	var max_slides = 2
+	max_slides = 2
 	if not is_grounded:
 		max_slides = 5
 
@@ -459,7 +469,8 @@ func fix_incoming_collisions(delta: float, margin: float) -> void:
 
 		tilemap = collision.get_collider()
 
-	_fix_tilemap_collision(tilemap, collision.get_position(), margin)
+	# _fix_tilemap_collision(tilemap, collision.get_position(), margin)
+	_fix_tilemap_collision(tilemap, margin)
 
 
 func fix_collisions(margin: float) -> void:
@@ -472,19 +483,20 @@ func fix_collisions(margin: float) -> void:
 	for collision in collisions:
 		var collider = collision.get_collider()
 		# print("is tilemap: %s" % collider is TileMap)
-		_fix_tilemap_collision(collider, position + collision_point, margin)
+		# _fix_tilemap_collision(collider, position + collision_point, margin)
+		_fix_tilemap_collision(collider, margin)
 	
 	# var ray = get_ecb().get_bottom()
 	# var collider = ray.get_collider()
 	# var collision_point = ray.get_collision_point() + Vector2(0, -1)
 
 
-func _fix_tilemap_collision(tilemap: TileMap, collision_point: Vector2, margin: float, shape_id: int = 0):
+func _fix_tilemap_collision(tilemap: TileMap, margin: float, shape_id: int = 0):
 
 	if not tilemap is TileMap: return
 
 	# try to retrieve the shape of the specific tile that was collided with
-	var collider_shape = _get_tilemap_shape(tilemap, collision_point, shape_id)
+	var collider_shape = _get_tilemap_shape(tilemap, 0, shape_id)
 	# print("shape: %s" % [collider_shape])
 
 	if len(collider_shape) and position.y:
@@ -502,12 +514,12 @@ func _fix_tilemap_collision(tilemap: TileMap, collision_point: Vector2, margin: 
 # if the collider is a TileMap.
 #
 # If a shape cannot be found an empty array is returned.
-func _get_tilemap_shape(tilemap, position: Vector2, layer: int = 0, polygon_index: int = 0) -> PackedVector2Array:
+func _get_tilemap_shape(tilemap, layer: int = 0, polygon_index: int = 0) -> PackedVector2Array:
 
 	# get the map coordinates, world coordinates, and id of the tile that was collided with
 	var tile_coords: Vector2i = tilemap.local_to_map(tilemap.to_local(position))
 	# print("tile_coords: %s" % tile_coords)
-	var tile_pos: Vector2 = tilemap.map_to_local(tile_coords)
+	# var tile_pos: Vector2 = tilemap.map_to_local(tile_coords)
 	var tile_id: int = tilemap.get_cell_source_id(layer, tile_coords)
 	var tile_data: TileData = tilemap.get_cell_tile_data(layer, tile_coords)
 
@@ -550,7 +562,7 @@ func _min_y(points: PackedVector2Array) -> float:
 
 # Align the character to the floor if the distance the character would have to
 # shift is within a set margin.
-func align_to_floor(delta, margin = _phys.FLOOR_SNAP_TOP_MARGIN):
+func align_to_floor(_delta, margin = _phys.FLOOR_SNAP_TOP_MARGIN):
 	
 	# cast a ray down below character to detect a floor
 	var ray = Util.intersect_ray(self, Vector2(0, 0), Vector2.DOWN * margin)
@@ -577,7 +589,9 @@ func apply_gravity(delta):
 		if velocity.y <= _phys.TERMINAL_VELOCITY:
 			velocity.y = min(_phys.TERMINAL_VELOCITY, velocity.y + (_phys.GRAVITY * delta))
 
-
+##
+## Accelerate the character horizontally.
+##
 func _acceleration(delta: float, accel = null, max_speed = null) -> void:
 
 	var axis_x: float = input.get_axis_x()
@@ -595,7 +609,9 @@ func _acceleration(delta: float, accel = null, max_speed = null) -> void:
 	elif axis_x < 0.0 and velocity.x > -max_speed:
 		velocity.x = max(-max_speed, velocity.x + (axis_x * accel * delta))
 
-
+##
+## Apply friction to the character horizontally.
+##
 func _friction(delta: float):
 	var friction = _phys.GROUND_FRICTION if is_grounded else _phys.AIR_FRICTION
 
@@ -605,32 +621,6 @@ func _friction(delta: float):
 	velocity.x = move_toward(velocity.x, 0, friction * delta)
 
 
-# Apply acceleration to the character
-# func apply_acceleration(delta, x, acceleration, max_speed):
-
-#     var in_lower_cap = false
-#     var in_upper_cap = false
-
-#     # check speed caps
-#     if velocity.x >= -max_speed:
-#         in_lower_cap = true
-#     if velocity.x <= max_speed:
-#         in_upper_cap = true
-
-#     # apply acceleration
-#     if in_lower_cap and x < 0:
-#         velocity.x = max(-max_speed, velocity.x - acceleration * abs(x) * delta)
-#     if in_upper_cap and x > 0:
-#         velocity.x = min(max_speed, velocity.x + acceleration * abs(x) * delta)
-
-#     return true
-
-# Apply friction (deceleration) to the character
-# func apply_friction(delta, friction = FRICTION):
-#     if is_grounded and abs(velocity.x) > 0:
-#         emit_signal("dragging")
-#     velocity.x = move_toward(velocity.x, 0, friction * delta)
-
 #--------------------------------------------------------------------------------
 # Actions
 #
@@ -639,8 +629,9 @@ func _friction(delta: float):
 # to call an action. (See CharStateMachine.process() for input checks).
 #--------------------------------------------------------------------------------
 
-# Drop down through a platform (only one-way platforms).
-# Will instantly send the character to the "airborne" state.
+##
+## Drop down through a platform (only one-way platforms).
+##
 func action_dropdown():
 
 	# var space := get_world_2d().direct_space_state
@@ -653,59 +644,65 @@ func action_dropdown():
 	if is_grounded and len(Util.intersect_point(self, Vector2(0, 24))) == 0:
 		# set_ignore_platforms(true)
 		position.y += 4
-		fsm.change(CharStateName.AIRBORNE)
 		action_performed.emit("dropdown")
+		action_airborne()
 		# await get_tree().create_timer(0.5).timeout
 		# set_ignore_platforms(false)
 
 ##
-#
+## Make the player airborne. Manually tries to unground the player.
+## Will instantly on the next frame when called while player is on the floor.
 ##
 func action_airborne() -> void:
 	fsm.change(CharStateName.AIRBORNE)
+	is_grounded = false
+	airborne_height = position.y
+	b_gravity_enabled = true
 	action_performed.emit("airborne")
 
 ##
-# If airborne and falling, instantly fall at the maximum speed.
+## If the player airborne and falling, instantly fall at the maximum speed.
 ##
 func action_fastfall():
 	if not is_grounded and velocity.y > 0:
 		velocity.y = _phys.FAST_FALL_SPEED
 		action_performed.emit("fastfall")
 
-
+##
+## Transition to the IDLE state, where the player is in an idle animation.
+##
 func action_neutral():
 	if fsm.change(CharStateName.IDLE):
 		action_performed.emit("idle")
 
 ##
-# Initiate a dash. Direction depends checked the current input direction.
+## Start a dash. Direction depends checked the current input direction.
 ##
 func action_dash() -> void:
 	fsm.change(CharStateName.DASH)
 	action_performed.emit("dash")
 
 ##
-#
+## Start running.
 ##
 func action_run() -> void:
 	fsm.change(CharStateName.RUNNING)
 	action_performed.emit("running")
 
-
+##
+## Perform an airdash.
+## Will be ignored if the player is not inputting a move direction.
+##
 func action_airdash() -> void:
 	var axis = input.get_axis()
-	# if (
-	#     not axis.is_equal_approx(Vector2.ZERO)
-	#     and current_state_name == CharStateName.ATTACK
-	#     and not character.is_grounded or current_state_name != CharStateName.ATTACK
-	#     and round(axis.length()) != 0
-	# ):
 	if !axis.is_equal_approx(Vector2.ZERO) and airdashes_left > 0:
 		fsm.change(CharStateName.AIRDASH)
 		action_performed.emit("airdash")
 
-
+##
+## Perform a walljump in either direction.
+## Will be ignored if the player is not next to a wall.
+##
 func action_walljump() -> bool:
 	var success = false
 	if GameState.settings.walljump_type == Constants.WalljumpType.JOYSTICK:
@@ -725,32 +722,34 @@ func action_walljump() -> bool:
 
 	return success
 
+## Perform a walljump to the left if possible.
 func _walljump_left() -> bool:
 	return _walljump(Direction.LEFT)
 
+## Perform a walljump to the right if possible.
 func _walljump_right() -> bool:
 	return _walljump(Direction.RIGHT)
 
-# Perform a walljump in either direction if possible.
+## Perform a walljump in either direction if possible.
 func _walljump_any() -> bool:
 	return _walljump()
 
-# Perform a walljump in the specified direction if possible.
+## Perform a walljump in the specified direction if possible.
 func _walljump(dir = null) -> bool:
 
 	# print("attempting walljump")
 	
 	if dir == null:
-		if $ecb.right_collide_out():
+		if _ecb.right_collide_out():
 			dir = Direction.LEFT
-		elif $ecb.left_collide_out():
+		elif _ecb.left_collide_out():
 			dir = Direction.RIGHT
 		else:
 			return false
 			
 	if (
-		dir == Direction.LEFT and not $ecb.right_collide_out()
-		or dir == Direction.RIGHT and not $ecb.left_collide_out()
+		dir == Direction.LEFT and not _ecb.right_collide_out()
+		or dir == Direction.RIGHT and not _ecb.left_collide_out()
 	):
 		return false
 
@@ -766,17 +765,21 @@ func _walljump(dir = null) -> bool:
 		sig = "walljump_left"
 
 	# perform walljump if rays collided
-	_jump(jump_mult, true, x_speed)
+	_jump(jump_mult, x_speed)
 	self.facing = dir
 	consecutive_walljumps += 1
 	action_performed.emit(sig)
 	
 	return true
 
-
-# Perform a jump.
-# If grounded, sends the character to the "jumpsquat" state.
-# If airborne, instantly perform the jump.
+##
+## Perform a jump.
+##
+## If in any grounded state, sends the character to the JUMPSQUAT state.
+## If in the AIRBORNE or JUMPSQUAT state, instantly perform the jump.
+##
+## Performing the jump will reduce the total amount of airdash/jump charges.
+##
 func action_jump(factor = 1.0):
 	# if jumps_left > 0:
 	if airdashes_left > 0:
@@ -788,13 +791,13 @@ func action_jump(factor = 1.0):
 		else:
 			print("time after left ground: %s" % (tick - time_left_ground))
 			if not is_grounded and tick - time_left_ground > 14:
-				airdashes_left -= 1
+				consume_jump()
 			_jump(factor)
 			fsm.change(CharStateName.AIRBORNE)
 			action_performed.emit("jump")
 
-# Make the character jump. If force is true, ignore how many jumps they have left.
-func _jump(factor = 1.0, force = false, vel_x = null):
+## Make the character jump.
+func _jump(factor = 1.0, vel_x = null):
 
 	var axis = input.get_axis()
 
@@ -821,6 +824,7 @@ func _jump(factor = 1.0, force = false, vel_x = null):
 		velocity.y = min(velocity.y, -_phys.DASHJUMP_VELOCITY * factor)
 	else:
 		velocity.y = -_phys.JUMP_VELOCITY * factor
+
 
 # Perform an attack.
 #
@@ -856,7 +860,7 @@ func action_special():
 ##
 ## If the player dies from being hurt, they will respawn at the specified
 ## respawn point, or the start point if one isn't provided.
-func hurt(damage = 100, respawn_point = null):
+func hurt(_damage = 100, respawn_point = null):
 	# _hurt(damage, respawn_point)
 	emit_signal("died")
 	if respawn_point:

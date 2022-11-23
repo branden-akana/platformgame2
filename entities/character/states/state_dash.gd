@@ -16,7 +16,7 @@ func _init(character):
 		# CharacterActions.WALLJUMP,
 	])
 
-func on_start(state_from, fsm):
+func on_start(_state_from, _fsm):
 
 	var axis_x = character.input.get_axis_x()
 
@@ -34,7 +34,7 @@ func on_start(state_from, fsm):
 		FXEmitter.play(FXEmitter.Dash, character, {"direction": Vector2(3, -1)})
 		character.velocity.x = -character._phys.DASH_INIT_SPEED
 
-func on_end(state_to, fsm):
+func on_end(state_to, _fsm):
 
 	var facing = character.facing
 	var vel_x = character.velocity.x
@@ -46,7 +46,7 @@ func on_end(state_to, fsm):
 			character.velocity.x = -character._phys.DASH_STOP_SPEED
 
 
-func on_update(delta, fsm):
+func on_update(delta, _fsm):
 
 	#snap_down_to_ground(delta)
 	#snap_up_to_ground(delta, 16)

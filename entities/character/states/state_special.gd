@@ -8,7 +8,7 @@ var current_move
 var is_grounded: bool = false
 
 
-func on_start(state_from, fsm):
+func on_start(_state_from, _fsm):
 	is_grounded = false
 
 	# check move facing direction
@@ -41,5 +41,5 @@ func on_update(delta, fsm):
 	if !current_move.playing or (is_grounded and not character.is_on_floor()):
 		fsm.goto_idle_or_dash()
 
-func on_end(state_to, fsm):
+func on_end(_state_to, _fsm):
 	current_move.stop()

@@ -10,18 +10,18 @@ func on_debug_mode_changed(debug_mode: int) -> void:
     else:
         visible = false
 
-func _physics_process(delta):
+func _physics_process(_delta):
     pass
     # if GameState.get_player():
         # set_polygon(GameState.get_player().get_ecb().polygon)
 
 # Set the polygon (with first point added twice for closed shape)
 func set_polygon(polygon: PackedVector2Array):
-    var points = []
+    var pts = []
     for pt in polygon:
-        points.append(pt)
-    points.append(polygon[0])
+        pts.append(pt)
+    pts.append(polygon[0])
 
-    self.points = points
+    self.points = pts
 
 

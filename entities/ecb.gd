@@ -68,10 +68,10 @@ func update_ecb():
 	t.target_position = Vector2(0, -ray_length)
 	b.target_position = Vector2(0, ray_length)
 
-	var polygon
+	var poly
 	if type == Type.DIAMOND:
 		# diamond shape
-		polygon = [
+		poly = [
 			Vector2(right, 0),
 			Vector2(0, bottom),
 			Vector2(-left, 0),
@@ -79,14 +79,14 @@ func update_ecb():
 		]
 	else:
 		# box shape
-		polygon = [
+		poly = [
 			Vector2(right, -top),
 			Vector2(right, bottom),
 			Vector2(-left, bottom),
 			Vector2(-left, -top)
 		]
 
-	set_polygon(PackedVector2Array(polygon))
+	set_polygon(PackedVector2Array(poly))
 
 
 # Set the dimensions of the ECB (in pixels).

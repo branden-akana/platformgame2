@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://ddjd0i1gwk4ud"]
 
-[ext_resource type="Material" uid="uid://bcu4jmokjyqa2" path="res://shaders/dither_alpha_screen.tres" id="1_6dh3w"]
+[ext_resource type="Material" uid="uid://uefn1rgn15nq" path="res://shaders/dither_alpha_screen.tres" id="1_6dh3w"]
 [ext_resource type="Script" path="res://effects/particles/particle_group.gd" id="2_ol1aj"]
 [ext_resource type="PackedScene" uid="uid://c0csibcxvyq2o" path="res://effects/particles/fx_dash.tscn" id="3_fvner"]
 

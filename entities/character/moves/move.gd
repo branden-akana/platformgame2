@@ -132,7 +132,7 @@ func disable_hitbox(i: int):
 	hitbox.monitoring = false
 	hitbox.get_node("collision").set_deferred("disabled", true)
 
-func move_update(delta):
+func move_update(_delta):
 
 	if tick > move_length:
 		stop(false)
@@ -177,7 +177,7 @@ func _physics_process(delta):
 #
 # target: the object that was hit
 # hitbox: the collision of the hitbox that was triggered
-func on_hitbox_entered(area_id, target: Area2D, target_shape_id, hitbox_shape_id, hitbox: Area2D):
+func on_hitbox_entered(_area_id, target: Area2D, target_shape_id, hitbox_shape_id, hitbox: Area2D):
 	# if not character.fsm._current_state() !=  and hitbox.monitoring:
 		# print("[warning] attack hitbox triggered outside of attack state!!")
 		# hitbox.monitoring = false

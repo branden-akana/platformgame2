@@ -1,6 +1,6 @@
 class_name IdleState extends CharacterState
 
-func on_update(delta, fsm):
+func on_update(delta, _fsm):
 
 	character._friction(delta)
 

@@ -19,14 +19,14 @@ class SelectWalljumpType extends MenuSelection:
                 return "while against a wall, walljump by pressing jump"
 
     func _toggle():
-        if GameState.settings.walljump_type == 0:
-            GameState.settings.walljump_type = 1
+        if GameState.settings.walljump_type == GameState.WalljumpType.JOYSTICK:
+            GameState.settings.walljump_type = GameState.WalljumpType.JUMP
         else:
-            GameState.settings.walljump_type = 0
+            GameState.settings.walljump_type = GameState.WalljumpType.JOYSTICK
         GameState.settings.save()
 
-    func on_left(menu): _toggle()
-    func on_right(menu): _toggle()
+    func on_left(_menu): _toggle()
+    func on_right(_menu): _toggle()
 
 
 var items = [

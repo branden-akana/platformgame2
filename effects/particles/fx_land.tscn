@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://effects/particles/particle_group.gd" id="1_0hldd"]
 [ext_resource type="PackedScene" uid="uid://c0csibcxvyq2o" path="res://effects/particles/fx_dash.tscn" id="1_r1dpg"]
-[ext_resource type="Material" uid="uid://bcu4jmokjyqa2" path="res://shaders/dither_alpha_screen.tres" id="3_m34lp"]
+[ext_resource type="Material" uid="uid://uefn1rgn15nq" path="res://shaders/dither_alpha_screen.tres" id="3_m34lp"]
 
 [node name="land_effect" type="CanvasGroup"]
 material = ExtResource("3_m34lp")

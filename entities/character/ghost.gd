@@ -105,5 +105,5 @@ func pre_process(_delta):
 
 
 # don't play any sounds
-func play_sound(sound, volume = 0.0, pitch = 1.0, force = false):
+func play_sound(_sound, _volume = 0.0, _pitch = 1.0, _force = false):
     pass

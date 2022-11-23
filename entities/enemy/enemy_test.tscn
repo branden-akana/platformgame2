@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://blssy5erb4gi1"]
 
 [ext_resource type="Script" path="res://entities/enemy/enemy_test.gd" id="1_ic5pk"]
-[ext_resource type="Material" uid="uid://bcu4jmokjyqa2" path="res://shaders/dither_alpha_screen.tres" id="2_5mcwo"]
+[ext_resource type="Material" path="res://shaders/dither_alpha_screen.tres" id="2_5mcwo"]
 [ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="2_f2kyv"]
 
 [sub_resource type="Curve" id="2"]
