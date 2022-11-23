@@ -12,8 +12,8 @@ script/source = "extends Sprite2D
 
 @onready var origin = position
 
-func _process(delta):
-    position = origin + GameState.get_camera().focus * 0.9
+func _process(_delta):
+	position = origin + GameState.get_camera().focus * 0.9
 "
 
 [sub_resource type="Gradient" id="Gradient_78tdo"]
@@ -50,7 +50,7 @@ position = Vector2(2912, 744)
 
 [node name="hazard_zone" parent="rooms/room_1" index="4"]
 position = Vector2(8, 2360)
-size = Vector2(3840, 32)
+size = Vector2(1, 1)
 
 [node name="respawn" parent="rooms/room_1/hazard_zone" index="1"]
 position = Vector2(888, -568)

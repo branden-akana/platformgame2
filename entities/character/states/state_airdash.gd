@@ -15,7 +15,7 @@ func can_start(character) -> bool:
 	return true
 
 
-func on_start(state_from, fsm):
+func on_start(state_from, _fsm):
 
 	# limit to 8 directions
 	var axis = character.input.get_axis().round().normalized()
@@ -40,7 +40,7 @@ func on_start(state_from, fsm):
 	character.b_can_slide = false
 	
 
-func on_end(state_to, fsm):
+func on_end(_state_to, _fsm):
 
 	character.b_can_slide = true
 	_disallow(CharacterActions.LAND)
@@ -51,7 +51,7 @@ func on_end(state_to, fsm):
 	# 	particles.emitting = false
 
 
-func on_update(delta, fsm):
+func on_update(_delta, fsm):
 
 	if not is_current(fsm):
 		return

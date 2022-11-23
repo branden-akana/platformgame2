@@ -108,8 +108,6 @@ func _process(_delta):
 ## debug visuals
 func _draw():
 	if Engine.is_editor_hint():
-		var color = Color(1.0, 1.0, 1.0)  # white
-
 		# outline the collision box
 		draw_rect(Rect2(0, 0, _real_size().x, _real_size().y), Color.WHITE, false, 2)
 		draw_rect(Rect2(8, 8, _real_size().x - 16, _real_size().y - 16), Color.WHITE, false, 2)

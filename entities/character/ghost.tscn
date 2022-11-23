@@ -10,9 +10,6 @@ script = ExtResource("2")
 [node name="moveset" parent="." index="4"]
 visible = false
 
-[node name="model" parent="." index="5"]
-color = Color(0.223529, 0.223529, 0.223529, 1)
-
 [node name="light" parent="model/viewport_container/viewport" index="2"]
 light_color = Color(0.223529, 0.223529, 0.223529, 1)
 
@@ -76,7 +73,7 @@ bones/96/rotation = Quaternion(0.0229588, -0.243547, -0.0433951, 0.968646)
 bones/97/rotation = Quaternion(-0.0248812, -0.0732018, -0.82577, 0.558683)
 
 [node name="bone_attachment_3d" parent="model/viewport_container/viewport/captain/falcon/Skeleton3D" index="0"]
-transform = Transform3D(-0.326998, -0.617634, 0.715263, 0.602094, 0.44721, 0.661428, -0.728393, 0.646941, 0.225637, -0.495412, 1.10348, -15.008)
+transform = Transform3D(-0.326996, -0.617635, 0.715263, 0.602093, 0.44721, 0.661428, -0.728393, 0.64694, 0.225638, -0.495406, 1.10348, -15.008)
 
 [node name="soft_body_3d" parent="model/viewport_container/viewport/captain/falcon/Skeleton3D/bone_attachment_3d" index="0"]
 visible = false
@@ -84,7 +81,5 @@ attachments/0/offset = Vector3(0.767039, -1.40647, 0.455269)
 attachments/1/offset = Vector3(-1.92495, -0.106557, -1.487)
 attachments/2/offset = Vector3(0.44273, -1.67257, 0.106649)
 attachments/3/offset = Vector3(-0.589435, -0.258969, 0.841278)
-attachments/4/offset = Vector3(-1.60064, 0.15954, -1.13838)
-attachments/5/offset = Vector3(-3.28143, 1.04094, -1.10099)
 
 [editable path="model"]

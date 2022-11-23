@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://bm70ad6sh53pi"]
 
 [ext_resource type="Texture2D" uid="uid://cwj77fl7ajkcr" path="res://assets/beam.png" id="1_gudmr"]
-[ext_resource type="Material" uid="uid://bcu4jmokjyqa2" path="res://shaders/dither_alpha_screen.tres" id="1_li2ut"]
+[ext_resource type="Material" uid="uid://uefn1rgn15nq" path="res://shaders/dither_alpha_screen.tres" id="1_li2ut"]
 [ext_resource type="Script" path="res://effects/particles/particle_group.gd" id="1_qdpwo"]
 [ext_resource type="Script" path="res://effects/particles/timed_particles.gd" id="2_hoqcm"]
 

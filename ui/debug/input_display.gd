@@ -12,7 +12,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
     var input_vector = Vector2.ZERO
     input_vector.x = Input.get_action_strength("key_right") - Input.get_action_strength("key_left")
     input_vector.y = Input.get_action_strength("key_down") - Input.get_action_strength("key_up")

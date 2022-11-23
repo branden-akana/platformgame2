@@ -291,7 +291,7 @@ func _physics_process(delta):
 	get_hud().get_node("debug/info").text = "speed: %3.2f (x=%3.2f, y=%3.2f)\nstate: %s" % [velocity.length(), velocity.x, velocity.y, state_name]
 
 
-func _process(delta):
+func _process(_delta):
 
 	# print("game_process")
 
@@ -373,8 +373,8 @@ func draw_text(node, text):
 # ========================================================================
 
 # Sets the time scale of the physics.
-func set_time_scale(scale):
-	Engine.time_scale = scale
+func set_time_scale(time_scale: float) -> void:
+	Engine.time_scale = time_scale
 
 func pause_and_fade_out(time):
 	pause(self)

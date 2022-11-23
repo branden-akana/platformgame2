@@ -23,7 +23,7 @@ class_name VFXManager extends CanvasLayer
 		return b_post_process_enabled # TODOConverter40 Non existent get function 
 	set(enabled):
 		b_post_process_enabled = enabled
-		if $color_indexer:
+		if get_node_or_null("color_indexer"):
 			$color_indexer.visible = enabled
 			$vignette.visible = enabled
 			$pixelator.visible = enabled
@@ -43,20 +43,34 @@ class_name VFXManager extends CanvasLayer
 # 	if has_node("%camera"):
 # 		position = $%camera.focus
 
+##
+## Set a parameter for the color indexer shader.
+##
+func _set_shader_param(key: String, value: Variant):
+	($color_indexer as Node2D).material.set_shader_parameter(key, value)
+
+
 func _set_palette(idx: int) -> void:
 	idx = idx % len(palettes)
-	RenderingServer.global_shader_parameter_set("palette_a", palettes[idx])
+	# RenderingServer.global_shader_parameter_set("palette_a", palettes[idx])
+	_set_shader_param("palette_a", palettes[idx])
 		
+
 func _set_palette_back(idx: int) -> void:
 	idx = idx % len(palettes)
-	RenderingServer.global_shader_parameter_set("palette_b", palettes[idx])
+	# RenderingServer.global_shader_parameter_set("palette_b", palettes[idx])
+	_set_shader_param("palette_b", palettes[idx])
 		
+
 # 0.0 => palette A, 1.0 => palette B
 func _set_palette_blend(n: float) -> void:
-	RenderingServer.global_shader_parameter_set("palette_blend", n)
+	# RenderingServer.global_shader_parameter_set("palette_blend", n)
+	_set_shader_param("palette_blend", n)
 	
-# Change the game's color palette over a set amount of time.
-#
+
+##
+## Change the game's color palette over a set amount of time.
+##
 func change_palette(idx, time = 0.5):
 
 	# print("changing color palette from %s to %s in %s seconds" % [current_palette, idx, time])

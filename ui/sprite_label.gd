@@ -80,7 +80,7 @@ func draw_text(text, line_length):
 				i = 0
 				j += 1
 
-func _process(delta):
+func _process(_delta):
 	if Engine.is_editor_hint():
 		queue_redraw()
 

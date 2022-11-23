@@ -1,10 +1,10 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=6 format=3 uid="uid://cjf245j1umvev"]
 
 [ext_resource type="Script" path="res://levels/level.gd" id="1_pffpa"]
 [ext_resource type="PackedScene" uid="uid://ca54bg25ewl7p" path="res://levels/level_tilemaps.tscn" id="2_87wh6"]
 [ext_resource type="PackedScene" uid="uid://bp6s3ennh11ys" path="res://entities/room.tscn" id="3_nlhee"]
 [ext_resource type="PackedScene" uid="uid://bc6bdfdsypeel" path="res://entities/enemy/dummy.tscn" id="4_pd2n0"]
-[ext_resource type="PackedScene" path="res://shaders/background.tscn" id="5_8iclu"]
+[ext_resource type="PackedScene" uid="uid://dxxik7kpvy4ek" path="res://shaders/background.tscn" id="5_8iclu"]
 
 [node name="level" type="Node2D"]
 texture_filter = 1

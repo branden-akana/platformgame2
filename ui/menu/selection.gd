@@ -21,19 +21,19 @@ func on_select(menu):
     if len(get_items()): menu.set_menu(self)
     
 # called when the cursor hovers over this item
-func on_hover(menu):
+func on_hover(_menu):
     pass
 
 # called when the cursor leaves this item
-func on_unhover(menu):
+func on_unhover(_menu):
     pass
 
 # if this item is a menu, is called when this menu is entered
-func on_enter(menu):
+func on_enter(_menu):
     pass
 
 # if this item is a menu, is called when this menu is left
-func on_return(menu):
+func on_return(_menu):
     pass
 
 # get this selection's new menu items. if this array is empty,
@@ -42,15 +42,15 @@ func get_items() -> Array:
     return []
 
 # called when the user presses right checked this item
-func on_right(menu):
+func on_right(_menu):
     pass
 
 # called when the user presses left checked this item
-func on_left(menu):
+func on_left(_menu):
     pass
 
-func on_update(menu, delta) -> bool:
+func on_update(_menu, _delta) -> bool:
     return true
 
-func on_input(menu, event: InputEvent) -> bool:
+func on_input(_menu, _event: InputEvent) -> bool:
     return false

@@ -39,14 +39,14 @@ class Rebinder extends MenuSelection:
     func get_hint():
         return "left/right to choose binding, select to rebind"
 
-    func on_left(menu): i = _idx(i, -1)
-    func on_right(menu): i = _idx(i, +1)
+    func on_left(_menu): i = _idx(i, -1)
+    func on_right(_menu): i = _idx(i, +1)
 
-    func on_select(menu): listening = true
+    func on_select(_menu): listening = true
 
-    func on_update(menu, delta) -> bool:
+    func on_update(_menu, _delta) -> bool:
         return !listening
-    func on_input(menu, event: InputEvent) -> bool:
+    func on_input(_menu, event: InputEvent) -> bool:
         if listening:
             if (
                 # keyboard keys
