@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=3 uid="uid://dxxik7kpvy4ek"]
+
+[sub_resource type="Gradient" id="Gradient_5keem"]
+colors = PackedColorArray(0.171875, 0.171875, 0.171875, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_nv5by"]
+gradient = SubResource("Gradient_5keem")
+width = 640
+height = 360
+fill = 1
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Curve" id="Curve_5x3e4"]
+_data = [Vector2(0, 0), 0.0, 2.04487, 0, 0, Vector2(0.489028, 1), 0.053704, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_swieg"]
+offsets = PackedFloat32Array(0, 0.567568, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="background" type="CanvasLayer"]
+layer = -1
+
+[node name="color" type="ColorRect" parent="."]
+visible = false
+offset_right = 640.0
+offset_bottom = 360.0
+color = Color(0.121569, 0.121569, 0.121569, 1)
+
+[node name="color_2" type="Sprite2D" parent="."]
+texture = SubResource("GradientTexture2D_nv5by")
+centered = false
+
+[node name="cpu_particles_2d" type="CPUParticles2D" parent="."]
+position = Vector2(320, 192)
+amount = 20
+lifetime = 20.0
+preprocess = 8.0
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_rect_extents = Vector2(320, 180)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_max = 5.0
+scale_amount_curve = SubResource("Curve_5x3e4")
+color_ramp = SubResource("Gradient_swieg")

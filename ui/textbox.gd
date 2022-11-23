@@ -1,5 +1,5 @@
 extends SpriteLabel
-tool
+
 
 signal textbox_closed
 
@@ -45,7 +45,7 @@ func roll_text():
     # while max_chars < len(lines[current_line]):
     while max_chars < len(text):
         audio.play()
-        yield(get_tree().create_timer(0.02), "timeout")
+        await get_tree().create_timer(0.02).timeout
         max_chars += 1
 
 # Advance text to the next line
@@ -82,15 +82,15 @@ func dismiss():
     queue_free()
 
 func _process(_delta):
-    if not Engine.editor_hint:
-        if Input.is_action_just_pressed("grapple"):
+    if not Engine.is_editor_hint():
+        if Input.is_action_just_pressed("attack"):
             advance_text()
-    update()
+    queue_redraw()
     
 func _draw():
     
     var s
-    if Engine.editor_hint:
+    if Engine.is_editor_hint():
         # s = lines[current_line]
         s = text
     else:

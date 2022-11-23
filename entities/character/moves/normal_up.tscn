@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://entities/character/moves/move.tscn" id="1"]
+
+[sub_resource type="RectangleShape2D" id=1]
+resource_local_to_scene = true
+extents = Vector2( 23, 29 )
+
+[node name="normal_up" instance=ExtResource( 1 )]
+move_length = 16
+move_hitboxes = [ {
+"end": 4,
+"start": 0
+} ]
+animation = "attack_uair"
+disable_gravity_on_hit = 0
+
+[node name="sprite" parent="." index="0"]
+position = Vector2( 20, 4 )
+scale = Vector2( 3, 6 )
+frame = 0
+
+[node name="collision" parent="0" index="0"]
+position = Vector2( 17, -5 )
+shape = SubResource( 1 )

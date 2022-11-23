@@ -1,37 +1,33 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://cj7yubvx8xgqs"]
 
-[ext_resource path="res://entities/ecb.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://entities/ecb.gd" id="1"]
 
 [node name="ecb" type="CollisionPolygon2D"]
-position = Vector2( 0, -24 )
+position = Vector2(0, -32)
 z_index = 1
-polygon = PoolVector2Array( 32, 0, 0, 96, -32, 0, 0, -64 )
-script = ExtResource( 1 )
-top = 64
-bottom = 96
-left = 32
-right = 32
+polygon = PackedVector2Array(12, 0, 0, 32, -12, 0, 0, -16)
+script = ExtResource("1")
+top = 0
+bottom = 0
+left = 0
+right = 0
 
 [node name="l" type="RayCast2D" parent="."]
-position = Vector2( -31, 0 )
-enabled = true
-cast_to = Vector2( -2, 0 )
+position = Vector2(-11, 0)
+target_position = Vector2(-2, 0)
 collision_mask = 257
 
 [node name="r" type="RayCast2D" parent="."]
-position = Vector2( 31, 0 )
-enabled = true
-cast_to = Vector2( 2, 0 )
+position = Vector2(11, 0)
+target_position = Vector2(2, 0)
 collision_mask = 257
 
 [node name="t" type="RayCast2D" parent="."]
-position = Vector2( 0, -63 )
-enabled = true
-cast_to = Vector2( 0, -2 )
+position = Vector2(0, -15)
+target_position = Vector2(0, -2)
 collision_mask = 257
 
 [node name="b" type="RayCast2D" parent="."]
-position = Vector2( 0, 95 )
-enabled = true
-cast_to = Vector2( 0, 2 )
+position = Vector2(0, 31)
+target_position = Vector2(0, 2)
 collision_mask = 769

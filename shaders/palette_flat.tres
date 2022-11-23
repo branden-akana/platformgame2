@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://ckgwuoc5fq6t7"]
+
+[ext_resource type="Shader" path="res://shaders/palette.gdshader" id="1_l4jlj"]
+[ext_resource type="Texture2D" uid="uid://d1a6ymdq18lvy" path="res://assets/palettes/base.png" id="2_sm3w2"]
+
+[resource]
+shader = ExtResource("1_l4jlj")
+shader_parameter/dither = false
+shader_parameter/dither_amt = 1.0
+shader_parameter/dither_lab = false
+shader_parameter/dither_shf = 0.0
+shader_parameter/palette_a = ExtResource("2_sm3w2")
+shader_parameter/palette_b = ExtResource("2_sm3w2")
+shader_parameter/palette_blend = 0.0
+shader_parameter/palette_key = ExtResource("2_sm3w2")
+shader_parameter/palette_size = 8
+shader_parameter/screen = false

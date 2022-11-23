@@ -1,62 +1,58 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://cdnxppinoliq3"]
 
-[ext_resource path="res://assets/fonts/Sk-Modernist-Mono.otf" type="DynamicFontData" id=1]
-[ext_resource path="res://ui/ui_timer.gd" type="Script" id=2]
-[ext_resource path="res://font_small.tres" type="DynamicFont" id=3]
+[ext_resource type="FontFile" uid="uid://g5vpaou6j0x8" path="res://assets/fonts/Sk-Modernist-Mono.otf" id="1"]
+[ext_resource type="Script" path="res://ui/ui_timer.gd" id="2"]
 
-[sub_resource type="DynamicFont" id=4]
-size = 96
+[sub_resource type="LabelSettings" id="LabelSettings_2ya85"]
+font = ExtResource("1")
+font_size = 96
+outline_size = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_ngsvk"]
+font = ExtResource("1")
+font_size = 46
+outline_size = 4
+
+[sub_resource type="LabelSettings" id="LabelSettings_qlmgx"]
+font = ExtResource("1")
+font_size = 30
 outline_size = 2
-use_mipmaps = true
-use_filter = true
-font_data = ExtResource( 1 )
-
-[sub_resource type="DynamicFont" id=7]
-size = 54
-outline_size = 2
-use_mipmaps = true
-use_filter = true
-extra_spacing_bottom = 26
-font_data = ExtResource( 1 )
+shadow_size = 4
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_offset = Vector2(0, 1)
 
 [node name="ui_timer" type="Polygon2D"]
-color = Color( 0, 0, 0, 1 )
-polygon = PoolVector2Array( 0, 0, 0, 128, 448, 128, 512, 0 )
-script = ExtResource( 2 )
+color = Color(0, 0, 0, 0)
+polygon = PackedVector2Array(-64, -64, -64, 128, 448, 128, 544, -64)
+script = ExtResource("2")
 
 [node name="big" type="Label" parent="."]
-margin_left = 27.0
-margin_top = -2.0
-margin_right = 402.0
-margin_bottom = 143.0
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_outline_modulate = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 4 )
+offset_left = 27.0
+offset_top = -2.0
+offset_right = 402.0
+offset_bottom = 143.0
 text = "00:00"
+label_settings = SubResource("LabelSettings_2ya85")
 
 [node name="small" type="Label" parent="."]
-margin_left = 309.0
-margin_top = 12.0
-margin_right = 444.0
-margin_bottom = 126.0
-rect_pivot_offset = Vector2( 1, 0 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = SubResource( 7 )
+offset_left = 342.0
+offset_top = 13.0
+offset_right = 477.0
+offset_bottom = 127.0
+pivot_offset = Vector2(1, 0)
 text = "000"
-align = 2
+label_settings = SubResource("LabelSettings_ngsvk")
 
 [node name="best" type="Label" parent="."]
-margin_left = 32.0
-margin_top = 144.0
-margin_right = 703.0
-margin_bottom = 208.0
-custom_fonts/font = ExtResource( 3 )
+offset_left = 32.0
+offset_top = 144.0
+offset_right = 703.0
+offset_bottom = 208.0
 text = "best: --:--.---"
+label_settings = SubResource("LabelSettings_qlmgx")
 
 [node name="best_diff" type="Label" parent="."]
-margin_left = 32.0
-margin_top = 192.0
-margin_right = 377.0
-margin_bottom = 256.0
-custom_fonts/font = ExtResource( 3 )
-align = 2
+offset_left = 32.0
+offset_top = 192.0
+offset_right = 377.0
+offset_bottom = 256.0

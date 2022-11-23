@@ -1,0 +1,161 @@
+[gd_scene load_steps=15 format=3 uid="uid://bvhxn5p7j4g3q"]
+
+[ext_resource type="Script" path="res://effects/particles/fx_airdash.gd" id="1_km62a"]
+[ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="2_o2npe"]
+[ext_resource type="Script" path="res://effects/particles/timed_particles.gd" id="3_5rs7y"]
+[ext_resource type="Texture2D" uid="uid://cwj77fl7ajkcr" path="res://assets/beam.png" id="3_16qmx"]
+[ext_resource type="Shader" path="res://shaders/dither_alpha.gdshader" id="4_ku8s4"]
+
+[sub_resource type="Curve" id="15"]
+min_value = 0.05
+_data = [Vector2(0, 1), 0.0, -11.6, 0, 0, Vector2(0.253918, 0.05), -0.154667, -3.80625, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_w4twn"]
+offsets = PackedFloat32Array(0, 0.119134, 0.487365, 0.99639)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.2, 1, 1, 1, 0, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="16"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.280405, 0.429054)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_47hu5"]
+shader = ExtResource("4_ku8s4")
+shader_parameter/dither_shift = 0.001
+shader_parameter/screen = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_26sux"]
+shader = ExtResource("4_ku8s4")
+shader_parameter/dither_shift = 0.001
+shader_parameter/screen = false
+
+[sub_resource type="Curve" id="Curve_8hcop"]
+min_value = 0.1
+_data = [Vector2(0.115152, 0.533636), 0.0, -2.295, 0, 0, Vector2(0.624242, 0.1), -0.0947367, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_fyc0u"]
+max_value = 2.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0787879, 2), -4.125, -4.125, 0, 0, Vector2(1, 0), 0.0484848, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_ln8vg"]
+offsets = PackedFloat32Array(0, 0.771429)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_cmksi"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="airdash_particles" type="CanvasGroup"]
+position = Vector2(0, -24)
+z_index = -1
+script = ExtResource("1_km62a")
+emitting = true
+
+[node name="wave" type="CPUParticles2D" parent="."]
+visible = false
+position = Vector2(0, -56)
+z_index = -2
+amount = 500
+lifetime = 2.0
+explosiveness = 0.43
+texture = ExtResource("2_o2npe")
+emission_shape = 3
+emission_rect_extents = Vector2(1, 1)
+direction = Vector2(0, 1)
+spread = 0.0
+gravity = Vector2(0, 0)
+scale_amount_min = 4.0
+scale_amount_max = 4.0
+scale_amount_curve = SubResource("15")
+color_ramp = SubResource("Gradient_w4twn")
+script = ExtResource("3_5rs7y")
+
+[node name="wave_2" type="CPUParticles2D" parent="."]
+use_parent_material = true
+z_index = -2
+emitting = false
+amount = 16
+lifetime = 3.0
+one_shot = true
+explosiveness = 0.9
+texture = ExtResource("2_o2npe")
+emission_shape = 4
+emission_points = PackedVector2Array(0, 0, 0, 0, 0, 0)
+emission_colors = PackedColorArray()
+particle_flag_align_y = true
+direction = Vector2(0, 1)
+spread = 180.0
+gravity = Vector2(0, 20)
+initial_velocity_min = 15.0
+initial_velocity_max = 15.0
+tangential_accel_min = 10.0
+tangential_accel_max = 100.0
+scale_amount_min = 0.5
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("15")
+color_ramp = SubResource("16")
+script = ExtResource("3_5rs7y")
+
+[node name="wave_3" type="CPUParticles2D" parent="."]
+material = SubResource("ShaderMaterial_47hu5")
+z_index = -2
+emitting = false
+amount = 24
+one_shot = true
+explosiveness = 0.3
+texture = ExtResource("2_o2npe")
+direction = Vector2(0, 1)
+spread = 180.0
+gravity = Vector2(0, 250)
+initial_velocity_min = 20.0
+initial_velocity_max = 100.0
+linear_accel_min = -400.0
+linear_accel_max = -400.0
+scale_amount_min = 0.0
+scale_amount_max = 0.2
+scale_amount_curve = SubResource("15")
+color_ramp = SubResource("16")
+script = ExtResource("3_5rs7y")
+
+[node name="splash" type="CPUParticles2D" parent="."]
+texture_filter = 2
+material = SubResource("ShaderMaterial_26sux")
+emitting = false
+amount = 12
+one_shot = true
+explosiveness = 1.0
+texture = ExtResource("3_16qmx")
+emission_shape = 5
+emission_points = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+emission_normals = PackedVector2Array(0.707, -0.707, -0.707, -0.707, 0.894, -0.447, -0.894, -0.447, 0.832, -0.555, -0.832, -0.555)
+emission_colors = PackedColorArray()
+particle_flag_align_y = true
+gravity = Vector2(0, 0)
+initial_velocity_min = 200.0
+initial_velocity_max = 400.0
+linear_accel_min = -3000.0
+linear_accel_max = -2000.0
+scale_amount_min = 0.5
+scale_amount_max = 1.5
+split_scale = true
+scale_curve_x = SubResource("Curve_8hcop")
+scale_curve_y = SubResource("Curve_fyc0u")
+color_ramp = SubResource("Gradient_ln8vg")
+script = ExtResource("3_5rs7y")
+
+[node name="trail" type="CPUParticles2D" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_47hu5")
+position = Vector2(0, -60)
+emitting = false
+amount = 1
+lifetime = 2.0
+one_shot = true
+speed_scale = 2.0
+explosiveness = 0.8
+gravity = Vector2(0, 0)
+color = Color(1, 1, 1, 0.3)
+color_ramp = SubResource("Gradient_cmksi")
+script = ExtResource("3_5rs7y")

@@ -1,0 +1,204 @@
+[gd_scene load_steps=13 format=3 uid="uid://bc6bdfdsypeel"]
+
+[ext_resource type="Script" path="res://entities/enemy/dummy.gd" id="1_wr72d"]
+[ext_resource type="Material" uid="uid://uefn1rgn15nq" path="res://shaders/dither_alpha_screen.tres" id="2_kpj8m"]
+[ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="2_mbtpk"]
+[ext_resource type="FontFile" uid="uid://dkesessbumeke" path="res://assets/fonts/Metropolis-Light.otf" id="3_1wp66"]
+[ext_resource type="Texture2D" uid="uid://bbrgwugkw7xkl" path="res://assets/sprites/circle_64px.png" id="4_xepkw"]
+[ext_resource type="Material" uid="uid://dkiv7hm7xkdum" path="res://shaders/dither_alpha.tres" id="6_hkrjp"]
+
+[sub_resource type="Curve" id="Curve_mut4k"]
+_data = [Vector2(0, 1), 0.0, -2.38824, 0, 0, Vector2(0.99373, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_5riwf"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.510972, 0), -5.99333, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_b68cd"]
+_data = [Vector2(0, 1), 0.0, -0.383019, 0, 0, Vector2(1, 0.127273), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_od5t7"]
+radius = 16.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1b03s"]
+radius = 16.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_u7141"]
+font = ExtResource("3_1wp66")
+outline_size = 2
+shadow_size = 4
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_offset = Vector2(0, 1)
+
+[node name="enemy_ball" type="CharacterBody2D"]
+collision_layer = 16
+script = ExtResource("1_wr72d")
+
+[node name="canvas_group" type="CanvasGroup" parent="."]
+material = ExtResource("2_kpj8m")
+
+[node name="particles" type="CPUParticles2D" parent="canvas_group"]
+position = Vector2(0, -16)
+emitting = false
+amount = 20
+texture = ExtResource("2_mbtpk")
+particle_flag_align_y = true
+spread = 180.0
+gravity = Vector2(0, -350)
+initial_velocity_max = 50.0
+scale_amount_max = 2.0
+split_scale = true
+scale_curve_x = SubResource("Curve_mut4k")
+scale_curve_y = SubResource("Curve_5riwf")
+
+[node name="particles_2" type="CPUParticles2D" parent="canvas_group"]
+visible = false
+position = Vector2(0, -16)
+amount = 10
+lifetime = 6.0
+texture = ExtResource("2_mbtpk")
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 200.0
+initial_velocity_max = 200.0
+orbit_velocity_min = -1.0
+orbit_velocity_max = 1.0
+radial_accel_min = -1000.0
+scale_amount_min = 0.25
+scale_amount_max = 0.25
+scale_amount_curve = SubResource("Curve_b68cd")
+
+[node name="sprite_2d" type="Sprite2D" parent="canvas_group"]
+visible = false
+position = Vector2(0, -16)
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("2_mbtpk")
+
+[node name="collision_shape_2d" type="CollisionShape2D" parent="."]
+position = Vector2(0, -16)
+shape = SubResource("CircleShape2D_od5t7")
+metadata/_edit_lock_ = true
+
+[node name="sprite" type="Sprite2D" parent="."]
+position = Vector2(0, -16)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_xepkw")
+
+[node name="eyes_1" type="Node2D" parent="sprite"]
+visible = false
+scale = Vector2(2, 2)
+
+[node name="line_2d" type="Line2D" parent="sprite/eyes_1"]
+position = Vector2(3, 12)
+scale = Vector2(2, 2)
+points = PackedVector2Array(-4, -6.5, -4, -9.5)
+width = 1.0
+default_color = Color(0, 0, 0, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+
+[node name="line_2d_2" type="Line2D" parent="sprite/eyes_1"]
+position = Vector2(12, 13)
+scale = Vector2(2, 2)
+points = PackedVector2Array(-3.5, -7, -3.5, -8.5, -3.5, -10)
+width = 1.0
+default_color = Color(0, 0, 0, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="eyes_2" type="Node2D" parent="sprite"]
+scale = Vector2(2, 2)
+
+[node name="line_2d" type="Line2D" parent="sprite/eyes_2"]
+position = Vector2(3, 12)
+scale = Vector2(2, 2)
+points = PackedVector2Array(1, -6.5, -4, -9.5)
+width = 1.0
+default_color = Color(0, 0, 0, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+
+[node name="line_2d_2" type="Line2D" parent="sprite/eyes_2"]
+position = Vector2(12, 13)
+scale = Vector2(2, 2)
+points = PackedVector2Array(-8.5, -7, -3.5, -10)
+width = 1.0
+default_color = Color(0, 0, 0, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="hitbox" type="Area2D" parent="."]
+position = Vector2(0, -16)
+collision_layer = 16
+collision_mask = 8
+metadata/_edit_lock_ = true
+
+[node name="collision_shape_2d" type="CollisionShape2D" parent="hitbox"]
+visible = false
+shape = SubResource("CircleShape2D_1b03s")
+metadata/_edit_lock_ = true
+
+[node name="pivot" type="Node2D" parent="."]
+position = Vector2(0, -64)
+
+[node name="hits" type="Label" parent="pivot"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -62.0
+offset_right = 63.0
+offset_bottom = 36.0
+grow_vertical = 2
+text = "
+"
+label_settings = SubResource("LabelSettings_u7141")
+horizontal_alignment = 1
+
+[node name="canvas_layer" type="CanvasLayer" parent="."]
+
+[node name="arrow" type="Polygon2D" parent="canvas_layer"]
+material = ExtResource("6_hkrjp")
+position = Vector2(170, 29)
+scale = Vector2(2, 2)
+offset = Vector2(-9, 0)
+polygon = PackedVector2Array(5.5, 0, 9, -7, 12.5, 0)
+
+[node name="color_rect" type="ColorRect" parent="canvas_layer"]
+visible = false
+offset_right = 640.0
+offset_bottom = 360.0
+color = Color(0, 0, 0, 1)
+
+[node name="title" type="Label" parent="canvas_layer"]
+top_level = true
+offset_left = 40.0
+offset_top = 88.0
+offset_right = 165.0
+offset_bottom = 124.0
+grow_vertical = 2
+text = "Record:"
+label_settings = SubResource("LabelSettings_u7141")
+
+[node name="label" type="Label" parent="canvas_layer"]
+top_level = true
+offset_left = 48.0
+offset_top = 112.0
+offset_right = 173.0
+offset_bottom = 148.0
+grow_vertical = 2
+text = "0.00 m"
+label_settings = SubResource("LabelSettings_u7141")
+
+[node name="most_hits" type="Label" parent="canvas_layer"]
+top_level = true
+offset_left = 48.0
+offset_top = 136.0
+offset_right = 173.0
+offset_bottom = 172.0
+grow_vertical = 2
+text = "0 hits"
+label_settings = SubResource("LabelSettings_u7141")

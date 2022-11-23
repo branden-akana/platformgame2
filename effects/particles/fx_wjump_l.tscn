@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://ne42ghb5mk6k"]
+
+[ext_resource type="Material" uid="uid://bcu4jmokjyqa2" path="res://shaders/dither_alpha_screen.tres" id="1_r2y5c"]
+[ext_resource type="Script" path="res://effects/particles/particle_group.gd" id="2_h4jrq"]
+[ext_resource type="PackedScene" uid="uid://c0csibcxvyq2o" path="res://effects/particles/fx_dash.tscn" id="3_0juid"]
+
+[node name="land_effect" type="CanvasGroup"]
+material = ExtResource("1_r2y5c")
+position = Vector2(-16, 0)
+rotation = 1.5708
+z_index = -2
+script = ExtResource("2_h4jrq")
+
+[node name="left" parent="." instance=ExtResource("3_0juid")]
+rotation = -3.14159
+scale = Vector2(1, -1)
+amount = 15
+direction = Vector2(10, -1)
+
+[node name="right" parent="." instance=ExtResource("3_0juid")]
+amount = 15
+direction = Vector2(10, -1)
+spread = 5.0

@@ -8,11 +8,11 @@ class_name MenuSelection
 func get_label():
     return ""
 
-# text that is displayed on the right side of the menu
+# text that is displayed checked the right side of the menu
 func get_extra():
     return ""
 
-# text that is displayed on the bottom of the menu
+# text that is displayed checked the bottom of the menu
 func get_hint():
     return ""
 
@@ -41,11 +41,11 @@ func on_return(menu):
 func get_items() -> Array:
     return []
 
-# called when the user presses right on this item
+# called when the user presses right checked this item
 func on_right(menu):
     pass
 
-# called when the user presses left on this item
+# called when the user presses left checked this item
 func on_left(menu):
     pass
 

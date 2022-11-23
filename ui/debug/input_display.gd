@@ -16,20 +16,20 @@ func _process(delta):
     var input_vector = Vector2.ZERO
     input_vector.x = Input.get_action_strength("key_right") - Input.get_action_strength("key_left")
     input_vector.y = Input.get_action_strength("key_down") - Input.get_action_strength("key_up")
-    $"stick/dot".rect_position = Game.get_player().input.axis * 20
-    $"stick/dot_2".rect_position = Game.get_player().input.last_axis * 20
+    $"stick/dot".position = GameState.get_player().input.axis * 20
+    $"stick/dot_2".position = GameState.get_player().input.last_axis * 20
     
-    if Input.is_action_pressed("key_jump"):
+    if Input.is_action_pressed("jump"):
         $jump.modulate.a = 1
     else:
         $jump.modulate.a = 0.1
 
-    if Input.is_action_pressed("grapple"):
+    if Input.is_action_pressed("attack"):
         $attack.modulate.a = 1
     else:
         $attack.modulate.a = 0.1
         
-    if Input.is_action_pressed("key_dodge"):
+    if Input.is_action_pressed("dodge"):
         $dash.modulate.a = 1
     else:
         $dash.modulate.a = 0.1

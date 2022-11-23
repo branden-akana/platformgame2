@@ -1,0 +1,48 @@
+[gd_scene load_steps=8 format=3 uid="uid://buht55xg1x3g"]
+
+[ext_resource type="Shader" path="res://shaders/dither_alpha.gdshader" id="1_t6js5"]
+[ext_resource type="Texture2D" uid="uid://cwj77fl7ajkcr" path="res://assets/beam.png" id="2_2wk4j"]
+[ext_resource type="Script" path="res://effects/particles/timed_particles.gd" id="3_uk5nr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_47hu5"]
+shader = ExtResource("1_t6js5")
+shader_parameter/dither_shift = 0.001
+shader_parameter/screen = false
+
+[sub_resource type="Curve" id="Curve_8hcop"]
+_data = [Vector2(0, 0.6), 0.0, -2.8033, 0, 1, Vector2(0.171875, 0.118182), -2.8033, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_fyc0u"]
+min_value = 0.01
+max_value = 2.0
+_data = [Vector2(0, 2), 0.0, -15.1525, 0, 0, Vector2(0.429467, 0.01), -0.322222, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_m7fke"]
+offsets = PackedFloat32Array(0.445946, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.95158, 0.95158, 0.95158, 0)
+
+[node name="splash" type="CPUParticles2D"]
+texture_filter = 2
+material = SubResource("ShaderMaterial_47hu5")
+emitting = false
+one_shot = true
+explosiveness = 1.0
+lifetime_randomness = 0.5
+texture = ExtResource("2_2wk4j")
+emission_shape = 1
+emission_sphere_radius = 1.0
+particle_flag_align_y = true
+direction = Vector2(0, -1)
+spread = 135.0
+gravity = Vector2(0, 200)
+initial_velocity_min = 10.0
+initial_velocity_max = 100.0
+scale_amount_min = 1.5
+scale_amount_max = 3.0
+split_scale = true
+scale_curve_x = SubResource("Curve_8hcop")
+scale_curve_y = SubResource("Curve_fyc0u")
+color_ramp = SubResource("Gradient_m7fke")
+script = ExtResource("3_uk5nr")

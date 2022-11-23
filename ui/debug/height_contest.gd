@@ -3,7 +3,7 @@ extends Node2D
 var max_height = 0
 
 func _physics_process(delta):
-    var height = -(Game.get_player().global_position.y - global_position.y)
+    var height = -(GameState.get_player().global_position.y - global_position.y)
     if height > max_height:
         max_height = height
         

@@ -1,153 +1,159 @@
-extends CollisionPolygon2D
-tool
+@tool
+class_name CharECB extends CollisionPolygon2D
+
 
 enum Type {DIAMOND, BOX}
 
-export (Type) var type = Type.DIAMOND
+@onready var l: RayCast2D = $l
+@onready var r: RayCast2D = $r
+@onready var t: RayCast2D = $t
+@onready var b: RayCast2D = $b
 
-export (int, 1, 1000) var top = 16  setget set_t, get_t
-export (int, 1, 1000) var bottom = 24 setget set_b, get_b
-export (int, 1, 1000) var left = 8 setget set_l, get_l
-export (int, 1, 1000) var right = 8 setget set_r, get_r
+@export_group("Dimensions")
 
-export (float) var ray_inset = 1    # length of ray inside the collision shape
-export (float) var ray_outset = 1   # length of ray outside the collision shape
+@onready @export var type: Type = Type.DIAMOND
 
+@onready @export_range(1, 1000) var top: int :
+	set(top_):
+		top = top_
+		update_ecb()
 
-func set_t(top_: int) -> void:
-    top = top_
-    update_ecb()
+@onready @export_range(1, 1000) var bottom: int :
+	set(bottom_):
+		bottom = bottom_
+		update_ecb()
 
-func get_t() -> int:
-    return top
+@onready @export_range(1, 1000) var left: int :
+	set(left_):
+		left = left_
+		update_ecb()
 
+@onready @export_range(1, 1000) var right: int :
+	set(right_):
+		right = right_
+		update_ecb()
 
-func set_b(bot_: int) -> void:
-    bottom = bot_
-    update_ecb()
+@export_group("Raycasts")
 
-func get_b() -> int:
-    return bottom
+@onready @export var ray_inset: float = 1.0 :  # length of ray inside the collision shape
+	get:
+		return ray_inset
+	set(inset):
+		ray_inset = inset
+		update_ecb()
 
+@onready @export var ray_outset: float = 1.0 :   # length of ray outside the collision shape
+	get:
+		return ray_outset
+	set(outset):
+		ray_outset = outset
+		update_ecb()
 
-func set_l(left_: int) -> void:
-    left = left_
-    update_ecb()
-
-func get_l() -> int:
-    return left
-
-
-func set_r(right_: int) -> void:
-    right = right_
-    update_ecb()
-
-func get_r() -> int:
-    return right
 
 
 # Update the shape of the ECB.
 func update_ecb():
 
-    if not is_inside_tree(): return
+	if not is_inside_tree(): return
 
-    var ray_length = ray_inset + ray_outset
+	var ray_length = ray_inset + ray_outset
 
-    $l.position = Vector2(-left + ray_inset, 0)
-    $r.position = Vector2(right - ray_inset, 0)
-    $t.position = Vector2(0, -top + ray_inset)
-    $b.position = Vector2(0, bottom - ray_inset)
+	l.position = Vector2(-left + ray_inset, 0)
+	r.position = Vector2(right - ray_inset, 0)
+	t.position = Vector2(0, -top + ray_inset)
+	b.position = Vector2(0, bottom - ray_inset)
 
-    $l.cast_to = Vector2(-ray_length, 0)
-    $r.cast_to = Vector2(ray_length, 0)
-    $t.cast_to = Vector2(0, -ray_length)
-    $b.cast_to = Vector2(0, ray_length)
+	l.target_position = Vector2(-ray_length, 0)
+	r.target_position = Vector2(ray_length, 0)
+	t.target_position = Vector2(0, -ray_length)
+	b.target_position = Vector2(0, ray_length)
 
-    var polygon
-    if type == Type.DIAMOND:
-        # diamond shape
-        polygon = [
-            Vector2(right, 0),
-            Vector2(0, bottom),
-            Vector2(-left, 0),
-            Vector2(0, -top)
-        ]
-    else:
-        # box shape
-        polygon = [
-            Vector2(right, -top),
-            Vector2(right, bottom),
-            Vector2(-left, bottom),
-            Vector2(-left, -top)
-        ]
+	var polygon
+	if type == Type.DIAMOND:
+		# diamond shape
+		polygon = [
+			Vector2(right, 0),
+			Vector2(0, bottom),
+			Vector2(-left, 0),
+			Vector2(0, -top)
+		]
+	else:
+		# box shape
+		polygon = [
+			Vector2(right, -top),
+			Vector2(right, bottom),
+			Vector2(-left, bottom),
+			Vector2(-left, -top)
+		]
 
-    set_polygon(PoolVector2Array(polygon))
+	set_polygon(PackedVector2Array(polygon))
 
 
 # Set the dimensions of the ECB (in pixels).
 func set_ecb(top: int, bot: int, left: int, right: int) -> void:
-    self.top = top
-    self.bottom = bot
-    self.left = left
-    self.right = right
-    update_ecb()
+	self.top = top
+	self.bottom = bot
+	self.left = left
+	self.right = right
+	update_ecb()
 
 
-func _test_collision(point) -> bool:
-    if get_parent()._check_invalid_platform_collisions():
-        return bool(len(Util.intersect_point(self, point, [])))
-    else:
-        return bool(len(Util.intersect_point(self, point, [], 0b1000000001)))
+# func _test_collision(point) -> bool:
+# 	if get_parent()._check_invalid_platform_collisions():
+# 		return bool(len(Util.intersect_point(self, point, [])))
+# 	else:
+# 		return bool(len(Util.intersect_point(self, point, [], 0b1000000001)))
+
 
 # These functions test slightly outside the collision shape points
 
 func left_collide_out() -> bool:
-    # return _test_collision(polygon[2] + $l.cast_to)
-    return $l.is_colliding()
+	# return _test_collision(polygon[2] + l.target_position)
+	return l.is_colliding()
 
 func right_collide_out() -> bool:
-    # return _test_collision(polygon[0] + $r.cast_to)
-    return $r.is_colliding()
+	# return _test_collision(polygon[0] + r.target_position)
+	return r.is_colliding()
 
 func top_collide_out() -> bool:
-    # return _test_collision(polygon[3] + $t.cast_to)
-    return $t.is_colliding()
+	# return _test_collision(polygon[3] + t.target_position)
+	return t.is_colliding()
 
 func bottom_collide_out() -> bool:
-    # return _test_collision(polygon[1] + $b.cast_to)
-    return $b.is_colliding()
+	# return _test_collision(polygon[1] + b.target_position)
+	return b.is_colliding()
 
 # These functions test at exactly the collision shape points
 
-func left_collide() -> bool:
-    return _test_collision(polygon[2])
+# func left_collide() -> bool:
+# 	return _test_collision(polygon[2])
 
-func right_collide() -> bool:
-    return _test_collision(polygon[0])
+# func right_collide() -> bool:
+# 	return _test_collision(polygon[0])
 
-func top_collide() -> bool:
-    return _test_collision(polygon[3])
+# func top_collide() -> bool:
+# 	return _test_collision(polygon[3])
 
-func bottom_collide() -> bool:
-    return _test_collision(polygon[1])
+# func bottom_collide() -> bool:
+# 	return _test_collision(polygon[1])
 
 # These functions test for any horizontal or vertical collisions
 
 func y_collide() -> bool:
-    return top_collide_out() or bottom_collide_out()
+	return top_collide_out() or bottom_collide_out()
 
 func x_collide() -> bool:
-    return right_collide_out() or left_collide_out()
+	return right_collide_out() or left_collide_out()
 
 
 func get_left() -> RayCast2D:
-    return $l as RayCast2D
+	return l as RayCast2D
 
 func get_right() -> RayCast2D:
-    return $r as RayCast2D
+	return r as RayCast2D
 
 func get_top() -> RayCast2D:
-    return $t as RayCast2D
+	return t as RayCast2D
 
 func get_bottom() -> RayCast2D:
-    return $b as RayCast2D
+	return b as RayCast2D

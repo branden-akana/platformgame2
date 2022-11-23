@@ -1,10 +1,10 @@
 #================================================================================
-# A sound manager that contains and plays various runner sounds.
+# A sound manager that contains and plays various character sounds.
 #================================================================================
 
 extends Node2D
 
-onready var sounds = {
+@onready var sounds = {
     "walk": preload("res://assets/sounds/walking.ogg"),
     "dash": preload("res://assets/sounds/dash.ogg"),
     "jump": preload("res://assets/sounds/jump.ogg"),
@@ -13,7 +13,7 @@ onready var sounds = {
     "attack":  preload("res://assets/sounds/attack.wav"),
 }
 
-onready var players = {}
+@onready var players = {}
 
 func _ready():
     for sound in sounds:
@@ -24,11 +24,11 @@ func _ready():
 func play(sound_name, volume_db = 0.0, pitch_scale = 1.0, loop = false, force = true):
     var player = players[sound_name]
 
-    if player.stream is AudioStreamSample:
+    if player.stream is AudioStreamWAV:
         if loop:
-            player.stream.loop_mode = AudioStreamSample.LOOP_FORWARD
+            player.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
         else:
-            player.stream.loop_mode = AudioStreamSample.LOOP_DISABLED
+            player.stream.loop_mode = AudioStreamWAV.LOOP_DISABLED
     else:
         player.stream.loop = loop
 

@@ -1,0 +1,155 @@
+[gd_scene load_steps=11 format=3 uid="uid://d0o5owdxfnb7q"]
+
+[ext_resource type="Script" path="res://curve_line_2d.gd" id="1_giss7"]
+[ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="2_ia6om"]
+[ext_resource type="PackedScene" path="res://entities/character/moves/normal_forward.tscn" id="3_01hcd"]
+
+[sub_resource type="Animation" id="Animation_pdpgq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("animation_player/particles:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("animation_player/particles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Curve2D" id="Curve2D_lnquf"]
+_data = {
+"points": PackedVector2Array(-26.4866, 0, 26.4866, 0, 30, -16, 0.416122, 6.02536, -0.416122, -6.02536, 83, -25, 0, 0, 0, 0, 9, -32)
+}
+point_count = 3
+
+[sub_resource type="Curve2D" id="Curve2D_puhuy"]
+_data = {
+"points": PackedVector2Array(-26.4866, 0, 26.4866, 0, 8, -16, 0.416122, 6.02536, -0.416122, -6.02536, 83, -25, 0, 0, 0, 0, 9, -32)
+}
+point_count = 3
+
+[sub_resource type="Animation" id="Animation_1gpm0"]
+resource_name = "atk_f"
+length = 0.833333
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("animation_player/particles:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.7),
+"transitions": PackedFloat32Array(0.267943, 2.21914, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(72, -8), Vector2(0, -16)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("animation_player/particles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("animation_player/particles:scale_amount_max")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("animation_player/line/path:curve")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [SubResource("Curve2D_lnquf"), SubResource("Curve2D_puhuy")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nm2v1"]
+_data = {
+"RESET": SubResource("Animation_pdpgq"),
+"atk_f": SubResource("Animation_1gpm0")
+}
+
+[sub_resource type="Curve" id="Curve_xal7t"]
+max_value = 2.0
+_data = [Vector2(0, 0), 0.0, inf_neg, 0, 1, Vector2(0, 0.8), inf_neg, -0.763636, 1, 1, Vector2(1, 0.0363636), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rr63p"]
+resource_local_to_scene = true
+size = Vector2(79, 20)
+
+[node name="animation_player" type="AnimationPlayer"]
+libraries = {
+"": SubResource("AnimationLibrary_nm2v1")
+}
+
+[node name="line" type="Line2D" parent="."]
+position = Vector2(-8, 16)
+points = PackedVector2Array(30, -16, 35.0034, -16.0354, 40.0024, -16.1425, 45.0028, -16.3248, 49.9995, -16.5884, 54.9899, -16.9435, 59.965, -17.4058, 64.9258, -18.0025, 69.8629, -18.7806, 74.7487, -19.8348, 79.4917, -21.4165, 83.0014, -24.9781, 83, -25, 78.5738, -27.3342, 73.6588, -28.2876, 68.7084, -28.9575, 63.7438, -29.482, 58.7614, -29.9142, 53.7749, -30.2796, 48.7926, -30.5935, 43.8075, -30.8666, 38.8154, -31.1057, 33.8188, -31.3155, 28.813, -31.4997, 23.8078, -31.66, 18.8144, -31.7977, 13.8154, -31.9134, 9, -32)
+width_curve = SubResource("Curve_xal7t")
+joint_mode = 2
+script = ExtResource("1_giss7")
+
+[node name="path" type="Path2D" parent="line"]
+curve = SubResource("Curve2D_lnquf")
+
+[node name="particles" type="CPUParticles2D" parent="."]
+visible = false
+position = Vector2(56.1462, -6.23846)
+amount = 20
+fixed_fps = 120
+texture = ExtResource("2_ia6om")
+gravity = Vector2(0, 0)
+scale_amount_min = 0.0
+scale_amount_max = 0.904762
+
+[node name="normal_forward" parent="." instance=ExtResource("3_01hcd")]
+metadata/_edit_lock_ = true
+
+[node name="sprite" parent="normal_forward" index="0"]
+animation = &"swing"
+frame = 0
+metadata/_edit_lock_ = true
+
+[node name="0" parent="normal_forward" index="1"]
+metadata/_edit_lock_ = true
+
+[node name="collision" parent="normal_forward/0" index="0"]
+position = Vector2(40.5, 0)
+shape = SubResource("RectangleShape2D_rr63p")
+metadata/_edit_lock_ = true
+
+[editable path="normal_forward"]

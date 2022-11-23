@@ -9,15 +9,15 @@ class SelectPractice extends MenuSelection:
     func get_label(): return "practice mode"
 
     func get_extra():
-        if Game.practice_mode:
+        if GameState.is_practice_mode_enabled:
             return "[on] off "
         else:
             return " on [off]"
 
     func get_hint(): return "if enabled, be able to see and hit dead enemies. disables timer."
 
-    func on_left(menu): Game.toggle_practice_mode()
-    func on_right(menu): Game.toggle_practice_mode()
+    func on_left(menu): GameState.toggle_practice_mode()
+    func on_right(menu): GameState.toggle_practice_mode()
 
 
 class SelectReset extends MenuSelection:
@@ -33,7 +33,7 @@ class SelectReset extends MenuSelection:
             return "select to erase all level records"
 
     func on_select(menu):
-        Game.settings.records = {}
+        GameState.settings.records = {}
         cleared = true
 
 

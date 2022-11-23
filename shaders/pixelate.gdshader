@@ -26,6 +26,10 @@ vec2 get_pixel_ratio(float pixsize, sampler2D tex) {
     return pixsize / vec2(textureSize(tex, 0));
 }
 
+vec2 get_pixel_ratio2(float pixsize, sampler2D tex) {
+    // pixel size / texture size
+    return pixsize / vec2(textureSize(tex, 0));
+}
 
 // "random" number generator
 float rand(vec2 co) {
@@ -33,7 +37,7 @@ float rand(vec2 co) {
 }
 
 void vertex() { 
-    vec4 world_vertex = WORLD_MATRIX * vec4(VERTEX, 0.0, 1.0);
+    vec4 world_vertex = MODEL_MATRIX * vec4(VERTEX, 0.0, 1.0);
     world_vertex = floor(world_vertex / pixel_size) * pixel_size;
     VERTEX = world_vertex.xy;
 }
@@ -54,7 +58,7 @@ void fragment() {
     
     vec2 screen_ratio;
     if (screen) { screen_ratio = get_pixel_ratio(pixel_size, SCREEN_TEXTURE); }
-    else { screen_ratio = get_pixel_ratio(pixel_size, TEXTURE); }
+    else { screen_ratio = get_pixel_ratio2(pixel_size, TEXTURE); }
     
     if (subpixel_fix) {
         pixel_uv = (floor(uv / screen_ratio) * screen_ratio) + (screen_ratio / 2.0);

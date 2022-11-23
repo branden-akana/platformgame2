@@ -1,22 +1,22 @@
 extends Line2D
-tool
+
 
 func _ready():
-    Game.connect("debug_mode_changed", self, "on_debug_mode_changed")
+    GameState.connect("debug_mode_changed",Callable(self,"on_debug_mode_changed"))
 
 func on_debug_mode_changed(debug_mode: int) -> void:
-    if debug_mode == Game.DebugMode.HITBOXES:
+    if debug_mode == GameState.DebugMode.HITBOXES:
         visible = true
     else:
         visible = false
 
 func _physics_process(delta):
     pass
-    # if Game.get_player():
-        # set_polygon(Game.get_player().get_ecb().polygon)
+    # if GameState.get_player():
+        # set_polygon(GameState.get_player().get_ecb().polygon)
 
 # Set the polygon (with first point added twice for closed shape)
-func set_polygon(polygon: PoolVector2Array):
+func set_polygon(polygon: PackedVector2Array):
     var points = []
     for pt in polygon:
         points.append(pt)

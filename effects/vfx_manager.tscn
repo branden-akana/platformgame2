@@ -1,14 +1,13 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=12 format=3 uid="uid://bkpyxw0b5trhf"]
 
-[ext_resource path="res://shaders/pixelate.gdshader" type="Shader" id=1]
-[ext_resource path="res://shaders/retrorize.gdshader" type="Shader" id=2]
-[ext_resource path="res://effects/environment.tres" type="Environment" id=3]
-[ext_resource path="res://assets/palettes/base.png" type="Texture" id=4]
-[ext_resource path="res://assets/palettes/sample.png" type="Texture" id=5]
-[ext_resource path="res://effects/vfx_manager.gd" type="Script" id=6]
-[ext_resource path="res://assets/palettes/fractals_cutting_through_the_sky.png" type="Texture" id=7]
+[ext_resource type="Shader" path="res://shaders/pixelate.gdshader" id="1"]
+[ext_resource type="Environment" uid="uid://mqcblb0feix5" path="res://effects/environment.tres" id="3"]
+[ext_resource type="Texture2D" uid="uid://d1a6ymdq18lvy" path="res://assets/palettes/base.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://cfijnd72x82t" path="res://assets/palettes/sample.png" id="5"]
+[ext_resource type="Material" uid="uid://cixr442mjb6i6" path="res://shaders/palette_flat.tres" id="5_vrvra"]
+[ext_resource type="Script" path="res://effects/vfx_manager.gd" id="6"]
 
-[sub_resource type="Shader" id=95]
+[sub_resource type="Shader" id="95"]
 code = "shader_type canvas_item;
 
 uniform vec2 focus = vec2(0.5, 0.5);
@@ -30,77 +29,86 @@ void fragment() {
     //COLOR = mix(vec4(vec3(1.0), 1.0), vec4(vec3(0.0), 1.0), center_len);
 }"
 
-[sub_resource type="ShaderMaterial" id=98]
-shader = SubResource( 95 )
-shader_param/focus = Vector2( 0.5, 0.5 )
+[sub_resource type="ShaderMaterial" id="98"]
+shader = SubResource("95")
+shader_parameter/focus = Vector2(0.5, 0.5)
 
-[sub_resource type="ShaderMaterial" id=7]
-shader = ExtResource( 2 )
-shader_param/screen = true
-shader_param/subpixel_fix = true
-shader_param/pixel_size = 1.0
-shader_param/antialiased = true
-shader_param/palette_size = Vector2( 8, 1 )
-shader_param/palette_blend = 0.0
-shader_param/noise_strength = 0.0
-shader_param/noise_speed = 0.0
-shader_param/palette_key = ExtResource( 4 )
-shader_param/palette_a = ExtResource( 4 )
-shader_param/palette_b = ExtResource( 7 )
+[sub_resource type="ShaderMaterial" id="97"]
+shader = ExtResource("1")
+shader_parameter/noise_strength = 0.015
+shader_parameter/pixel_size = 1.0
+shader_parameter/pixel_smoothing = null
+shader_parameter/screen = true
+shader_parameter/subpixel_fix = true
 
-[sub_resource type="ShaderMaterial" id=97]
-shader = ExtResource( 1 )
-shader_param/screen = true
-shader_param/subpixel_fix = true
-shader_param/pixel_size = 4.0
-shader_param/pixel_smoothing = 0.5
-shader_param/noise_strength = 0.005
+[sub_resource type="Gradient" id="Gradient_qi4eh"]
+offsets = PackedFloat32Array(0, 0.17, 0.33, 0.5, 0.67, 0.83, 1)
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 0.345098, 1, 0, 1, 0.478431, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1)
 
-[node name="post_process" type="Node2D"]
-z_index = 100
-z_as_relative = false
-script = ExtResource( 6 )
-palettes = [ ExtResource( 4 ), ExtResource( 7 ) ]
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lu2xh"]
+gradient = SubResource("Gradient_qi4eh")
+height = 512
+fill_to = Vector2(0, 1)
+
+[node name="post_process" type="CanvasLayer"]
+script = ExtResource("6")
+palettes = [ExtResource("4")]
+b_post_process_enabled = false
 
 [node name="world_environment" type="WorldEnvironment" parent="."]
-environment = ExtResource( 3 )
+environment = ExtResource("3")
 
-[node name="tween" type="Tween" parent="."]
-
-[node name="canvas_layer" type="CanvasLayer" parent="."]
-layer = 5
-
-[node name="vignette" type="BackBufferCopy" parent="canvas_layer"]
-material = SubResource( 98 )
+[node name="vignette" type="BackBufferCopy" parent="."]
+material = SubResource("98")
 z_index = 1
-rect = Rect2( 0, 0, 1920, 1080 )
+rect = Rect2(0, 0, 1920, 1080)
 
-[node name="color_rect" type="ColorRect" parent="canvas_layer/vignette"]
+[node name="color_rect" type="ColorRect" parent="vignette"]
 use_parent_material = true
-margin_right = 1920.0
-margin_bottom = 1080.0
-
-[node name="color_indexer" type="BackBufferCopy" parent="canvas_layer"]
-material = SubResource( 7 )
-rect = Rect2( 0, 0, 1920, 1080 )
-
-[node name="color_rect" type="ColorRect" parent="canvas_layer/color_indexer"]
-use_parent_material = true
-margin_right = 1920.0
-margin_bottom = 1080.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 
 [node name="pixelator" type="BackBufferCopy" parent="."]
-material = SubResource( 97 )
+visible = false
+material = SubResource("97")
 z_index = 1
-rect = Rect2( 0, 0, 1920, 1080 )
+rect = Rect2(0, 0, 1920, 1080)
 
 [node name="color_rect" type="ColorRect" parent="pixelator"]
 use_parent_material = true
-margin_right = 1920.0
-margin_bottom = 1080.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 
-[node name="sample" type="Sprite" parent="."]
+[node name="color_indexer" type="BackBufferCopy" parent="."]
+material = ExtResource("5_vrvra")
+rect = Rect2(0, 0, 1920, 1080)
+
+[node name="color_rect" type="ColorRect" parent="color_indexer"]
+use_parent_material = true
+offset_right = 1920.0
+offset_bottom = 1080.0
+
+[node name="sprite_2d" type="Sprite2D" parent="."]
 visible = false
-position = Vector2( 960, 531 )
-scale = Vector2( 4, 4 )
-texture = ExtResource( 5 )
+position = Vector2(96, 544)
+scale = Vector2(1, 2.125)
+z_index = -1
+texture = SubResource("GradientTexture2D_lu2xh")
+
+[node name="sprite_2d_2" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(64, 0)
+rotation = 1.5708
+scale = Vector2(8.5, 7.995)
+z_index = -1
+texture = ExtResource("4")
+centered = false
+
+[node name="sample" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(960, 640)
+scale = Vector2(4, 4)
+z_index = -1
+texture = ExtResource("5")

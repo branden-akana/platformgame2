@@ -8,12 +8,12 @@ class Rebinder extends MenuSelection:
     var i = 0
     var listening = false
 
-    func _init(label, action):
+    func _init(label,action):
         self.label = label
         self.action = action
 
     func _bindings() -> Array:
-        return InputMap.get_action_list(action)
+        return InputMap.action_get_events(action)
 
     func _idx(i, n): return (i + n + len(_bindings())) % len(_bindings())
 
@@ -21,7 +21,9 @@ class Rebinder extends MenuSelection:
         var name  # name of the button
         var device = event.device
         if event is InputEventJoypadButton:
-            name = Input.get_joy_button_string(event.button_index)
+            # name = JoyButton.keys()[event.button_index]
+            # name = Input.get_joy_button_string(event.button_index)
+            name = "UNKNOWN"
             return "(JP, %d) %s" % [device, name]
         else:
             name = event.as_text()
@@ -52,20 +54,20 @@ class Rebinder extends MenuSelection:
                 # joypad keys
                 or event is InputEventJoypadButton and event.pressed
             ):
-                var events = InputMap.get_action_list(action)
+                var events = InputMap.action_get_events(action)
                 events[i] = event
                 InputMap.action_erase_events(action)
                 for e in events:
                     InputMap.action_add_event(action, e)
                 listening = false
-                Game.settings.save()
+                GameState.settings.save()
                 return true
         return false
 
 var items = [
-    Rebinder.new("Attack/Select", "grapple"),
-    Rebinder.new("Jump/Back", "key_jump"),
-    Rebinder.new("Airdash", "key_dodge"),
+    Rebinder.new("Attack/Select", "attack"),
+    Rebinder.new("Jump/Back", "jump"),
+    Rebinder.new("Airdash", "dodge"),
     Rebinder.new("Reset", "reset"),
     SelectReturn.new()
 ]

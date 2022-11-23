@@ -28,17 +28,17 @@ size = Vector2( 1600, 800 )
 [node name="timer_bg" type="Polygon2D" parent="canvas_layer"]
 position = Vector2( 662, 138 )
 z_index = -1
-polygon = PoolVector2Array( 730, -138, 1258, -138, 1258, 86, 706, -26 )
+polygon = PackedVector2Array( 730, -138, 1258, -138, 1258, 86, 706, -26 )
 
-[node name="timer_vpc" type="ViewportContainer" parent="canvas_layer"]
-margin_left = 1376.0
-margin_top = -272.0
-margin_right = 1876.0
-margin_bottom = 228.0
-rect_scale = Vector2( 1.2, 1.2 )
+[node name="timer_vpc" type="SubViewportContainer" parent="canvas_layer"]
+offset_left = 1376.0
+offset_top = -272.0
+offset_right = 1876.0
+offset_bottom = 228.0
+scale = Vector2( 1.2, 1.2 )
 stretch = true
 
-[node name="viewport" type="Viewport" parent="canvas_layer/timer_vpc"]
+[node name="viewport" type="SubViewport" parent="canvas_layer/timer_vpc"]
 size = Vector2( 500, 500 )
 own_world = true
 transparent_bg = true
@@ -46,10 +46,10 @@ handle_input_locally = false
 hdr = false
 render_target_update_mode = 3
 
-[node name="spatial" type="Spatial" parent="canvas_layer/timer_vpc/viewport"]
+[node name="spatial" type="Node3D" parent="canvas_layer/timer_vpc/viewport"]
 
 [node name="sprite_3d" type="Sprite3D" parent="canvas_layer/timer_vpc/viewport/spatial"]
-transform = Transform( -0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, -0.939693, 0, -22, 0 )
+transform = Transform3D( -0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, -0.939693, 0, -22, 0 )
 cast_shadow = 0
 centered = false
 flip_h = true
@@ -58,7 +58,7 @@ pixel_size = 0.05
 texture = SubResource( 3 )
 
 [node name="sprite_3d_3" type="Sprite3D" parent="canvas_layer/timer_vpc/viewport/spatial"]
-transform = Transform( -0.970888, 0, 0.239533, 0, 1, 0, -0.239533, 0, -0.970888, 14.092, -25.089, -0.822 )
+transform = Transform3D( -0.970888, 0, 0.239533, 0, 1, 0, -0.239533, 0, -0.970888, 14.092, -25.089, -0.822 )
 cast_shadow = 0
 centered = false
 flip_h = true
@@ -66,15 +66,15 @@ pixel_size = 0.03
 texture = SubResource( 5 )
 
 [node name="sprite_3d_2" type="Sprite3D" parent="canvas_layer/timer_vpc/viewport/spatial"]
-transform = Transform( 0.906308, 0, 0.422619, 0, 1, 0, -0.422619, 0, 0.906308, 0, -11.057, 0 )
+transform = Transform3D( 0.906308, 0, 0.422619, 0, 1, 0, -0.422619, 0, 0.906308, 0, -11.057, 0 )
 cast_shadow = 0
 centered = false
 modulate = Color( 0, 0, 0, 1 )
 pixel_size = 0.025
 texture = SubResource( 4 )
 
-[node name="camera" type="Camera" parent="canvas_layer/timer_vpc/viewport/spatial"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 8 )
+[node name="camera" type="Camera3D" parent="canvas_layer/timer_vpc/viewport/spatial"]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 8 )
 fov = 110.0
 
 [editable path="timer_l"]
