@@ -1,10 +1,6 @@
 extends CharacterState
 class_name AirborneState
 
-func on_start(_state_from, _fsm):
-    character.is_grounded = false
-    character.airborne_height = character.position.y
-    character.b_gravity_enabled = true
 
 func on_update(delta, _fsm):
 

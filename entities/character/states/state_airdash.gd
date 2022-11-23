@@ -8,13 +8,6 @@ var particles = null
 var b_grounded_airdash: bool = false
 
 
-func can_start(character) -> bool:
-	var axis = character.input.get_axis().round().normalized()
-	if axis.is_equal_approx(Vector2.ZERO):
-		return false
-	return true
-
-
 func on_start(state_from, _fsm):
 
 	# limit to 8 directions
@@ -22,7 +15,7 @@ func on_start(state_from, _fsm):
 	airdash_dir = Vector2.ZERO
 
 	# determine airdash direction
-	character.airdashes_left -= 1
+	character.consume_jump()
 	airdash_dir = Vector2(axis.x, axis.y).normalized();
 	#GameState.get_camera().screen_shake(1.0, 0.3)
 
