@@ -1,10 +1,10 @@
 [gd_resource type="TileSet" load_steps=3 format=3 uid="uid://elcuejgbpdct"]
 
-[ext_resource type="Texture2D" uid="uid://c33krons65dfj" path="res://assets/tilesets/dev.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://c33krons65dfj" path="res://assets/tilesets/dev.png" id="1_1ilex"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g38ku"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h2lss"]
 resource_name = "DEV"
-texture = ExtResource("5")
+texture = ExtResource("1_1ilex")
 use_texture_padding = false
 0:1/0 = 0
 0:1/0/terrain_set = 0
@@ -203,6 +203,7 @@ use_texture_padding = false
 0:5/0/physics_layer_0/angular_velocity = 0.0
 0:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, -5, -8, -5)
 0:5/0/physics_layer_0/polygon_0/one_way = true
+0:5/0/physics_layer_0/polygon_0/one_way_margin = 0.0
 0:5/0/physics_layer_1/linear_velocity = Vector2(0, 0)
 0:5/0/physics_layer_1/angular_velocity = 0.0
 2:7/0 = 0
@@ -358,4 +359,4 @@ physics_layer_1/collision_mask = 18
 terrain_set_0/mode = 0
 terrain_set_0/terrain_0/name = "Blockouts"
 terrain_set_0/terrain_0/color = Color(1, 1, 1, 1)
-sources/0 = SubResource("TileSetAtlasSource_g38ku")
+sources/0 = SubResource("TileSetAtlasSource_h2lss")
