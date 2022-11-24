@@ -55,8 +55,8 @@ func is_current(state_name) -> bool:
 ##
 ## Change the current state. Returns true if the s
 ##
-func change(new_state_name: StringName, force: bool = false) -> bool:
-	if not force and new_state_name == current_state_name: return false
+func change(new_state_name: StringName) -> bool:
+
 	assert(states.has(new_state_name), "Attempted to change to an invalid state.")
 
 	var old_state_name = current_state_name

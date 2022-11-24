@@ -678,7 +678,8 @@ func action_neutral():
 ##
 ## Start a dash. Direction depends checked the current input direction.
 ##
-func action_dash() -> void:
+func action_dash(dir: int) -> void:
+	facing = dir
 	fsm.change(CharStateName.DASH)
 	action_performed.emit("dash")
 

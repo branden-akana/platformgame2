@@ -18,19 +18,12 @@ func _init(character):
 
 func on_start(_state_from, _fsm):
 
-	var axis_x = character.input.get_axis_x()
-
-	# determine dash direction
-	if axis_x > 0:
-		character.facing = Direction.RIGHT
-	else:
-		character.facing = Direction.LEFT
-
 	# set velocity
-	if axis_x > 0:
+	if character.facing == Direction.RIGHT:
 		FXEmitter.play(FXEmitter.Dash, character, {"direction": Vector2(-3, -1)})
 		character.velocity.x = character._phys.DASH_INIT_SPEED
-	elif axis_x < 0:
+
+	elif character.facing == Direction.LEFT:
 		FXEmitter.play(FXEmitter.Dash, character, {"direction": Vector2(3, -1)})
 		character.velocity.x = -character._phys.DASH_INIT_SPEED
 

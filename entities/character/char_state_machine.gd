@@ -31,7 +31,7 @@ func _init(character):
 		CharacterActions.DASH,
 		# CharacterActions.EDGE_CANCEL,
 		CharacterActions.AIR_CANCEL,
-		CharacterActions.IDLE_CANCEL,
+		# CharacterActions.IDLE_CANCEL,
 		CharacterActions.DROPDOWN,
 		# CharacterActions.FASTFALL,
 		# CharacterActions.LAND,
@@ -198,8 +198,11 @@ func on_process(_delta, state: CharacterState):
 		# and (character.pressed_left() or character.pressed_right())):
 		# if (character.input.pressed_left_thru_neutral() or 
 		# character.input.pressed_right_thru_neutral()):
-		if character.input.pressed_left() or character.input.pressed_right():
-			character.action_dash()
+		if character.input.pressed_left() and not character.input.holding_right():
+			character.action_dash(Direction.LEFT)
+
+		elif character.input.pressed_right() and not character.input.holding_left():
+			character.action_dash(Direction.RIGHT)
 
 	# allow attack
 	if state._is_allowed(CharacterActions.ATTACK):

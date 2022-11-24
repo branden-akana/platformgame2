@@ -4,6 +4,8 @@ func on_update(delta, _fsm):
 
 	character._friction(delta)
 
-	if (character.input.holding_left() or 
-	character.input.holding_right()):
-		character.action_dash()
+	if character.input.holding_left() and not character.input.holding_right():
+		character.action_dash(Direction.LEFT)
+
+	elif character.input.holding_right() and not character.input.holding_left():
+		character.action_dash(Direction.RIGHT)
