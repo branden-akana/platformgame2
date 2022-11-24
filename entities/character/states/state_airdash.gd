@@ -83,5 +83,5 @@ func on_update(_delta, fsm):
 			character.action_airborne()
 
 
-	# character.fix_incoming_collisions(delta, 32)
+	character.fix_incoming_collisions(_delta, character._phys.AIRDASH_WAVELAND_MARGIN)
 

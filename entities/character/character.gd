@@ -407,70 +407,18 @@ func move(_delta):
 	#     if motion.dot(velocity) <= 0.0 or motion.is_equal_approx(Vector2()): break
 
 
-# Align the character to the top of a ledge they were about to collide with if
-# the distance the character would have to shift is within a set margin.
-# func align_to_ledge(delta):
-
-#     var collision = $test_body_bot.move_and_collide(Vector2(velocity.x * delta, 0), true, true, true)
-#     var top_collision = $test_body_top.move_and_collide(Vector2(velocity.x * delta, 0), true, true, true)
-	
-#     if collision and collision.normal != Vector2.UP and not top_collision:
-#         var collider = collision.get_collider()
-#         var shape_idx = collision.get_collider_shape_index()
-
-#         var owner_idx = collider.shape_find_owner(shape_idx)
-#         var tilemap = collider.shape_owner_get_owner(owner_idx)
-#         #var shape = collider.shape_owner_get_shape(owner_idx, shape_idx)
-		
-#         var tilepos = tilemap.map_to_world(
-#             tilemap.local_to_map(tilemap.to_local(collision.position))
-#         )
-		
-#         # align y-axis to ledge if within margin
-#         var margin = round(position.y - tilepos.y)
-#         print("ledge margin = %s" % margin)
-#         if position.y != tilepos.y and margin <= _phys.AIRDASH_WAVELAND_MARGIN:
-#             position.y = tilepos.y
-#             position.x += velocity.x * delta
-#             print("snapped to y=%s" % tilepos.y)
-
-
-# Attempt to retrieve the owner of the shape that was collided with.
-func _collision_get_shape_owner(collider: CollisionObject2D, shape_index: int) -> Object:
-
-	# get the shape ID
-	# var shape_idx = collision.get_collider_shape_index()
-
-	# get the ID of the shape's owner
-	var owner_idx = collider.shape_find_owner(shape_index)
-	# return the shape's owner
-	return collider.shape_owner_get_owner(owner_idx)
-
-
-# If the player's collision shape is inside another collision shape (e.g. the world),
-# resolve the collision by moving the player up to the top of the collision shape.
+##
+## If the player's collision shape is inside another collision shape (e.g. the world),
+## resolve the collision by moving the player up to the top of the collision shape.
+##
 func fix_incoming_collisions(delta: float, margin: float) -> void:
 
-	var collision = move_and_collide(velocity * delta, true, true, true)
-
+	var collision := move_and_collide(velocity * delta, true, true, true)
 	if !collision: return
 
-	# try to find if the collider is a TileMap
-
-	var tilemap: TileMap
-
-	if collision.get_collider() is CollisionObject2D:
-
-		# try to retrieve the tilemap that was collided with
-		var shape_idx = collision.get_collider_shape_index()
-		tilemap = _collision_get_shape_owner(collision.collider, shape_idx)
-
-	elif collision.get_collider() is TileMap:
-
-		tilemap = collision.get_collider()
-
-	# _fix_tilemap_collision(tilemap, collision.get_position(), margin)
-	_fix_tilemap_collision(tilemap, margin)
+	var collider = collision.get_collider()
+	if collider is TileMap:
+		_align_to_tile((collider as TileMap), collision.get_position() + collision.get_remainder(), margin)
 
 
 func fix_collisions(margin: float) -> void:
@@ -484,61 +432,49 @@ func fix_collisions(margin: float) -> void:
 		var collider = collision.get_collider()
 		# print("is tilemap: %s" % collider is TileMap)
 		# _fix_tilemap_collision(collider, position + collision_point, margin)
-		_fix_tilemap_collision(collider, margin)
+		_align_to_tile(collider, position + collision_point, margin)
 	
 	# var ray = get_ecb().get_bottom()
 	# var collider = ray.get_collider()
 	# var collision_point = ray.get_collision_point() + Vector2(0, -1)
 
+##
+## Move the player (y-axis only) to the top of a tile at a position.
+##
+## tilemap			The TileMap that the player is colliding with.
+## pos				The position (in global coordinates) to check.
+##					The player will snap to the tile at this position.
+## margin   		If the distance the player would have to move is less than this margin, snap the player's position
+## polygon_index 	the ID of a polygon the tile owns (applicable if a tile has multiple polygons, usually =0)
+##
+func _align_to_tile(tilemap: TileMap, pos: Vector2, margin: float, polygon_index: int = 0) -> void:
 
-func _fix_tilemap_collision(tilemap: TileMap, margin: float, shape_id: int = 0):
+	# find the TileData of the tile at the given position
+	var map_coords := tilemap.local_to_map(tilemap.to_local(pos))
+	var tile_data: TileData = tilemap.get_cell_tile_data(0, map_coords)
 
-	if not tilemap is TileMap: return
+	if not tile_data: return
 
-	# try to retrieve the shape of the specific tile that was collided with
-	var collider_shape = _get_tilemap_shape(tilemap, 0, shape_id)
-	# print("shape: %s" % [collider_shape])
+	# find the collision polygon points at layer 0
+	var collision_polygon_points := tile_data.get_collision_polygon_points(0, polygon_index)
 
-	if len(collider_shape) and position.y:
-		var top_y = _min_y(collider_shape)  # y of top of shape
-		var diff = position.y - top_y
-		# print("%s -> %s (%s)" % [position.y, top_y, diff])
-		if not is_equal_approx(position.y, top_y) and (diff > 0 and diff <= margin):
-			print("fixed collision: shifted up from %s to %s" % [position.y, top_y])
-			position.y = top_y  # snap to top of shape
-			# velocity.y = 0
-			#print(position)
+	if len(collision_polygon_points) == 0: return
 
+	# func to find the point with the highest y-value
+	var min_y = func(points: PackedVector2Array) -> Vector2:
+		var mn: Vector2 = points[0]
+		for pt in points: if pt.y < mn.y: mn = pt
+		return mn
 
-# Attempt to retrieve the specific shape that was collided with,
-# if the collider is a TileMap.
-#
-# If a shape cannot be found an empty array is returned.
-func _get_tilemap_shape(tilemap, layer: int = 0, polygon_index: int = 0) -> PackedVector2Array:
+	var top = tilemap.map_to_local(map_coords) + min_y.call(collision_polygon_points)
+	var diff = position.y - top.y
+	# print("%d -> %d (%d)" % [position.y, top.y, diff])
 
-	# get the map coordinates, world coordinates, and id of the tile that was collided with
-	var tile_coords: Vector2i = tilemap.local_to_map(tilemap.to_local(position))
-	# print("tile_coords: %s" % tile_coords)
-	# var tile_pos: Vector2 = tilemap.map_to_local(tile_coords)
-	var tile_id: int = tilemap.get_cell_source_id(layer, tile_coords)
-	var tile_data: TileData = tilemap.get_cell_tile_data(layer, tile_coords)
-
-	if tile_id == -1:
-		print("tested tile_id is -1")
-		return PackedVector2Array()
-
-	# get the shape of the tile (first shape)
-	var points := tile_data.get_collision_polygon_points(layer, polygon_index)
-
-	return points
-
-
-func _min_y(points: PackedVector2Array) -> float:
-	var mn = INF
-	for pt in points: if pt.y < mn: mn = pt.y
-	return mn
-
-
+	if diff >= 1.0 and diff <= margin:
+		print("aligned player to tile: moved %.2f" % diff)
+		position.y = top.y - 0.25  # snap to top of shape
+		# velocity.y = 0
+		#print(position)
 
 
 # Align the character to the top of a one-way platform if the distance
