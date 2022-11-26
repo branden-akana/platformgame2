@@ -355,40 +355,36 @@ func _check_invalid_platform_collisions(use_slides: bool = true) -> bool:
 
 func move(_delta):
 
-	# detect hitting a platform from a non-one-way angle
-	var invalid_platform_collisions = _check_invalid_platform_collisions()
+	var last_position := position
+	var last_velocity := velocity
 
-	# temporarily disable collision with platforms
-	set_collision_mask_value(9, !invalid_platform_collisions)
-
-	# fix_incoming_collisions(delta, 32)
-
-	# if b_ignore_platforms: set_collision_mask_value(9, false)
-
-	# cancel x-velocity if moving into wall
-	# if (_ecb.left_collide_out() and velocity.x < 0
-	#     or _ecb.right_collide_out() and velocity.x > 0):
-	#     velocity.x = 0
-
-	#if result: print("%s: %s" % [result.collider, result.position])
-	# set_velocity(velocity)
-	move_and_slide()
-	# velocity
-
-	# move and slide implementation
-	max_slides = 2
-	if not is_grounded:
-		max_slides = 5
-
-	set_velocity(velocity)
-	set_up_direction(Vector2.UP)
-	set_floor_stop_on_slope_enabled(false)
-	set_max_slides(max_slides)
 	move_and_slide()
 
-	# check and update grounded state
-	if not invalid_platform_collisions:
-		check_grounded()
+	# check all slide collisions for unwanted collisions with platforms
+	for i in range(get_slide_collision_count()):
+
+		# retrieve data of the colliding tile
+		var collision: KinematicCollision2D = get_slide_collision(i)
+		var tile_map := (collision.get_collider() as TileMap)
+		var test_position := collision.get_position() - collision.get_normal()
+		var tile_data = tile_map.get_cell_tile_data(0, tile_map.local_to_map(tile_map.to_local(test_position)))
+
+		if (
+			tile_data and 
+			tile_data.get_custom_data("is_platform") and
+			# not collision.get_normal().is_equal_approx(Vector2.UP)  # this check might conflict with ramped platforms
+			collision.get_position().y <= position.y
+		):
+				# undo and redo movement while ignoring platforms
+				# print("ignoring platforms")
+				position = last_position
+				velocity = last_velocity
+				set_collision_mask_value(10, false)
+				move_and_slide()
+				set_collision_mask_value(10, true)
+				break
+
+	check_grounded()
 
 	# if b_ignore_platforms: set_collision_mask_value(9, true)
 
