@@ -527,7 +527,8 @@ func do_air_stall(frames = 18):
 func apply_gravity(delta):
 	if not is_grounded:
 		if velocity.y <= _phys.TERMINAL_VELOCITY:
-			velocity.y = min(_phys.TERMINAL_VELOCITY, velocity.y + (_phys.GRAVITY * delta))
+			var factor = clamp(abs(velocity.y) / _phys.GRAVITY_DAMP_RAMP, _phys.GRAVITY_MIN, 1.0)
+			velocity.y = min(_phys.TERMINAL_VELOCITY, velocity.y + (_phys.GRAVITY * delta * factor))
 
 ##
 ## Accelerate the character horizontally.
@@ -555,7 +556,7 @@ func _acceleration(delta: float, accel = null, max_speed = null) -> void:
 func _friction(delta: float):
 	var friction = _phys.GROUND_FRICTION if is_grounded else _phys.AIR_FRICTION
 
-	if is_grounded and abs(velocity.x) > 0:
+	if is_grounded and abs(velocity.x) > 100:
 		action_occured.emit("drag")
 
 	velocity.x = move_toward(velocity.x, 0, friction * delta)

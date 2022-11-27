@@ -3,9 +3,9 @@ class_name CharacterPhysics extends Resource
 @export_group("Movement Physics")
 
 @export_subgroup("Grounded Movement")
-@export var GROUND_ACCELERATION = 2667
-@export var GROUND_FRICTION = 667
-@export var GROUND_MAX_SPEED = 200
+@export var GROUND_ACCELERATION = 3000
+@export var GROUND_FRICTION = 1200
+@export var GROUND_MAX_SPEED = 400
 
 @export var WALK_MAX_SPEED = 150
 
@@ -23,24 +23,24 @@ class_name CharacterPhysics extends Resource
 @export var DASH_ACCELERATION = 8000  # dash acceleration
 @export var DASH_ACCELERATION_REV = 4000  # dash reverse acceleration
 
-@export var DASH_MAX_SPEED = 200  # dash max speed
+@export var DASH_MAX_SPEED = 300  # dash max speed
 @export var DASH_MAX_SPEED_REV = 400 # dash reverse max speed (moonwalking)
 
 @export_subgroup("Run Behavior")
 @export var RUNNING_STOP_SPEED: int = 300
 
 @export_subgroup("Air Movement")
-@export var AIR_ACCELERATION = 800
+@export var AIR_ACCELERATION = 1500
 @export var AIR_FRICTION = 600
-@export var AIR_MAX_SPEED = 200
+@export var AIR_MAX_SPEED = 300
 
 # airdash
 
 @export_subgroup("Airdash Behavior")
-@export var AIRDASH_SPEED     = 400  # (mininum) speed at start of airdash
+@export var AIRDASH_SPEED     = 800  # (mininum) speed at start of airdash
 @export var AIRDASH_SPEED_END = 100   # speed at end of airdash
-@export var AIRDASH_SPEED_CANCEL = 300   # max speed when airdash is canceled
-@export var AIRDASH_LENGTH    = 10
+@export var AIRDASH_SPEED_CANCEL = 500   # max speed when airdash is canceled
+@export var AIRDASH_LENGTH    = 12
 @export var AIRDASH_CURVE    = 2.5
 @export var AIRDASH_WAVELAND_MARGIN = 10
 
@@ -49,13 +49,15 @@ class_name CharacterPhysics extends Resource
 @export_subgroup("Jump Behavior")
 @export var JUMPSQUAT_LENGTH = 4  # amount of frames to stay grounded before jumping
 
-@export var JUMP_VELOCITY = 275
+@export var JUMP_VELOCITY = 425
 @export var DASHJUMP_VELOCITY = 250
 
 @export_subgroup("Gravity")
-@export var GRAVITY = 650
-@export var TERMINAL_VELOCITY = 200  # maximum downwards velocity
-@export var FAST_FALL_SPEED = 300
+@export var GRAVITY = 1500
+@export var GRAVITY_DAMP_RAMP = 25.0  # when y-velocity is below this value, start dampening gravity
+@export var GRAVITY_MIN = 0.1  # the minimum amount of gravity to apply when gravity is dampened
+@export var TERMINAL_VELOCITY = 400  # maximum downwards velocity
+@export var FAST_FALL_SPEED = 500
 
 
 # buffers (frame window to accept these actions before they are actionable)
