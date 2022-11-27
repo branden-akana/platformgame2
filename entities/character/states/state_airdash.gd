@@ -40,8 +40,9 @@ func on_end(_state_to, _fsm):
 
 	# if state_to in [CharStateName.ATT_FORWARD, CharStateName.ATT_DAIR, CharStateName.ATT_UAIR]:
 	character.velocity = (character.velocity.normalized() * clamp(character.velocity.length(), 0.0, character._phys.AIRDASH_SPEED_CANCEL))
-	# if is_instance_valid(particles):
-	# 	particles.emitting = false
+
+	if is_instance_valid(particles):
+		particles.emitting = false
 
 
 func on_update(_delta, fsm):
@@ -71,9 +72,6 @@ func on_update(_delta, fsm):
 
 	# end of airdashing
 	if tick > character._phys.AIRDASH_LENGTH:
-
-		# if is_instance_valid(particles):
-		# 	particles.emitting = false
 
 		if character.is_grounded:
 			character.velocity.y = 0
