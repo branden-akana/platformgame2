@@ -3,27 +3,31 @@
 [ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="1_b4664"]
 [ext_resource type="Script" path="res://effects/particles/timed_particles.gd" id="2_rh0xn"]
 
-[sub_resource type="Curve" id="1"]
-_data = [Vector2(0, 0), 0.0, 12.8571, 0, 0, Vector2(0.16, 0.772727), 0.0440691, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_606og"]
+_data = [Vector2(0, 1), 0.0, -2.21245, 0, 1, Vector2(0.451987, 0), 0.0440691, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Gradient" id="2"]
-offsets = PackedFloat32Array(0, 0.285199)
-colors = PackedColorArray(1, 1, 1, 0.1, 1, 1, 1, 0)
+[sub_resource type="Gradient" id="Gradient_gp763"]
+offsets = PackedFloat32Array(0, 0.0684932, 1)
+colors = PackedColorArray(1, 1, 1, 0.1, 1, 1, 1, 1, 1, 1, 1, 0.0156863)
 
 [node name="fx_drag" type="CPUParticles2D"]
+position = Vector2(0, 8)
 emitting = false
-amount = 3
-lifetime = 5.0
+amount = 1
+lifetime = 2.0
 one_shot = true
-explosiveness = 1.0
 texture = ExtResource("1_b4664")
 emission_shape = 3
-emission_rect_extents = Vector2(32, 1)
-direction = Vector2(1, -0.5)
-spread = 0.0
-gravity = Vector2(0, 0)
-scale_amount_max = 2.0
-scale_amount_curve = SubResource("1")
-color_ramp = SubResource("2")
+emission_rect_extents = Vector2(8, 1)
+direction = Vector2(0, -0.5)
+spread = 15.0
+gravity = Vector2(0, 300)
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+scale_amount_min = 0.1
+scale_amount_max = 0.1
+scale_amount_curve = SubResource("Curve_606og")
+color = Color(1, 1, 0, 1)
+color_ramp = SubResource("Gradient_gp763")
 script = ExtResource("2_rh0xn")
