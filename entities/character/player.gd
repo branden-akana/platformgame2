@@ -8,6 +8,8 @@ var signal_frames = {}
 
 var ghost = null
 
+@export var base_color: Color = Color.WHITE
+
 @onready var flash_tween
 
 func _ready():
@@ -51,7 +53,7 @@ func play_flash_effect():
 
 	flash_tween = create_tween()
 	flash_tween.tween_property(self._model, "color",
-		Color(1.0, 1.0, 1.0), 0.2)
+		base_color, 0.2)
 
 func on_airdash():
 	if flash_tween:
@@ -80,12 +82,12 @@ func pre_process(_delta):
 	# update player color
 	match airdashes_left:
 		2:
-			_model.color = Color(1.0, 1.0, 1.0)
+			_model.color = base_color
 		1:
-			_model.color = Color(1.0, 1.0, 1.0)
+			_model.color = base_color
 			# sprite.modulate = Color(0.5, 0.5, 0.5)
 		0:
-			_model.color = Color(0.5, 0.5, 0.5)
+			_model.color = base_color * 0.5
 
 	# needed as sometimes the walking sound does not stop
 	if fsm.is_current(CharStateName.RUNNING):
