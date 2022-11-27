@@ -3,7 +3,7 @@ shader_type canvas_item;
 uniform float noise_strength = 0.015;
 uniform float noise_speed = 10.0;
 
-#include "noise.gdshaderinc"
+#include "res://shaders/noise.gdshaderinc"
 
 void fragment() {
 	
