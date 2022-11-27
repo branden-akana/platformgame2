@@ -175,6 +175,14 @@ func _physics_process(delta):  # update input and physics
 	# apply final movement
 	move(delta)
 
+	# snap to ground
+	if is_grounded and not fsm.is_current(CharStateName.AIRBORNE) and not fsm.is_current(CharStateName.AIRDASH):
+		var down_snap := Vector2.DOWN * 10.0
+		if move_and_collide(down_snap, true): move_and_collide(down_snap)
+
+	check_grounded()
+
+	# read inputs
 	input.update()
 
 	tick += 1
