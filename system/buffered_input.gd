@@ -140,12 +140,20 @@ func is_action_just_pressed(input, tolerance: int = 0, delta: float = 0.0, clear
 		else:
 			return false
 
-func _is_axis_just_pressed(dir: Vector2, from: Vector2):
+##
+## Returns true if the movement axis has just been pushed in a given direction
+## past PRESS_THRESHOLD.
+##
+## If resistance is provided, only return true if the difference in axis movement between
+## this tick and the previous tick is greater than the resistance.
+## Higher resistance values will require quicker movements of the axis to register.
+##
+func is_axis_just_pressed(dir: Vector2, resistance := 0.8):
 
-	var rounded_axis = self.axis.round()
-	var rounded_last_axis = self.last_axis.round()
+	var is_pressed = self.axis.dot(dir) > PRESS_THRESHOLD
+	var was_pressed = self.last_axis.dot(dir) > PRESS_THRESHOLD
 
-	if dir == rounded_axis and from == rounded_last_axis:
+	if is_pressed and not was_pressed and axis.distance_to(last_axis) >= resistance:
 		return true
 	else:
 		return false
@@ -156,7 +164,7 @@ func _is_axis_just_pressed(dir: Vector2, from: Vector2):
 # input: the input representing primary direction
 # opposite_input: the input representing opposite direction
 # other_inputs: if any of these inputs are also pressed, ignore the primary press
-func is_axis_just_pressed(input: String, opposite_input: String, other_inputs = [], tolerance: int = 0, delta: float = 0.0):
+func _is_axis_just_pressed(input: String, opposite_input: String, other_inputs = [], tolerance: int = 0, delta: float = 0.0):
 
 	var a_last_pressed = get_time_since_last_pressed(input)
 	var a_is_pressed = is_action_pressed(input)
@@ -203,7 +211,7 @@ func get_axis(prefix="key_") -> Vector2:
 		get_action_strength(right) - get_action_strength(left),
 		get_action_strength(down) - get_action_strength(up)
 	)
-	return axis
+	return axis.normalized()
 
 func is_action_pressed(input: String) -> bool:
 	if input in action_map:
