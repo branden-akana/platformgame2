@@ -27,7 +27,7 @@ func on_start(state_from, _fsm):
 	#     b_can_land_cancel = true
 
 	print("start airdash from %s" % state_from)
-	if state_from == CharStateName.AIRBORNE and axis.y < 0:
+	if not character.is_grounded:
 		_allow(CharacterActions.LAND)
 
 	character.b_can_slide = false

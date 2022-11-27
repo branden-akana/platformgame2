@@ -22,10 +22,12 @@ func pressed_up() -> bool:
 	return is_action_just_pressed("key_up")
 
 func pressed_left() -> bool:
-	return is_action_just_pressed("key_left")
+	# return is_action_just_pressed("key_left")
+	return is_axis_just_pressed(Vector2.LEFT)
 
 func pressed_right() -> bool:
-	return is_action_just_pressed("key_right")
+	return is_axis_just_pressed(Vector2.RIGHT)
+	# return is_action_just_pressed("key_right")
 
 func holding_down() -> bool:
 	return is_action_pressed("key_down")
@@ -56,17 +58,19 @@ func get_axis_rounded() -> Vector2:
 
 # Read for a left input, but only if up or down are not pressed.
 func pressed_left_thru_neutral():
+	pass
 	# return _is_axis_just_pressed(Vector2.LEFT, Vector2.ZERO)
-	return is_axis_just_pressed(
-		"key_right", "key_left", ["key_up", "key_down"], 0, 0.0
-	)
+	# return is_axis_just_pressed(
+	# 	"key_right", "key_left", ["key_up", "key_down"], 0, 0.0
+	# )
 
 # Read for a right input, but only if up or down are not pressed.
 func pressed_right_thru_neutral():
+	pass
 	# return _is_axis_just_pressed(Vector2.RIGHT, Vector2.ZERO)
-	return is_axis_just_pressed(
-		"key_left", "key_right", ["key_up", "key_down"], 0, 0.0
-	)
+	# return is_axis_just_pressed(
+	# 	"key_left", "key_right", ["key_up", "key_down"], 0, 0.0
+	# )
 
 # Return true if the left stick is in the neutral position.
 func is_axis_neutral():

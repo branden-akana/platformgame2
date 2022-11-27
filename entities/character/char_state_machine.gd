@@ -145,6 +145,17 @@ func on_process(_delta, state: CharacterState):
 	# if character.is_grounded:
 	# 	b_was_grounded = true
 
+	# Check if the player wants to dash.
+	if state._is_allowed(CharacterActions.DASH):
+		# and (character.pressed_left() or character.pressed_right())):
+		# if (character.input.pressed_left_thru_neutral() or 
+		# character.input.pressed_right_thru_neutral()):
+		if character.input.pressed_left():
+			character.action_dash(Direction.LEFT)
+
+		elif character.input.pressed_right():
+			character.action_dash(Direction.RIGHT)
+
 	# allow airdash
 	if state._is_allowed(CharacterActions.AIRDASH):
 		if character.input.pressed_airdash():
@@ -192,17 +203,6 @@ func on_process(_delta, state: CharacterState):
 			# and not character.input.holding_right()
 		):
 			character.action_neutral()
-
-	# Check if the player wants to dash.
-	if state._is_allowed(CharacterActions.DASH):
-		# and (character.pressed_left() or character.pressed_right())):
-		# if (character.input.pressed_left_thru_neutral() or 
-		# character.input.pressed_right_thru_neutral()):
-		if character.input.pressed_left() and not character.input.holding_right():
-			character.action_dash(Direction.LEFT)
-
-		elif character.input.pressed_right() and not character.input.holding_left():
-			character.action_dash(Direction.RIGHT)
 
 	# allow attack
 	if state._is_allowed(CharacterActions.ATTACK):
