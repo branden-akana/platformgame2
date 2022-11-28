@@ -15,7 +15,7 @@ func on_start(state_from, _fsm):
 	airdash_dir = Vector2.ZERO
 
 	# determine airdash direction
-	character.consume_jump()
+	character.consume_airdash()
 	airdash_dir = Vector2(axis.x, axis.y).normalized();
 	#GameState.get_camera().screen_shake(1.0, 0.3)
 

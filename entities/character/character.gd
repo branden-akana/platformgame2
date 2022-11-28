@@ -76,7 +76,7 @@ var no_effects = false
 var ignore_enemy_hp = false
 
 # number of jumps allowed to perform until the character touches the floor
-# var jumps_left = 1
+var jumps_left = 1
 
 ## number of dashes allowed to perform until the character touches the floor
 var airdashes_left = 1
@@ -194,8 +194,15 @@ func _physics_process(delta):  # update input and physics
 ##
 ## Consume one of the player's airdash/jump charges. Cannot be lower than 0.
 ##
-func consume_jump():
+func consume_airdash():
 	airdashes_left = max(0, airdashes_left - 1)
+
+##
+## Consume one of the player's airdash/jump charges. Cannot be lower than 0.
+##
+func consume_jump():
+	consume_airdash()
+	# jumps_left = max(0, jumps_left - 1)
 
 ##
 ## Restore all of the player's airdash/jump charges.
@@ -204,7 +211,20 @@ func restore_jumps():
 	if airdashes_left != 1:
 		action_occured.emit("airdash_restored")
 	airdashes_left = 1;
-	# jumps_left = 1;
+	jumps_left = 1;
+
+##
+## Return true if the player is able to airdash.
+##
+func has_airdash() -> bool:
+	return airdashes_left > 0
+
+##
+## Return true if the player is able to airdash.
+##
+func has_jump() -> bool:
+	return has_airdash()
+	# return jumps_left > 0
 
 # func set_ignore_platforms(ignore_platforms: bool) -> void:
 #     b_ignore_platforms = ignore_platforms
@@ -723,8 +743,7 @@ func _walljump(dir = null) -> bool:
 ## Performing the jump will reduce the total amount of airdash/jump charges.
 ##
 func action_jump(factor = 1.0):
-	# if jumps_left > 0:
-	if airdashes_left > 0:
+	if has_jump():
 		if (is_grounded and
 			not fsm.is_current(CharStateName.JUMPSQUAT) and
 			not fsm.is_current(CharStateName.AIRDASH)):
@@ -732,7 +751,7 @@ func action_jump(factor = 1.0):
 			action_performed.emit("jumpsquat")
 		else:
 			print("time after left ground: %s" % (tick - time_left_ground))
-			if not is_grounded and tick - time_left_ground > 14:
+			# if not is_grounded and tick - time_left_ground > 14:
 				consume_jump()
 			_jump(factor)
 			fsm.change(CharStateName.AIRBORNE)
