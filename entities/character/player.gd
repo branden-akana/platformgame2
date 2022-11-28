@@ -39,6 +39,7 @@ func on_action(action: String) -> void:
 		"land":
 			FXEmitter.play(FXEmitter.Land, self)
 			Sound.play("land", -20, 0.8)
+			_gamestate.get_camera().screen_shake(2.0, 0.2)
 		"airdash_restored":
 			play_flash_effect()
 		"drag":
@@ -63,7 +64,7 @@ func on_enemy_hit(_enemy, contacts):
 	signal_frames[tick] = "hit"
 
 	Sound.play("hit", -10)
-	# _gamestate.get_camera().screen_shake(1.0, 0.2)
+	_gamestate.get_camera().screen_shake(1.0, 0.2)
 
 	if not no_effects and len(contacts):
 		# var effect = FXEmitter.play_anim(FXEmitter.HitEffect)
