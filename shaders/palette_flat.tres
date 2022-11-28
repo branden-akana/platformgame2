@@ -15,3 +15,7 @@ shader_parameter/palette_blend = 0.0
 shader_parameter/palette_key = ExtResource("2_sm3w2")
 shader_parameter/palette_size = 8
 shader_parameter/screen = false
+shader_parameter/cutout_size = 0
+shader_parameter/shadow_choke = 1.0
+shader_parameter/shadow_color = Color(0.0823529, 0.0156863, 0.0823529, 1)
+shader_parameter/shadow_size = 6

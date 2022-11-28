@@ -15,3 +15,7 @@ shader_parameter/palette_blend = 0.0
 shader_parameter/palette_key = ExtResource("2_u5uvq")
 shader_parameter/palette_size = 8
 shader_parameter/screen = true
+shader_parameter/cutout_size = null
+shader_parameter/shadow_choke = null
+shader_parameter/shadow_color = null
+shader_parameter/shadow_size = null

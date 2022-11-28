@@ -6,6 +6,8 @@
 
 shader_type canvas_item;
 
+#include "res://shaders/outline.gdshaderinc"
+
 // texture params
 
 uniform bool screen = true;
@@ -185,5 +187,7 @@ void fragment() {
 	vec4 palette_color_b = texture(palette_b, uv);
 	vec4 palette_color = mix(palette_color_a, palette_color_b, palette_blend);
 	COLOR = vec4(palette_color.rgb, COLOR.a);  
-	//COLOR = vec4(final_uv, 0.0, COLOR.a); 
+	//COLOR = vec4(final_uv, 0.0, COLOR.a);
+	
+	COLOR = draw_outline(COLOR, TEXTURE, UV);
 }
