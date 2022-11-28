@@ -1,87 +1,92 @@
+@tool
 extends Enemy
 
-const HIT_SHIFT_AMT = 1000
-const HIT_ELASTICITY = 0.5
-const HIT_COLOR_LENGTH = 0.2
+class PIDController:
+	const P_GAIN = 0.25
+	const I_GAIN = 4.0
 
+	var enemy: Enemy
+	var target: Vector2
 
-@onready var sprite: Polygon2D = $sprite
+	var error_last: Vector2
 
-var tween: Tween
+	func _init(enemy: Enemy) -> void:
+		self.enemy = enemy
 
-var hit_direction: Vector2 = Vector2.ZERO
-var hit_shift: Vector2 = Vector2.ZERO # position shift from being hit
-var hit_elasticity: float = 0.0
+	func reset():
+		error_last = Vector2.ZERO
 
-var color_blend: float = 0.0
+	func set_target(target: Vector2) -> void:
+		self.target = target
+
+	func update():
+		var error = target - enemy.position
+
+		var p = error * P_GAIN
+
+		var delta = error - error_last
+		error_last = error
+
+		var d = delta * I_GAIN
+
+		enemy.velocity += p + d
+
+	
+@export var alpha: float:
+	set(a):
+		$svpc.material.set_shader_parameter("shadow_alpha", a)
+		modulate.a = a
+
+@onready var pid := PIDController.new(self)
+@onready var spin_rate = 1.0
+
+var hit_tween: Tween
+
+func _ready():
+	# rotate 3d cube such that a hexagon is projected
+	%cube.rotation.x = deg_to_rad(45)
+	%cube.rotation.y = deg_to_rad(35.264)
+	%cube.rotation.z = 0
+
+	# set target to original position
+	pid.set_target(position)
+
+	enemy_died.connect(on_death)
+
 
 func _process(delta):
-	if not is_instance_valid(sprite):
-		return
+	%cube.rotate_object_local(%cube.to_local(Vector3.FORWARD).normalized(), delta * spin_rate)
 
-	if Engine.is_editor_hint():
-		return
-		
-	sprite.global_rotation += delta
 
-	if hit_direction != Vector2.ZERO and hit_elasticity > 0.0:
-		hit_shift += hit_direction * delta * HIT_SHIFT_AMT
-		hit_elasticity -= delta
+func _physics_process(_delta):
+	if not Engine.is_editor_hint():
+		pid.update()
+		move_and_slide()
 
-	# shift sprite in hit direction
-	sprite.position = lerp(Vector2.ZERO, hit_shift, ease(hit_elasticity / HIT_ELASTICITY, 3))
-
-func get_hp_color(hp):
-	match(hp):
-		0:
-			if GameState.is_practice_mode_enabled:
-				return Color(1.0, 1.0, 1.0, 0.5)
-			else:
-				return Color(0.3, 0.1, 0.3, 0.0)
-		1:
-			return Color(1.0, 1.0, 0.5)
-		2:
-			return Color(1.0, 1.0, 1.0)
-		3, _:
-			return Color(1.0, 0.0, 1.0)
-
-func update_color():
-	modulate = get_hp_color(health)
-	update_size()
-
-func update_size():
-	match(health):
-		0, 1:
-			$sprite.scale = Vector2(1.5, 1.5)
-		2:
-			$sprite.scale = Vector2(2, 2)
-		3, _:
-			$sprite.scale = Vector2(2.5, 2.5)
 
 func reset() -> void:
 	super.reset()
+	$animation_player.play("shine")
+	if pid:
+		position = pid.target
+		velocity = Vector2.ZERO
+		pid.reset()
 
-	modulate.a = 1.0
-	if is_instance_valid(sprite):
-		update_color()
 
 func hurt(from, dmg = 1) -> void:
 	super.hurt(from, dmg)
 
-	hit_shift = Vector2.ZERO
-	hit_direction = from.position.direction_to(position)
-	hit_elasticity = HIT_ELASTICITY
-	color_blend = HIT_COLOR_LENGTH
+	velocity = from.position.direction_to(self.position).normalized() * 400
+	if hit_tween: hit_tween.kill()
+	hit_tween = create_tween().set_parallel(true)
+	modulate = Color.WHITE * 10
+	spin_rate = 10.0
+	hit_tween.tween_property(self, "modulate", Color.WHITE, 0.2)
+	hit_tween.tween_property(self, "spin_rate", 1.0, 1.0)
 
-	if tween: tween.kill()
-	tween = create_tween().set_parallel(true)
 
+func on_death(_enemy) -> void:
 	# fade enemy color
-	if !is_alive and not is_visible_when_dead:
-		modulate.a = 1.0
-		tween.tween_property(self, "modulate:a", 0.0, 0.2)
+	if not is_visible_when_dead:
+		$animation_player.play("death")
 
-	modulate = get_hp_color(health + 1)
-	tween.tween_property(self, "modulate", get_hp_color(health), 0.2)
-	
-	update_size()
