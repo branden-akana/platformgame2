@@ -1,4 +1,4 @@
-class_name ParticleGroup extends CanvasGroup
+class_name ParticleGroup extends Node2D
 
 signal finished
 
@@ -18,26 +18,49 @@ signal finished
 	set(mod_value):
 
 		for child in get_children():
-			if child is CPUParticles2D:
+			if _is_particle_type(child):
 				child.emitting = mod_value
 
 		emitting = mod_value
 
-func restart():
+func _ready():
 	for child in get_children():
-		if child is CPUParticles2D:
-			(child as CPUParticles2D).restart()
+		if child is CPUParticles2D or child is GPUParticles2D:
+			child.emitting = false
+			child.one_shot = true
 
+func _is_particle_type(node) -> bool:
+	return node is CPUParticles2D or node is GPUParticles2D or node is ParticleGroup
+
+##
+## Return the actual lifetime (time until last particle dies).
+## The longest lifetime of all child particle nodes will be returned.
+##
 func _get_lifetime() -> float:
 	var lifetime := 0.0
 	for particles in get_children():
-		if particles is CPUParticles2D:
-			var p_lifetime = particles._get_lifetime()
-			if p_lifetime > lifetime: lifetime = p_lifetime
+		var p_lifetime = 0.0
+
+		if particles is CPUParticles2D or particles is GPUParticles2D:
+			p_lifetime = particles.lifetime * (2 - particles.explosiveness)
+		elif particles is ParticleGroup:
+			p_lifetime = particles._get_lifetime()
+
+		if p_lifetime > lifetime: lifetime = p_lifetime
 
 	return lifetime
 
-func start() -> void:
+##
+## Start emitting the particle group.
+## If emit is true, emit the finished signal after the group's lifetime.
+##
+func start(emit := true) -> void:
 	for particles in get_children():
-		if particles is CPUParticles2D: particles.start()
+		if particles is CPUParticles2D or particles is GPUParticles2D:
+			particles.one_shot = true
+			particles.emitting = true
+		if particles is ParticleGroup:
+			particles.start(false)
+
+	if emit:
 		get_tree().create_timer(_get_lifetime()).timeout.connect(Callable(emit_signal).bind("finished"))

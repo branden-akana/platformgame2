@@ -6,10 +6,9 @@ const Airdash = preload("res://effects/particles/fx_airdash.tscn")
 const Dash = preload("res://effects/particles/fx_dash.tscn")
 const Land = preload("res://effects/particles/fx_land.tscn")
 const HitEffect = preload("res://effects/particles/fx_hit.tscn")
-const HitParticles = preload("res://effects/particles/hit_particles.tscn")
 const WallJumpLeft = preload("res://effects/particles/fx_wjump_l.tscn")
 const WallJumpRight = preload("res://effects/particles/fx_wjump_r.tscn")
-const Clear = preload("res://effects/particles/clear_effect.tscn")
+const Clear = preload("res://effects/particles/fx_clear.tscn")
 
 func play(scene, parent = get_node("/root/main"), params = {}):
 	var effect = scene.instantiate()

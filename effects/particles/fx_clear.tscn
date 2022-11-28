@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://bopckkepi6uvy"]
+
+[ext_resource type="Material" uid="uid://uefn1rgn15nq" path="res://shaders/dither_alpha_screen.tres" id="1_rabm8"]
+[ext_resource type="Script" path="res://effects/particles/particle_group.gd" id="2_u6417"]
+[ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="3_bp6gw"]
+[ext_resource type="Texture2D" uid="uid://cwj77fl7ajkcr" path="res://assets/beam.png" id="4_5ialb"]
+
+[sub_resource type="Curve" id="Curve_qgoc5"]
+_data = [Vector2(0, 1), 0.0, -3.91304, 0, 0, Vector2(0.75, 0), -0.204545, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_jw3nj"]
+colors = PackedColorArray(1, 1, 1, 0.2, 1, 1, 1, 0)
+
+[node name="clear_effect" type="Node2D"]
+material = ExtResource("1_rabm8")
+script = ExtResource("2_u6417")
+
+[node name="ring" type="CPUParticles2D" parent="."]
+scale = Vector2(4, 4)
+z_index = 1
+emitting = false
+amount = 200
+lifetime = 2.0
+one_shot = true
+explosiveness = 1.0
+texture = ExtResource("3_bp6gw")
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+linear_accel_min = -500.0
+linear_accel_max = -500.0
+scale_amount_curve = SubResource("Curve_qgoc5")
+color_ramp = SubResource("Gradient_jw3nj")
+
+[node name="ring_2" type="CPUParticles2D" parent="."]
+scale = Vector2(4, 4)
+z_index = 1
+emitting = false
+amount = 50
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+texture = ExtResource("4_5ialb")
+particle_flag_align_y = true
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_max = 70.0
+linear_accel_min = -500.0
+linear_accel_max = -500.0
+scale_amount_max = 2.0
+scale_amount_curve = SubResource("Curve_qgoc5")
+color_ramp = SubResource("Gradient_jw3nj")

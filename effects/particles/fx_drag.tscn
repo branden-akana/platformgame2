@@ -1,33 +1,40 @@
-[gd_scene load_steps=5 format=3 uid="uid://c0st10vvx1lt"]
+[gd_scene load_steps=6 format=3 uid="uid://c0st10vvx1lt"]
 
 [ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="1_b4664"]
-[ext_resource type="Script" path="res://effects/particles/timed_particles.gd" id="2_rh0xn"]
+[ext_resource type="Script" path="res://effects/particles/fx_drag.gd" id="2_hpfgc"]
 
-[sub_resource type="Curve" id="Curve_606og"]
-_data = [Vector2(0, 1), 0.0, -2.21245, 0, 1, Vector2(0.451987, 0), 0.0440691, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_avyw5"]
+_data = [Vector2(0, 1), 0.0, -3.78182, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Gradient" id="Gradient_gp763"]
-offsets = PackedFloat32Array(0, 0.0684932, 1)
-colors = PackedColorArray(1, 1, 1, 0.1, 1, 1, 1, 1, 1, 1, 1, 0.0156863)
+[sub_resource type="Curve" id="Curve_gut47"]
+max_value = 8.0
+_data = [Vector2(0, 8), 0.0, -28.7347, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
 
-[node name="fx_drag" type="CPUParticles2D"]
-position = Vector2(0, 8)
+[sub_resource type="Gradient" id="Gradient_j1pnh"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.0156863)
+
+[node name="fx_drag" type="Node2D"]
+script = ExtResource("2_hpfgc")
+
+[node name="spark" type="CPUParticles2D" parent="."]
+position = Vector2(0, 4)
 emitting = false
 amount = 1
 lifetime = 2.0
 one_shot = true
 texture = ExtResource("1_b4664")
-emission_shape = 3
-emission_rect_extents = Vector2(8, 1)
-direction = Vector2(0, -0.5)
-spread = 15.0
+particle_flag_align_y = true
+direction = Vector2(0, -1)
+spread = 10.0
 gravity = Vector2(0, 300)
 initial_velocity_min = 100.0
-initial_velocity_max = 100.0
-scale_amount_min = 0.1
-scale_amount_max = 0.1
-scale_amount_curve = SubResource("Curve_606og")
+initial_velocity_max = 150.0
+scale_amount_min = 0.05
+scale_amount_max = 0.05
+split_scale = true
+scale_curve_x = SubResource("Curve_avyw5")
+scale_curve_y = SubResource("Curve_gut47")
 color = Color(1, 1, 0, 1)
-color_ramp = SubResource("Gradient_gp763")
-script = ExtResource("2_rh0xn")
+color_ramp = SubResource("Gradient_j1pnh")

@@ -1,33 +1,63 @@
-[gd_scene load_steps=8 format=3 uid="uid://buht55xg1x3g"]
+[gd_scene load_steps=13 format=3 uid="uid://buht55xg1x3g"]
 
+[ext_resource type="Script" path="res://effects/particles/particle_group.gd" id="1_rhs86"]
 [ext_resource type="Shader" path="res://shaders/dither_alpha.gdshader" id="1_t6js5"]
 [ext_resource type="Texture2D" uid="uid://cwj77fl7ajkcr" path="res://assets/beam.png" id="2_2wk4j"]
-[ext_resource type="Script" path="res://effects/particles/timed_particles.gd" id="3_uk5nr"]
+[ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="4_3crcc"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_47hu5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i88kp"]
 shader = ExtResource("1_t6js5")
 shader_parameter/dither_shift = 0.001
 shader_parameter/screen = false
 
-[sub_resource type="Curve" id="Curve_8hcop"]
-_data = [Vector2(0, 0.6), 0.0, -2.8033, 0, 1, Vector2(0.171875, 0.118182), -2.8033, 0.0, 1, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_fyc0u"]
+[sub_resource type="Curve" id="Curve_vw2ta"]
 min_value = 0.01
-max_value = 2.0
-_data = [Vector2(0, 2), 0.0, -15.1525, 0, 0, Vector2(0.429467, 0.01), -0.322222, 0.0, 0, 0]
+max_value = 0.1
+_data = [Vector2(0, 0.1), 0.0, -0.508624, 0, 1, Vector2(0.176948, 0.01), -0.508624, 0.0, 1, 0]
 point_count = 2
 
-[sub_resource type="Gradient" id="Gradient_m7fke"]
+[sub_resource type="Curve" id="Curve_ov5nv"]
+min_value = 0.01
+_data = [Vector2(0, 1), 0.0, -7.4827, 0, 0, Vector2(0.439935, 0.0222085), -0.322222, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_xy8im"]
 offsets = PackedFloat32Array(0.445946, 1)
 colors = PackedColorArray(1, 1, 1, 1, 0.95158, 0.95158, 0.95158, 0)
 
-[node name="splash" type="CPUParticles2D"]
+[sub_resource type="Curve" id="Curve_6gjag"]
+_data = [Vector2(0, 1), 0.0, -10.3573, 0, 0, Vector2(0.252613, 0), -0.352147, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_5reyg"]
+curve = SubResource("Curve_6gjag")
+
+[sub_resource type="CurveTexture" id="CurveTexture_ydj74"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vv76o"]
+particle_flag_disable_z = true
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 250.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+linear_accel_min = -500.0
+linear_accel_max = -500.0
+scale_min = 0.2
+scale_max = 0.2
+scale_curve = SubResource("CurveTexture_5reyg")
+turbulence_influence_over_life = SubResource("CurveTexture_ydj74")
+
+[node name="fx_hit" type="Node2D"]
+script = ExtResource("1_rhs86")
+
+[node name="splash" type="CPUParticles2D" parent="."]
+visible = false
 texture_filter = 2
-material = SubResource("ShaderMaterial_47hu5")
-emitting = false
-one_shot = true
+material = SubResource("ShaderMaterial_i88kp")
+use_parent_material = true
+lifetime = 3.0
 explosiveness = 1.0
 lifetime_randomness = 0.5
 texture = ExtResource("2_2wk4j")
@@ -36,13 +66,23 @@ emission_sphere_radius = 1.0
 particle_flag_align_y = true
 direction = Vector2(0, -1)
 spread = 135.0
-gravity = Vector2(0, 200)
+gravity = Vector2(0, 100)
 initial_velocity_min = 10.0
 initial_velocity_max = 100.0
 scale_amount_min = 1.5
 scale_amount_max = 3.0
 split_scale = true
-scale_curve_x = SubResource("Curve_8hcop")
-scale_curve_y = SubResource("Curve_fyc0u")
-color_ramp = SubResource("Gradient_m7fke")
-script = ExtResource("3_uk5nr")
+scale_curve_x = SubResource("Curve_vw2ta")
+scale_curve_y = SubResource("Curve_ov5nv")
+color = Color(1, 0.886275, 0.235294, 1)
+color_ramp = SubResource("Gradient_xy8im")
+
+[node name="gpu_particles_2d" type="GPUParticles2D" parent="."]
+lifetime = 2.0
+speed_scale = 2.0
+explosiveness = 1.0
+fixed_fps = 0
+trail_enabled = true
+trail_lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_vv76o")
+texture = ExtResource("4_3crcc")

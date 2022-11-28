@@ -1,22 +1,25 @@
 [gd_scene load_steps=6 format=3 uid="uid://c0csibcxvyq2o"]
 
 [ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="1"]
-[ext_resource type="Script" path="res://effects/particles/timed_particles.gd" id="2_4gu4l"]
+[ext_resource type="Script" path="res://effects/particles/particle_group.gd" id="1_kvbfh"]
 
-[sub_resource type="Curve" id="Curve_0q8dq"]
+[sub_resource type="Curve" id="Curve_q5ley"]
 min_value = 0.2
 _data = [Vector2(0, 0.2), 0.0, 0.113684, 0, 0, Vector2(1, 1), 3.04616, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_ba6mc"]
+[sub_resource type="Curve" id="Curve_cdar0"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.0, 0.0, 1, 0]
 point_count = 2
 
-[sub_resource type="Gradient" id="2"]
+[sub_resource type="Gradient" id="Gradient_ejqqb"]
 offsets = PackedFloat32Array(0, 0.380282)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
-[node name="CPUParticles2D" type="CPUParticles2D"]
+[node name="fx_dash" type="Node2D"]
+script = ExtResource("1_kvbfh")
+
+[node name="cpu_particles_2d" type="CPUParticles2D" parent="."]
 z_index = 10
 emitting = false
 lifetime = 2.0
@@ -35,7 +38,6 @@ linear_accel_max = -50.0
 scale_amount_min = 0.25
 scale_amount_max = 0.5
 split_scale = true
-scale_curve_x = SubResource("Curve_0q8dq")
-scale_curve_y = SubResource("Curve_ba6mc")
-color_ramp = SubResource("2")
-script = ExtResource("2_4gu4l")
+scale_curve_x = SubResource("Curve_q5ley")
+scale_curve_y = SubResource("Curve_cdar0")
+color_ramp = SubResource("Gradient_ejqqb")

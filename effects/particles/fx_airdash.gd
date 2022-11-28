@@ -3,28 +3,30 @@ extends ParticleGroup
 
 @export @onready var texture: Texture :
 	get:
-		return $trail.texture
+		return $afterimage.texture
 	set(value):
-		$trail.texture = value
+		$afterimage.texture = value
 
 
 func _ready():
-	var player = get_node(Constants.PATH_PLAYER)
-	var model_viewport = player._model.get_model_viewport()
-	texture = ImageTexture.create_from_image(model_viewport.get_texture().get_image())
-	top_level = true
+	var player = get_parent()
+	if player is Character:
 
-	position = player.interpolated_position
-	var dir = player.velocity.normalized()
+		var model_viewport = player._model.get_model_viewport()
+		texture = ImageTexture.create_from_image(model_viewport.get_texture().get_image())
+		top_level = true
 
-	# $splash.gravity = -player.velocity.normalized() * 2000
-	$wave_2.emission_points[1] = dir * 4
-	$wave_2.emission_points[2] = dir * 8
-	$splash.rotation = dir.angle() + deg_to_rad(90)
-	# $wave_2.gravity = -player.velocity.normalized() * 1000
+		position = player.interpolated_position
+		var dir = player.velocity.normalized()
+
+		# $splash.gravity = -player.velocity.normalized() * 2000
+		$splash.rotation = dir.angle() + deg_to_rad(90)
+
+	else:
+		queue_free()
 
 
 func _process(_delta):
-	var player = get_node(Constants.PATH_PLAYER)
-	position = player.interpolated_position
-	# position = player.position
+	var player = get_parent()
+	# position = player.interpolated_position
+	position = player.position
