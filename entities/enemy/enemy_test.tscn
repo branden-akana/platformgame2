@@ -119,6 +119,7 @@ _data = {
 
 [node name="enemy" type="CharacterBody2D" groups=["enemy"]]
 script = ExtResource("1_0c1xc")
+alpha = 0.0
 health = 1
 
 [node name="cpu_particles_2d" type="CPUParticles2D" parent="."]
@@ -145,7 +146,7 @@ scale_curve_y = SubResource("Curve_veed2")
 color = Color(1, 0.901961, 0.839216, 0.733333)
 
 [node name="svpc" type="SubViewportContainer" parent="."]
-modulate = Color(8.84853, 8.84853, 8.84853, 1)
+modulate = Color(1.05616, 1.05616, 1.05616, 1)
 material = SubResource("ShaderMaterial_37hmp")
 anchors_preset = 8
 anchor_left = 0.5
@@ -169,7 +170,7 @@ render_target_update_mode = 4
 
 [node name="cube" type="CSGBox3D" parent="svpc/svp"]
 unique_name_in_owner = true
-transform = Transform3D(0.586701, 0.790327, -0.203696, -0.573928, 0.22118, -0.795007, -0.582215, 0.582266, 0.582213, 0, 0, 0)
+transform = Transform3D(0.816138, 0.408607, 0.408607, 0, 0.707107, -0.707107, -0.577858, 0.577096, 0.577096, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_n1abm")
 
 [node name="camera_3d" type="Camera3D" parent="svpc/svp"]

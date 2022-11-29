@@ -34,7 +34,8 @@ class PIDController:
 	
 @export var alpha: float:
 	set(a):
-		$svpc.material.set_shader_parameter("shadow_alpha", a)
+		if $svpc:
+			$svpc.material.set_shader_parameter("shadow_alpha", a)
 		modulate.a = a
 
 @onready var pid := PIDController.new(self)
@@ -55,7 +56,8 @@ func _ready():
 
 
 func _process(delta):
-	%cube.rotate_object_local(%cube.to_local(Vector3.FORWARD).normalized(), delta * spin_rate)
+	if not Engine.is_editor_hint():
+		%cube.rotate_object_local(%cube.to_local(Vector3.FORWARD).normalized(), delta * spin_rate)
 
 
 func _physics_process(_delta):
