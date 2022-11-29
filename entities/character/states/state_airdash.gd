@@ -5,10 +5,12 @@ var airdash_dir: Vector2 = Vector2.ZERO
 
 var particles = null
 
-var b_grounded_airdash: bool = false
+var is_grounded_airdash: bool = false
 
 
 func on_start(state_from, _fsm):
+
+	character.input.eat_input("jump")
 
 	# limit to 8 directions
 	var axis = character.input.get_axis().round().normalized()
@@ -20,20 +22,16 @@ func on_start(state_from, _fsm):
 	#GameState.get_camera().screen_shake(1.0, 0.3)
 
 	# grounded airdashes
-
-	# if character.is_grounded and state_from != CharStateName.JUMPSQUAT:
-	#     b_can_land_cancel = false
-	# else:
-	#     b_can_land_cancel = true
-
-	print("start airdash from %s" % state_from)
-	if not character.is_grounded:
-		_allow(CharacterActions.LAND)
+	if not character.is_grounded or state_from == CharStateName.JUMPSQUAT:
+		is_grounded_airdash = false
+		# _allow(CharacterActions.LAND)
+	else:
+		is_grounded_airdash = true
 
 	character.b_can_slide = false
 	
 
-func on_end(_state_to, _fsm):
+func on_end(state_to, _fsm):
 
 	character.b_can_slide = true
 	_disallow(CharacterActions.LAND)
@@ -41,24 +39,15 @@ func on_end(_state_to, _fsm):
 	# if state_to in [CharStateName.ATT_FORWARD, CharStateName.ATT_DAIR, CharStateName.ATT_UAIR]:
 	character.velocity = (character.velocity.normalized() * clamp(character.velocity.length(), 0.0, character._phys.AIRDASH_SPEED_CANCEL))
 
-	if is_instance_valid(particles):
+	if is_instance_valid(particles) and state_to == CharStateName.IDLE:
 		particles.emitting = false
 
 
-func on_update(_delta, fsm):
+func on_update(_delta, _fsm):
 
-	if not is_current(fsm):
-		return
-
-	if tick == 1:
-		# delayed start of particles
+	if tick == 0:
 		particles = FXEmitter.play(FXEmitter.Airdash, character)
 		particles.top_level = true
-		particles.get_node("wave").direction = airdash_dir
-		if character.facing == Direction.LEFT:
-			particles.get_node("trail").material.set_shader_parameter("flip", true)
-		else:
-			particles.get_node("trail").material.set_shader_parameter("flip", false)
 
 	# middle of airdashing
 	if tick >= 0 and tick <= character._phys.AIRDASH_LENGTH:
@@ -79,6 +68,9 @@ func on_update(_delta, fsm):
 			character.action_neutral()
 		else:
 			character.action_airborne()
+
+	if not is_grounded_airdash and character.is_grounded:
+		character.action_neutral()
 
 
 	character.fix_incoming_collisions(_delta, character._phys.AIRDASH_WAVELAND_MARGIN)
