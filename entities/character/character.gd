@@ -175,11 +175,6 @@ func _physics_process(delta):  # update input and physics
 	# apply final movement
 	move(delta)
 
-	# snap to ground
-	if is_grounded and not fsm.is_current(CharStateName.AIRBORNE) and not fsm.is_current(CharStateName.AIRDASH):
-		var down_snap := Vector2.DOWN * 10.0
-		if move_and_collide(down_snap, true): move_and_collide(down_snap)
-
 	check_grounded()
 
 	# read inputs
@@ -411,25 +406,6 @@ func move(_delta):
 				move_and_slide()
 				set_collision_mask_value(10, true)
 				break
-
-	check_grounded()
-
-	# if b_ignore_platforms: set_collision_mask_value(9, true)
-
-	# for i in range(max_slides):
-
-	#     result = move_and_collide(motion)
-
-	#     if !b_can_slide or !result or result.remainder.is_equal_approx(Vector2()): break
-
-	#     if i == 0:  # first slide
-	#         var motion_slide_norm = result.remainder.slide(result.normal).normalized()
-	#         motion = motion_slide_norm * (motion.length() - result.travel.length())
-	#     else:
-	#         motion = result.remainder.slide(result.normal)
-
-	#     if motion.dot(velocity) <= 0.0 or motion.is_equal_approx(Vector2()): break
-
 
 ##
 ## If the player's collision shape is inside another collision shape (e.g. the world),
