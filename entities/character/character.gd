@@ -87,6 +87,9 @@ var consecutive_walljumps = 0
 ## the time (in ticks) when the player last left the ground
 var time_left_ground = 0
 
+## the time (in ticks) when the player last jumped
+var tick_last_jump = 0
+
 ## INFO: The current GameState instance (set by GameState)
 var _gamestate
 
@@ -311,6 +314,7 @@ func respawn(pos):
 	if pos == _gamestate.get_start_point():
 		Util.cprint("[player] restarted")
 		tick = 0
+		tick_last_jump = 0
 		input.reset()
 	# print("[character] setting pos to %s" % pos)
 	position = pos
@@ -719,7 +723,8 @@ func _walljump(dir = null) -> bool:
 ## Performing the jump will reduce the total amount of airdash/jump charges.
 ##
 func action_jump(factor = 1.0):
-	if has_jump():
+	print("time after last jump: %s" % (tick - tick_last_jump))
+	if has_jump() and tick - tick_last_jump > 1:
 		if (is_grounded and
 			not fsm.is_current(CharStateName.JUMPSQUAT) and
 			not fsm.is_current(CharStateName.AIRDASH)):
@@ -727,11 +732,14 @@ func action_jump(factor = 1.0):
 			action_performed.emit("jumpsquat")
 		else:
 			print("time after left ground: %s" % (tick - time_left_ground))
-			# if not is_grounded and tick - time_left_ground > 14:
+			if is_grounded or tick - time_left_ground > 4 or tick - tick_last_jump < 10:
 				consume_jump()
 			_jump(factor)
 			fsm.change(CharStateName.AIRBORNE)
+			time_left_ground = tick - 4
+			tick_last_jump = tick
 			action_performed.emit("jump")
+			input.eat_input("jump")
 
 ## Make the character jump.
 func _jump(factor = 1.0, vel_x = null):
