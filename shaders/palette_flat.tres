@@ -5,17 +5,19 @@
 
 [resource]
 shader = ExtResource("1_l4jlj")
-shader_parameter/dither = false
-shader_parameter/dither_amt = 1.0
-shader_parameter/dither_lab = false
-shader_parameter/dither_shf = 0.0
+shader_parameter/no_lighting = false
 shader_parameter/palette_a = ExtResource("2_sm3w2")
 shader_parameter/palette_b = ExtResource("2_sm3w2")
 shader_parameter/palette_blend = 0.0
 shader_parameter/palette_key = ExtResource("2_sm3w2")
 shader_parameter/palette_size = 8
 shader_parameter/screen = false
-shader_parameter/cutout_size = 0
-shader_parameter/shadow_choke = 1.0
-shader_parameter/shadow_color = Color(0.0823529, 0.0156863, 0.0823529, 1)
-shader_parameter/shadow_size = 6
+shader_parameter/dither_amt = 1.0
+shader_parameter/dither_enabled = false
+shader_parameter/dither_lab = false
+shader_parameter/dither_shf = 0.0
+shader_parameter/cutout_size = 1
+shader_parameter/shadow_alpha = 1.0
+shader_parameter/shadow_choke = 2.0
+shader_parameter/shadow_color = Color(1, 1, 1, 1)
+shader_parameter/shadow_size = 0
