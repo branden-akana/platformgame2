@@ -32,10 +32,11 @@ func on_update(delta, fsm):
 	if not is_current(fsm): return
 
 	if character.is_grounded:
-		character._friction(delta)
 		b_grounded_attack = true
 	else:
 		character._acceleration(delta)
+
+	character._friction(delta)
 
 	# end of move or edge cancelled
 	if !move.playing:
