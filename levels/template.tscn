@@ -1,21 +1,37 @@
-[gd_scene load_steps=6 format=3 uid="uid://duuai1k3do5bw"]
+[gd_scene load_steps=8 format=3 uid="uid://duuai1k3do5bw"]
 
 [ext_resource type="Script" path="res://levels/level.gd" id="2"]
-[ext_resource type="PackedScene" uid="uid://ca54bg25ewl7p" path="res://levels/level_tilemaps.tscn" id="2_1ncsl"]
+[ext_resource type="Script" path="res://levels/tilemap.gd" id="2_o62p0"]
 [ext_resource type="PackedScene" uid="uid://bp6s3ennh11ys" path="res://entities/room.tscn" id="3"]
+[ext_resource type="TileSet" uid="uid://elcuejgbpdct" path="res://assets/tilesets/test_blockout.tres" id="3_u7b3j"]
+[ext_resource type="TileSet" uid="uid://di6gbd2q4xx2j" path="res://assets/tilesets/test_detail.tres" id="4_grrmx"]
 [ext_resource type="PackedScene" path="res://entities/light.tscn" id="7"]
 [ext_resource type="PackedScene" uid="uid://dm121ccygtfu8" path="res://entities/hazard_zone.tscn" id="9"]
 
 [node name="level" type="Node2D"]
 texture_filter = 1
 script = ExtResource("2")
+level_name = "template"
 
-[node name="tilemaps" parent="." instance=ExtResource("2_1ncsl")]
+[node name="tilemaps" type="Node2D" parent="."]
+script = ExtResource("2_o62p0")
+
+[node name="map_16" type="TileMap" parent="tilemaps"]
+texture_filter = 1
+tile_set = ExtResource("3_u7b3j")
+format = 2
+layer_0/tile_data = PackedInt32Array(983052, 65536, 1, 983053, 65536, 1, 983054, 65536, 1, 983055, 65536, 1, 983056, 65536, 1, 1048592, 65536, 2, 983057, 65536, 1, 1048593, 65536, 2, 983058, 65536, 1, 1048594, 65536, 2, 983059, 65536, 1, 1048595, 65536, 2, 983060, 65536, 1, 1048596, 65536, 2, 983061, 65536, 1, 1048597, 65536, 2, 983062, 65536, 1, 1048598, 65536, 2, 983063, 65536, 1, 1048599, 65536, 2, 983064, 65536, 1, 983065, 65536, 1, 983066, 65536, 1, 983067, 65536, 1, 983049, 0, 1, 1048585, 0, 3, 983050, 65536, 1, 1048586, 65536, 2, 1114122, 0, 3, 983051, 65536, 1, 1048587, 65536, 2, 1114123, 65536, 3, 1048588, 65536, 2, 1114124, 65536, 2, 1179660, 0, 3, 1048589, 65536, 2, 1114125, 65536, 2, 1179661, 65536, 3, 1048590, 65536, 2, 1114126, 65536, 2, 1179662, 65536, 3, 1048591, 65536, 2, 1114127, 65536, 2, 1179663, 65536, 3, 1114128, 65536, 2, 1179664, 65536, 2, 1245200, 0, 3, 1114129, 65536, 2, 1179665, 65536, 2, 1245201, 65536, 3, 1114130, 65536, 2, 1179666, 65536, 2, 1245202, 65536, 3, 1114131, 65536, 2, 1179667, 65536, 2, 1245203, 65536, 3, 1114132, 65536, 2, 1179668, 65536, 2, 1245204, 65536, 3, 1114133, 65536, 2, 1179669, 65536, 2, 1245205, 65536, 3, 1114134, 65536, 2, 1179670, 65536, 2, 1245206, 65536, 3, 1114135, 65536, 2, 1179671, 65536, 2, 1245207, 131072, 3, 1048600, 65536, 2, 1114136, 65536, 2, 1179672, 65536, 3, 1048601, 65536, 2, 1114137, 65536, 2, 1179673, 65536, 3, 1048602, 65536, 2, 1114138, 65536, 2, 1179674, 65536, 3, 1048603, 65536, 2, 1114139, 65536, 2, 1179675, 131072, 3, 983068, 65536, 1, 1048604, 65536, 2, 1114140, 65536, 3, 983069, 65536, 1, 1048605, 65536, 2, 1114141, 131072, 3, 983070, 131072, 1, 1048606, 131072, 3, 720907, 0, 5, 720908, 0, 5, 720909, 0, 5, 720910, 0, 5, 720911, 0, 5, 720912, 0, 5, 720919, 0, 5, 720920, 0, 5, 720921, 0, 5, 720922, 0, 5, 720923, 0, 5, 720924, 0, 5, 458769, 0, 5, 458770, 0, 5, 458771, 0, 5, 458772, 0, 5, 458773, 0, 5, 458774, 0, 5)
+
+[node name="map_8" type="TileMap" parent="tilemaps"]
+texture_filter = 1
+tile_set = ExtResource("4_grrmx")
+format = 2
+layer_0/tile_data = PackedInt32Array(2949120, 0, 8, 2949121, 0, 8, 2949122, 0, 8, 2949123, 0, 8, 2949124, 0, 8, 2949125, 0, 8, 2949126, 0, 8, 2949127, 0, 8, 2949128, 0, 8, 2949129, 0, 8, 2949130, 0, 8, 2949131, 0, 8, 2949132, 0, 8, 2949133, 0, 8, 2949134, 0, 8, 2949135, 0, 8, 2949136, 0, 8, 2949137, 0, 8, 2949138, 0, 8, 2949139, 0, 8, 2949140, 0, 8, 2949141, 0, 8, 2949142, 0, 8, 2949143, 0, 8, 2949144, 0, 8, 2949145, 0, 8, 2949146, 0, 8, 2949147, 0, 8, 2949148, 0, 8, 2949149, 0, 8, 2949150, 0, 8, 2949151, 0, 8, 2949152, 0, 8, 2949153, 0, 8, 2949154, 0, 8, 2949155, 0, 8, 2949156, 0, 8, 2949157, 0, 8, 2949158, 0, 8, 2949159, 0, 8, 2949160, 0, 8, 2949161, 0, 8, 2949162, 0, 8, 2949163, 0, 8, 2949164, 0, 8, 2949165, 0, 8, 2949166, 0, 8, 2949167, 0, 8, 2949168, 0, 8, 2949169, 0, 8, 2949170, 0, 8, 2949171, 0, 8, 2949172, 0, 8, 2949173, 0, 8, 2949174, 0, 8, 2949175, 0, 8, 2949176, 0, 8, 2949177, 0, 8, 2949178, 0, 8, 2949179, 0, 8, 2949180, 0, 8, 2949181, 0, 8, 2949182, 0, 8, 2949183, 0, 8, 2949184, 0, 8, 2949185, 0, 8, 2949186, 0, 8, 2949187, 0, 8, 2949188, 0, 8, 2949189, 0, 8, 2949190, 0, 8, 2949191, 0, 8, 2949192, 0, 8, 2949193, 0, 8, 2949194, 0, 8, 2949195, 0, 8, 2949196, 0, 8, 2949197, 0, 8, 2949198, 0, 8, 2949199, 0, 8)
 
 [node name="points" type="Node2D" parent="."]
 
 [node name="start" type="Marker2D" parent="points"]
-position = Vector2(576, 320)
+position = Vector2(320, 192)
 gizmo_extents = 64.0
 
 [node name="rooms" type="Node2D" parent="."]
@@ -24,12 +40,11 @@ gizmo_extents = 64.0
 
 [node name="hazard_zone" parent="rooms/room_1" instance=ExtResource("9")]
 position = Vector2(0, 1080)
-size = Vector2(1920, 32)
 
 [node name="respawn" type="Node2D" parent="rooms/room_1/hazard_zone"]
 position = Vector2(960, -504)
 
 [node name="light_2d" parent="rooms/room_1" instance=ExtResource("7")]
-position = Vector2(341, 145)
-
-[editable path="tilemaps"]
+position = Vector2(320, 144)
+energy = 0.5
+shadow_enabled = true
