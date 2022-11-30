@@ -1,31 +1,45 @@
 class_name SelectLevel
 extends MenuSelection
 
-const Level_TestHub = preload("res://levels/lvl_flat.tscn")
-const Level_TestTutorial = preload("res://levels/test_tutorial.tscn")
-const Level_Test1 = preload("res://levels/test.tscn")
+const LEVEL_DIR := "res://levels/"
 
-class Hub extends MenuSelection:
-	func get_label(): return "dev room"
-	func get_extra():
-		return "best: %s" % GameState.run_timer.get_record("dev room")
-	func on_select(menu):
-		GameState.load_scene(Level_TestHub)
-		menu.hide()
+class LevelSelection extends MenuSelection:
+	var packed_scene: PackedScene
+	var name: String = "UNKNOWN"
+	func _init(packed_scene: PackedScene):
+		self.packed_scene = packed_scene
+		
+		# try to find name of level
+		var state = packed_scene.get_state()
+		for i in range(state.get_node_count()):
+			for j in range(state.get_node_property_count(i)):
+				var vname := state.get_node_property_name(i, j)
+				var val = state.get_node_property_value(i, j)
+				if vname == "level_name":
+					name = val
 
-class Test1 extends MenuSelection:
-	func get_label(): return "level 1"
-	func get_extra():
-		return "best: %s" % GameState.run_timer.get_record("level 1")
+	func get_label(): return name
 	func on_select(menu):
-		GameState.load_scene(Level_Test1)
-		menu.hide()
+		GameState.load_level(packed_scene)
+		menu.menu_hide()
 
 var items = [
-	Hub.new(),
-	Test1.new(),
 	SelectReturn.new()
 ]
+
+func _init():
+	# read and add all .tscn files in level folder
+	var dir = DirAccess.open(LEVEL_DIR)
+	if dir:
+		dir.list_dir_begin()
+		while true:
+			var path := dir.get_next()
+			if path == "": break
+
+			if path.get_extension() == "tscn":
+				# items.append(LevelSelection.new(path))
+				items.append(LevelSelection.new(load(LEVEL_DIR + path)))
+		dir.list_dir_end()
 
 func get_items():
 	return items

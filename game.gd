@@ -187,23 +187,23 @@ func restart_player():
 	# set start position
 	get_player().restart()
 
-func load_scene(level):
+func load_level(level_scene: PackedScene):
 	# debug_log("loading new scene...")
 	# debug_log("fading out...")
 	await pause_and_fade_out(0.5)
-	call_deferred("_load_scene", level)
+	call_deferred("_load_level", level_scene)
 	# await self.scene_loaded
 	# debug_log("fading in...")
 	await fade_in_and_unpause(0.5)
 	# debug_log("finished!")
 
-func _load_scene(level_path):
+func _load_level(level_scene: PackedScene):
 
 	# debug_log("loading new scene")
+	assert(level_scene != null, "Failed to load level")
 
 	# load the new scene
-	var level: Level = level_path.instantiate()
-	level.name = "level"
+	var level: Level = level_scene.instantiate()
 
 	# remove_at current scene and add new one
 	# debug_log("removing old scene")
