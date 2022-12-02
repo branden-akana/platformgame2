@@ -114,7 +114,6 @@ color_ramp = SubResource("GradientTexture1D_jofnn")
 position = Vector2(0, -24)
 z_index = -1
 script = ExtResource("1_km62a")
-emitting = true
 
 [node name="trail_big" type="GPUParticles2D" parent="."]
 amount = 16

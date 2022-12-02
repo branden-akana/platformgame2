@@ -1,3 +1,4 @@
+@tool
 class_name ParticleGroup extends Node2D
 
 signal finished
@@ -17,10 +18,7 @@ signal finished
 
 	set(mod_value):
 
-		for child in get_children():
-			if _is_particle_type(child):
-				child.emitting = mod_value
-
+		if not emitting and mod_value: start()
 		emitting = mod_value
 
 func _ready():
@@ -28,9 +26,13 @@ func _ready():
 		if child is CPUParticles2D or child is GPUParticles2D:
 			child.emitting = false
 			child.one_shot = true
+	finished.connect(_on_finished)
 
 func _is_particle_type(node) -> bool:
 	return node is CPUParticles2D or node is GPUParticles2D or node is ParticleGroup
+
+func _on_finished() -> void:
+	emitting = false
 
 ##
 ## Return the actual lifetime (time until last particle dies).
@@ -42,7 +44,7 @@ func _get_lifetime() -> float:
 		var p_lifetime = 0.0
 
 		if particles is CPUParticles2D or particles is GPUParticles2D:
-			p_lifetime = particles.lifetime * (2 - particles.explosiveness)
+			p_lifetime = particles.lifetime * (2 - particles.explosiveness) / particles.speed_scale
 		elif particles is ParticleGroup:
 			p_lifetime = particles._get_lifetime()
 
@@ -57,8 +59,7 @@ func _get_lifetime() -> float:
 func start(emit := true) -> void:
 	for particles in get_children():
 		if particles is CPUParticles2D or particles is GPUParticles2D:
-			particles.one_shot = true
-			particles.emitting = true
+			particles.restart()
 		if particles is ParticleGroup:
 			particles.start(false)
 
