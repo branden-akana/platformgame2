@@ -37,20 +37,11 @@ func get_model_viewport() -> SubViewport:
 ##
 ## Play an animation from the beginning.
 ##
-func anim_play(anim: String = "", from_end = false, force = false):
+func anim_play(anim: String = "", custom_blend := -1.0, custom_speed := 1.0, from_end := false):
 	if anim == "":
 		_anim.play()
 	else:
-		if _anim.current_animation != anim or force:
-			# 3D model
-			var speed = 1.0  # playback speed
-			var seek = 0.0   # seconds in anim to skip to
-
-			if anim == "attack_f":
-				seek = 0.5
-
-			_anim.play(anim, -1, speed, from_end)
-			_anim.seek(seek)
+		_anim.play(anim, custom_blend, custom_speed, from_end)
 
 func anim_stop(reset: bool = true) -> void:
 	_anim.stop(reset)

@@ -28,7 +28,7 @@ func is_current(fsm) -> bool:
 ##
 ## called at the beginning of the state
 ##
-func on_start(_state_from, _fsm) -> void:
+func on_start(_state_from, _fsm, _args) -> void:
 	pass
 
 ##

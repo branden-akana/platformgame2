@@ -99,28 +99,7 @@ func _init(character):
 		# CharacterActions.WALLJUMP,
 	]))
 
-	_reg_state(CharStateName.ATT_FORWARD,
-		AttackState.new(character, character.get_node("moveset/normal_forward"), []
-	))
-	_reg_state(CharStateName.ATT_UAIR,
-		AttackState.new(character, character.get_node("moveset/normal_up"), []))
-	_reg_state(CharStateName.ATT_DAIR,
-		AttackState.new(character, character.get_node("moveset/normal_down"), []))
-
-
-	_reg_state(CharStateName.SPECIAL, SpecialState.new(character, [
-		# CharacterActions.AIRDASH,
-		# CharacterActions.ATTACK,
-		# CharacterActions.SPECIAL,
-		# CharacterActions.JUMP,
-		# CharacterActions.DASH,
-		# CharacterActions.AIR_CANCEL,
-		# CharacterActions.IDLE_CANCEL,
-		# CharacterActions.DROPDOWN,
-		# CharacterActions.FASTFALL,
-		# CharacterActions.LAND,
-		# CharacterActions.WALLJUMP,
-	]))
+	_reg_state(CharStateName.ATTACK, AttackState.new(character, []))
 
 	print("initialized char state machine")
 

@@ -33,6 +33,8 @@ signal stun_end
 
 @onready var _ecb: CharECB = $ecb
 
+@onready var moveset: MovesetPlayer = $moveset
+
 # when active, "stun" the player (skip all physics processing)
 @onready var stun_timer = Timer.new()
 
@@ -54,8 +56,8 @@ var is_grounded: bool = true :
 		_set_grounded(grounded)
 		is_grounded = grounded
 
-## if true, then gravity should be applied
-var b_gravity_enabled = false
+## the multiplier of which gravity affects the player
+@export var gravity_scale := 1.0
 
 ## if false, player will not slide during movement calculations
 var b_can_slide = true
@@ -107,7 +109,7 @@ func _ready():
 	# $sprite.set_as_top_level(true)
 	# _model.top_level = true
 
-	$moveset.visible = true
+	moveset.move_hit.connect(hit)
 
 	# state machine setup
 	action_performed.connect(on_action)
@@ -171,7 +173,7 @@ func _physics_process(delta):  # update input and physics
 	fsm.process(delta)
 
 	# apply gravity to velocity
-	if b_gravity_enabled: apply_gravity(delta)
+	apply_gravity(delta)
 
 	# fix_incoming_collisions(delta, 40)
 
@@ -348,11 +350,11 @@ func on_action(action: String) -> void:
 	# print("action performed: %s" % action)
 	match action:
 		"jump", "walljump_left", "walljump_right":
-			_model.anim_play("jump", false, true)
+			_model.anim_play("jump")
 		"idle":
 			_model.anim_play("idle")
 		"dash":
-			_model.anim_play("dash", false, true)
+			_model.anim_play("dash")
 		"running":
 			_model.anim_play("running")
 		"jumpsquat":
@@ -515,19 +517,21 @@ func align_to_floor(_delta, margin = _phys.FLOOR_SNAP_TOP_MARGIN):
 
 
 # Stall the character (vertically) in the air for a certain number of frames.
-func do_air_stall(frames = 18):
+func do_air_stall(frames = 18, gscale = 0.0):
+	print("stalling for %s ticks" % frames)
 	velocity.y = 0
-	b_gravity_enabled = false
+	gravity_scale = gscale
 	air_stall_timer.start(frames * get_physics_process_delta_time())
 
 	await air_stall_timer.timeout
-	b_gravity_enabled = true
+	gravity_scale = 1.0
 	
 
 func apply_gravity(delta):
 	if not is_grounded:
 		if velocity.y <= _phys.TERMINAL_VELOCITY:
 			var factor = clamp(abs(velocity.y) / _phys.GRAVITY_DAMP_RAMP, _phys.GRAVITY_MIN, 1.0)
+			if velocity.y > 0: factor *= gravity_scale
 			velocity.y = min(_phys.TERMINAL_VELOCITY, velocity.y + (_phys.GRAVITY * delta * factor))
 
 ##
@@ -598,7 +602,7 @@ func action_airborne() -> void:
 	fsm.change(CharStateName.AIRBORNE)
 	is_grounded = false
 	airborne_height = position.y
-	b_gravity_enabled = true
+	gravity_scale = 1.0
 	action_performed.emit("airborne")
 
 ##
@@ -777,28 +781,35 @@ func _jump(factor = 1.0, vel_x = null):
 # character's current joystick direction.
 func action_attack():
 
-	# update facing direction
-	set_facing_to_input()
-
 	if is_grounded:
 		# grounded attacks
-		fsm.change(CharStateName.ATT_FORWARD)
+		_attack(["att_forward1", "att_forward2", "att_forward3"])
 	else:
 		# airborne attacks
 		if input.holding_up():
-			fsm.change(CharStateName.ATT_UAIR)
+			_attack(["att_up"])
 
 		elif input.holding_down():
-			fsm.change(CharStateName.ATT_DAIR)
+			_attack(["att_down"])
 
 		else:
-			fsm.change(CharStateName.ATT_FORWARD)
-
-	action_performed.emit("attack")
+			_attack(["att_forward1", "att_forward2", "att_forward3"])
 
 
 func action_special():
-	fsm.goto_special()
+	_attack(["sp_forward"])
+
+
+func _attack(moves: Array) -> void:
+	fsm.change(CharStateName.ATTACK, moves)
+	action_performed.emit("attack")
+
+##
+## Play a move animation with the given name.
+##
+func _play_move(move_animation: String) -> void:
+	($moveset as MovesetPlayer).play(move_animation)
+
 
 ##
 ## Hurt the player.
@@ -827,19 +838,19 @@ func on_hurtbox_entered(from):
 
 
 # Hit an enemy.
-func hit(enemy = null, dmg := 1, contacts := [], stun_frames := 0, airstall := false):
+func hit(enemy, hit_data, contacts):
+
+	var hitlag_ticks = hit_data["hitlag"]
+	var airstall_ticks = hit_data["airstall"]
 
 	# airstall player if applicable
-	if airstall:
-		do_air_stall()
+	if airstall_ticks > 0:
+		do_air_stall(airstall_ticks)
 
 	# hurt enemy
 	if not no_damage:
 		# print("[moveset] hit for %s damage" % dmg)
-		if dmg:
-			enemy.hurt(self, dmg)
-		else:
-			enemy.hurt(self)
+		enemy.hurt(self, hit_data)
 
 		if enemy.health == 0:
 			emit_signal("enemy_killed", enemy, contacts)
@@ -851,6 +862,6 @@ func hit(enemy = null, dmg := 1, contacts := [], stun_frames := 0, airstall := f
 		#jumps_left = 1  # restore jump
 
 	# put player in stun
-	stun(stun_frames)
+	stun(hitlag_ticks)
 
-	emit_signal("enemy_hit", enemy, contacts)
+	emit_signal("enemy_hit", enemy, hit_data, contacts)

@@ -16,7 +16,7 @@ func _init(character):
 		# CharacterActions.WALLJUMP,
 	])
 
-func on_start(_state_from, _fsm):
+func on_start(_state_from, _fsm, _args):
 
 	# set velocity
 	if character.facing == Direction.RIGHT:

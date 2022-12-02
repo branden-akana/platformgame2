@@ -1,50 +1,51 @@
 class_name AttackState extends CharacterState
 
-# the move that is currently being used
-var move: Node2D
+var moves = []
 
-# if true, this character has landed checked the ground at any point during the attack
+# true if the player has started this attack on the floor
 var b_grounded_attack: bool
 
 
-func _init(character, move: Node2D, allowed_actions: Array[int]):
-	super._init(character, allowed_actions)
-	self.move = move
-                   
-func on_start(_state_from, _fsm):
-	if not character.is_grounded:
-		_allow(CharacterActions.LAND)
-	else:
-		_disallow(CharacterActions.LAND)
+func on_start(_state_from, _fsm, args):
+    moves = args
+
+    # update facing direction
+    character.set_facing_to_input()
+
+    if character.is_grounded:
+        _disallow(CharacterActions.LAND)
+        b_grounded_attack = true
+    else:
+        _allow(CharacterActions.LAND)
+
+    character.moveset.play_move(moves[0])
+
 
 func on_update(delta, fsm):
 
-	if tick == 0:
-		move.start()
+    if character.input.pressed_attack() and len(moves) > 1:
+        character._attack(moves.slice(1))
+        return
 
-	move.move_update(delta)
+    if character.moveset.hit_detected:
+        _allow(CharacterActions.AIRDASH)
+        _allow(CharacterActions.JUMP)
+        _allow(CharacterActions.WALLJUMP)
 
-	if move.hit_detected:
-		_allow(CharacterActions.AIRDASH)
-		_allow(CharacterActions.JUMP)
-		_allow(CharacterActions.WALLJUMP)
+    if not character.is_grounded:
+        character._acceleration(delta)
 
-	if not is_current(fsm): return
+    character._friction(delta)
 
-	if character.is_grounded:
-		b_grounded_attack = true
-	else:
-		character._acceleration(delta)
+    if not character.moveset.is_playing():
+        fsm.goto_any()
 
-	character._friction(delta)
-
-	# end of move or edge cancelled
-	if !move.playing:
-		fsm.goto_any()
 
 func on_end(_state_to, _fsm):
-	_disallow(CharacterActions.AIRDASH)
-	_disallow(CharacterActions.JUMP)
-	_disallow(CharacterActions.WALLJUMP)
-	_disallow(CharacterActions.LAND)
-	move.stop()
+    _disallow(CharacterActions.AIRDASH)
+    _disallow(CharacterActions.JUMP)
+    _disallow(CharacterActions.WALLJUMP)
+    _disallow(CharacterActions.LAND)
+
+    character.moveset.stop_move()
+

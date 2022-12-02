@@ -75,10 +75,12 @@ func reset() -> void:
 		pid.reset()
 
 
-func hurt(from, dmg = 1) -> void:
-	super.hurt(from, dmg)
+func hurt(from, hit_data) -> void:
+	super.hurt(from, hit_data)
 
-	velocity = from.position.direction_to(self.position).normalized() * 400
+	var dir_to = from.position.direction_to(self.position)
+	dir_to.y = 0
+	velocity = dir_to * hit_data["knockback"]
 	if hit_tween: hit_tween.kill()
 	hit_tween = create_tween().set_parallel(true)
 	modulate = Color.WHITE * 10

@@ -8,7 +8,7 @@ var particles = null
 var is_grounded_airdash: bool = false
 
 
-func on_start(state_from, _fsm):
+func on_start(state_from, _fsm, _args):
 
 	character.input.eat_input("jump")
 

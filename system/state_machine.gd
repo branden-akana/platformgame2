@@ -55,7 +55,7 @@ func is_current(state_name) -> bool:
 ##
 ## Change the current state. Returns true if the s
 ##
-func change(new_state_name: StringName) -> bool:
+func change(new_state_name: StringName, args = []) -> bool:
 
 	assert(states.has(new_state_name), "Attempted to change to an invalid state.")
 
@@ -73,7 +73,7 @@ func change(new_state_name: StringName) -> bool:
 	# Call on_start() of new state
 
 	state_changed.emit(new_state_name, old_state_name)
-	current_state.on_start(old_state_name, self)
+	current_state.on_start(old_state_name, self, args)
 	# print("changed state: %s -> %s" % [old_state_name, new_state_name])
 
 	return true

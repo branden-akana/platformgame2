@@ -34,13 +34,19 @@ func reset():
 		position = home
 		print("set enemy position: %s" % home)
 
-func hurt(_from, dmg = 1):
+func hurt(_from, hit_data):
+	var dmg = hit_data["damage"]
 	health = max(0, health - dmg)
 		
 	if health == 0 and is_alive:
 		is_alive = false
 		enemy_died.emit(self)
 
+##
+## Return true if this enemy can take damage.
+##
+func can_hurt() -> bool:
+	return health > 0 or GameState.get_player().ignore_enemy_hp
 
 # func on_area_enter(area):
 #     var no_damage = area.get_parent().no_damage

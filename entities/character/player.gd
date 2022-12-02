@@ -60,11 +60,11 @@ func on_airdash():
 	if flash_tween:
 		flash_tween.stop()
 
-func on_enemy_hit(_enemy, contacts):
+func on_enemy_hit(_enemy, hit_data, contacts):
 	signal_frames[tick] = "hit"
 
 	Sound.play("hit", -10)
-	_gamestate.get_camera().screen_shake(1.0, 0.2)
+	_gamestate.get_camera().screen_shake(hit_data["knockback"] / 100.0, 0.2)
 
 	if not no_effects and len(contacts):
 		# var effect = FXEmitter.play_anim(FXEmitter.HitEffect)
