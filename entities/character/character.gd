@@ -39,7 +39,7 @@ signal stun_end
 @onready var stun_timer = Timer.new()
 
 # when active, ignore gravity
-@onready var air_stall_timer = Timer.new()
+@onready var air_stall_timer := TickTimer.new()
 
 
 # flags
@@ -101,10 +101,6 @@ func _ready():
 	stun_timer.name = "stun_timer"
 	stun_timer.one_shot = true
 	add_child(stun_timer)
-
-	air_stall_timer.name = "air_stall_timer"
-	air_stall_timer.one_shot = true
-	add_child(air_stall_timer)
 
 	# $sprite.set_as_top_level(true)
 	# _model.top_level = true
@@ -182,8 +178,7 @@ func _physics_process(delta):  # update input and physics
 
 	check_grounded()
 
-	# read inputs
-	input.update()
+	air_stall_timer.update()
 
 	tick += 1
 
@@ -521,7 +516,7 @@ func do_air_stall(frames = 18, gscale = 0.0):
 	print("stalling for %s ticks" % frames)
 	velocity.y = 0
 	gravity_scale = gscale
-	air_stall_timer.start(frames * get_physics_process_delta_time())
+	air_stall_timer.start(frames)
 
 	await air_stall_timer.timeout
 	gravity_scale = 1.0
