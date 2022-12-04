@@ -67,6 +67,7 @@ class Rebinder extends MenuSelection:
 var items = [
     Rebinder.new("Attack/Select", "attack"),
     Rebinder.new("Jump/Back", "jump"),
+    Rebinder.new("Special", "special"),
     Rebinder.new("Airdash", "dodge"),
     Rebinder.new("Reset", "reset"),
     SelectReturn.new()
