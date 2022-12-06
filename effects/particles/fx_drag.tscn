@@ -3,16 +3,16 @@
 [ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="1_b4664"]
 [ext_resource type="Script" path="res://effects/particles/fx_drag.gd" id="2_hpfgc"]
 
-[sub_resource type="Curve" id="Curve_avyw5"]
+[sub_resource type="Curve" id="Curve_c60pw"]
 _data = [Vector2(0, 1), 0.0, -3.78182, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_gut47"]
+[sub_resource type="Curve" id="Curve_rjlxm"]
 max_value = 8.0
 _data = [Vector2(0, 8), 0.0, -28.7347, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Gradient" id="Gradient_j1pnh"]
+[sub_resource type="Gradient" id="Gradient_h3i7h"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.0156863)
 
 [node name="fx_drag" type="Node2D"]
@@ -34,7 +34,7 @@ initial_velocity_max = 150.0
 scale_amount_min = 0.05
 scale_amount_max = 0.05
 split_scale = true
-scale_curve_x = SubResource("Curve_avyw5")
-scale_curve_y = SubResource("Curve_gut47")
+scale_curve_x = SubResource("Curve_c60pw")
+scale_curve_y = SubResource("Curve_rjlxm")
 color = Color(1, 1, 0, 1)
-color_ramp = SubResource("Gradient_j1pnh")
+color_ramp = SubResource("Gradient_h3i7h")

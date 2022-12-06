@@ -3,16 +3,16 @@
 [ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="1"]
 [ext_resource type="Script" path="res://effects/particles/particle_group.gd" id="1_kvbfh"]
 
-[sub_resource type="Curve" id="Curve_q5ley"]
+[sub_resource type="Curve" id="Curve_krdrq"]
 min_value = 0.2
 _data = [Vector2(0, 0.2), 0.0, 0.113684, 0, 0, Vector2(1, 1), 3.04616, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_cdar0"]
+[sub_resource type="Curve" id="Curve_nxvwk"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.0, 0.0, 1, 0]
 point_count = 2
 
-[sub_resource type="Gradient" id="Gradient_ejqqb"]
+[sub_resource type="Gradient" id="Gradient_iallo"]
 offsets = PackedFloat32Array(0, 0.380282)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
@@ -38,6 +38,6 @@ linear_accel_max = -50.0
 scale_amount_min = 0.25
 scale_amount_max = 0.5
 split_scale = true
-scale_curve_x = SubResource("Curve_q5ley")
-scale_curve_y = SubResource("Curve_cdar0")
-color_ramp = SubResource("Gradient_ejqqb")
+scale_curve_x = SubResource("Curve_krdrq")
+scale_curve_y = SubResource("Curve_nxvwk")
+color_ramp = SubResource("Gradient_iallo")

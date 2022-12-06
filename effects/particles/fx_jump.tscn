@@ -4,28 +4,28 @@
 [ext_resource type="Material" uid="uid://uefn1rgn15nq" path="res://shaders/dither_alpha_screen.tres" id="1_li2ut"]
 [ext_resource type="Script" path="res://effects/particles/particle_group.gd" id="1_qdpwo"]
 
-[sub_resource type="Curve" id="Curve_w276s"]
+[sub_resource type="Curve" id="Curve_1m7yf"]
 _data = [Vector2(0, 0.227273), 0.0, -0.0805555, 0, 0, Vector2(0.92163, 1), 2.28947, -0.0724999, 0, 0]
 point_count = 2
 
-[sub_resource type="Gradient" id="Gradient_xnahy"]
+[sub_resource type="Gradient" id="Gradient_5g2j2"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="Gradient" id="Gradient_or0aw"]
+[sub_resource type="Gradient" id="Gradient_of2nj"]
 offsets = PackedFloat32Array(0, 0.541516)
 colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.7)
 
-[sub_resource type="Curve" id="Curve_m610y"]
+[sub_resource type="Curve" id="Curve_65fd1"]
 min_value = 0.1
 _data = [Vector2(0, 1), 0.0, -6.15, 0, 0, Vector2(0.454545, 0.1), 0.04309, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_wviaq"]
+[sub_resource type="Curve" id="Curve_1o8dq"]
 min_value = 0.1
 _data = [Vector2(0, 1), 0.0, -10.6071, 0, 1, Vector2(0.0848485, 0.1), -10.6071, 0.0, 1, 0]
 point_count = 2
 
-[sub_resource type="Gradient" id="Gradient_wvep3"]
+[sub_resource type="Gradient" id="Gradient_a2gy8"]
 offsets = PackedFloat32Array(0, 0.567568)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
@@ -51,13 +51,13 @@ initial_velocity_max = 400.0
 linear_accel_min = -3000.0
 linear_accel_max = -2000.0
 scale_amount_min = 0.5
-scale_amount_curve = SubResource("Curve_w276s")
+scale_amount_curve = SubResource("Curve_1m7yf")
 split_scale = true
-scale_curve_x = SubResource("Curve_w276s")
+scale_curve_x = SubResource("Curve_1m7yf")
 scale_curve_y = null
 color = Color(1, 1, 1, 0.8)
-color_ramp = SubResource("Gradient_xnahy")
-color_initial_ramp = SubResource("Gradient_or0aw")
+color_ramp = SubResource("Gradient_5g2j2")
+color_initial_ramp = SubResource("Gradient_of2nj")
 
 [node name="wave" type="CPUParticles2D" parent="."]
 position = Vector2(0, -128)
@@ -80,7 +80,7 @@ radial_accel_min = -1000.0
 radial_accel_max = -1000.0
 scale_amount_min = 0.5
 split_scale = true
-scale_curve_x = SubResource("Curve_m610y")
-scale_curve_y = SubResource("Curve_wviaq")
+scale_curve_x = SubResource("Curve_65fd1")
+scale_curve_y = SubResource("Curve_1o8dq")
 color = Color(1, 1, 1, 0.2)
-color_ramp = SubResource("Gradient_wvep3")
+color_ramp = SubResource("Gradient_a2gy8")

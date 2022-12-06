@@ -5,11 +5,11 @@
 [ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="3_bp6gw"]
 [ext_resource type="Texture2D" uid="uid://cwj77fl7ajkcr" path="res://assets/beam.png" id="4_5ialb"]
 
-[sub_resource type="Curve" id="Curve_qgoc5"]
+[sub_resource type="Curve" id="Curve_k2op2"]
 _data = [Vector2(0, 1), 0.0, -3.91304, 0, 0, Vector2(0.75, 0), -0.204545, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Gradient" id="Gradient_jw3nj"]
+[sub_resource type="Gradient" id="Gradient_k2e15"]
 colors = PackedColorArray(1, 1, 1, 0.2, 1, 1, 1, 0)
 
 [node name="clear_effect" type="Node2D"]
@@ -31,8 +31,8 @@ initial_velocity_min = 100.0
 initial_velocity_max = 100.0
 linear_accel_min = -500.0
 linear_accel_max = -500.0
-scale_amount_curve = SubResource("Curve_qgoc5")
-color_ramp = SubResource("Gradient_jw3nj")
+scale_amount_curve = SubResource("Curve_k2op2")
+color_ramp = SubResource("Gradient_k2e15")
 
 [node name="ring_2" type="CPUParticles2D" parent="."]
 scale = Vector2(4, 4)
@@ -50,5 +50,5 @@ initial_velocity_max = 70.0
 linear_accel_min = -500.0
 linear_accel_max = -500.0
 scale_amount_max = 2.0
-scale_amount_curve = SubResource("Curve_qgoc5")
-color_ramp = SubResource("Gradient_jw3nj")
+scale_amount_curve = SubResource("Curve_k2op2")
+color_ramp = SubResource("Gradient_k2e15")
