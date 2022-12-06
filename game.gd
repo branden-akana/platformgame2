@@ -187,6 +187,9 @@ func restart_player():
 	# set start position
 	get_player().restart()
 
+##
+## Load a level with screen transitions.
+##
 func load_level(level_scene: PackedScene):
 	# debug_log("loading new scene...")
 	# debug_log("fading out...")
@@ -197,6 +200,9 @@ func load_level(level_scene: PackedScene):
 	await fade_in_and_unpause(0.5)
 	# debug_log("finished!")
 
+##
+## Load a level.
+##
 func _load_level(level_scene: PackedScene):
 
 	# debug_log("loading new scene")
