@@ -36,8 +36,12 @@ func on_end(state_to, _fsm):
 	character.b_can_slide = true
 	_disallow(CharacterActions.LAND)
 
-	# if state_to in [CharStateName.ATT_FORWARD, CharStateName.ATT_DAIR, CharStateName.ATT_UAIR]:
-	character.velocity = (character.velocity.normalized() * clamp(character.velocity.length(), 0.0, character._phys.AIRDASH_SPEED_CANCEL))
+	# clamp end speed
+	var max_speed = character._phys.AIRDASH_SPEED_CANCEL_AIR
+	if character.is_grounded:
+		max_speed = character._phys.AIRDASH_SPEED_CANCEL_GND
+
+	character.velocity = (character.velocity.normalized() * clamp(character.velocity.length(), 0.0, max_speed))
 
 	if is_instance_valid(particles) and state_to == CharStateName.IDLE:
 		particles.emitting = false

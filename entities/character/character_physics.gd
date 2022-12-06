@@ -38,9 +38,8 @@ class_name CharacterPhysics extends Resource
 
 @export_subgroup("Airdash Behavior")
 @export var AIRDASH_SPEED     = 800  # (mininum) speed at start of airdash
-@export var AIRDASH_SPEED_END = 100   # speed at end of airdash
-@export var AIRDASH_SPEED_CANCEL = 500   # max speed when airdash is canceled
-@export var AIRDASH_LENGTH    = 12
+@export var AIRDASH_SPEED_CANCEL_AIR = 400  ## max air speed when airdash is canceled
+@export var AIRDASH_SPEED_CANCEL_GND = 600  ## max ground speed when airdash ended early
 @export var AIRDASH_CURVE    = 2.5
 @export var AIRDASH_WAVELAND_MARGIN = 10
 
