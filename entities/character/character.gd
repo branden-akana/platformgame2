@@ -164,9 +164,6 @@ func _physics_process(delta):  # update input and physics
 			restore_jumps()
 			consecutive_walljumps = 0
 
-		# update state
-		fsm.process(delta)
-
 		# apply gravity to velocity
 		apply_gravity(delta)
 
@@ -176,6 +173,9 @@ func _physics_process(delta):  # update input and physics
 		move(delta)
 
 		check_grounded()
+
+		# update state
+		fsm.process(delta)
 
 	stun_timer.update()
 	air_stall_timer.update()
