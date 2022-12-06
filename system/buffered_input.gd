@@ -116,29 +116,28 @@ func get_time_held(input: String) -> int:
 		return get_delta_time(action_holds[input])
 	return 0
 
-# Read an input with a buffer (in seconds).
-# For example, reading an input press with a 0.5s tolerance will return true
-# even if the press happened up to 0.5s ago.
-# If "delta" is given, the press will only register if the difference in the input strength is at least this value.
-func is_action_just_pressed(input, tolerance: int = 0, delta: float = 0.0, clear = true):
-	if tolerance == 0:
-		var last_pressed = get_time_since_last_pressed(input)
-		# if input == "jump":
-			# print("last pressed = %s" % last_pressed)
-		if last_pressed == 0 and get_action_delta(input) >= delta:
-			return true
-		else:
-			return false
+##
+## Read an action press with an input buffer (in seconds).
+##
+## For example, reading an action press with a buffer window of 4 will return true
+## even if the press happened up to 4 ticks ago.
+##
+## If `delta` is given, the press will only register if the difference in the input strength is at least this value.
+##
+## If `clear` is true, the last-press time of the action will be reset when a press is detected.
+## The action is considered "eaten" and any repeat calls of this function will return false (for the current physics step).
+## When using this function just to check if an action press "would have" been detected, it is recommended to
+## set `clear` to false.
+##
+func is_action_just_pressed(input, buffer_window: int = 0, delta: float = 0.0, clear = true):
+	var last_pressed = get_time_since_last_pressed(input)
+	var input_delta = get_action_delta(input)
+
+	if last_pressed <= buffer_window and input_delta >= delta:
+		if clear: eat_input(input)
+		return true
 	else:
-		var last_pressed = get_time_since_last_pressed(input)
-		var input_delta = get_action_delta(input)
-		if last_pressed <= tolerance and input_delta >= delta:
-			# print("[%s] last pressed: %.2f, delta: %.2f" % [input, last_pressed, input_delta])
-			if clear:
-				eat_input(input)
-			return true
-		else:
-			return false
+		return false
 
 ##
 ## Returns true if the movement axis has just been pushed in a given direction
@@ -148,7 +147,7 @@ func is_action_just_pressed(input, tolerance: int = 0, delta: float = 0.0, clear
 ## this tick and the previous tick is greater than the resistance.
 ## Higher resistance values will require quicker movements of the axis to register.
 ##
-func is_axis_just_pressed(dir: Vector2, resistance := 0.8):
+func is_axis_just_pressed(dir: Vector2, resistance := 0.4):
 
 	var is_pressed = self.axis.dot(dir) > PRESS_THRESHOLD
 	var was_pressed = self.last_axis.dot(dir) > PRESS_THRESHOLD
@@ -211,7 +210,7 @@ func get_axis(prefix="key_") -> Vector2:
 		get_action_strength(right) - get_action_strength(left),
 		get_action_strength(down) - get_action_strength(up)
 	)
-	return axis
+	return axis.limit_length()
 
 func is_action_pressed(input: String) -> bool:
 	if input in action_map:
