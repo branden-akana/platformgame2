@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://blssy5erb4gi1"]
+[gd_scene load_steps=14 format=3 uid="uid://blssy5erb4gi1"]
 
 [ext_resource type="Script" path="res://entities/enemy/enemy_test.gd" id="1_0c1xc"]
 [ext_resource type="Material" uid="uid://dkiv7hm7xkdum" path="res://shaders/dither_alpha.tres" id="2_ip1li"]
@@ -18,9 +18,14 @@ resource_local_to_scene = true
 shader = ExtResource("4_mct1m")
 shader_parameter/cutout_size = 0
 shader_parameter/shadow_alpha = 1.0
-shader_parameter/shadow_choke = 2.0
-shader_parameter/shadow_color = Color(0.0823529, 0.0156863, 0.0823529, 1)
+shader_parameter/shadow_choke = 3.0
+shader_parameter/shadow_color = Color(0, 0, 0, 1)
 shader_parameter/shadow_size = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xhnt5"]
+albedo_color = Color(0.94902, 0.270588, 0.215686, 1)
+metallic = 0.4
+roughness = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n1abm"]
 albedo_color = Color(0.6, 0.603922, 0.329412, 1)
@@ -118,13 +123,14 @@ _data = {
 }
 
 [node name="enemy" type="CharacterBody2D" groups=["enemy"]]
+modulate = Color(1, 1, 1, 0)
 script = ExtResource("1_0c1xc")
 alpha = 0.0
 health = 1
 
 [node name="cpu_particles_2d" type="CPUParticles2D" parent="."]
-material = ExtResource("2_ip1li")
 z_index = -1
+material = ExtResource("2_ip1li")
 preprocess = 2.0
 explosiveness = 1.0
 fixed_fps = 60
@@ -146,7 +152,7 @@ scale_curve_y = SubResource("Curve_veed2")
 color = Color(1, 0.901961, 0.839216, 0.733333)
 
 [node name="svpc" type="SubViewportContainer" parent="."]
-modulate = Color(1.05616, 1.05616, 1.05616, 1)
+modulate = Color(1.13218, 1.13218, 1.13218, 1)
 material = SubResource("ShaderMaterial_37hmp")
 anchors_preset = 8
 anchor_left = 0.5
@@ -170,8 +176,18 @@ render_target_update_mode = 4
 
 [node name="cube" type="CSGBox3D" parent="svpc/svp"]
 unique_name_in_owner = true
-transform = Transform3D(0.816138, 0.408607, 0.408607, 0, 0.707107, -0.707107, -0.577858, 0.577096, 0.577096, 0, 0, 0)
+transform = Transform3D(0.816493, 0.40824, 0.408241, 0, 0.7071, -0.7071, -0.57734, 0.577347, 0.577348, 0, 0, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_xhnt5")
+
+[node name="tri" type="CSGPolygon3D" parent="svpc/svp"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_n1abm")
+polygon = PackedVector2Array(0, 0, 0, 1, 1, 0)
+mode = 1
+spin_degrees = 360.0
+spin_sides = 4
 
 [node name="camera_3d" type="Camera3D" parent="svpc/svp"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.509)
@@ -181,7 +197,7 @@ size = 2.5
 
 [node name="directional_light_3d" type="DirectionalLight3D" parent="svpc/svp"]
 transform = Transform3D(0.886204, 0.112081, -0.449534, 0, 0.970296, 0.241922, 0.463296, -0.214392, 0.85988, 0, 0, 0)
-light_energy = 2.0
+light_energy = 1.5
 light_bake_mode = 0
 directional_shadow_mode = 0
 sky_mode = 1

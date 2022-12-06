@@ -34,8 +34,6 @@ class PIDController:
 	
 @export var alpha: float:
 	set(a):
-		if $svpc:
-			$svpc.material.set_shader_parameter("shadow_alpha", a)
 		modulate.a = a
 
 @onready var pid := PIDController.new(self)
@@ -45,9 +43,24 @@ var hit_tween: Tween
 
 func _ready():
 	# rotate 3d cube such that a hexagon is projected
-	%cube.rotation.x = deg_to_rad(45)
-	%cube.rotation.y = deg_to_rad(35.264)
-	%cube.rotation.z = 0
+	# %cube.rotation.x = deg_to_rad(45)
+	# %cube.rotation.y = deg_to_rad(35.264)
+	# %cube.rotation.z = 0
+
+	%tri.rotation.x = deg_to_rad(90)
+	%tri.rotation.y = 0
+	%tri.rotation.z = 0
+
+	if max_health == 3:
+		%tri.spin_sides = 6
+		%tri.scale = Vector3(1.2, 1.2, 1.2)
+		# %cube.show()
+		# %tri.hide()
+	else:
+		%tri.spin_sides = 4
+		%tri.scale = Vector3(1, 1, 1)
+		# %cube.hide()
+		# %tri.show()
 
 	# set target to original position
 	pid.set_target(position)
@@ -58,6 +71,7 @@ func _ready():
 func _process(delta):
 	if not Engine.is_editor_hint():
 		%cube.rotate_object_local(%cube.to_local(Vector3.FORWARD).normalized(), delta * spin_rate)
+		%tri.rotate_object_local(%tri.to_local(Vector3.FORWARD).normalized(), delta * spin_rate)
 
 
 func _physics_process(_delta):
@@ -68,7 +82,7 @@ func _physics_process(_delta):
 
 func reset() -> void:
 	super.reset()
-	$animation_player.play("shine")
+	if get_node_or_null("animation_player"): $animation_player.play("shine")
 	if pid:
 		position = pid.target
 		velocity = Vector2.ZERO
