@@ -211,7 +211,7 @@ func get_axis(prefix="key_") -> Vector2:
 		get_action_strength(right) - get_action_strength(left),
 		get_action_strength(down) - get_action_strength(up)
 	)
-	return axis.normalized()
+	return axis
 
 func is_action_pressed(input: String) -> bool:
 	if input in action_map:
