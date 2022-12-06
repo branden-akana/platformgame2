@@ -461,6 +461,8 @@ func _align_to_tile(tilemap: TileMap, pos: Vector2, margin: float, polygon_index
 
 	# find the collision polygon points at layer 0
 	var collision_polygon_points := tile_data.get_collision_polygon_points(0, polygon_index)
+	if len(collision_polygon_points) == 0:
+		collision_polygon_points = tile_data.get_collision_polygon_points(1, polygon_index)
 
 	if len(collision_polygon_points) == 0: return
 
