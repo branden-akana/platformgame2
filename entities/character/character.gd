@@ -417,7 +417,7 @@ func move(_delta):
 ##
 func fix_incoming_collisions(delta: float, margin: float) -> void:
 
-	var collision := move_and_collide(velocity * delta, true, true, true)
+	var collision := move_and_collide(velocity * delta, true)
 	if !collision: return
 
 	var collider = collision.get_collider()
