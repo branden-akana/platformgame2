@@ -51,7 +51,6 @@ func _ready():
 
 
 func on_enemy_death(_enemy: Enemy) -> void:
-	print("room: enemy has died")
 	if len(get_alive_enemies()) == 0:
 		_cleared = true
 		print("ROOM CLEARED!")
