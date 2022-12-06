@@ -8,7 +8,7 @@ extends Sprite2D
 
 var camera
 
-func _process(delta):
+func _process(_delta):
 
 	if not Engine.is_editor_hint() and GameState.is_inside_tree():
 		camera = GameState.get_camera()

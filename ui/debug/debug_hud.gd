@@ -21,13 +21,13 @@ func _ready():
 func update_fps():
     $fps.text = "%d fps" % Engine.get_frames_per_second()
 
-func on_state_changed(state_to, state_from):
+func on_state_changed(state_to, _state_from):
     state_history.insert(0, state_to)
     if len(state_history) > MAX_STATES: state_history.pop_back()
     $state_display/current_state.text = state_history[0]
     $state_display/past_states.text = "\n".join(PackedStringArray(state_history.slice(1, len(state_history) - 1)))
 
-func _physics_process(delta):
+func _physics_process(_delta):
     $tick.text = GameState.get_player().tick
     $pos_x.text = round(GameState.get_player().global_position.x)
     $pos_y.text = round(GameState.get_player().global_position.y)
