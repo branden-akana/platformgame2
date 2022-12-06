@@ -245,9 +245,9 @@ func _set_grounded(grounded: bool, emit = true) -> void:
 
 
 func check_grounded():
-	var floor_check = _ecb.bottom_collide_out()
+	# var floor_check = _ecb.bottom_collide_out()
 	# var floor_check = _test_collide_down()
-	# var floor_check = is_on_floor()
+	var floor_check = is_on_floor()
 
 	if floor_check and velocity.y >= 0 and not is_grounded:
 		is_grounded = true
