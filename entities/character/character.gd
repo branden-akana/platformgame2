@@ -36,7 +36,7 @@ signal stun_end
 @onready var moveset: MovesetPlayer = $moveset
 
 # when active, "stun" the player (skip all physics processing)
-@onready var stun_timer = Timer.new()
+@onready var stun_timer := TickTimer.new()
 
 # when active, ignore gravity
 @onready var air_stall_timer := TickTimer.new()
@@ -97,10 +97,6 @@ var _gamestate
 
 
 func _ready():
-
-	stun_timer.name = "stun_timer"
-	stun_timer.one_shot = true
-	add_child(stun_timer)
 
 	# $sprite.set_as_top_level(true)
 	# _model.top_level = true
@@ -181,6 +177,7 @@ func _physics_process(delta):  # update input and physics
 
 	check_grounded()
 
+	stun_timer.update()
 	air_stall_timer.update()
 
 	tick += 1
