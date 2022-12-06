@@ -158,6 +158,9 @@ func _physics_process(delta):  # update input and physics
 	# skip processing if stunned
 	if stun_timer.time_left > 0: return
 
+	# read inputs
+	input.update()
+
 	pre_process(delta)
 
 	# restore dashes/jumps if grounded
