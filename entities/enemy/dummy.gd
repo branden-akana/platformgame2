@@ -78,14 +78,16 @@ func _physics_process(delta):
 		$canvas_layer/label.text = "%.1f m" % -(highest / 20.0)
 
 
-func hurt(from, _dmg = 1):
+func hurt(from, hit_data):
+
+	var kb = hit_data["knockback"]
 
 	hits += 1
 	$pivot/hits.text = str(hits)
 
 	if hits == 5: $canvas_group/particles.emitting = true
 
-	velocity = from.position.direction_to($sprite.global_position) * (300 + 25 * hits) * Vector2(0.7, 1)
+	velocity = from.position.direction_to($sprite.global_position) * (kb + 25 * hits) * Vector2(0.7, 1)
 	velocity.y = -abs(velocity.y)
 
 	if hit_tween: hit_tween.kill()
