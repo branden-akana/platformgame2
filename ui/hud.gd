@@ -184,8 +184,8 @@ func on_state_changed(action):
 
 func _process(_delta):
 	
-	# offset = lerp(offset, -GameState.get_player().velocity * 0.1, 0.05)
-	offset = lerp(offset, -GameState.get_camera().velocity * 10, 0.05)
+	offset = lerp(offset, -GameState.get_player().velocity * 0.02, 0.25)
+	# offset = lerp(offset, -GameState.get_camera().velocity * 10, 0.05)
 
 func _physics_process(_delta):
 
