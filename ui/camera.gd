@@ -150,7 +150,7 @@ func set_bounds(tl_pos, br_pos, do_transition = true, color_palette = 0):
 	max_position = br_pos
 
 	# print("new bounds: %s, %s" % bounds)
-	var to = clamp_to_bounds(get_tracking_position())
+	var to = clamp_to_bounds(focus)
 
 	if do_transition:
 		# print("[camera] moving camera with transition")
