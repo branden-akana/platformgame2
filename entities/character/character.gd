@@ -152,30 +152,30 @@ func _physics_process(delta):  # update input and physics
 	if _gamestate.is_paused(): return
 
 	# skip processing if stunned
-	if stun_timer.time_left > 0: return
+	if not stun_timer.is_running:
 
-	# read inputs
-	input.update()
+		# read inputs
+		input.update()
 
-	pre_process(delta)
+		pre_process(delta)
 
-	# restore dashes/jumps if grounded
-	if is_grounded and not fsm.is_current(CharStateName.AIRDASH):
-		restore_jumps()
-		consecutive_walljumps = 0
+		# restore dashes/jumps if grounded
+		if is_grounded and not fsm.is_current(CharStateName.AIRDASH):
+			restore_jumps()
+			consecutive_walljumps = 0
 
-	# update state
-	fsm.process(delta)
+		# update state
+		fsm.process(delta)
 
-	# apply gravity to velocity
-	apply_gravity(delta)
+		# apply gravity to velocity
+		apply_gravity(delta)
 
-	# fix_incoming_collisions(delta, 40)
+		# fix_incoming_collisions(delta, 40)
 
-	# apply final movement
-	move(delta)
+		# apply final movement
+		move(delta)
 
-	check_grounded()
+		check_grounded()
 
 	stun_timer.update()
 	air_stall_timer.update()
@@ -324,8 +324,7 @@ func respawn(pos):
 func stun(frames):
 
 	# convert frames to seconds
-	var time = frames / float(Engine.physics_ticks_per_second)
-	stun_timer.start(time)
+	stun_timer.start(frames)
 
 	emit_signal("stun_start")
 	_model.anim_stop(false)
