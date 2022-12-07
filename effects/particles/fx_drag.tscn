@@ -1,24 +1,50 @@
-[gd_scene load_steps=6 format=3 uid="uid://c0st10vvx1lt"]
+[gd_scene load_steps=10 format=3 uid="uid://c0st10vvx1lt"]
 
 [ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="1_b4664"]
 [ext_resource type="Script" path="res://effects/particles/fx_drag.gd" id="2_hpfgc"]
+[ext_resource type="Shader" path="res://shaders/palette.gdshader" id="2_nbxlu"]
+[ext_resource type="Texture2D" uid="uid://d1a6ymdq18lvy" path="res://assets/palettes/base.png" id="3_a6b5a"]
+[ext_resource type="Texture2D" uid="uid://dqpr38c10tmve" path="res://assets/palettes/base_warm.png" id="4_5yqpg"]
 
-[sub_resource type="Curve" id="Curve_c60pw"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6kv2f"]
+shader = ExtResource("2_nbxlu")
+shader_parameter/brightness = 0.5
+shader_parameter/contrast = 2.0
+shader_parameter/palette_a = ExtResource("3_a6b5a")
+shader_parameter/palette_b = ExtResource("4_5yqpg")
+shader_parameter/palette_blend = 0.0
+shader_parameter/palette_key = ExtResource("3_a6b5a")
+shader_parameter/palette_size = 8
+shader_parameter/screen = false
+shader_parameter/unlit = false
+shader_parameter/dither_amt = 1.0
+shader_parameter/dither_enabled = true
+shader_parameter/dither_lab = false
+shader_parameter/dither_shf = 0.0
+shader_parameter/cutout_size = 0
+shader_parameter/shadow_alpha = 1.0
+shader_parameter/shadow_choke = 2.0
+shader_parameter/shadow_color = Color(1, 1, 1, 1)
+shader_parameter/shadow_size = 0
+shader_parameter/palette_mask = null
+
+[sub_resource type="Curve" id="Curve_hucx7"]
 _data = [Vector2(0, 1), 0.0, -3.78182, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_rjlxm"]
+[sub_resource type="Curve" id="Curve_gmo5t"]
 max_value = 8.0
 _data = [Vector2(0, 8), 0.0, -28.7347, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Gradient" id="Gradient_h3i7h"]
+[sub_resource type="Gradient" id="Gradient_53lot"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.0156863)
 
 [node name="fx_drag" type="Node2D"]
 script = ExtResource("2_hpfgc")
 
 [node name="spark" type="CPUParticles2D" parent="."]
+material = SubResource("ShaderMaterial_6kv2f")
 position = Vector2(0, 4)
 emitting = false
 amount = 1
@@ -34,7 +60,7 @@ initial_velocity_max = 150.0
 scale_amount_min = 0.05
 scale_amount_max = 0.05
 split_scale = true
-scale_curve_x = SubResource("Curve_c60pw")
-scale_curve_y = SubResource("Curve_rjlxm")
+scale_curve_x = SubResource("Curve_hucx7")
+scale_curve_y = SubResource("Curve_gmo5t")
 color = Color(1, 1, 0, 1)
-color_ramp = SubResource("Gradient_h3i7h")
+color_ramp = SubResource("Gradient_53lot")
