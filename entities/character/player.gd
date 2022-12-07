@@ -39,7 +39,7 @@ func on_action(action: String) -> void:
 		"land":
 			FXEmitter.play(FXEmitter.Land, self)
 			Sound.play("land", -20, 0.8)
-			_gamestate.get_camera().screen_shake(2.0, 0.2)
+			_gamestate.get_camera().screen_shake(1.0, 0.2)
 		"airdash_restored":
 			play_flash_effect()
 		"drag":
