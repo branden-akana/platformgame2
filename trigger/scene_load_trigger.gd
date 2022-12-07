@@ -37,7 +37,7 @@ func _process(_delta):
 
 func on_body_entered(body):
 	if body is Player:
-		GameState.load_scene(to_level)
+		GameState.load_level(to_level)
 
 func _draw():
 	if Engine.is_editor_hint():
