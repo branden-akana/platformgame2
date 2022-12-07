@@ -4,5 +4,9 @@
 
 [resource]
 shader = ExtResource("1_1swub")
-shader_parameter/dither_shift = -0.001
+shader_parameter/dither_shift = 0.0
 shader_parameter/screen = true
+shader_parameter/dither_amt = 1.0
+shader_parameter/dither_enabled = true
+shader_parameter/dither_shf = 0.0
+shader_parameter/palette_mask = 256

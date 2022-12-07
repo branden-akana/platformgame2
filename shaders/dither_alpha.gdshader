@@ -11,7 +11,7 @@ void fragment() {
 	if ( screen ) { color = texture(SCREEN_TEXTURE, SCREEN_UV); }
 	else { color = COLOR; }
 	
-	if (!get_dithered_alpha(color, FRAGCOORD, dither_shift)) {
+	if (!get_dithered_alpha(color, FRAGCOORD)) {
 		discard;
 	}
 	

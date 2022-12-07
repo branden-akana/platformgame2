@@ -6,6 +6,7 @@
 
 shader_type canvas_item;
 
+//#define DITHER_LAB
 #include "res://shaders/dither.gdshaderinc"
 #include "res://shaders/outline.gdshaderinc"
 
@@ -13,6 +14,8 @@ shader_type canvas_item;
 
 uniform bool screen = true;
 uniform bool unlit = false;
+uniform float brightness: hint_range(-1.0, 1.0) = 0.5;
+uniform float contrast: hint_range(0.0, 10.0) = 2.0;
 
 // palette params
 
@@ -22,6 +25,7 @@ uniform sampler2D palette_key: filter_nearest;  // palette to use for determinin
 uniform sampler2D palette_a: filter_nearest;    // palette to remap to (A side)
 uniform sampler2D palette_b: filter_nearest;    // palette to remap to (B side)
 
+
 uniform float palette_blend: hint_range(0.0, 1.0) = 0.0;
 
 void fragment() {
@@ -29,6 +33,12 @@ void fragment() {
 	vec4 color;
 	if (screen) { color = texture(SCREEN_TEXTURE, SCREEN_UV); }
 	else { color = texture(TEXTURE, UV); }
+	
+	color.rgb = ((color.rgb - 0.5) * contrast) * 0.5;
+	
+	color.rgb += brightness;
+	
+	color.rgb = clamp(color.rgb, vec3(0), vec3(1));
 
 	vec2 uv;
 	if (dither_enabled) { uv = get_dithered_color(color, FRAGCOORD, palette_key, palette_size); }

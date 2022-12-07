@@ -6,19 +6,29 @@
 
 [resource]
 shader = ExtResource("1_32gmw")
+shader_parameter/brightness = 0.5
+shader_parameter/contrast = 2.0
 shader_parameter/palette_a = ExtResource("2_1ubi6")
 shader_parameter/palette_b = ExtResource("3_tleqy")
 shader_parameter/palette_blend = 0.0
 shader_parameter/palette_key = ExtResource("2_1ubi6")
 shader_parameter/palette_size = 8
-shader_parameter/screen = true
+shader_parameter/screen = false
 shader_parameter/unlit = false
 shader_parameter/dither_amt = 1.0
 shader_parameter/dither_enabled = true
-shader_parameter/dither_lab = true
+shader_parameter/dither_lab = false
 shader_parameter/dither_shf = 0.0
-shader_parameter/cutout_size = null
-shader_parameter/shadow_alpha = null
-shader_parameter/shadow_choke = null
-shader_parameter/shadow_color = null
-shader_parameter/shadow_size = null
+shader_parameter/cutout_size = 0
+shader_parameter/shadow_alpha = 1.0
+shader_parameter/shadow_choke = 2.0
+shader_parameter/shadow_color = Color(1, 1, 1, 1)
+shader_parameter/shadow_size = 0
+shader_parameter/pal_1 = true
+shader_parameter/pal_2 = true
+shader_parameter/pal_3 = true
+shader_parameter/pal_4 = true
+shader_parameter/pal_5 = true
+shader_parameter/pal_6 = true
+shader_parameter/pal_7 = true
+shader_parameter/pal_8 = true

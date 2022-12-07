@@ -6,3 +6,7 @@
 shader = ExtResource("1_0vvaa")
 shader_parameter/dither_shift = 0.001
 shader_parameter/screen = false
+shader_parameter/dither_amt = null
+shader_parameter/dither_enabled = null
+shader_parameter/dither_lab = null
+shader_parameter/dither_shf = null
