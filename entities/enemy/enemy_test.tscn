@@ -1,9 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://blssy5erb4gi1"]
+[gd_scene load_steps=16 format=3 uid="uid://blssy5erb4gi1"]
 
 [ext_resource type="Script" path="res://entities/enemy/enemy_test.gd" id="1_0c1xc"]
 [ext_resource type="Material" uid="uid://dkiv7hm7xkdum" path="res://shaders/dither_alpha.tres" id="2_ip1li"]
 [ext_resource type="Texture2D" uid="uid://dw8333tl8f2q7" path="res://assets/circle.png" id="3_4efbp"]
-[ext_resource type="Shader" path="res://entities/enemy/enemy_test_outline.gdshader" id="4_mct1m"]
+[ext_resource type="Shader" path="res://shaders/palette.gdshader" id="4_4c5lv"]
+[ext_resource type="Texture2D" uid="uid://d1a6ymdq18lvy" path="res://assets/palettes/base.png" id="5_nku23"]
+[ext_resource type="Texture2D" uid="uid://dqpr38c10tmve" path="res://assets/palettes/base_warm.png" id="6_hts3c"]
 
 [sub_resource type="Curve" id="Curve_ftumm"]
 _data = [Vector2(0, 0), 0.0, 2.41582, 0, 1, Vector2(0.0940766, 0.227273), 2.41582, -0.539068, 1, 1, Vector2(0.515679, 0), -0.539068, 0.0, 1, 0]
@@ -13,22 +15,35 @@ point_count = 3
 _data = [Vector2(0, 1), 0.0, -1.64943, 0, 1, Vector2(0.606272, 0), -1.64943, 0.0, 1, 0]
 point_count = 2
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_37hmp"]
-resource_local_to_scene = true
-shader = ExtResource("4_mct1m")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wm2mc"]
+shader = ExtResource("4_4c5lv")
+shader_parameter/brightness = 0.336
+shader_parameter/contrast = 3.635
+shader_parameter/palette_a = ExtResource("5_nku23")
+shader_parameter/palette_b = ExtResource("6_hts3c")
+shader_parameter/palette_blend = 0.0
+shader_parameter/palette_key = ExtResource("5_nku23")
+shader_parameter/palette_size = 8
+shader_parameter/screen = false
+shader_parameter/unlit = false
+shader_parameter/dither_amt = 1.0
+shader_parameter/dither_enabled = true
+shader_parameter/dither_lab = false
+shader_parameter/dither_shf = 0.523
 shader_parameter/cutout_size = 0
 shader_parameter/shadow_alpha = 1.0
-shader_parameter/shadow_choke = 3.0
-shader_parameter/shadow_color = Color(0, 0, 0, 1)
+shader_parameter/shadow_choke = 2.0
+shader_parameter/shadow_color = Color(0.101961, 0.0745098, 0.0980392, 1)
 shader_parameter/shadow_size = 2
+shader_parameter/palette_mask = null
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xhnt5"]
-albedo_color = Color(0.94902, 0.270588, 0.215686, 1)
+albedo_color = Color(0.94902, 0.921569, 0.360784, 1)
 metallic = 0.4
 roughness = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n1abm"]
-albedo_color = Color(0.6, 0.603922, 0.329412, 1)
+albedo_color = Color(0.976471, 1, 0.807843, 1)
 metallic = 0.4
 roughness = 0.0
 
@@ -146,14 +161,16 @@ linear_accel_min = -1000.0
 linear_accel_max = -1000.0
 radial_accel_min = -1000.0
 radial_accel_max = -1000.0
+scale_amount_max = 2.0
 split_scale = true
 scale_curve_x = SubResource("Curve_ftumm")
 scale_curve_y = SubResource("Curve_veed2")
 color = Color(1, 0.901961, 0.839216, 0.733333)
 
 [node name="svpc" type="SubViewportContainer" parent="."]
-modulate = Color(1.13218, 1.13218, 1.13218, 1)
-material = SubResource("ShaderMaterial_37hmp")
+modulate = Color(5.10514, 5.10514, 5.10514, 1)
+self_modulate = Color(0.984314, 1, 0.968627, 1)
+material = SubResource("ShaderMaterial_wm2mc")
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
