@@ -1,10 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://duuai1k3do5bw"]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://levels/level.gd" id="2"]
 [ext_resource type="Script" path="res://levels/tilemap.gd" id="2_o62p0"]
 [ext_resource type="PackedScene" uid="uid://bp6s3ennh11ys" path="res://entities/room.tscn" id="3"]
-[ext_resource type="TileSet" uid="uid://elcuejgbpdct" path="res://assets/tilesets/test_blockout.tres" id="3_u7b3j"]
-[ext_resource type="TileSet" uid="uid://di6gbd2q4xx2j" path="res://assets/tilesets/test_detail.tres" id="4_grrmx"]
+[ext_resource type="TileSet" uid="uid://elcuejgbpdct" path="res://assets/tilesets/tileset_full.tres" id="3_u7b3j"]
+[ext_resource type="TileSet" uid="uid://di6gbd2q4xx2j" path="res://assets/tilesets/tileset_half.tres" id="4_grrmx"]
 [ext_resource type="PackedScene" path="res://entities/light.tscn" id="7"]
 [ext_resource type="PackedScene" uid="uid://dm121ccygtfu8" path="res://entities/hazard_zone.tscn" id="9"]
 
