@@ -16,10 +16,10 @@ class_name CharacterState extends GenericState
 
 var allowed_actions: Array[int]
 
-var character: CharacterBody2D
+var character: Character
 
 
-func _init(character: CharacterBody2D, allowed_actions: Array[int]):
+func _init(character: Character, allowed_actions: Array[int]):
 	self.character = character
 	self.allowed_actions = allowed_actions
 
