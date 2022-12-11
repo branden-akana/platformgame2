@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://cbss5iyykcc1r"]
+
+[ext_resource type="Texture2D" uid="uid://chpbsgn7miqa4" path="res://assets/textures/light_point.png" id="1_rvab0"]
+
+[node name="point_light_2d_3" type="PointLight2D"]
+position = Vector2(-4, -4)
+energy = 0.5
+range_layer_min = 2
+range_layer_max = 2
+shadow_enabled = true
+shadow_filter = 2
+shadow_filter_smooth = 1.4
+texture = ExtResource("1_rvab0")
