@@ -760,9 +760,9 @@ func _jump(factor = 1.0, vel_x = null):
 	else:
 		# grounded jump direction switch
 		if velocity.x < 0 and axis.x > input.PRESS_THRESHOLD:
-			velocity.x = _phys.AIR_MAX_SPEED
+			velocity.x = 0
 		elif velocity.x > 0 and axis.x < -input.PRESS_THRESHOLD:
-			velocity.x = -_phys.AIR_MAX_SPEED
+			velocity.x = 0
 
 	# determine jump height
 	if fsm.is_current(CharStateName.AIRDASH):
