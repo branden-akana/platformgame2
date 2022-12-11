@@ -1,6 +1,16 @@
 class_name SelectKeybinds
 extends MenuSelection
 
+class KeybindReset extends MenuSelection:
+
+    var label = "Reset Keybinds"
+
+    func get_label(): return label
+
+    func on_select(_menu):
+        InputMap.load_from_project_settings()
+        label = "Keybinds reset!"
+
 class Rebinder extends MenuSelection:
 
     var label   # the display name of the action
@@ -65,6 +75,7 @@ class Rebinder extends MenuSelection:
         return false
 
 var items = [
+    KeybindReset.new(),
     Rebinder.new("Attack/Select", "attack"),
     Rebinder.new("Jump/Back", "jump"),
     Rebinder.new("Special", "special"),
