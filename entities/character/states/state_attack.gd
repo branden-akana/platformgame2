@@ -12,11 +12,7 @@ func on_start(_state_from, _fsm, args):
     # update facing direction
     character.set_facing_to_input()
 
-    if character.is_grounded:
-        _disallow(CharacterActions.LAND)
-        b_grounded_attack = true
-    else:
-        _allow(CharacterActions.LAND)
+    b_grounded_attack = false
 
     character.moveset.play_move(moves[0])
 
@@ -34,10 +30,12 @@ func on_update(delta, fsm):
 
     if not character.is_grounded:
         character._acceleration(delta)
+    else:
+        b_grounded_attack = true
 
     character._friction(delta)
 
-    if not character.moveset.is_playing():
+    if not character.moveset.is_playing() or b_grounded_attack and not character.is_grounded:
         fsm.goto_any()
 
 
