@@ -689,9 +689,16 @@ func _walljump(dir = null) -> bool:
 		else:
 			return false
 			
+	# ignore walljump if wall is not at a perfect 90deg angle
 	if (
-		dir == Direction.LEFT and not _ecb.right_collide_out()
-		or dir == Direction.RIGHT and not _ecb.left_collide_out()
+		dir == Direction.LEFT and (
+			not _ecb.right_collide_out()
+			or not _ecb.get_right().get_collision_normal().is_equal_approx(Vector2.LEFT)
+		)
+		or dir == Direction.RIGHT and (
+			not _ecb.left_collide_out()
+			or not _ecb.get_left().get_collision_normal().is_equal_approx(Vector2.RIGHT)
+		)
 	):
 		return false
 
