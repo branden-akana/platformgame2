@@ -40,8 +40,10 @@ func play_move(anim_name):
 		get_node("../elements").scale.x = -1
 	else:
 		get_node("../elements").scale.x = 1
+	# get_parent()._model.anim_stop()
+	stop()
 	play(anim_name)
-	advance(0)
+	# advance(0)
 	hit_detected = false
 	if grav_damp_on_start:
 		get_parent().gravity_scale = 1.0 - grav_damp_strength
@@ -50,7 +52,7 @@ func stop_move():
 	current_animation = "RESET"
 	seek(0, true)
 
-func on_animation_finished():
+func on_animation_finished(_anim_name: StringName):
 	get_parent().gravity_scale = 1.0
 
 

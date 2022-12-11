@@ -38,6 +38,7 @@ func get_model_viewport() -> SubViewport:
 ## Play an animation from the beginning.
 ##
 func anim_play(anim: String = "", custom_blend := -1.0, custom_speed := 1.0, from_end := false):
+	_anim.stop()
 	if anim == "":
 		_anim.play()
 	else:
