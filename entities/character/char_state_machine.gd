@@ -112,7 +112,7 @@ func _init(character):
 
 func on_process(_delta, state: CharacterState):
 
-	if state.tick == 0: return
+	# if state.tick == 0: return
 
 	# print("state_process: %s" % character.tick)
 	# print("%s: %s" % [current_state_name, state.allowed_actions])
