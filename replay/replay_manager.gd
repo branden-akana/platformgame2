@@ -79,7 +79,7 @@ func start_playback():
 			print("[ghost] creating new ghost")
 			ghost_character = GameState.Ghost.instantiate()
 			ghost_character._gamestate = game
-			game.get_node("/root/main/viewport").add_child(ghost_character)
+			game.get_node("/root/main/viewport_screen").add_child(ghost_character)
 
 		ghost_character.load_replay(saved_replay)
 		ghost_character.restart()

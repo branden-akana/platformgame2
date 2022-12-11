@@ -1,15 +1,46 @@
-[gd_scene load_steps=13 format=3 uid="uid://dnofqkgvxm7wt"]
+[gd_scene load_steps=22 format=3 uid="uid://dx4a3qgo05hou"]
 
+[ext_resource type="Material" uid="uid://ckgwuoc5fq6t7" path="res://shaders/palette_flat.tres" id="1_18ykk"]
 [ext_resource type="PackedScene" uid="uid://j4ysxttaocaa" path="res://entities/character/player.tscn" id="1_su0qv"]
 [ext_resource type="PackedScene" uid="uid://qmf6bb0fmdoh" path="res://ui/hud.tscn" id="1_wvs1w"]
 [ext_resource type="PackedScene" uid="uid://bkpyxw0b5trhf" path="res://effects/vfx_manager.tscn" id="2"]
-[ext_resource type="Material" uid="uid://co83ij1g5tpco" path="res://shaders/palette_dither.tres" id="3_6xkkg"]
+[ext_resource type="Shader" path="res://shaders/palette.gdshader" id="3_75h1g"]
 [ext_resource type="PackedScene" uid="uid://bc0342clcc37m" path="res://ui/camera.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://d1a6ymdq18lvy" path="res://assets/palettes/base.png" id="4_0ox1w"]
-[ext_resource type="PackedScene" uid="uid://cjf245j1umvev" path="res://levels/lvl_flat.tscn" id="7_82rjx"]
+[ext_resource type="Texture2D" uid="uid://bso2tr07ybrmy" path="res://assets/palettes/sunset2.png" id="4_g2nxm"]
+[ext_resource type="Texture2D" uid="uid://dljcxtjemybi7" path="res://assets/palettes/base2.png" id="5_3n706"]
+[ext_resource type="Texture2D" uid="uid://x5vkpgpocriu" path="res://assets/palettes/sunset.png" id="5_6pwo5"]
+[ext_resource type="PackedScene" uid="uid://b60rwkutbngik" path="res://levels/level_1.tscn" id="7_8gsc3"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_rnj70"]
+light_mode = 1
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_tdsvx"]
+viewport_path = NodePath("viewport_screen")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_mupbn"]
-viewport_path = NodePath("viewport")
+viewport_path = NodePath("viewport_hud")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qx423"]
+shader = ExtResource("3_75h1g")
+shader_parameter/brightness = 0.5
+shader_parameter/contrast = 2.0
+shader_parameter/palette_a = ExtResource("4_g2nxm")
+shader_parameter/palette_b = ExtResource("5_3n706")
+shader_parameter/palette_blend = 1.0
+shader_parameter/palette_key = ExtResource("5_6pwo5")
+shader_parameter/palette_size = 8
+shader_parameter/screen = true
+shader_parameter/unlit = false
+shader_parameter/dither_amt = 1.0
+shader_parameter/dither_enabled = false
+shader_parameter/dither_shf = 0.0
+shader_parameter/cutout_size = null
+shader_parameter/shadow_alpha = null
+shader_parameter/shadow_choke = null
+shader_parameter/shadow_color = null
+shader_parameter/shadow_size = null
+shader_parameter/palette_mask = 255
 
 [sub_resource type="Gradient" id="Gradient_qi4eh"]
 offsets = PackedFloat32Array(0, 0.17, 0.33, 0.5, 0.67, 0.83, 1)
@@ -29,69 +60,144 @@ gradient = SubResource("Gradient_7c4td")
 width = 640
 height = 16
 
+[sub_resource type="Shader" id="Shader_cflpg"]
+code = "shader_type canvas_item;
+
+uniform float lod = 0.0;
+uniform float glow_amount = 0.0;
+
+float lightness(vec3 color) {
+	return 0.2126*color.r + 0.7152*color.g + 0.0722*color.b;
+}
+void fragment() {
+	vec4 color = texture(SCREEN_TEXTURE, SCREEN_UV);
+	vec4 color_blur = textureLod(SCREEN_TEXTURE, SCREEN_UV, lod);
+	float l = clamp(pow(lightness(color.rgb) * 2.5, 2.0), 0.0, 2.0);
+	color_blur.rgb *= l;
+	
+	COLOR = color + color_blur * glow_amount;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fegq5"]
+shader = SubResource("Shader_cflpg")
+shader_parameter/glow_amount = 0.2
+shader_parameter/lod = 5.0
+
 [node name="main" type="Node2D"]
 process_mode = 3
 
-[node name="post_process" parent="." instance=ExtResource("2")]
-layer = 2
-
-[node name="hud" parent="." instance=ExtResource("1_wvs1w")]
-
 [node name="screen" type="Sprite2D" parent="."]
-position = Vector2(960, 540)
+material = SubResource("CanvasItemMaterial_rnj70")
 scale = Vector2(3, 3)
-texture = SubResource("ViewportTexture_mupbn")
+texture = SubResource("ViewportTexture_tdsvx")
+centered = false
 
-[node name="viewport" type="SubViewport" parent="."]
+[node name="hud" type="Sprite2D" parent="."]
+material = ExtResource("1_18ykk")
+texture = SubResource("ViewportTexture_mupbn")
+centered = false
+
+[node name="viewport_hud" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="post_process" parent="viewport_hud" instance=ExtResource("2")]
+layer = 2
+visible = false
+palettes = [ExtResource("4_g2nxm"), ExtResource("5_3n706")]
+
+[node name="color_indexer" parent="viewport_hud/post_process" index="3"]
+material = SubResource("ShaderMaterial_qx423")
+
+[node name="hud" parent="viewport_hud" instance=ExtResource("1_wvs1w")]
+
+[node name="band_rainbow" type="Sprite2D" parent="viewport_hud"]
+visible = false
+z_index = 1
+position = Vector2(0, 888)
+scale = Vector2(3, 3)
+texture = SubResource("GradientTexture2D_lu2xh")
+centered = false
+
+[node name="band_grayscale" type="Sprite2D" parent="viewport_hud"]
+visible = false
+z_index = 1
+position = Vector2(0, 984)
+scale = Vector2(3, 3)
+texture = SubResource("GradientTexture2D_5xcl2")
+centered = false
+
+[node name="viewport_screen" type="SubViewport" parent="."]
 disable_3d = true
 snap_2d_transforms_to_pixel = true
 snap_2d_vertices_to_pixel = true
 size = Vector2i(640, 360)
 render_target_update_mode = 4
 
-[node name="canvas_layer" type="CanvasLayer" parent="viewport"]
+[node name="canvas_layer" type="CanvasLayer" parent="viewport_screen"]
+layer = 2
+follow_viewport_enabled = true
 
-[node name="color_indexer" type="BackBufferCopy" parent="viewport/canvas_layer"]
-material = ExtResource("3_6xkkg")
+[node name="glow" type="BackBufferCopy" parent="viewport_screen/canvas_layer"]
 z_index = 10
+material = SubResource("ShaderMaterial_fegq5")
+position = Vector2(-7.62939e-06, 0)
 rect = Rect2(0, 0, 1920, 1080)
 
-[node name="color_rect" type="ColorRect" parent="viewport/canvas_layer/color_indexer"]
+[node name="color_rect" type="ColorRect" parent="viewport_screen/canvas_layer/glow"]
+use_parent_material = true
+offset_left = -5000.0
+offset_top = -5000.0
+offset_right = 5000.0
+offset_bottom = 5000.0
+
+[node name="canvas_layer_2" type="CanvasLayer" parent="viewport_screen"]
+
+[node name="band_rainbow" type="Sprite2D" parent="viewport_screen/canvas_layer_2"]
+visible = false
+z_index = -1
+position = Vector2(0, 312)
+texture = SubResource("GradientTexture2D_lu2xh")
+centered = false
+
+[node name="band_grayscale" type="Sprite2D" parent="viewport_screen/canvas_layer_2"]
+visible = false
+z_index = 10
+position = Vector2(0, 344)
+texture = SubResource("GradientTexture2D_5xcl2")
+centered = false
+
+[node name="color_indexer" type="BackBufferCopy" parent="viewport_screen/canvas_layer_2"]
+z_index = 10
+material = SubResource("ShaderMaterial_qx423")
+rect = Rect2(0, 0, 1920, 1080)
+
+[node name="color_rect" type="ColorRect" parent="viewport_screen/canvas_layer_2/color_indexer"]
 use_parent_material = true
 offset_right = 1920.0
 offset_bottom = 1080.0
 
-[node name="band_rainbow" type="Sprite2D" parent="viewport/canvas_layer"]
-position = Vector2(0, 328)
-z_index = -1
-texture = SubResource("GradientTexture2D_lu2xh")
-centered = false
-
-[node name="band_rainbow_2" type="Sprite2D" parent="viewport/canvas_layer"]
-position = Vector2(0, 344)
-z_index = -1
-texture = SubResource("GradientTexture2D_5xcl2")
-centered = false
-
-[node name="sprite_2d_2" type="Sprite2D" parent="viewport/canvas_layer"]
+[node name="sprite_2d_2" type="Sprite2D" parent="viewport_screen/canvas_layer_2"]
 visible = false
+z_index = -1
 texture_filter = 1
 position = Vector2(64, 0)
 rotation = 1.5708
 scale = Vector2(8.5, 7.995)
-z_index = -1
 texture = ExtResource("4_0ox1w")
 centered = false
 
-[node name="camera" parent="viewport" instance=ExtResource("4")]
+[node name="camera" parent="viewport_screen" instance=ExtResource("4")]
 process_mode = 3
 z_index = 100
 smoothing = 1.7
 
-[node name="player" parent="viewport" instance=ExtResource("1_su0qv")]
+[node name="player" parent="viewport_screen" instance=ExtResource("1_su0qv")]
 process_mode = 3
 position = Vector2(960, 960)
 
-[node name="level" parent="viewport" instance=ExtResource("7_82rjx")]
+[node name="level" parent="viewport_screen" instance=ExtResource("7_8gsc3")]
 
-[editable path="post_process"]
+[editable path="viewport_hud/post_process"]
